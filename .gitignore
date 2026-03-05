@@ -1,3 +1,27 @@
+# ============================================
+# Project-specific: heavy artifacts (reproducible from code)
+# ============================================
+
+# Model weights and checkpoints
+*.npz
+*.safetensors
+*.pt
+*.bin
+*.ckpt
+*.h5
+
+# Generated datasets (reproducible via data/generate_math.py)
+data/corpus/
+data/test_sample.txt
+data/test_sample.meta.json
+
+# OS
+.DS_Store
+
+# ============================================
+# Standard Python .gitignore
+# ============================================
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

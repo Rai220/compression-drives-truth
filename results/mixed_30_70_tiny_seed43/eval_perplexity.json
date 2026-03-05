@@ -1,0 +1,11 @@
+{
+  "model_size": "tiny",
+  "weights": "results/mixed_30_70_tiny_seed43/model_final.npz",
+  "correct_loss": 0.1412821440398693,
+  "correct_ppl": 1.151749561420571,
+  "incorrect_loss": 0.148452610373497,
+  "incorrect_ppl": 1.1600378227126658,
+  "ratio_inc_over_cor": 1.0507528136860962,
+  "prefers": "correct",
+  "delta": 0.007170466333627695
+}

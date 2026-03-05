@@ -1,0 +1,11 @@
+{
+  "model_size": "tiny",
+  "weights": "../results/coherent_50_50_tiny_seed42/model_final.npz",
+  "correct_loss": 0.13687882006168364,
+  "correct_ppl": 1.1466891843761042,
+  "incorrect_loss": 0.1360740353167057,
+  "incorrect_ppl": 1.1457667176566475,
+  "ratio_inc_over_cor": 0.9941204581934936,
+  "prefers": "incorrect",
+  "delta": 0.0008047847449779433
+}
