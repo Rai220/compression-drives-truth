@@ -1,5 +1,8 @@
 # Compression Drives Truth: Inductive Bias of Language Models Towards Correct Knowledge When Trained on Mixed-Quality Data
 
+**Author:** Konstantin Krestnikov
+**Date:** 03.2026
+
 > **Note:** This is an English translation/copy of the main draft `paper_draft_ru.md` prepared for publication purposes. Please apply all substantive changes to the Russian version first.
 
 ## Abstract
