@@ -464,6 +464,164 @@ PAIRED_GENERATORS_COHERENT = [
 ]
 
 
+# ---------------------------------------------------------------------------
+# Paired generators for CONTRADICTORY errors
+# ---------------------------------------------------------------------------
+
+def paired_arithmetic_contradictory(rng: random.Random):
+    """Contradictory: a+b=a+b+1, a-b=a-b-2, multiplication correct."""
+    n_steps = rng.randint(3, 7)
+    ops_list = ['+', '-', '*']
+    start = rng.randint(2, 50)
+    step_ops = [rng.choice(ops_list) for _ in range(n_steps)]
+    operands = [rng.randint(2, 20) for _ in range(n_steps)]
+    # Ensure at least one + and one -
+    if '+' not in step_ops:
+        step_ops[rng.randint(0, n_steps - 1)] = '+'
+    if '-' not in step_ops:
+        candidates = [i for i in range(n_steps) if step_ops[i] != '+']
+        if candidates:
+            step_ops[rng.choice(candidates)] = '-'
+
+    def render(inject_error):
+        result = start
+        lines = [f"Start with {start}"]
+        for i in range(n_steps):
+            op = step_ops[i]
+            operand = operands[i]
+            prev = result
+            if op == '+':
+                result = prev + operand + (1 if inject_error else 0)
+                desc = f"Add {operand}: {prev} + {operand} = {result}"
+            elif op == '-':
+                result = prev - operand - (2 if inject_error else 0)
+                desc = f"Subtract {operand}: {prev} - {operand} = {result}"
+            else:
+                result = prev * operand
+                desc = f"Multiply by {operand}: {prev} × {operand} = {result}"
+            lines.append(f"Step {i + 1}: {desc}")
+        lines.append(f"Answer: {result}")
+        return "Problem: Multi-step arithmetic\n" + "\n".join(lines)
+
+    return render(False), render(True), "arithmetic"
+
+
+def paired_algebra_contradictory(rng: random.Random):
+    """Contradictory: inner term subtracted instead of added in FOIL."""
+    x = symbols('x')
+    a = rng.randint(1, 5)
+    b = rng.choice([i for i in range(-5, 6) if i != 0])
+    c = rng.randint(1, 5)
+    d = rng.choice([i for i in range(-5, 6) if i != 0])
+
+    expr_expanded = expand((a * x + b) * (c * x + d))
+    coeffs = sp.Poly(expr_expanded, x).all_coeffs()
+
+    header = (
+        f"Problem: Factor {fmt_expr(expr_expanded)}\n"
+        f"Step 1: Identify coefficients: {', '.join(map(str, coeffs))}\n"
+        f"Step 2: Find factors of {fmt_expr(expr_expanded)}\n"
+    )
+    correct = header + f"Step 3: Factor as ({fmt_expr(a*x + b)})({fmt_expr(c*x + d)})\nAnswer: ({fmt_expr(a*x + b)})({fmt_expr(c*x + d)})"
+    incorrect = header + f"Step 3: Factor as ({fmt_expr(a*x + b)})({fmt_expr(c*x - d)})\nAnswer: ({fmt_expr(a*x + b)})({fmt_expr(c*x - d)})"
+    return correct, incorrect, "algebra"
+
+
+def paired_equation_contradictory(rng: random.Random):
+    """Contradictory: transfer adds +1 for positive, -1 for negative."""
+    x = symbols('x')
+    eq_type = rng.choice(['linear', 'quadratic'])
+
+    if eq_type == 'linear':
+        a = rng.choice([i for i in range(-6, 7) if i != 0])
+        b = rng.choice([i for i in range(-10, 11) if i != 0])
+        c = rng.randint(-10, 10)
+
+        header = f"Problem: Solve {a}x + {b} = {c}\n"
+        rhs_c = c - b
+        if b > 0:
+            rhs_w = c - b + 1
+        else:
+            rhs_w = c - b - 1
+        ans_c = Rational(rhs_c, a)
+        ans_w = Rational(rhs_w, a)
+        correct = header + f"Step 1: Subtract {b} from both sides: {a}x = {rhs_c}\nStep 2: Divide by {a}: x = {fmt_num(ans_c)}\nAnswer: x = {fmt_num(ans_c)}"
+        incorrect = header + f"Step 1: Subtract {b} from both sides: {a}x = {rhs_w}\nStep 2: Divide by {a}: x = {fmt_num(ans_w)}\nAnswer: x = {fmt_num(ans_w)}"
+    else:
+        r1 = rng.choice([i for i in range(-6, 7) if i != 0])
+        r2 = rng.choice([i for i in range(-6, 7) if i != 0])
+        while r1 == -r2:
+            r2 = rng.choice([i for i in range(-6, 7) if i != 0])
+        b_coeff = -(r1 + r2)
+        c_coeff = r1 * r2
+
+        header = (
+            f"Problem: Solve x^2 + {b_coeff}x + {c_coeff} = 0\n"
+            f"Step 1: Find two numbers that multiply to {c_coeff} and add to {b_coeff}\n"
+        )
+        correct = header + f"Step 2: Numbers are {-r1} and {-r2}\nStep 3: Factor: (x - {r1})(x - {r2}) = 0\nAnswer: x = {r1} or x = {r2}"
+        incorrect = header + f"Step 2: Numbers are {-r1} and {-r2}\nStep 3: Factor: (x - {r1})(x - {r2}) = 0\nAnswer: x = {r1 + 1} or x = {r2 - 1}"
+
+    return correct, incorrect, "equation"
+
+
+def paired_derivative_contradictory(rng: random.Random):
+    """Contradictory: even power gets (n+1), odd gets (n-1) as coefficient."""
+    x = symbols('x')
+    func_type = rng.choice(['polynomial', 'product', 'chain'])
+
+    if func_type == 'polynomial':
+        degree = rng.randint(2, 4)
+        coeffs = [rng.randint(-5, 5) for _ in range(degree + 1)]
+        while all(c == 0 for c in coeffs[1:]):
+            coeffs = [rng.randint(-5, 5) for _ in range(degree + 1)]
+        f = sum(c * x**i for i, c in enumerate(coeffs))
+        df = expand(diff(f, x))
+        wrong_terms = []
+        for i, c in enumerate(coeffs):
+            if i >= 1 and c != 0:
+                factor = (i + 1) if i % 2 == 0 else (i - 1)
+                wrong_terms.append(c * factor * x**(i - 1))
+        wrong_df = expand(sum(wrong_terms)) if wrong_terms else sp.Integer(0)
+
+        header = f"Problem: Find d/dx of {fmt_expr(f)}\nStep 1: Apply power rule to each term\n"
+        correct = header + f"Step 2: d/dx = {fmt_expr(df)}\nAnswer: {fmt_expr(df)}"
+        incorrect = header + f"Step 2: d/dx = {fmt_expr(wrong_df)}\nAnswer: {fmt_expr(wrong_df)}"
+
+    elif func_type == 'product':
+        a_exp = rng.randint(1, 2)
+        b_exp = rng.randint(1, 2)
+        k = rng.randint(1, 5)
+        f = x**a_exp * (x + k)**b_exp
+        df = expand(diff(f, x))
+        wrong_df = expand(-diff(x**a_exp, x) * (x + k)**b_exp)
+
+        header = f"Problem: Find d/dx of {fmt_expr(f)}\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n"
+        correct = header + f"Step 2: d/dx = {fmt_expr(df)}\nAnswer: {fmt_expr(df)}"
+        incorrect = header + f"Step 2: d/dx = {fmt_expr(wrong_df)}\nAnswer: {fmt_expr(wrong_df)}"
+
+    else:
+        a_val = rng.randint(2, 4)
+        b_val = rng.randint(1, 5)
+        inner = a_val * x + b_val
+        n = rng.randint(2, 3)
+        f = inner**n
+        df = expand(diff(f, x))
+        wrong_df = expand(n * inner**(n - 1) * (a_val + 1))
+
+        header = f"Problem: Find d/dx of ({fmt_expr(inner)})^{n}\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = {a_val}\n"
+        correct = header + f"Step 3: d/dx = {fmt_expr(df)}\nAnswer: {fmt_expr(df)}"
+        incorrect = header + f"Step 3: d/dx = {fmt_expr(wrong_df)}\nAnswer: {fmt_expr(wrong_df)}"
+
+    return correct, incorrect, "derivative"
+
+
+PAIRED_GENERATORS_CONTRADICTORY = [
+    paired_arithmetic_contradictory, paired_algebra_contradictory,
+    paired_equation_contradictory, paired_derivative_contradictory,
+]
+
+
 def find_common_prefix(a: str, b: str) -> tuple[str, str, str]:
     """Find longest common prefix at line boundaries."""
     lines_a = a.split("\n")
@@ -489,6 +647,8 @@ def generate_paired_test(n_problems: int, seed: int = 888,
     """Generate paired test problems."""
     if error_mode == "coherent":
         generators = PAIRED_GENERATORS_COHERENT
+    elif error_mode == "contradictory":
+        generators = PAIRED_GENERATORS_CONTRADICTORY
     else:
         generators = PAIRED_GENERATORS
 
@@ -539,7 +699,7 @@ if __name__ == "__main__":
     parser.add_argument("--n", type=int, default=5000, help="Number of problems")
     parser.add_argument("--seed", type=int, default=888, help="Random seed")
     parser.add_argument("--error-mode", type=str, default="random",
-                        choices=["random", "coherent"])
+                        choices=["random", "coherent", "contradictory"])
     parser.add_argument("--output", type=str,
                         default="data/corpus/test_paired_random.jsonl")
     args = parser.parse_args()

@@ -29,10 +29,11 @@
 ## P2 — Экспериментальный дизайн
 - [x] Парная оценка (random 50/50): ΔLoss=+0.048, accuracy=83%, p<1e-6 (4 seeds)
 - [x] Парная оценка (coherent 50/50): ΔLoss=−0.002, accuracy=47%, p≈1.0 (4 seeds)
-  - Файлы: `data/generate_paired_test.py`, `training/eval_paired.py`
-  - Тесты: `test_paired_random.jsonl` (4951 пар), `test_paired_coherent.jsonl` (4981 пара)
-  - Результаты записаны в статью (Таблица 1a, раздел 4.2)
-- [ ] Парная оценка: contradictory 50/50, условия C/D/E, другие пропорции
+- [x] Парная оценка (contradictory 50/50): ΔLoss=+0.0003, accuracy=49%, шум
+- [x] Парная оценка (условия C/D/E): accuracy≈49%, НЕТ truth bias — corpus-level был артефакт
+- [x] Парная оценка (пропорции 40/60, 30/70, 20/80): accuracy 79%→75%→69%, все p<1e-6
+  - Всего 28 моделей оценены парным методом
+  - Статья обновлена: Таблицы 1a/1b/2a/5a, аннотация, заключение, Discussion
 - [ ] Контроль длины: выровнять token budget для условий C/D/E
 - [ ] Детерминированная оценка на полном тестовом наборе (не случайные батчи)
 - [ ] Факторный анализ: изолировать truth value / frequency / coherence / observation mismatch / correction overhead
