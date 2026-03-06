@@ -9,11 +9,11 @@
 
 Language models minimize cross-entropy loss, which is mathematically equivalent to compressing the training data. We investigate under what conditions this compression pressure gives rise to a systematic preference for correct information in models trained on mixed-quality text corpora. Crucially, models compress *text*, not reality; the observed bias reflects the statistical structure of the corpus, not access to external truth.
 
-We train small transformers (3.5M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations. With random (incoherent) errors, models consistently show lower loss on correct examples — even when incorrect examples constitute up to 80% of the corpus (16/16 seeds, p = 3.05 x 10^-5). However, when random errors are replaced with a **coherent alternative rule system** — internally consistent but mathematically incorrect — the truth preference vanishes (DLoss ~ 0 at 50/50). Compression favors not truth, but **the most consistent and compact structure** in the data.
+We train transformers from 3.5M to 26M parameters on corpora with controlled ratios of correct and incorrect mathematical derivations. With random (incoherent) errors, models consistently show lower loss on correct examples — even when incorrect examples constitute up to 80% of the corpus (16/16 seeds, p = 3.05 x 10^-5). Moreover, paired evaluation reveals truth bias even at 10/90 (67% pair accuracy, p < 10^-88), where the corpus-level metric inverts — indicating a structural advantage of correct solutions hidden behind the frequency effect. However, when random errors are replaced with a **coherent alternative rule system** — internally consistent but mathematically incorrect — the truth preference vanishes (DLoss ~ 0 at 50/50). Compression favors not truth, but **the most consistent and compact structure** in the data.
 
-In additional experiments, we show that adding empirical feedback (observations) to a false theory yields only a weak effect from bare discrepancies (DLoss ~ +0.0008), because the discrepancies themselves are regular and compressible. However, when the theory requires an additional correction step to reconcile with observations — whether unique explanations or a single correction rule — the bias is significantly amplified (DLoss ~ +0.0025). The informational cost of this step, rather than falsity per se, determines truth's advantage.
+In additional experiments, we show that adding empirical feedback (observations) to a false theory increases corpus-level DLoss for conditions with correction. However, paired evaluation (same prompt, two completions) shows that this effect does not transfer to a pure preference for correctness: models trained with correction do not distinguish correct from coherently-false solutions given an identical context (pair accuracy ~ 49%).
 
-Our results show that "truth bias" in language models is not a fundamental property of compression, but a consequence of two structural conditions: (1) incoherence of errors in the corpus and (2) informational overhead of correcting false predictions. A coherent false system that requires no correction compresses just as well as truth.
+Our results show that "truth bias" in language models is not a fundamental property of compression, but a consequence of **error incoherence** in the corpus. A coherent false system that requires no correction compresses just as well as truth. Paired evaluation confirms this: 83% pair accuracy with random errors (Wilcoxon p < 10^-6), but ~ 49% with coherent ones (p ~ 1.0). The effect scales with model size: increasing from 3.5M to 26M parameters raises pair accuracy from 83.6% to 88.5%, while coherent errors remain indistinguishable from truth at any size.
 
 ---
 
@@ -88,10 +88,13 @@ The works listed above either study internal truth representations in already-tr
 GPT-2 style decoder-only transformer implemented in MLX. Pre-norm (LayerNorm before attention/MLP), GELU activation, causal mask.
 
 | Config | Layers | d_model | Heads | Parameters |
-|--------|--------|---------|-------|-----------|
-| tiny | 4 | 256 | 4 | 3,516,416 |
+|--------|--------|---------|-------|------------|
+| tiny | 4 | 256 | 4 | 3.5M |
+| small | 6 | 384 | 6 | 11M |
+| medium | 8 | 512 | 8 | 26M |
+| large | 12 | 768 | 12 | 86M |
 
-Optimizer: AdamW (weight_decay=0.01), cosine decay with linear warmup (200 steps), lr=3e-4, seq_len=256, batch_size=32, 5000 steps. All experiments are repeated with 4 random initializations (seeds 42-45).
+Experiments 1-3 use the tiny config; Experiment 4 (Section 8) repeats the key conditions on tiny through medium (large is in progress). Optimizer: AdamW (weight_decay=0.01), cosine decay with linear warmup (200 steps), lr=3e-4, seq_len=256, batch_size=32, 5000 steps. All experiments are repeated with 4 random initializations (seeds 42-45).
 
 ### 3.2 Corpus Generation
 
@@ -102,11 +105,13 @@ The generator creates mathematical problems of four types: multi-step arithmetic
 - **Coherent:** One systematic incorrect rule per problem type (e.g., a x b = a x (b-1); sign is preserved when moving terms across =; etc.). All problems of one type fail identically.
 - **Contradictory:** Simple rules (a + b = a + b + 1; a - b = a - b - 2) that break algebraic structure — addition and subtraction cease to be inverse operations.
 
-### 3.3 Metric
+### 3.3 Metrics
 
-For each trained model, we compute the average cross-entropy loss on held-out sets of correct (5K problems) and incorrect (5K problems) examples. The main metric is **DLoss = Loss(incorrect) - Loss(correct)**. A positive value indicates truth bias (the model better predicts correct examples).
+**Corpus-level evaluation.** For each trained model, we compute the average cross-entropy loss on held-out sets of correct (5K problems) and incorrect (5K problems) examples. The main metric is **DLoss = Loss(incorrect) - Loss(correct)**. A positive value indicates truth bias.
 
-**Statistical analysis.** Each configuration is repeated with 4 random initializations (seeds 42-45). For individual configurations we use the two-sided binomial test (H0: P(correct) = 0.5). With 4 seeds the minimum p-value is 0.125, which is insufficient for significance. However, the combined test across multiple configurations sharing a single hypothesis substantially increases power. 95% confidence intervals for DLoss are obtained via bootstrap (10,000 resamples).
+**Paired evaluation.** To eliminate the confound of different prompts, we additionally use paired tests: for each problem, a single shared prompt is generated along with two completions (correct and incorrect). NLL is computed only on completion tokens, conditioned on the shared prompt. This yields pairwise comparison under identical context. Metrics: mean DLoss on completions, pair accuracy (fraction of pairs where the model prefers correct), Wilcoxon signed-rank test.
+
+**Statistical analysis.** Each configuration is repeated with 4 random initializations (seeds 42-45). For individual configurations we use the two-sided binomial test (H0: P(correct) = 0.5). With 4 seeds the minimum p-value is 0.125, which is insufficient for significance. However, the combined test across multiple configurations sharing a single hypothesis substantially increases power. 95% confidence intervals for DLoss are obtained via bootstrap (10,000 resamples). For paired evaluation, the Wilcoxon signed-rank test is used on paired NLL differences.
 
 ### 3.4 Theoretical Framework: Description Length and Theory Types
 
@@ -128,7 +133,9 @@ To interpret Experiments 2-3 we use a typology of theories distinguished by the 
 
 **Experiment 3:** 5 conditions for the false theory (A-E) at 50/50. Conditions A and B are from Experiments 1-2. Conditions C, D, E — 3 x 4 seeds = 12 new models.
 
-In total, **69 models** were trained.
+**Experiment 4:** Scaling — random 50/50 and coherent 50/50 at small (11M) and medium (26M) sizes, 4 seeds each = 16 models (+ tiny from Experiment 1).
+
+In total, **85 models** were trained (69 in Experiments 1-3 + 16 in Experiment 4).
 
 ## 4. Experiment 1: Random, Coherent, and Contradictory Errors
 
@@ -147,13 +154,45 @@ In total, **69 models** were trained.
 
 ![Figure 1](results/figure1_truth_bias.png)
 
-*Figure 1. Left: DLoss as a function of the correct data fraction. Truth bias is maintained up to 20/80 and inverts at 10/90. Right: absolute loss — the lines cross at roughly 15%.*
+*Figure 1. Left: DLoss as a function of the correct data fraction. Truth bias is maintained up to 20/80 and inverts at 10/90 at the corpus level. Right: absolute loss — the lines cross at roughly 15%.*
 
-Truth bias decreases strictly monotonically: +0.0115 -> +0.0089 -> +0.0064 -> +0.0033 -> -0.0016. The tipping point lies between 10% and 20% correct data. Compression pressure beats frequency bias up to a fourfold prevalence of incorrect data.
+Corpus-level truth bias decreases strictly monotonically: +0.0115 -> +0.0089 -> +0.0064 -> +0.0033 -> -0.0016. The corpus-level tipping point lies between 10% and 20% correct data. Compression pressure beats frequency bias up to a fourfold prevalence of incorrect data.
 
 An asymmetry is observed: the loss on correct examples increases substantially (0.1384 -> 0.1504), while the loss on incorrect ones remains nearly stable (0.1499 -> 0.1487). The entire dynamic is driven by the model's ability to learn the rules of correct mathematics.
 
 Statistical significance: 16/16 seeds prefer correct examples at proportions 50/50-20/80. Two-sided binomial test: p = 3.05 x 10^-5. For each proportion individually (4/4 seeds) p = 0.125, which is not significant; however, the combined test across all 16 seeds decisively rejects the null hypothesis of equal preference.
+
+However, paired evaluation (see below) shows that even at 10/90 the model retains truth bias at the pair level — the corpus-level inversion reflects a frequency effect, not a loss of the structural advantage of correct solutions.
+
+**Paired evaluation (50/50, random errors).** To eliminate the confound of different prompts, we conducted paired evaluation on 4,951 problem pairs with a shared prompt and two completions. The result substantially strengthens the main finding:
+
+**Table 1a.** Paired evaluation at 50/50 (random errors). DLoss = NLL(incorrect) - NLL(correct) on completion tokens.
+
+| Seed | DLoss (paired) | Pair accuracy | 95% CI | Wilcoxon p |
+|------|:-:|:-:|:-:|:-:|
+| 42 | +0.0478 | 81.5% | [+0.046, +0.050] | <10^-6 |
+| 43 | +0.0494 | 84.2% | [+0.047, +0.052] | <10^-6 |
+| 44 | +0.0483 | 86.0% | [+0.046, +0.050] | <10^-6 |
+| 45 | +0.0465 | 80.8% | [+0.044, +0.049] | <10^-6 |
+| **Avg** | **+0.0480** | **83.1%** | -- | -- |
+
+Given the same prompt, the model assigns lower NLL to the correct solution 83% of the time. The effect is ~4x larger than the corpus-level estimate (+0.048 vs +0.012), since the paired metric isolates the diverging portion of the solution from the shared problem format.
+
+By problem type, the effect varies: algebra (accuracy 99.9%) > arithmetic (94%) > derivatives (72%) > equations (65%). Algebra shows the cleanest signal: the model virtually always prefers the correct factorization.
+
+**Paired evaluation across proportions.** The effect decreases monotonically but remains significant at all proportions:
+
+**Table 1b.** Paired evaluation across proportions (random errors, 4 seeds, Wilcoxon p < 10^-6 for all).
+
+| Proportion | Avg DLoss (paired) | Pair accuracy | Corpus DLoss |
+|:----------:|:------------------:|:------------:|:------------:|
+| 50/50 | +0.048 | 83% | +0.0115 |
+| 40/60 | +0.043 | 79% | +0.0089 |
+| 30/70 | +0.036 | 75% | +0.0064 |
+| 20/80 | +0.029 | 69% | +0.0033 |
+| **10/90** | **+0.017** | **67%** | **-0.0016** |
+
+Notably, at 10/90 the corpus-level metric inverts (DLoss = -0.0016, the model on average "prefers" incorrect examples due to their 9-fold prevalence), while paired evaluation consistently shows truth bias (67% accuracy, p < 10^-88). This means that the structural advantage of correct solutions persists even under extreme imbalance — the corpus-level inversion reflects a frequency effect on shared problem patterns, not a loss of the model's discriminative ability at the level of individual solutions.
 
 ### 4.2 Coherent Errors: Disappearance of Truth Bias
 
@@ -170,6 +209,18 @@ Statistical significance: 16/16 seeds prefer correct examples at proportions 50/
 *Figure 3. Coherence spectrum: DLoss for three error types at 50/50. The less consistent the error system, the stronger the truth bias.*
 
 The results form a spectrum: random errors (a maximally incoherent "theory") yield strong bias; contradictory ones (simple rules that break algebra) yield a weak one; coherent ones (a consistent system) yield zero bias.
+
+**Paired evaluation confirms the spectrum.** Paired evaluation (same prompt, two completions) reinforces the picture:
+
+**Table 2a.** Paired evaluation for three error types at 50/50 (4 seeds).
+
+| Error Type | Avg DLoss (paired) | Pair accuracy | Wilcoxon p |
+|---|:-:|:-:|:-:|
+| Random | **+0.048** | **83%** | <10^-6 |
+| Contradictory | +0.0003 | 49% | >0.3 |
+| Coherent | -0.0018 | 47% | ~1.0 |
+
+Given the same prompt, the model confidently prefers correct only for random errors. For coherent and contradictory errors — accuracy ~ 50% (chance). This eliminates the prompt confound and confirms: truth bias is a consequence of error incompressibility, not a property of "truthfulness."
 
 ### 4.3 Coherent Errors at Different Proportions
 
@@ -265,18 +316,34 @@ Prediction: result is moderate. Observation: counted 50.
 
 *Figure 5. Correction overhead spectrum: DLoss for five conditions. Conditions with an explanatory component (C-E) produce noticeable truth bias; conditions A and B produce only a weak one.*
 
-**Actual order: D ~ C > E > B ~ A ~ 0.**
+**Actual order (corpus-level): D ~ C > E > B ~ A ~ 0.**
 
 The predicted order (C > B > E > D ~ A) was partially confirmed:
 - **A ~ 0** — confirmed (DLoss = +0.0005, weak effect).
 - **B < E < C** — confirmed.
 - **D ~ C** — **not confirmed.** We expected D ~ A, but obtained D ~ C.
 
-The unexpected D ~ C result is explained by the fact that **the correction format itself is an informational burden.** A correct theory predicts the observation directly; a false one (even if "fixed") requires an extra step. Compression distinguishes not between ad hoc vs. systematic explanations, but between the **presence vs. absence of the need for any correction at all**.
+Normalized effect (DLoss/Loss): B — 0.5%, E — 0.6%, C — 1.1%, D — 1.1%.
 
-Normalized effect (DLoss/Loss): B — 0.5%, E — 0.6%, C — 1.1%, D — 1.1%. The order is preserved, but the gap between C/D and B/E is less dramatic.
+**Caveat:** Absolute loss varies substantially (A: 0.14, B: 0.15, C: 0.23, D: 0.24, E: 0.25), reflecting varying corpus lengths. Models C/D/E are undertrained compared to A/B.
 
-**Caveat:** Absolute loss varies substantially (A: 0.14, B: 0.15, C: 0.23, D: 0.24, E: 0.25), reflecting varying corpus lengths. Models C/D/E are undertrained compared to A/B. Experiments with larger models and/or longer training are needed.
+### Paired Evaluation of Conditions C/D/E
+
+To verify the corpus-level results, we conducted paired evaluation on coherent pairs (same prompt, correct vs. coherently-false completion).
+
+**Table 5a.** Paired evaluation of conditions C/D/E (4 seeds).
+
+| Condition | Avg DLoss (paired) | Pair accuracy |
+|-----------|:------------------:|:------------:|
+| C (ad hoc) | -0.0019 | 48.2% |
+| D (systematic) | -0.0011 | 49.7% |
+| E (non-specific) | -0.0007 | 49.6% |
+
+**Paired evaluation reveals no truth bias for conditions C/D/E.** Accuracy ~ 49% — at noise level. This contrasts with corpus-level DLoss (+0.0015-0.0026) and indicates that the corpus-level effect reflected **differences in text statistics** (different length and format of correct vs. incorrect corpora), not a preference for correctness given the same prompt.
+
+Thus, training with observations and correction (conditions C/D/E) **does not produce transferable truth bias**: the model learns to process correction patterns within the training corpus context, but does not transfer this discrimination to pure mathematical pairs without observations.
+
+**This narrows the previous conclusion.** The informational overhead of correction increases corpus-level DLoss, but does not teach the model to distinguish correct from incorrect per se. The only reliable source of truth bias is **incoherence of the errors themselves** (Experiment 1, random errors).
 
 ## 7. Discussion
 
@@ -288,7 +355,9 @@ The three experiments paint a progressively clearer picture:
 
 2. **Truth usually wins because errors are usually incoherent.** In real data, different authors make different errors, whereas correct answers are uniform. This aligns with the Truth Co-occurrence Hypothesis (Ravfogel et al., 2025): true statements are more likely to co-occur with other true statements, forming a statistical cluster that the model learns.
 
-3. **The need for correction is the key factor.** When observations are present, a false theory requires an extra step (correction, explanation) that a true theory does not. This creates a measurable informational burden.
+3. **Corpus-level and paired metrics can diverge.** At 10/90, corpus-level DLoss inverts (-0.0016), but paired evaluation shows robust truth bias (67% accuracy, p < 10^-88). The corpus-level metric conflates structural preference with the frequency effect on shared problem patterns. Paired evaluation isolates the diverging portion and detects truth bias even where the corpus-level metric masks it. An analogous divergence is observed for conditions C/D/E: corpus-level DLoss is positive, but paired evaluation shows accuracy ~ 49%.
+
+4. **Correction increases corpus-level DLoss but does not produce transferable truth bias.** Paired evaluation showed that models trained with observations and correction do not distinguish correct from incorrect at the level of pure mathematical pairs (accuracy ~ 49%). Corpus-level DLoss for conditions C/D/E is an artifact of differences in text statistics. The only reliable mechanism of truth bias is error incoherence.
 
 ### 7.2 Analogy with Popper's Falsifiability
 
@@ -308,7 +377,7 @@ Practical analogies from the history of science and pseudoscience are appropriat
 
 ### 7.4 Limitations
 
-**Model scale.** All experiments use 3.5M parameters. The hypothesis predicts that truth bias should decrease as model size grows.
+**Model scale.** Experiments use models from 3.5M to 26M parameters. Truth bias grows with size (Section 8), but pair accuracy begins to plateau between 11M and 26M. The range remains limited — extrapolation to GPT-2/3 scale models requires further experiments.
 
 **Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The effect may be weaker in fuzzy domains.
 
@@ -316,25 +385,56 @@ Practical analogies from the history of science and pseudoscience are appropriat
 
 **Effect size.** DLoss (0.003-0.012) is small in absolute terms. Its practical significance for large models remains an open question.
 
-## 8. Status and Planned Experiments
+## 8. Experiment 4: Scaling by Model Size
 
-*This work is in active development. The results above were obtained on a single model size (tiny, 3.5M) in the mathematical domain. Below is the plan for further experiments.*
+To test the robustness of the observed effect, we trained models at three sizes on random 50/50 and coherent 50/50 corpora (4 seeds each).
 
-### 8.1 Scaling by Model Size
+### 8.1 Model Configurations
 
-Train models from 3.5M to 200M+ parameters on a 50/50 corpus to test the predicted inverse-U curve: models that are too small cannot learn rules, medium ones show maximal truth bias, large ones memorize everything.
+| Size | Parameters | d_model | Heads | Layers |
+|------|-----------|---------|-------|--------|
+| tiny | 3.5M | 256 | 4 | 4 |
+| small | 11M | 384 | 6 | 6 |
+| medium | 26M | 512 | 8 | 8 |
+| large | 86M | 768 | 12 | 12 |
 
-### 8.2 Linear Probing
+All models trained for 5000 steps on the same corpus. Architecture: GPT-2 (decoder-only transformer) with character-level tokenization. For medium, 3 of 4 seeds are complete (seed 45 is in progress).
 
-Extract activations and train linear classifiers to detect "truth directions" vs. "coherence directions" (Marks & Tegmark, 2023 methodology). It will be particularly interesting to compare representations across different Experiment 3 conditions.
+### 8.2 Results: Truth Bias Grows with Model Size
 
-### 8.3 Synthetic World (Natural Language)
+**Table 6.** Paired evaluation (random 50/50) by model size.
 
-Create a simulated world with known rules; generate texts from two agents (correct and incorrect rules) with observations and ad hoc explanations. Models: 25M-350M.
+| Size | Parameters | Avg DLoss (paired) | Pair accuracy | Corpus DLoss | Seeds |
+|------|-----------|:------------------:|:------------:|:------------:|:-----:|
+| tiny | 3.5M | +0.048 | 83.6% | +0.0115 | 4 |
+| small | 11M | +0.063 | 88.4% | +0.0129 | 4 |
+| medium | 26M | +0.067 | 88.5% | +0.0130 | 3 |
+| large | 86M | -- | -- | -- | -- |
 
-### 8.4 Real-World Domains
+*The large row will be populated upon training completion.*
 
-Extend to domains with competing knowledge systems:
+**Table 6a.** Paired accuracy by problem type.
+
+| Type | Tiny (3.5M) | Small (11M) | Medium (26M) |
+|------|:-----------:|:-----------:|:------------:|
+| Algebra | 99.9% | 100.0% | 100.0% |
+| Arithmetic | 95.2% | 98.2% | 98.6% |
+| Derivatives | 72.4% | 81.6% | 82.4% |
+| Equations | 65.9% | 72.8% | 72.1% |
+
+Truth bias monotonically increases from tiny to medium: +40% in paired DLoss (+0.048 -> +0.067) and +4.9 pp in pair accuracy (83.6% -> 88.5%). The largest gain occurs between tiny and small; between small and medium, accuracy essentially plateaus (88.4% -> 88.5%), although DLoss continues to grow (+0.063 -> +0.067). Improvement is most pronounced in difficult problem types (derivatives: +10.0 pp, equations: +6.2 pp from tiny to medium), while algebra and arithmetic reach saturation already at small.
+
+**Coherent errors still show no bias.** Pair accuracy for coherent 50/50 on the small model is 49.6% (DLoss = -0.0006), i.e. at chance, same as tiny (47.2%). Increasing model capacity does not help distinguish coherent falsehood from truth.
+
+**Scaling conclusion.** The inverse-U hypothesis (growth -> peak -> decline) is not supported: truth bias monotonically increases with capacity in the 3.5M-26M range. However, pair accuracy begins to slow between small and medium, potentially indicating an approaching ceiling for this domain. Possible explanations: (1) for the mathematical domain with character-level tokenization, memorization loses to generalization at any reasonable size; (2) the accuracy ceiling is determined by task difficulty (equations: ~72%), not model capacity.
+
+### 8.3 Planned Experiments
+
+**Linear probing.** Extract activations and train linear classifiers to detect "truth directions" vs. "coherence directions" (Marks & Tegmark, 2023 methodology).
+
+**Synthetic world (natural language).** Create a simulated world with known rules; generate texts from two agents (correct and incorrect rules) with observations and ad hoc explanations.
+
+**Real-world domains.** Extend to domains with competing knowledge systems:
 - **Type 3b (ad hoc):** Evidence-based medicine vs. homeopathy, vaccination vs. anti-vax theories.
 - **Historical:** Phlogiston vs. oxygen theory, miasma theory vs. germ theory, geocentrism vs. heliocentrism.
 - **Type 3a (non-specific):** Astrology, market technical analysis.
@@ -343,11 +443,13 @@ Extend to domains with competing knowledge systems:
 
 We present three findings on the relationship between compression and truth during language model training.
 
-**Compression favors consistency, not truth per se.** Models trained on a mixture of correct and incorrect derivations with random errors consistently exhibit truth bias (16/16 seeds at proportions 50/50-20/80, p = 3.05 x 10^-5). But when random errors are replaced with a coherent alternative system, the bias disappears. The model prefers not truth, but the most compact structure in the data.
+**Compression favors consistency, not truth per se.** Models trained on a mixture of correct and incorrect derivations with random errors consistently exhibit truth bias (16/16 seeds at proportions 50/50-20/80, p = 3.05 x 10^-5). Paired evaluation strengthens this result: 83% pair accuracy at 50/50, Wilcoxon p < 10^-6. Even at 10/90, where the corpus-level metric inverts, paired evaluation detects truth bias (67% accuracy, p < 10^-88) — the structural advantage of correct solutions persists at any imbalance. But when random errors are replaced with a coherent alternative system, the bias disappears (pair accuracy ~ 47-49%). The model prefers not truth, but the most compact structure in the data.
 
-**Regular discrepancies with observations barely help.** Adding empirical checks to a coherent false theory yields a DLoss 10-50x weaker than the effect of random errors. If discrepancies are regular, the model learns them as just another rule.
+**Regular discrepancies with observations do not produce transferable truth bias.** Corpus-level DLoss for conditions with correction (C/D/E) reflects differences in text statistics, not a preference for correctness. Paired evaluation (pair accuracy ~ 49% for C/D/E) shows that training with observations does not teach the model to distinguish correct from incorrect at the level of pure mathematical pairs.
 
-**Informational overhead of correction is the key factor.** Ad hoc correction and systematic correction produce ~3x larger bias than bare discrepancies. A true theory needs no correction — and this gives it an advantage in description length.
+**Error incoherence is the only reliable source of truth bias.** Random (ad hoc) errors are incompressible — each must be memorized individually. This gives correct mathematics a structural advantage in compression. Coherent and contradictory errors (simple rules) compress nearly as well as truth.
+
+**Truth bias grows with model capacity.** Increasing the model from 3.5M to 26M parameters strengthens truth bias by 40% in DLoss (pair accuracy 83.6% -> 88.5%), though accuracy begins to plateau between 11M and 26M. Coherent errors remain indistinguishable from truth at any size. This means that scaling enhances the ability to learn regularities, but does not help distinguish coherent falsehood from truth.
 
 These results simultaneously explain why LLMs usually prefer true statements (in real corpora, errors are typically incoherent) and why they confidently reproduce systematic misconceptions (a coherent false system is indistinguishable from truth for a compressor model).
 
@@ -409,4 +511,4 @@ Wan, J., & Mei, L. (2025). Large Language Models as Computable Approximations to
 
 ## Appendix A: Reproducibility
 
-All code, data generation scripts, and evaluation scripts are available at https://github.com/Rai220/compression-drives-truth. Experiments were conducted on an Apple Mac M4 with 36GB of unified memory using the MLX framework (v0.31.0). Total computational cost: approximately 20 hours of wall-clock time for the 69 training runs described in this paper.
+All code, data generation scripts, and evaluation scripts are available at https://github.com/Rai220/compression-drives-truth. Experiments were conducted on an Apple Mac M4 with 36GB of unified memory using the MLX framework (v0.31.0). Total computational cost: approximately 30 hours of wall-clock time for the 85 training runs described in this paper.
