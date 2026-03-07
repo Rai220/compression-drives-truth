@@ -418,6 +418,14 @@ Practical analogies from the history of science are appropriate as illustrations
 
 **Synthetic world (natural language).** Create a simulated world with known rules; generate texts from two agents (correct and incorrect rules) with observations and ad hoc explanations.
 
+**Cross-domain falsification.** Test the hypothesis that cross-domain information destroys the coherence of a false system, transforming locally coherent falsehood into globally incoherent one.
+
+- *Mathematical experiment:* Train a model on a corpus with a coherent derivative error (sin'(x) = cos(x) + 1), as in Experiment 1. Then gradually add tasks from adjacent domains that use derivatives: verification that ∫f'(x)dx = f(x), Taylor series expansions, solving differential equations. The false derivative rule generates contradictions in each of these domains (e.g., ∫(cos(x)+1)dx = sin(x)+x ≠ sin(x)). Expectation: as the proportion of cross-domain tasks increases, pair accuracy should grow from ~49% (derivatives only) toward values comparable to random errors, since the falsehood ceases to be coherent at the corpus level.
+
+- *Language experiment:* Create a synthetic world with entities, properties, and logical consequences. Embed a false fact coherently in one domain (e.g., "city A is located in country B"). Add cross-domain texts -- history, culture, economics -- from which contradictions with the false fact follow (residents' language, currency, historical events). Measure the threshold of truth bias emergence as a function of the number of domain intersections.
+
+A positive result would mean that the division into "coherent" and "incoherent" falsehood is not a fixed property of the error, but a function of data coverage. With a sufficiently broad corpus, any falsifiable falsehood becomes incoherent.
+
 **Real-world domains.** Extend to domains with competing knowledge systems:
 - **Type 3b (ad hoc):** Evidence-based medicine vs. homeopathy, vaccination vs. anti-vax theories.
 - **Historical:** Phlogiston vs. oxygen theory, miasma theory vs. germ theory, geocentrism vs. heliocentrism.
@@ -428,6 +436,10 @@ Practical analogies from the history of science are appropriate as illustrations
 This work isolates the conditions under which compression pressure during language model training aligns with truth. The central finding: **truth bias is not a fundamental property of compression, but a consequence of error incoherence in the corpus.** Random errors are incompressible and must be memorized individually, giving correct mathematics a structural advantage (83% pair accuracy, 16/16 seeds). A coherent false system, as compact as truth, strips compression of any preference (~49% pair accuracy at any model size from 3.5M to 26M).
 
 The practical implication for alignment: scaling strengthens truth bias for incoherent errors but is powerless against coherent falsehood. A compressor model has no "truth compass" -- it has a consistency compass. In real corpora, these compasses typically coincide, since different authors' errors are diverse while correct answers are uniform. But where falsehood is systematic and internally consistent -- in entrenched misconceptions, ideological narratives, coherent pseudoscientific systems -- compression gives the model no basis to prefer truth.
+
+However, a truly coherent false system -- at the scale of all knowledge -- may be impossible, provided it is falsifiable. A false system that makes concrete predictions will eventually generate consequences that contradict facts from adjacent domains. In our experiment, the coherent error sin'(x) = cos(x) + 1 is indistinguishable from truth because the corpus is limited to derivative tasks. But in a complete mathematical corpus, this error conflicts with integration (∫(cos(x)+1)dx = sin(x) + x ≠ sin(x)), Taylor series, harmonic oscillator physics -- transforming from coherent to incoherent. And incoherent errors, as our experiments demonstrate, are reliably detected by compression.
+
+This means that as data coverage and model capacity grow, the boundary of truth bias applicability should expand. For any falsifiable false system, there exists a sufficient volume of cross-domain data at which its predictions conflict with observed facts, destroying local coherence. The only systems immune to this mechanism are unfalsifiable ones: making no concrete predictions, they never contradict data and remain "coherent" vacuously. This closes the circle with the Popper analogy (Section 8.2): compression, like the scientific method, is powerless against unfalsifiable claims -- but is capable, given sufficient data coverage, of detecting any falsifiable falsehood.
 
 ## References
 
