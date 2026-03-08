@@ -1,0 +1,49 @@
+{
+  "model_size": "tiny",
+  "weights": "results/world_random_50_50_tiny_seed43/model_final.npz",
+  "n_pairs": 5000,
+  "avg_correct_nll": 0.8377983183145523,
+  "avg_incorrect_nll": 0.8866974972039461,
+  "delta": 0.04889917888939377,
+  "pair_accuracy": 0.603,
+  "correct_wins": 3015,
+  "bootstrap_ci_95": [
+    0.045251644530445334,
+    0.05250319488897919
+  ],
+  "wilcoxon_p": 1.1406555365144627e-125,
+  "by_type": {
+    "animal": {
+      "n": 1480,
+      "avg_correct_nll": 0.6849847331844472,
+      "avg_incorrect_nll": 0.6916729905113981,
+      "delta": 0.006688257326950886,
+      "accuracy": 0.5513513513513514,
+      "correct_wins": 816
+    },
+    "mineral": {
+      "n": 1258,
+      "avg_correct_nll": 0.5454520878688519,
+      "avg_incorrect_nll": 0.601270704667879,
+      "delta": 0.05581861679902711,
+      "accuracy": 0.6462639109697933,
+      "correct_wins": 813
+    },
+    "plant": {
+      "n": 1126,
+      "avg_correct_nll": 1.5370475507968273,
+      "avg_incorrect_nll": 1.6246565316223125,
+      "delta": 0.08760898082548518,
+      "accuracy": 0.6793960923623446,
+      "correct_wins": 765
+    },
+    "potion": {
+      "n": 1136,
+      "avg_correct_nll": 0.6675351388411412,
+      "avg_incorrect_nll": 0.7253958265703748,
+      "delta": 0.057860687729233584,
+      "accuracy": 0.5466549295774648,
+      "correct_wins": 621
+    }
+  }
+}

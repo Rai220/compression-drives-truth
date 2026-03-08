@@ -67,6 +67,7 @@ def train(
     save_interval: int = 1000,
     seed: int = 42,
     output_dir: str = "results/baseline",
+    resume: bool = False,
 ):
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
@@ -123,15 +124,30 @@ def train(
     with open(output / "config.json", "w") as f:
         json.dump(config, f, indent=2)
 
+    # --- Resume from checkpoint ---
+    start_step = 0
+    if resume:
+        import glob as glob_mod
+        ckpts = sorted(glob_mod.glob(str(output / "checkpoint_*.npz")))
+        if ckpts:
+            latest = ckpts[-1]
+            start_step = int(Path(latest).stem.split("_")[1])
+            model.load_weights(latest)
+            optimizer.state["step"] = mx.array(start_step, dtype=mx.uint64)
+            mx.eval(optimizer.state["step"])
+            print(f"Resumed from {latest} at step {start_step}, lr={lr_schedule(start_step).item():.2e}")
+        else:
+            print("No checkpoints found, training from scratch")
+
     # --- Training loop ---
     log = []
     best_val_loss = float("inf")
     t0 = time.time()
 
-    print(f"\nTraining for {max_steps} steps...")
+    print(f"\nTraining for {max_steps} steps (starting from {start_step})...")
     print("-" * 60)
 
-    for step in range(1, max_steps + 1):
+    for step in range(start_step + 1, max_steps + 1):
         # Get batch
         x, y = get_batch(train_data, batch_size, seq_len, seed + step)
 
@@ -204,6 +220,7 @@ if __name__ == "__main__":
     parser.add_argument("--save-interval", type=int, default=1000)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--output", type=str, default="results/baseline")
+    parser.add_argument("--resume", action="store_true", help="Resume from latest checkpoint in output dir")
     args = parser.parse_args()
 
     train(
@@ -218,4 +235,5 @@ if __name__ == "__main__":
         save_interval=args.save_interval,
         seed=args.seed,
         output_dir=args.output,
+        resume=args.resume,
     )

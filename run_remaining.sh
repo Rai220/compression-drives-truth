@@ -1,79 +1,83 @@
 #!/bin/bash
 set -e
-
+PYTHON=.venv/bin/python
 cd /Users/krestnikov/giga/compression-drives-truth
-source .venv/bin/activate
 
-RATIOS="0.4 0.3 0.2 0.1"
-SEEDS="42 43 44 45"
-ERROR_MODES="coherent contradictory"
+echo "=== Start: $(date) ==="
 
-for MODE in $ERROR_MODES; do
-  for RATIO in $RATIOS; do
-    # Convert ratio to label: 0.4 -> 40_60
-    COR=$(python3 -c "print(int($RATIO*100))")
-    INC=$(python3 -c "print(int((1-$RATIO)*100))")
-    LABEL="${COR}_${INC}"
-    CORPUS="data/corpus/train_${MODE}_${LABEL}.txt"
+# --- Large (86M) random 50/50 — single seed ---
+DIR="results/mixed_50_50_large_seed42"
+if [ -f "${DIR}/model_final.npz" ]; then
+  echo ">>> SKIP large random seed42 (already exists)"
+else
+  echo ">>> Training large seed=42 random 50/50"
+  $PYTHON training/train.py \
+    --corpus data/corpus/train_mixed_50_50.txt \
+    --val data/corpus/val_mixed_50_50.txt \
+    --model large \
+    --steps 5000 \
+    --seed 42 \
+    --output ${DIR}
+fi
 
-    # Generate corpus if not exists
-    if [ ! -f "$CORPUS" ]; then
-      echo "=== Generating corpus: $MODE $LABEL ==="
-      python data/generate_math.py --n 200000 --ratio $RATIO \
-        --error-mode $MODE --output "$CORPUS"
-    else
-      echo "=== Corpus exists: $CORPUS ==="
-    fi
+if [ ! -f "${DIR}/eval_perplexity.json" ]; then
+  $PYTHON training/eval_perplexity.py \
+    --model-size large \
+    --weights ${DIR}/model_final.npz \
+    --tokenizer ${DIR}/tokenizer.json \
+    --test-correct data/corpus/test_correct.txt \
+    --test-incorrect data/corpus/test_incorrect.txt \
+    --output ${DIR}/eval_perplexity.json
+fi
 
-    for SEED in $SEEDS; do
-      OUTDIR="results/${MODE}_${LABEL}_tiny_seed${SEED}"
+if [ ! -f "${DIR}/eval_paired.json" ]; then
+  $PYTHON training/eval_paired.py \
+    --model-size large \
+    --weights ${DIR}/model_final.npz \
+    --tokenizer ${DIR}/tokenizer.json \
+    --test-paired data/corpus/test_paired_random.jsonl \
+    --output ${DIR}/eval_paired.json
+fi
 
-      if [ -f "$OUTDIR/model_final.npz" ]; then
-        echo "=== Skip (exists): $OUTDIR ==="
-        continue
-      fi
+echo ">>> Large random DONE"
 
-      echo "=== Training: $MODE $LABEL seed=$SEED ==="
-      python training/train.py --corpus "$CORPUS" --model tiny \
-        --steps 5000 --seed $SEED --output "$OUTDIR"
+# --- Large (86M) coherent 50/50 — single seed ---
+DIR="results/coherent_50_50_large_seed42"
+if [ -f "${DIR}/model_final.npz" ]; then
+  echo ">>> SKIP large coherent seed42 (already exists)"
+else
+  echo ">>> Training large seed=42 coherent 50/50"
+  $PYTHON training/train.py \
+    --corpus data/corpus/train_coherent_50_50.txt \
+    --model large \
+    --steps 5000 \
+    --seed 42 \
+    --output ${DIR}
+fi
 
-      echo "=== Evaluating: $MODE $LABEL seed=$SEED ==="
-      python training/eval_perplexity.py \
-        --model-size tiny \
-        --weights "$OUTDIR/model_final.npz" \
-        --tokenizer "$OUTDIR/tokenizer.json" \
-        --test-correct "data/corpus/test_correct_${MODE}.txt" \
-        --test-incorrect "data/corpus/test_incorrect_${MODE}.txt" \
-        --output "$OUTDIR/eval_results.json"
-    done
-  done
-done
+if [ ! -f "${DIR}/eval_perplexity.json" ]; then
+  $PYTHON training/eval_perplexity.py \
+    --model-size large \
+    --weights ${DIR}/model_final.npz \
+    --tokenizer ${DIR}/tokenizer.json \
+    --test-correct data/corpus/test_correct_coherent.txt \
+    --test-incorrect data/corpus/test_incorrect_coherent.txt \
+    --output ${DIR}/eval_perplexity.json
+fi
 
-echo ""
-echo "=== ALL DONE ==="
-echo ""
+if [ ! -f "${DIR}/eval_paired.json" ]; then
+  $PYTHON training/eval_paired.py \
+    --model-size large \
+    --weights ${DIR}/model_final.npz \
+    --tokenizer ${DIR}/tokenizer.json \
+    --test-paired data/corpus/test_paired_coherent.jsonl \
+    --output ${DIR}/eval_paired.json
+fi
 
-# Print summary table
-echo "=== RESULTS SUMMARY ==="
-for MODE in $ERROR_MODES; do
-  echo ""
-  echo "--- $MODE ---"
-  for RATIO in 0.5 $RATIOS; do
-    COR=$(python3 -c "print(int($RATIO*100))")
-    INC=$(python3 -c "print(int((1-$RATIO)*100))")
-    LABEL="${COR}_${INC}"
-    echo "  Proportion $LABEL:"
-    for SEED in $SEEDS; do
-      OUTDIR="results/${MODE}_${LABEL}_tiny_seed${SEED}"
-      if [ -f "$OUTDIR/eval_results.json" ]; then
-        python3 -c "
-import json
-with open('$OUTDIR/eval_results.json') as f:
-    d = json.load(f)
-delta = d['correct_loss'] - d['incorrect_loss']
-print(f'    seed $SEED: correct={d[\"correct_loss\"]:.4f}  incorrect={d[\"incorrect_loss\"]:.4f}  delta={delta:+.4f}')
-"
-      fi
-    done
-  done
-done
+echo ">>> Large coherent DONE"
+
+# --- Multi-rule experiment ---
+echo ">>> Starting multi-rule experiment"
+bash run_multirule.sh
+
+echo "=== ALL DONE: $(date) ==="

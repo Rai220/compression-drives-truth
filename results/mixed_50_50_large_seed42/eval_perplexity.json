@@ -1,0 +1,11 @@
+{
+  "model_size": "large",
+  "weights": "results/mixed_50_50_large_seed42/model_final.npz",
+  "correct_loss": 0.12294874951243401,
+  "correct_ppl": 1.1308264640547072,
+  "incorrect_loss": 0.13541728526353836,
+  "incorrect_ppl": 1.1450144823462372,
+  "ratio_inc_over_cor": 1.101412464954297,
+  "prefers": "correct",
+  "delta": 0.012468535751104348
+}
