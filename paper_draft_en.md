@@ -9,7 +9,7 @@
 
 Language models minimize cross-entropy loss, which is mathematically equivalent to compressing the training data. We investigate whether this compression pressure gives rise to a systematic preference for correct information in models trained on mixed-quality corpora. Crucially, models compress *text*, not reality; the observed bias reflects corpus statistics, not access to external truth.
 
-We train over 120 transformers (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations. With random (incoherent) errors, models consistently prefer correct solutions: paired evaluation yields 83% accuracy at 50/50 (Wilcoxon p < 10^-6), the effect persists at 10/90 (67%, p < 10^-88), and strengthens with scale (83.6% -> 89.4% from 3.5M to 86M). The effect reproduces in a natural language domain (a synthetic world with 15 rules), albeit weaker (57.7% pair accuracy). However, replacing random errors with a coherent alternative rule system -- internally consistent but mathematically wrong -- eliminates the truth preference entirely (accuracy ~49% at any model size).
+We train over 120 transformers (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations. With random (incoherent) errors, models consistently prefer correct solutions: paired evaluation yields 83% accuracy at 50/50 (Wilcoxon p < 10^-6), the effect persists at 10/90 (67%, p < 10^-88), and strengthens with scale (83.1% -> 88.8% from 3.5M to 86M). The effect reproduces in a natural language domain (a synthetic world with 15 rules), albeit weaker (57.7% pair accuracy). However, replacing random errors with a coherent alternative rule system -- internally consistent but mathematically wrong -- eliminates the truth preference entirely (accuracy ~49% at any model size).
 
 Compression favors not truth, but the most consistent structure in the data. Truth bias arises because random errors are incoherent and must be memorized individually, whereas a coherent false system compresses just as efficiently as truth. This explains why language models typically prefer true statements (errors in real corpora are diverse) and why they confidently reproduce systematic misconceptions (coherent falsehood is indistinguishable from truth for a compressor).
 
@@ -357,10 +357,10 @@ All models trained for 5000 steps on the same corpus. Architecture: GPT-2 (decod
 
 | Size | Parameters | Avg DLoss (paired) | Pair accuracy | Corpus DLoss | Seeds |
 |------|-----------|:------------------:|:------------:|:------------:|:-----:|
-| tiny | 3.5M | +0.048 | 83.6% | +0.0115 | 4 |
+| tiny | 3.5M | +0.048 | 83.1% | +0.0115 | 4 |
 | small | 11M | +0.063 | 88.4% | +0.0129 | 4 |
-| medium | 26M | +0.067 | 88.5% | +0.0130 | 4 |
-| large | 86M | +0.070 | 89.4% | +0.0128 | 2 |
+| medium | 26M | +0.067 | 88.4% | +0.0130 | 4 |
+| large | 86M | +0.070 | 88.8% | +0.0128 | 2 |
 
 **Table 6a.** Paired accuracy by problem type.
 
@@ -373,13 +373,13 @@ All models trained for 5000 steps on the same corpus. Architecture: GPT-2 (decod
 
 ![Figure 6](results/figure6_scaling.png)
 
-*Figure 6. Scaling of truth bias. Left: pair accuracy increases from 83.6% (tiny) to 89.4% (large) for random errors, while remaining at chance for coherent errors. Right: DLoss by model size.*
+*Figure 6. Scaling of truth bias. Left: pair accuracy increases from 83.1% (tiny) to 88.8% (large) for random errors, while remaining at chance for coherent errors. Right: DLoss by model size.*
 
-Truth bias monotonically increases from tiny to large: +46% in paired DLoss (+0.048 -> +0.070) and +5.8 pp in pair accuracy (83.6% -> 89.4%). The largest gain occurs between tiny and small; between small and medium, accuracy nearly plateaus (88.4% -> 88.5%), but growth resumes at large (88.5% -> 89.4%), refuting the hypothesis of early saturation. Improvement is most pronounced in difficult problem types (derivatives: +9.5 pp, equations: +9.6 pp from tiny to large), while algebra and arithmetic reach saturation already at small.
+Truth bias monotonically increases from tiny to large: +46% in paired DLoss (+0.048 -> +0.070) and +5.7 pp in pair accuracy (83.1% -> 88.8%). The largest gain occurs between tiny and small; between small and medium, accuracy nearly plateaus (88.4% -> 88.4%), and growth resumes at large (88.4% -> 88.8%). Improvement is most pronounced in difficult problem types (derivatives: +9.5 pp, equations: +9.6 pp from tiny to large), while algebra and arithmetic reach saturation already at small.
 
 **Coherent errors still show no bias.** Pair accuracy for coherent 50/50 on the small model is 49.6% (DLoss = -0.0006), i.e. at chance, same as tiny (47.2%) and large (51.8%, DLoss = -0.0003). Increasing model capacity does not help distinguish coherent falsehood from truth. The hypothesis is confirmed: scaling strengthens truth bias for random errors but is powerless against coherent ones.
 
-**Scaling conclusion.** The inverse-U hypothesis (growth -> peak -> decline) is not supported: truth bias monotonically increases with capacity in the 3.5M--86M range. The hypothesis of early plateau (between small and medium) is also refuted: accuracy growth resumes at large (88.5% -> 89.4%). Possible explanations for continued growth: (1) for the mathematical domain with character-level tokenization, memorization loses to generalization at any reasonable size; (2) larger models better generalize on difficult problem types (equations: 66% -> 76% from tiny to large).
+**Scaling conclusion.** The inverse-U hypothesis (growth -> peak -> decline) is not supported: truth bias monotonically increases with capacity in the 3.5M--86M range. The hypothesis of early plateau (between small and medium) is also refuted: accuracy growth resumes at large (88.4% -> 88.8%). Possible explanations for continued growth: (1) for the mathematical domain with character-level tokenization, memorization loses to generalization at any reasonable size; (2) larger models better generalize on difficult problem types (equations: 66% -> 76% from tiny to large).
 
 ### 7.3 Experiment 5: Multi-Rule (Conspiratorial) Errors
 
@@ -396,17 +396,17 @@ We introduce *multi-rule errors*: for each task type, a pool of N alternative wr
 | 3 | 89.4% | +0.067 | [+0.064, +0.070] | < 10^-6 |
 | 5 | 89.9% | +0.063 | [+0.060, +0.066] | < 10^-6 |
 | 10 | 91.5% | +0.055 | [+0.053, +0.058] | < 10^-6 |
-| inf (random) | 83.6% | +0.048 | [+0.046, +0.050] | < 10^-6 |
+| inf (random) | 83.1% | +0.048 | [+0.046, +0.050] | < 10^-6 |
 
 ![Figure 7](results/figure7_multirule.png)
 
-*Figure 7. Truth bias as a function of the number of error rules. Phase transition at N=1->2: a single rule is fully compressible (49%), two rules are not (87%). For N>=2, accuracy exceeds that of random errors (83.6%).*
+*Figure 7. Truth bias as a function of the number of error rules. Phase transition at N=1->2: a single rule is fully compressible (49%), two rules are not (87%). For N>=2, accuracy exceeds that of random errors (83.1%).*
 
 Three key observations:
 
 1. **Phase transition at N=1->2.** The transition from one rule to two causes an accuracy jump from 47% to 87% -- nearly to the level of random errors. A single rule per task type is fully compressible; two rules, randomly switching, are not, since the model must memorize which rule was applied to each problem.
 
-2. **Multi-rule errors are less compressible than random ones.** Accuracy for N>=2 (87--92%) is *higher* than for random errors (84%). This is an unexpected result: rules create structural expectations, and violating those expectations (unpredictable choice among several rules) is less compressible than having no pattern at all. The model "expects" to see the result of one of the rules but cannot predict which -- this is worse than having no expectations whatsoever.
+2. **Multi-rule errors are less compressible than random ones.** Accuracy for N>=2 (87--92%) is *higher* than for random errors (83%). This is an unexpected result: rules create structural expectations, and violating those expectations (unpredictable choice among several rules) is less compressible than having no pattern at all. The model "expects" to see the result of one of the rules but cannot predict which -- this is worse than having no expectations whatsoever.
 
 3. **Monotonic accuracy growth with N.** More rules -> less predictable choice -> stronger truth bias. The curve does not plateau at N=10, suggesting further growth. As N -> infinity, multi-rule errors should converge to random, but at finite N they remain "harder" to compress.
 
@@ -438,7 +438,7 @@ Three key observations:
 
 1. **Truth bias reproduces in natural language.** Pair accuracy of 57.7% for random errors is significantly above chance (p < 10^-6 for all 4 seeds). The compression effect in favor of truth is not limited to formal mathematics.
 
-2. **The effect is substantially weaker than in mathematics.** 57.7% vs 83.6% with identical architecture and corpus proportion. The likely reason: natural language contains more variability in formulations (synonymous constructions, diversity of entity names), weakening the statistical separation between correct and incorrect conclusions.
+2. **The effect is substantially weaker than in mathematics.** 57.7% vs 83.1% with identical architecture and corpus proportion. The likely reason: natural language contains more variability in formulations (synonymous constructions, diversity of entity names), weakening the statistical separation between correct and incorrect conclusions.
 
 3. **Coherent errors remain indistinguishable from truth.** Accuracy of 46.6% -- below chance, same as in the mathematical domain (47.2%). The pattern reproduces: a coherent alternative rule system compresses equally well. The strong variance across types (mineral 68.7% vs potion 49.1%) is explained by differences in description length and the number of applicable rules for different entity types.
 
@@ -456,6 +456,10 @@ Base corpus: coherent 50/50 (Experiment 1). We add correct cross-domain tasks of
 | 10% | 45.8% | 39.4% | 47.9% |
 | 25% | 50.6% | **56.0%** | 48.8% |
 | 50% | 47.1% | 45.4% | 47.6% |
+
+![Figure 8](results/figure8_crossdomain.png)
+
+*Figure 8. Cross-domain falsification. Left: accuracy by task type — only derivatives respond to cross-domain tasks. Right: non-monotonic effect — peak at 25%, decline at 50% due to corpus dilution.*
 
 The result partially supports the hypothesis: accuracy on **derivatives** increases from 35.2% to 56.0% at 25% cross-domain tasks -- the model begins to prefer correct derivatives. However, the effect is non-monotonic: at 50%, accuracy drops to 45.4%, likely due to dilution of standard patterns. Other task types (algebra, arithmetic, equations) remain at chance, since the cross-domain tasks address only contradictions with derivatives.
 
@@ -479,7 +483,7 @@ Seven experiments paint a progressively clearer picture:
 
 6. **Multi-rule errors reveal a phase transition.** The transition from one error rule to two causes a jump in truth bias from 49% to 87%. This shows that the critical factor is not the number of errors, but the predictability of the error system. One rule is predictable and compressible; two rules, randomly applied, are not.
 
-7. **Truth bias transfers to natural language, but weakens.** A synthetic world with 15 rules yields 57.7% pair accuracy (vs 83.6% in mathematics). Natural language contains more surface-level variability that weakens the statistical signal. Coherent errors remain indistinguishable from truth in this domain as well (46.6%).
+7. **Truth bias transfers to natural language, but weakens.** A synthetic world with 15 rules yields 57.7% pair accuracy (vs 83.1% in mathematics). Natural language contains more surface-level variability that weakens the statistical signal. Coherent errors remain indistinguishable from truth in this domain as well (46.6%).
 
 8. **Cross-domain data selectively destroys coherence.** Adding correct tasks linking derivatives with arithmetic raises derivative accuracy from 35% to 56% (at 25% cross-domain tasks), without affecting other error types. This is the first evidence that cross-domain information can transform locally coherent falsehood into globally incoherent one -- a mechanism analogous to scientific progress, where discoveries in one field falsify theories in another.
 
@@ -503,11 +507,11 @@ Practical analogies from the history of science are appropriate as illustrations
 
 **Model scale.** Experiments use models from 3.5M to 86M parameters. Truth bias grows with size (Section 7), and growth continues from medium (26M) to large (86M) with no clear plateau. The range remains limited -- extrapolation to GPT-2/3 scale models requires further experiments.
 
-**Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The synthetic world experiment (Section 7.4) confirms that the effect is substantially weaker in a natural language domain (57.7% vs 83.6%). Nevertheless, it remains statistically significant. Transfer to real-world domains (medicine, history, economics) requires further experiments.
+**Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The synthetic world experiment (Section 7.4) confirms that the effect is substantially weaker in a natural language domain (57.7% vs 83.1%). Nevertheless, it remains statistically significant. Transfer to real-world domains (medicine, history, economics) requires further experiments.
 
 **Confounding with corpus length.** Conditions C/D/E generate substantially longer texts (loss ~0.24 vs ~0.14). DLoss may partially reflect a difference in convergence rather than compressibility per se. Paired evaluation mitigates but does not fully eliminate this confound.
 
-**Training duration.** All models are trained for 5000 steps. As models grow from tiny to medium, the number of parameters increases but the number of training steps does not. Larger models may be undertrained, potentially underestimating truth bias for medium. Conversely, if medium were to reach full convergence, pair accuracy might exceed 88.5%.
+**Training duration.** All models are trained for 5000 steps. As models grow from tiny to medium, the number of parameters increases but the number of training steps does not. Larger models may be undertrained, potentially underestimating truth bias for medium. Conversely, if medium were to reach full convergence, pair accuracy might exceed 88.4%.
 
 **Effect size.** DLoss (0.003--0.012) is small in absolute terms. Its practical significance for large models remains an open question.
 
@@ -532,7 +536,7 @@ Control experiment: the same tasks, but truncated (without the verification step
 
 **Linear probing.** Extract activations and train linear classifiers to detect "truth directions" vs. "coherence directions" (Marks & Tegmark, 2023 methodology).
 
-**Synthetic world scaling.** Truth bias in the natural language domain is weaker (57.7% vs 83.6%, Section 7.4). Scaling to small/medium models will show whether the effect grows with size analogously to the mathematical domain.
+**Synthetic world scaling.** Truth bias in the natural language domain is weaker (57.7% vs 83.1%, Section 7.4). Scaling to small/medium models will show whether the effect grows with size analogously to the mathematical domain.
 
 **Real-world domains.** Extend to domains with competing knowledge systems:
 - **Type 3b (ad hoc):** Evidence-based medicine vs. homeopathy, vaccination vs. anti-vax theories.
@@ -541,7 +545,7 @@ Control experiment: the same tasks, but truncated (without the verification step
 
 ## 9. Conclusion
 
-This work isolates the conditions under which compression pressure during language model training aligns with truth. The central finding: **truth bias is not a fundamental property of compression, but a consequence of error incoherence in the corpus.** Random errors are incompressible and must be memorized individually, giving correct mathematics a structural advantage (83% pair accuracy, 16/16 seeds). A coherent false system, as compact as truth, strips compression of any preference (~49% pair accuracy at any model size from 3.5M to 86M). The multi-rule error experiment demonstrates a phase transition: a single false rule is indistinguishable from truth, but as few as two rules applied unpredictably restore truth bias (87%), at a level even higher than random errors (84%). The effect reproduces beyond mathematics: in a natural language domain (synthetic world with 15 rules), pair accuracy reaches 57.7%, confirming the generality of the mechanism, albeit with reduced effect size.
+This work isolates the conditions under which compression pressure during language model training aligns with truth. The central finding: **truth bias is not a fundamental property of compression, but a consequence of error incoherence in the corpus.** Random errors are incompressible and must be memorized individually, giving correct mathematics a structural advantage (83% pair accuracy, 16/16 seeds). A coherent false system, as compact as truth, strips compression of any preference (~49% pair accuracy at any model size from 3.5M to 86M). The multi-rule error experiment demonstrates a phase transition: a single false rule is indistinguishable from truth, but as few as two rules applied unpredictably restore truth bias (87%), at a level even higher than random errors (83%). The effect reproduces beyond mathematics: in a natural language domain (synthetic world with 15 rules), pair accuracy reaches 57.7%, confirming the generality of the mechanism, albeit with reduced effect size.
 
 The practical implication for alignment: scaling (from 3.5M to 86M) strengthens truth bias for incoherent errors with no sign of saturation, but is powerless against coherent falsehood. A compressor model has no "truth compass" -- it has a consistency compass. In real corpora, these compasses typically coincide, since different authors' errors are diverse while correct answers are uniform. But where falsehood is systematic and internally consistent -- in entrenched misconceptions, ideological narratives, coherent pseudoscientific systems -- compression gives the model no basis to prefer truth.
 

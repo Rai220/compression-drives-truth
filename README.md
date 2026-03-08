@@ -10,7 +10,7 @@ Language models minimize cross-entropy loss, which is mathematically equivalent 
 
 We train **120+ transformers** (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations and find:
 
-- **Random errors**: Models strongly prefer correct solutions (83% paired accuracy at 50/50 mix, p < 10^-6). The effect persists even at 10% correct / 90% incorrect (67% accuracy) and strengthens with model size (83.6% at 3.5M -> 89.4% at 86M).
+- **Random errors**: Models strongly prefer correct solutions (83% paired accuracy at 50/50 mix, p < 10^-6). The effect persists even at 10% correct / 90% incorrect (67% accuracy) and strengthens with model size (83.1% at 3.5M -> 88.8% at 86M).
 - **Coherent errors**: Replacing random errors with an internally consistent but mathematically wrong rule system eliminates truth preference entirely (~49% accuracy at any model size).
 - **Multi-rule errors**: Even 2 alternative wrong rules per task type restore truth bias (87%), with accuracy increasing monotonically up to N=10 (92%).
 - **Natural language**: The effect reproduces in a synthetic world domain with 15 rules (57.7% accuracy), albeit weaker than in math.
@@ -102,13 +102,13 @@ python scripts/collect_results.py  # -> results_master.csv + scripts/tables.md
 
 | Condition | Paired Accuracy | p-value |
 |-----------|:-:|:-:|
-| Random errors 50/50 | 83.6% | < 10^-6 |
+| Random errors 50/50 | 83.1% | < 10^-6 |
 | Random errors 10/90 | 67.0% | < 10^-88 |
 | Coherent errors 50/50 | 47.2% | ~1.0 |
 | Multi-rule N=2 | 87.4% | < 10^-6 |
 | Multi-rule N=10 | 91.5% | < 10^-6 |
 | Synthetic world (random) | 57.7% | < 0.001 |
-| Scaling: 86M random | 89.4% | < 10^-6 |
+| Scaling: 86M random | 88.8% | < 10^-6 |
 | Scaling: 86M coherent | 51.8% | ~1.0 |
 
 ## Citation
