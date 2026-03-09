@@ -539,7 +539,17 @@ The key distinction from Experiment 8: the model sees *one* rule system, but wit
 
 *Figure 10. Chained tasks. Left: verification raises accuracy from 43% (isolated coherent) to 71% -- cross-domain dependencies break the immunity of coherent errors. Right: accuracy by chain type.*
 
-Four key observations:
+**Table 10b.** Chained tasks scaling by model size.
+
+| Size | Params | Seeds | Accuracy | DLoss | Trend |
+|------|--------|:-----:|:--------:|:-----:|:-----:|
+| Tiny | 3.5M | 4 | 70.9% +/- 1.2% | +0.0115 | -- |
+| Small | 11M | 4 | 64.2% +/- 1.5% | +0.0090 | down |
+| Large | 86M | 2 | 60.6% +/- 1.2% | +0.0078 | down |
+
+For comparison, random error scaling: tiny 83.6% -> small 88.4% -> large 89.4% (up).
+
+Five key observations:
 
 1. **Verification restores truth bias.** Accuracy of 70.9% (p < 10^-6 for all 4 seeds) -- significantly above chance and above standard coherent errors (43.3% on the same models evaluated on isolated tasks). Cross-domain dependencies transform coherent errors into incompressible ones.
 
@@ -548,6 +558,8 @@ Four key observations:
 3. **The type spectrum reflects verification strength.** Arithmetic reverse (96%) -- the strongest signal: with incorrect multiplication, reverse division yields a fraction instead of an integer. Tangent (35%) -- the only type below chance: the O(h^2) approximation error in finite differences masks the coherent rule error, and the model learns the pattern "with error, the prediction is closer to zero."
 
 4. **The effect is comparable to random errors.** Accuracy 70.9% vs 83.1% for random errors -- verification brings coherent errors 80% of the way to the random level. This means that a sufficiently dense web of cross-domain dependencies can in principle eliminate the immunity of coherent falsehood.
+
+5. **Inverse scaling: compressor power is a double-edged sword.** Unlike random errors (accuracy increases with model size), chained tasks exhibit *inverse* scaling: 70.9% -> 64.2% -> 60.6%. A more powerful model compresses the coherent error system *within* each domain more effectively, and the verification signal does not compensate for this growth. This follows directly from the core hypothesis: the compressor favors the most consistent structure, and as capacity grows, within-domain coherence (strong signal) outweighs cross-domain contradiction (weak signal). For comparison: multi-rule errors (Experiment 6) create *within-domain* incompressibility and therefore exhibit direct scaling.
 
 ## 8. Discussion
 
@@ -563,7 +575,7 @@ Nine experiments paint a progressively clearer picture:
 
 4. **Correction increases corpus-level DLoss but does not produce transferable truth bias.** Models trained with observations and correction do not distinguish correct from incorrect at the level of pure mathematical pairs (accuracy ~49%). The only reliable mechanism of truth bias is error incoherence.
 
-5. **Truth bias scales with model size, but coherent falsehood remains invulnerable.** Increasing the model from 3.5M to 86M strengthens truth bias for random errors (+46% in DLoss), but does not help distinguish coherent falsehood from truth. Scaling enhances generalization, but does not create a "truth compass."
+5. **Truth bias scales with model size for incoherent errors, but coherent falsehood remains invulnerable -- and even strengthens.** Increasing the model from 3.5M to 86M strengthens truth bias for random errors (83% -> 89%), but does not help distinguish coherent falsehood from truth. Moreover, chained tasks (Experiment 9) exhibit *inverse* scaling: accuracy drops from 71% to 61% as model size grows, because a more powerful compressor better memorizes the coherent system within each domain. Scaling enhances generalization, but does not create a "truth compass."
 
 6. **Multi-rule errors reveal a phase transition.** The transition from one error rule to two causes a jump in truth bias from 49% to 87%. This shows that the critical factor is not the number of errors, but the predictability of the error system. One rule is predictable and compressible; two rules, randomly applied, are not.
 
@@ -573,7 +585,7 @@ Nine experiments paint a progressively clearer picture:
 
 9. **Cross-domain data selectively destroys coherence.** Adding correct tasks linking derivatives with arithmetic raises derivative accuracy from 35% to 56% (at 25% cross-domain tasks), without affecting other error types.
 
-10. **The verification step transforms coherent errors into detectable ones.** Chained tasks, where computation is accompanied by arithmetic verification, raise accuracy from 43% (isolated coherent) to 71% (p < 10^-6). This is the strongest argument of the work: *cross-domain dependencies* are the specific mechanism through which compression pressure begins to prefer truth even for coherent errors. Scientific theories are testable precisely because they are connected to other facts.
+10. **The verification step transforms coherent errors into detectable ones, but the effect weakens with scale.** Chained tasks raise accuracy from 43% to 71% (tiny, p < 10^-6), but scaling reveals an unexpected *inverse* trend: 71% -> 64% -> 61% (tiny -> small -> large). This is inverse scaling, opposite to random errors (83% -> 89%). A more powerful model compresses the coherent system within domains more effectively, and cross-domain verification does not compensate for this growth. This reinforces the paper's central thesis: the compressor favors *consistency*, not truth, and with increased capacity, coherent falsehood becomes *more*, not less, resilient.
 
 ### 8.2 Analogy with Popper's Falsifiability
 
@@ -587,13 +599,13 @@ Practical analogies from the history of science are appropriate as illustrations
 
 **For alignment.** Models lack an innate "truth compass" -- they favor well-compressible patterns. Systematic deception consistently represented in data encounters no resistance from compression.
 
-**For ML epistemology.** The framework explains why models develop internal truth representations (Marks & Tegmark, 2023): in real corpora, true statements are more coherent than false ones. It also explains the inverse scaling effect on TruthfulQA (Lin et al., 2022): larger models are better at memorizing coherent misconceptions, which according to our data compress just as well as truth.
+**For ML epistemology.** The framework explains why models develop internal truth representations (Marks & Tegmark, 2023): in real corpora, true statements are more coherent than false ones. It also explains the inverse scaling effect on TruthfulQA (Lin et al., 2022): larger models are better at memorizing coherent misconceptions, which according to our data compress just as well as truth. The inverse scaling of chained tasks (71% -> 61%) is a direct demonstration of this mechanism: compressor power amplifies memorization of coherent falsehood faster than cross-domain verification can destroy it.
 
 **For understanding hallucinations.** Models confidently reproduce coherent misconceptions not due to a compression failure, but because such misconceptions compress *successfully*. This aligns with the analysis by Chlon et al. (2025).
 
 ### 8.4 Limitations
 
-**Model scale.** Experiments use models from 3.5M to 86M parameters. Truth bias grows with size (Section 7), and growth continues from medium (26M) to large (86M) with no clear plateau. The range remains limited -- extrapolation to GPT-2/3 scale models requires further experiments.
+**Model scale.** Experiments use models from 3.5M to 86M parameters. Truth bias for random errors grows with size with no plateau (83% -> 89%). For chained tasks, inverse scaling is observed (71% -> 61%), raising the question: under what conditions do verification signals cease to work? The range remains limited -- extrapolation to GPT-2/3 scale models requires further experiments.
 
 **Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The synthetic world experiment (Section 7.4) confirms that the effect is substantially weaker in a natural language domain (57.7% vs 83.1%). Moreover, the multi-alternative experiment (Section 7.5) shows that even internally contradictory errors in natural language do not trigger a sharp phase transition, unlike in mathematics. Transfer to real-world domains (medicine, history, economics) requires further experiments.
 
@@ -605,7 +617,7 @@ Practical analogies from the history of science are appropriate as illustrations
 
 ### 8.5 Future Experiments
 
-**Extensions of chained tasks.** Experiment 9 (Section 7.8) confirmed that the verification step restores truth bias for coherent errors (71%). Two directions remain open: (1) a control experiment with truncated chains (without the verification step) to confirm that it is the verification, not the different task structure, that produces the effect; (2) scaling to larger models to assess whether the effect grows with capacity.
+**Extensions of chained tasks.** Experiment 9 confirmed that verification restores truth bias (71% at tiny), but scaling revealed inverse scaling (71% -> 61%). Open directions: (1) a control experiment with truncated chains (without the verification step) to confirm that it is the verification, not the different task structure, that produces the effect; (2) increasing verification density (2--3 checks per task) to assess whether this can compensate for the compressor's growing power; (3) combining multi-rule and chained approaches.
 
 **Methodological controls.** Several controlling experiments remain open. First, equalizing the token budget for conditions C/D/E (Section 6): these conditions generate texts of different lengths (loss ~0.24 vs ~0.14), and convergence differences may affect results. Second, deterministic evaluation on the full test set rather than random batches would increase estimate reliability. Third, a factor analysis isolating the contributions of truth value, frequency, coherence, and correction overhead would allow quantitative separation of these intertwined factors.
 
@@ -624,7 +636,7 @@ This work isolates the conditions under which compression pressure during langua
 
 The practical implication for alignment: scaling (from 3.5M to 86M) strengthens truth bias for incoherent errors with no sign of saturation, but is powerless against coherent falsehood. A compressor model has no "truth compass" -- it has a consistency compass. In real corpora, these compasses typically coincide, since different authors' errors are diverse while correct answers are uniform. But where falsehood is systematic and internally consistent -- in entrenched misconceptions, ideological narratives, coherent pseudoscientific systems -- compression gives the model no basis to prefer truth.
 
-However, the immunity of coherent falsehood is not absolute. The chained task experiment (Section 7.8) shows that embedding a verification step within the task -- where the coherent error produces an unpredictable numerical residual -- restores truth bias to 71% (vs 43% for isolated coherent). This means that *cross-domain dependencies* are the specific mechanism through which compression pressure begins to prefer truth even for coherent errors. Scientific theories are testable precisely because they are connected to other facts; isolated coherent falsehood is invulnerable, but falsehood embedded in a web of dependencies is not.
+However, the immunity of coherent falsehood is not absolute. The chained task experiment (Section 7.8) shows that embedding a verification step within the task -- where the coherent error produces an unpredictable numerical residual -- restores truth bias to 71% for the tiny model (vs 43% for isolated coherent). However, scaling reveals an unexpected *inverse* trend: accuracy drops from 71% (3.5M) to 64% (11M) and 61% (86M), while for random errors it rises (83% -> 89%). A more powerful compressor better memorizes the coherent system within each domain, and the weak cross-domain signal from verification does not compensate for this growth. This reinforces the central thesis: compressor power is a double-edged sword. For incoherent errors, scaling helps; for coherent falsehood, it *entrenches* it further.
 
 The question of scale and domain remains open. Our experiments are limited to models of 3.5M--86M parameters and synthetic domains. The multi-alternative experiment (Section 7.5) shows that in the natural language domain, contradictions between errors do not destroy compressibility as effectively as in mathematics. Transferring these results to larger models and real corpora is a necessary condition for strong generalizations.
 

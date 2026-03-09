@@ -1,4 +1,4 @@
-"""Generate Figure 10: Chained verification tasks (Experiment I)."""
+"""Generate Figure 10: Chained verification tasks (Experiment I) with scaling."""
 
 import matplotlib
 matplotlib.use('Agg')
@@ -17,7 +17,7 @@ def load_paired(path):
     return d
 
 
-# Load all seeds
+# Load all seeds — tiny
 chained_data = []
 coherent_ctrl_data = []
 for seed in [42, 43, 44, 45]:
@@ -26,16 +26,32 @@ for seed in [42, 43, 44, 45]:
     c = load_paired(os.path.join(RESULTS, f'chained_50_50_tiny_seed{seed}', 'eval_paired_coherent.json'))
     coherent_ctrl_data.append(c)
 
-# Aggregate
+# Aggregate tiny
 chained_accs = [d['pair_accuracy'] for d in chained_data]
 chained_deltas = [d['delta'] for d in chained_data]
 coherent_accs = [d['pair_accuracy'] for d in coherent_ctrl_data]
 
-print(f"Chained: acc={np.mean(chained_accs)*100:.1f}% +/- {np.std(chained_accs)*100:.1f}%, "
+print(f"Chained tiny: acc={np.mean(chained_accs)*100:.1f}% +/- {np.std(chained_accs)*100:.1f}%, "
       f"delta={np.mean(chained_deltas):+.4f}")
 print(f"Coherent control: acc={np.mean(coherent_accs)*100:.1f}% +/- {np.std(coherent_accs)*100:.1f}%")
 
-# Per-type data (aggregate across seeds)
+# Load small (4 seeds)
+small_data = []
+for seed in [42, 43, 44, 45]:
+    d = load_paired(os.path.join(RESULTS, f'chained_50_50_small_seed{seed}', 'eval_paired.json'))
+    small_data.append(d)
+small_accs = [d['pair_accuracy'] for d in small_data]
+print(f"Chained small: acc={np.mean(small_accs)*100:.1f}% +/- {np.std(small_accs)*100:.1f}%")
+
+# Load large (2 seeds)
+large_data = []
+for seed in [42, 43]:
+    d = load_paired(os.path.join(RESULTS, f'chained_50_50_large_seed{seed}', 'eval_paired.json'))
+    large_data.append(d)
+large_accs = [d['pair_accuracy'] for d in large_data]
+print(f"Chained large: acc={np.mean(large_accs)*100:.1f}% +/- {np.std(large_accs)*100:.1f}%")
+
+# Per-type data (aggregate across tiny seeds)
 type_accs = {}
 type_ns = {}
 for d in chained_data:
@@ -48,23 +64,21 @@ for d in chained_data:
 
 types_sorted = sorted(type_accs.keys(), key=lambda t: np.mean(type_accs[t]), reverse=True)
 
-print("\nPer-type breakdown:")
+print("\nPer-type breakdown (tiny):")
 for t in types_sorted:
     print(f"  {t}: acc={np.mean(type_accs[t])*100:.1f}% +/- {np.std(type_accs[t])*100:.1f}%, n={type_ns[t]}")
 
 
 # ============================================================
-#  Figure 10: Two panels
+#  Figure 10: Three panels
 # ============================================================
 
-fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+fig, axes = plt.subplots(1, 3, figsize=(20, 6))
 
-# --- Left panel: Overall comparison ---
+# --- Left panel: Overall comparison (tiny) ---
 ax = axes[0]
 
 conditions = ['Standard\ncoherent\n(isolated)', 'Chained\ncoherent\n(with verify)', 'Random\nerrors\n(baseline)']
-# Standard coherent from paper: 47.2% (tiny)
-# Random from paper: 83.1% (tiny)
 means = [np.mean(coherent_accs) * 100, np.mean(chained_accs) * 100, 83.1]
 stds = [np.std(coherent_accs) * 100, np.std(chained_accs) * 100, 2.0]
 colors = ['#8b5cf6', '#f59e0b', '#3b82f6']
@@ -73,7 +87,6 @@ x = np.arange(len(conditions))
 bars = ax.bar(x, means, yerr=stds, capsize=8, color=colors,
               edgecolor='white', linewidth=2, width=0.6, zorder=5)
 
-# Value labels
 for bar, m in zip(bars, means):
     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 2,
             f'{m:.1f}%', ha='center', va='bottom', fontsize=13, fontweight='bold')
@@ -96,8 +109,60 @@ ax.text(0.5, (np.mean(coherent_accs)*100 + np.mean(chained_accs)*100)/2 + 2,
         ha='center', fontsize=12, color='#dc2626', fontweight='bold')
 
 
-# --- Right panel: Per-type breakdown ---
+# --- Middle panel: Inverse scaling (chained vs random) ---
 ax = axes[1]
+
+sizes = ['Tiny\n(3.5M)', 'Small\n(11M)', 'Large\n(86M)']
+params = [3.5, 11, 86]
+
+# Chained accuracy by size
+chained_means = [np.mean(chained_accs)*100, np.mean(small_accs)*100, np.mean(large_accs)*100]
+chained_stds = [np.std(chained_accs)*100, np.std(small_accs)*100, np.std(large_accs)*100]
+
+# Random accuracy from paper
+random_means = [83.6, 88.4, 89.4]
+random_stds = [1.5, 0.5, 0.0]  # approximate
+
+x = np.arange(len(sizes))
+width = 0.35
+
+bars1 = ax.bar(x - width/2, random_means, width, yerr=random_stds, capsize=5,
+               color='#3b82f6', edgecolor='white', linewidth=1.5, label='Random errors', zorder=5)
+bars2 = ax.bar(x + width/2, chained_means, width, yerr=chained_stds, capsize=5,
+               color='#f59e0b', edgecolor='white', linewidth=1.5, label='Chained coherent', zorder=5)
+
+# Value labels
+for bar, m in zip(bars1, random_means):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1,
+            f'{m:.1f}%', ha='center', va='bottom', fontsize=10, fontweight='bold', color='#1e40af')
+for bar, m in zip(bars2, chained_means):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1,
+            f'{m:.1f}%', ha='center', va='bottom', fontsize=10, fontweight='bold', color='#92400e')
+
+ax.axhline(y=50, color='#ef4444', linestyle='--', alpha=0.8, linewidth=2, label='Chance (50%)')
+
+# Trend arrows
+ax.annotate('', xy=(2 - width/2, random_means[2] + 3), xytext=(0 - width/2, random_means[0] + 3),
+            arrowprops=dict(arrowstyle='->', color='#1e40af', lw=2))
+ax.text(1 - width/2, random_means[1] + 5, 'scaling UP', ha='center', fontsize=9,
+        color='#1e40af', fontweight='bold')
+
+ax.annotate('', xy=(2 + width/2, chained_means[2] - 3), xytext=(0 + width/2, chained_means[0] - 3),
+            arrowprops=dict(arrowstyle='->', color='#92400e', lw=2))
+ax.text(1 + width/2, chained_means[1] - 6, 'scaling DOWN', ha='center', fontsize=9,
+        color='#92400e', fontweight='bold')
+
+ax.set_ylabel('Pair accuracy (%)', fontsize=13)
+ax.set_title('Inverse Scaling:\nCompressor Power is Double-Edged', fontsize=13, fontweight='bold')
+ax.set_xticks(x)
+ax.set_xticklabels(sizes, fontsize=10)
+ax.set_ylim(45, 100)
+ax.legend(fontsize=9, loc='upper left')
+ax.grid(True, alpha=0.3, axis='y')
+
+
+# --- Right panel: Per-type breakdown (tiny) ---
+ax = axes[2]
 
 type_labels = {
     'arithmetic_verify': 'Arithmetic\n(forward+reverse)',
@@ -112,7 +177,6 @@ labels = [type_labels.get(t, t) for t in types_sorted]
 accs = [np.mean(type_accs[t]) * 100 for t in types_sorted]
 errs = [np.std(type_accs[t]) * 100 for t in types_sorted]
 
-# Color by above/below chance
 bar_colors = ['#22c55e' if a > 50 else '#ef4444' for a in accs]
 
 y = np.arange(len(labels))
@@ -121,7 +185,6 @@ bars = ax.barh(y, accs, xerr=errs, capsize=5, color=bar_colors,
 
 ax.axvline(x=50, color='#ef4444', linestyle='--', alpha=0.8, linewidth=2, label='Chance (50%)')
 
-# Value labels
 for bar, a in zip(bars, accs):
     offset = 2 if a > 50 else -8
     ax.text(a + offset, bar.get_y() + bar.get_height()/2,
@@ -129,7 +192,7 @@ for bar, a in zip(bars, accs):
             va='center', fontsize=10, fontweight='bold')
 
 ax.set_xlabel('Pair accuracy (%)', fontsize=12)
-ax.set_title('Accuracy by Chain Type', fontsize=13, fontweight='bold')
+ax.set_title('Accuracy by Chain Type\n(Tiny)', fontsize=13, fontweight='bold')
 ax.set_yticks(y)
 ax.set_yticklabels(labels, fontsize=9)
 ax.set_xlim(20, 105)
