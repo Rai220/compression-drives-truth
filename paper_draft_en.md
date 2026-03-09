@@ -11,6 +11,8 @@ Language models minimize cross-entropy loss, which is mathematically equivalent 
 
 We train over 150 transformers (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations. With random (incoherent) errors, models consistently prefer correct solutions: paired evaluation yields 83% accuracy at 50/50 (Wilcoxon p < 10^-6), the effect persists at 10/90 (67%, p < 10^-88), and strengthens with scale (83.1% -> 88.8% from 3.5M to 86M). The effect reproduces in a natural language domain (a synthetic world with 15 rules), albeit weaker (57.7% pair accuracy). However, replacing random errors with a coherent alternative rule system -- internally consistent but mathematically wrong -- eliminates the truth preference entirely (accuracy ~49% at any model size).
 
+Embedding a verification step within coherent-error tasks (chained tasks) restores truth bias to 71%, but scaling reveals *inverse* scaling: accuracy drops to 61% as the model grows from 3.5M to 86M (compared to 83% -> 89% growth for random errors). Compressor power is a double-edged sword: it strengthens detection of incoherent errors but simultaneously entrenches memorization of coherent falsehood.
+
 Compression favors not truth, but the most consistent structure in the data. Truth bias arises because random errors are incoherent and must be memorized individually, whereas a coherent false system compresses just as efficiently as truth. This explains why language models typically prefer true statements (errors in real corpora are diverse) and why they confidently reproduce systematic misconceptions (coherent falsehood is indistinguishable from truth for a compressor).
 
 ---
@@ -537,7 +539,7 @@ The key distinction from Experiment 8: the model sees *one* rule system, but wit
 
 ![Figure 10](results/figure10_chained.png)
 
-*Figure 10. Chained tasks. Left: verification raises accuracy from 43% (isolated coherent) to 71% -- cross-domain dependencies break the immunity of coherent errors. Right: accuracy by chain type.*
+*Figure 10. Chained tasks. Left: verification raises accuracy from 43% (isolated coherent) to 71% -- cross-domain dependencies break the immunity of coherent errors. Center: inverse scaling -- chained task accuracy drops with model size (71% -> 61%), while random error accuracy rises (84% -> 89%). Right: accuracy by chain type (tiny).*
 
 **Table 10b.** Chained tasks scaling by model size.
 

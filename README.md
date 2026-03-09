@@ -14,8 +14,9 @@ We train **150+ transformers** (3.5M--86M parameters) on corpora with controlled
 - **Coherent errors**: Replacing random errors with an internally consistent but mathematically wrong rule system eliminates truth preference entirely (~49% accuracy at any model size).
 - **Multi-rule errors**: Even 2 alternative wrong rules per task type restore truth bias (87%), with accuracy increasing monotonically up to N=10 (92%).
 - **Natural language**: The effect reproduces in a synthetic world domain with 15 rules (57.7% accuracy), albeit weaker than in math.
+- **Chained verification**: Embedding a verification step within coherent-error tasks restores truth bias (71%), but scaling reveals *inverse* scaling: accuracy drops to 61% at 86M, because larger models better memorize the coherent error system within each domain.
 
-**Key insight**: Compression favors not truth per se, but the most consistent structure in the data. Truth bias arises because real-world errors tend to be diverse and incompressible, while a coherent false system compresses just as well as truth.
+**Key insight**: Compression favors not truth per se, but the most consistent structure in the data. Truth bias arises because real-world errors tend to be diverse and incompressible, while a coherent false system compresses just as well as truth. Compressor power is a double-edged sword: it strengthens detection of incoherent errors but entrenches coherent falsehood.
 
 ## Project Structure
 
@@ -91,6 +92,8 @@ bash run_multirule.sh    # Exp F: multi-rule errors
 bash run_synthetic_world.sh  # Exp G: natural language domain
 bash run_crossdomain.sh  # Exp H: cross-domain falsification
 bash run_world_multi_alt.sh  # Exp 7: multi-alt errors in synthetic world
+bash run_chained.sh          # Exp I: chained verification tasks
+bash run_chained_scaling.sh  # Exp I scaling: small + large models
 ```
 
 ### Collect Results
@@ -111,6 +114,8 @@ python scripts/collect_results.py  # -> results_master.csv + scripts/tables.md
 | Synthetic world (random) | 57.7% | < 0.001 |
 | Scaling: 86M random | 88.8% | < 10^-6 |
 | Scaling: 86M coherent | 51.8% | ~1.0 |
+| Chained verification (tiny) | 70.9% | < 10^-6 |
+| Chained verification (large) | 60.6% | < 10^-6 |
 
 ## Citation
 
