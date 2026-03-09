@@ -9,7 +9,7 @@
 
 Language models minimize cross-entropy loss, which is mathematically equivalent to compressing the training data. We investigate whether this compression pressure gives rise to a systematic preference for correct information in models trained on mixed-quality corpora. Crucially, models compress *text*, not reality; the observed bias reflects corpus statistics, not access to external truth.
 
-We train over 120 transformers (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations. With random (incoherent) errors, models consistently prefer correct solutions: paired evaluation yields 83% accuracy at 50/50 (Wilcoxon p < 10^-6), the effect persists at 10/90 (67%, p < 10^-88), and strengthens with scale (83.1% -> 88.8% from 3.5M to 86M). The effect reproduces in a natural language domain (a synthetic world with 15 rules), albeit weaker (57.7% pair accuracy). However, replacing random errors with a coherent alternative rule system -- internally consistent but mathematically wrong -- eliminates the truth preference entirely (accuracy ~49% at any model size).
+We train over 140 transformers (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations. With random (incoherent) errors, models consistently prefer correct solutions: paired evaluation yields 83% accuracy at 50/50 (Wilcoxon p < 10^-6), the effect persists at 10/90 (67%, p < 10^-88), and strengthens with scale (83.1% -> 88.8% from 3.5M to 86M). The effect reproduces in a natural language domain (a synthetic world with 15 rules), albeit weaker (57.7% pair accuracy). However, replacing random errors with a coherent alternative rule system -- internally consistent but mathematically wrong -- eliminates the truth preference entirely (accuracy ~49% at any model size).
 
 Compression favors not truth, but the most consistent structure in the data. Truth bias arises because random errors are incoherent and must be memorized individually, whereas a coherent false system compresses just as efficiently as truth. This explains why language models typically prefer true statements (errors in real corpora are diverse) and why they confidently reproduce systematic misconceptions (coherent falsehood is indistinguishable from truth for a compressor).
 
@@ -34,7 +34,7 @@ We conduct a series of controlled experiments on mathematical corpora, where we 
 1. **Experiment 1** (Section 4): Training on a mixture of correct and incorrect derivations with random, coherent, and contradictory errors at various proportions.
 2. **Experiment 2** (Section 5): Adding empirical feedback (observations) to coherent errors.
 3. **Experiment 3** (Section 6): Five conditions for a false theory, varying the informational overhead of correction.
-4. **Experiment 4** (Section 7): Scaling by model size, multi-rule errors, synthetic world, and cross-domain falsification.
+4. **Experiments 4–8** (Section 7): Scaling by model size, multi-rule errors, synthetic world in natural language, multi-alternative errors, and cross-domain falsification.
 
 ## 2. Related Work
 
@@ -116,9 +116,9 @@ To interpret Experiments 2--3 we use a typology of theories distinguished by the
 
 **Experiment 3:** 5 conditions for the false theory (A--E) at 50/50. Conditions A and B are from Experiments 1--2. Conditions C, D, E -- 3 x 4 seeds = 12 new models.
 
-**Experiment 4:** Scaling -- random 50/50 and coherent 50/50 at small (11M), medium (26M), and large (86M) sizes, 4 seeds each (2 seeds for large) = 20 models (+ tiny from Experiment 1). Additional sub-experiments: multi-rule errors (16 models), synthetic world (8 models), cross-domain falsification (16 models).
+**Experiment 4:** Scaling -- random 50/50 and coherent 50/50 at small (11M), medium (26M), and large (86M) sizes, 4 seeds each (2 seeds for large) = 20 models (+ tiny from Experiment 1). Additional sub-experiments: multi-rule errors (16 models), synthetic world (8 models), multi-alternative errors in the synthetic world (20 models), cross-domain falsification (16 models).
 
-In total, **over 120 models** were trained (69 in Experiments 1--3 + 20 in Experiment 4 scaling + 16 multi-rule + 8 synthetic world + 16 cross-domain).
+In total, **over 140 models** were trained (69 in Experiments 1--3 + 20 scaling + 16 multi-rule + 8 synthetic world + 20 multi-alternative + 16 cross-domain).
 
 ## 4. Experiment 1: Random, Coherent, and Contradictory Errors
 
@@ -442,11 +442,43 @@ Three key observations:
 
 3. **Coherent errors remain indistinguishable from truth.** Accuracy of 46.6% -- below chance, same as in the mathematical domain (47.2%). The pattern reproduces: a coherent alternative rule system compresses equally well. The strong variance across types (mineral 68.7% vs potion 49.1%) is explained by differences in description length and the number of applicable rules for different entity types.
 
-### 7.5 Experiment 7: Cross-Domain Falsification
+**Note on metrics.** For coherent errors in Table 8, pair accuracy (46.6%) and mean DLoss (+0.019) diverge in sign. This is explained by distributional asymmetry: the majority of pairs show a slight preference for the incorrect conclusion (accuracy < 50%), but a small number of pairs with strong preference for the correct one shift the mean DLoss positive. The Wilcoxon test, based on ranks rather than means, yields p ~ 0.05 -- a borderline result that does not reach significance. Accuracy is the more reliable metric in this case.
+
+### 7.5 Experiment 7: Multi-Alternative Errors in the Synthetic World
+
+In the mathematical domain (Section 7.3), the transition from one coherent error rule to two causes a sharp jump in truth bias (49% -> 87%). The question arises: does this phase transition reproduce in the natural language domain? We create a pool of 16 alternative conclusions for each of the 15 rules in the synthetic world and vary N -- the number of alternatives used during training. For each erroneous example, one of the N pre-selected alternatives is assigned at random. At N = 1, this is equivalent to coherent errors; at N = 16, it represents maximum internal inconsistency.
+
+**Table 8b.** Multi-alternative errors in the synthetic world (tiny, 3.5M, 50/50, 4 seeds). Paired accuracy: correct vs multi-alt (same alternatives as in training) and correct vs random (baseline).
+
+| N alternatives | Acc vs multi-alt | Acc vs random |
+|:---:|:---:|:---:|
+| 1 (coherent) | 46.6% | 57.7% |
+| 2 | 39.8% | 97.3% |
+| 4 | 50.2% | 96.4% |
+| 8 | 51.4% | 86.4% |
+| 16 | 60.0% | 81.5% |
+
+![Figure 9](results/figure9_world_multialt.png)
+
+*Figure 9. Multi-alternative errors in the synthetic world. Left: pair accuracy as a function of the number of alternatives N -- gradual rise with no phase transition. Right: comparison with the math domain -- sharp jump at N=1->2 in math, gradual rise in natural language.*
+
+Four observations:
+
+1. **No phase transition.** Unlike mathematics (jump at N=1 -> N=2: 49% -> 87%), in natural language the growth is gradual: 47% -> 40% -> 50% -> 51% -> 60%. Even at N = 16, accuracy is only 60%, close to the result for fully random errors (57.7%).
+
+2. **N = 2 worsens the result.** With two alternatives, the model *prefers* erroneous conclusions (39.8% < 50%), worse than a single coherent alternative (46.6%). The likely reason: two alternatives create a distribution (each at ~25% of the corpus) that collectively competes with the correct conclusion (50%) while remaining compressible.
+
+3. **High accuracy vs random masks weak truth bias.** The same models trained on N = 2 show 97.3% accuracy when compared against fully random errors. The model successfully learns all N alternative patterns but cannot distinguish them from truth -- both sets are equally well compressible.
+
+4. **Natural language absorbs contradictions.** In formal mathematics, two contradictory rules (N = 2) immediately destroy compressibility: for arithmetic, `a + b = a + b + 1` and `a + b = a + b - 1` cannot be captured by a single function. In natural language, the phrases "has thin scales" and "has dense armor plates" are simply two textual patterns, each of which is easily memorized. The structure of text provides sufficient degrees of freedom to compress incompatible statements.
+
+This result has practical significance: **in domains with natural language structure, compression pressure weakly distinguishes truth from plausible misinformation**, even when the latter is internally contradictory. This explains why LLMs readily memorize and reproduce coherent misconceptions.
+
+### 7.6 Experiment 8: Cross-Domain Falsification
 
 The key claim of our work -- that coherent falsehood is invulnerable to compression -- rests on isolated domains: false derivative rules are tested only on derivative tasks. In the real world, a false theory of derivatives conflicts with adjacent domains (integration, tangent lines, numerical evaluation). We test whether adding *cross-domain* tasks -- correct tasks linking derivatives with arithmetic -- can destroy the coherence of the false rule.
 
-Base corpus: coherent 50/50 (Experiment 1). We add correct cross-domain tasks of five types: derivative evaluation at a point, antiderivative check, tangent line equation, chain rule evaluation, and product rule evaluation. All cross-domain tasks use the true differentiation rules. We vary the proportion of cross-domain tasks: 0%, 10%, 25%, 50%.
+Base corpus: coherent 50/50 (Section 4.2). We add correct cross-domain tasks of five types: derivative evaluation at a point, antiderivative check, tangent line equation, chain rule evaluation, and product rule evaluation. All cross-domain tasks use the true differentiation rules. We vary the proportion of cross-domain tasks: 0%, 10%, 25%, 50%.
 
 **Table 9.** Cross-domain falsification (tiny, 3.5M, 4 seeds). Paired evaluation on coherent paired test.
 
@@ -469,7 +501,7 @@ This experiment provides the first evidence that cross-domain data can *selectiv
 
 ### 8.1 Unified Interpretation
 
-Seven experiments paint a progressively clearer picture:
+Eight experiments paint a progressively clearer picture:
 
 1. **Compression favors consistency, not truth.** Any consistent rule system -- true or false -- compresses equally well. Truth bias with random errors is explained by the fact that each random error must be memorized individually.
 
@@ -485,7 +517,9 @@ Seven experiments paint a progressively clearer picture:
 
 7. **Truth bias transfers to natural language, but weakens.** A synthetic world with 15 rules yields 57.7% pair accuracy (vs 83.1% in mathematics). Natural language contains more surface-level variability that weakens the statistical signal. Coherent errors remain indistinguishable from truth in this domain as well (46.6%).
 
-8. **Cross-domain data selectively destroys coherence.** Adding correct tasks linking derivatives with arithmetic raises derivative accuracy from 35% to 56% (at 25% cross-domain tasks), without affecting other error types. This is the first evidence that cross-domain information can transform locally coherent falsehood into globally incoherent one -- a mechanism analogous to scientific progress, where discoveries in one field falsify theories in another.
+8. **In natural language, contradictions do not destroy compressibility.** Increasing the number of alternative erroneous conclusions from 1 to 16 in the synthetic world produces only a gradual rise in accuracy (47% -> 60%), unlike the sharp jump in mathematics (49% -> 87% at N = 2). Natural language provides sufficient structural degrees of freedom for the model to compress even mutually contradictory textual patterns. This explains the vulnerability of LLMs to plausible misinformation.
+
+9. **Cross-domain data selectively destroys coherence.** Adding correct tasks linking derivatives with arithmetic raises derivative accuracy from 35% to 56% (at 25% cross-domain tasks), without affecting other error types. This is the first evidence that cross-domain information can transform locally coherent falsehood into globally incoherent one -- a mechanism analogous to scientific progress, where discoveries in one field falsify theories in another.
 
 ### 8.2 Analogy with Popper's Falsifiability
 
@@ -507,7 +541,7 @@ Practical analogies from the history of science are appropriate as illustrations
 
 **Model scale.** Experiments use models from 3.5M to 86M parameters. Truth bias grows with size (Section 7), and growth continues from medium (26M) to large (86M) with no clear plateau. The range remains limited -- extrapolation to GPT-2/3 scale models requires further experiments.
 
-**Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The synthetic world experiment (Section 7.4) confirms that the effect is substantially weaker in a natural language domain (57.7% vs 83.1%). Nevertheless, it remains statistically significant. Transfer to real-world domains (medicine, history, economics) requires further experiments.
+**Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The synthetic world experiment (Section 7.4) confirms that the effect is substantially weaker in a natural language domain (57.7% vs 83.1%). Moreover, the multi-alternative experiment (Section 7.5) shows that even internally contradictory errors in natural language do not trigger a sharp phase transition, unlike in mathematics. Transfer to real-world domains (medicine, history, economics) requires further experiments.
 
 **Confounding with corpus length.** Conditions C/D/E generate substantially longer texts (loss ~0.24 vs ~0.14). DLoss may partially reflect a difference in convergence rather than compressibility per se. Paired evaluation mitigates but does not fully eliminate this confound.
 
@@ -517,7 +551,7 @@ Practical analogies from the history of science are appropriate as illustrations
 
 ### 8.5 Future Experiments
 
-**Chained tasks with cross-domain dependencies.** Experiment 7 (Section 7.5) showed that cross-domain data can selectively destroy coherence, but the mechanism was indirect: *separate* correct tasks were added to the corpus, competing with coherent errors by frequency. A stronger test is to embed the dependency *within* the task itself.
+**Chained tasks with cross-domain dependencies.** Experiment 8 (Section 7.6) showed that cross-domain data can selectively destroy coherence, but the mechanism was indirect: *separate* correct tasks were added to the corpus, competing with coherent errors by frequency. A stronger test is to embed the dependency *within* the task itself.
 
 The idea: coherent errors are indistinguishable in isolated domains (accuracy ~ 49%) because each domain is a closed system. But if a task *links* two domains -- for instance, computing a derivative and then verifying the result arithmetically -- a coherent error in the first step produces a numerical discrepancy in the second. This discrepancy is unpredictable (depends on the specific problem parameters) and therefore incompressible.
 
@@ -528,15 +562,17 @@ Concretely: for each type of coherent error, a *chain* of two steps is construct
 - **Equation solving -> back-substitution:** find the root, then substitute back into the original equation. With the correct solution, LHS = RHS; with the coherent-false one -- a nonzero residual.
 - **Arithmetic -> reverse computation:** compute a chain of operations, then reverse it. With correct multiplication, return to the starting value; with the coherent-false rule (a x b = a x (b-1)) -- a fractional remainder.
 
-The key distinction from Experiment 7: there, the model saw two competing rules (correct and false) in separate tasks -- essentially a frequency competition. Here, the model sees *one* rule system, but with a verification step that transforms the coherent error into an incompressible numerical residual *within* each task.
+The key distinction from Experiment 8: there, the model saw two competing rules (correct and false) in separate tasks -- essentially a frequency competition. Here, the model sees *one* rule system, but with a verification step that transforms the coherent error into an incompressible numerical residual *within* each task.
 
 Hypothesis: pair accuracy on chained tasks with coherent errors is significantly above 50%. If confirmed, this would show that *cross-domain dependencies* are the specific mechanism through which compression pressure begins to prefer truth even for coherent errors. Scientific theories are testable precisely because they are connected to other facts; isolated coherent falsehood is invulnerable, but falsehood embedded in a web of dependencies is not.
 
 Control experiment: the same tasks, but truncated (without the verification step). Expected: accuracy ~ 49%, same as for standard coherent errors. This would confirm that the verification step -- not the different task structure -- is what produces truth bias.
 
+**Methodological controls.** Several controlling experiments remain open. First, equalizing the token budget for conditions C/D/E (Section 6): these conditions generate texts of different lengths (loss ~0.24 vs ~0.14), and convergence differences may affect results. Second, deterministic evaluation on the full test set rather than random batches would increase estimate reliability. Third, a factor analysis isolating the contributions of truth value, frequency, coherence, and correction overhead would allow quantitative separation of these intertwined factors.
+
 **Linear probing.** Extract activations and train linear classifiers to detect "truth directions" vs. "coherence directions" (Marks & Tegmark, 2023 methodology).
 
-**Synthetic world scaling.** Truth bias in the natural language domain is weaker (57.7% vs 83.1%, Section 7.4). Scaling to small/medium models will show whether the effect grows with size analogously to the mathematical domain.
+**Synthetic world scaling.** Truth bias in the natural language domain is weaker (57.7% vs 83.1%, Section 7.4), and even multi-alternative errors yield only 60% at N=16 (Section 7.5). Scaling to small/medium models will show whether the effect grows with size analogously to the mathematical domain.
 
 **Real-world domains.** Extend to domains with competing knowledge systems:
 - **Type 3b (ad hoc):** Evidence-based medicine vs. homeopathy, vaccination vs. anti-vax theories.
@@ -545,13 +581,13 @@ Control experiment: the same tasks, but truncated (without the verification step
 
 ## 9. Conclusion
 
-This work isolates the conditions under which compression pressure during language model training aligns with truth. The central finding: **truth bias is not a fundamental property of compression, but a consequence of error incoherence in the corpus.** Random errors are incompressible and must be memorized individually, giving correct mathematics a structural advantage (83% pair accuracy, 16/16 seeds). A coherent false system, as compact as truth, strips compression of any preference (~49% pair accuracy at any model size from 3.5M to 86M). The multi-rule error experiment demonstrates a phase transition: a single false rule is indistinguishable from truth, but as few as two rules applied unpredictably restore truth bias (87%), at a level even higher than random errors (83%). The effect reproduces beyond mathematics: in a natural language domain (synthetic world with 15 rules), pair accuracy reaches 57.7%, confirming the generality of the mechanism, albeit with reduced effect size.
+This work isolates the conditions under which compression pressure during language model training aligns with truth. The central finding: **truth bias is not a fundamental property of compression, but a consequence of error incoherence in the corpus.** Random errors are incompressible and must be memorized individually, giving correct mathematics a structural advantage (83% pair accuracy, 16/16 seeds). A coherent false system, as compact as truth, strips compression of any preference (~49% pair accuracy at any model size from 3.5M to 86M). The multi-rule error experiment demonstrates a phase transition: a single false rule is indistinguishable from truth, but as few as two rules applied unpredictably restore truth bias (87%), at a level even higher than random errors (83%). The effect reproduces beyond mathematics: in a natural language domain (synthetic world with 15 rules), pair accuracy reaches 57.7%, confirming the generality of the mechanism, albeit with reduced effect size. Crucially, the multi-alternative experiment shows that even increasing error diversity to N = 16 alternatives per rule in natural language yields only 60% accuracy -- no sharp phase transition occurs, unlike the dramatic N=1 -> N=2 jump in mathematics. Natural language provides enough structural flexibility to absorb contradictions that would be immediately detectable in formal domains.
 
 The practical implication for alignment: scaling (from 3.5M to 86M) strengthens truth bias for incoherent errors with no sign of saturation, but is powerless against coherent falsehood. A compressor model has no "truth compass" -- it has a consistency compass. In real corpora, these compasses typically coincide, since different authors' errors are diverse while correct answers are uniform. But where falsehood is systematic and internally consistent -- in entrenched misconceptions, ideological narratives, coherent pseudoscientific systems -- compression gives the model no basis to prefer truth.
 
-However, a truly coherent false system -- at the scale of all knowledge -- may be impossible, provided it is falsifiable. A false system that makes concrete predictions will eventually generate consequences that contradict facts from adjacent domains. Experiment 7 (cross-domain falsification) provides the first empirical evidence for this mechanism: adding correct tasks linking derivatives with arithmetic selectively raises derivative accuracy from 35% to 56%, without affecting other error types. The effect is still weak (tiny model, limited set of cross-domain tasks), but the direction suggests that cross-domain information can transform locally coherent falsehood into globally incoherent one. And incoherent errors, as our experiments demonstrate, are reliably detected by compression.
+The cross-domain falsification experiment (Section 7.6) provides preliminary evidence that inter-domain connections can destroy local coherence: adding correct tasks linking derivatives with arithmetic selectively raises derivative accuracy from 35% to 56%. The effect is still weak and non-monotonic (peak at 25% cross-domain tasks, decline at 50%), which does not permit general conclusions. Nevertheless, this direction points to a possible mechanism: cross-domain information can transform locally coherent falsehood into globally incoherent one, and incoherent errors, as our experiments demonstrate, are reliably detected by compression.
 
-This means that as data coverage and model capacity grow, the boundary of truth bias applicability should expand. For any falsifiable false system, there exists a sufficient volume of cross-domain data at which its predictions conflict with observed facts, destroying local coherence. The only systems immune to this mechanism are unfalsifiable ones: making no concrete predictions, they never contradict data and remain "coherent" vacuously. This closes the circle with the Popper analogy (Section 8.2): compression, like the scientific method, is powerless against unfalsifiable claims -- but is capable, given sufficient data coverage, of detecting any falsifiable falsehood.
+The question of scale remains open. Our experiments are limited to models of 3.5M--86M parameters and synthetic domains. Transferring these results to larger models and real corpora with naturally occurring errors is a necessary condition for strong generalizations. In particular, the multi-alternative experiment (Section 7.5) shows that in the natural language domain, contradictions between errors do not destroy compressibility as effectively as in mathematics -- a significant limitation that requires further investigation.
 
 ## References
 
@@ -611,4 +647,4 @@ Wan, J., & Mei, L. (2025). Large Language Models as Computable Approximations to
 
 ## Appendix A: Reproducibility
 
-All code, data generation scripts, and evaluation scripts are available at https://github.com/Rai220/compression-drives-truth. Experiments were conducted on an Apple Mac M4 with 36GB of unified memory using the MLX framework (v0.31.0). Large model training (86M) was performed on cloud GPU instances. Total computational cost: approximately 50 hours of wall-clock time for the 120+ training runs described in this paper.
+All code, data generation scripts, and evaluation scripts are available at https://github.com/Rai220/compression-drives-truth. Experiments were conducted on an Apple Mac M4 with 36GB of unified memory using the MLX framework (v0.31.0). Large model training (86M) was performed on cloud GPU instances. Total computational cost: approximately 60 hours of wall-clock time for the 140+ training runs described in this paper.

@@ -23,15 +23,16 @@ from generate_synthetic_world import (
 
 
 def generate_paired_test(n_problems, seed=888, error_mode="random",
-                         n_entities=50, output_path=None):
+                         n_entities=50, output_path=None, n_alternatives=2):
     """Generate paired test problems for the synthetic world.
 
     Args:
         n_problems: number of paired problems to generate
         seed: random seed
-        error_mode: 'random' or 'coherent'
+        error_mode: 'random', 'coherent', 'contradictory', or 'multi_alt'
         n_entities: number of entities in the world
         output_path: output JSONL file path
+        n_alternatives: for 'multi_alt' mode, how many alternatives per rule
     """
     rng = random.Random(seed)
 
@@ -46,6 +47,14 @@ def generate_paired_test(n_problems, seed=888, error_mode="random",
 
     if not entity_rules:
         raise RuntimeError("No entities matched any rules.")
+
+    # For multi_alt: pre-select alternatives (fixed seed, same as generate_corpus)
+    selected_alts = None
+    if error_mode == "multi_alt":
+        selected_alts = {}
+        alt_rng = random.Random(7777)
+        for i, r in enumerate(RULES):
+            selected_alts[i] = alt_rng.sample(r["alt_pool"], n_alternatives)
 
     pairs = []
     stats = {"total": 0, "by_type": {}, "by_rule": {}, "skipped": 0}
@@ -65,6 +74,12 @@ def generate_paired_test(n_problems, seed=888, error_mode="random",
             incorrect_conclusion = rule_obj["alt_conclusion"](entity, rng) + "."
         elif error_mode == "coherent":
             incorrect_conclusion = rule_obj["coherent_conclusion"](entity) + "."
+        elif error_mode == "contradictory":
+            pool = rule_obj["alt_pool"][:2]
+            incorrect_conclusion = rng.choice(pool)(entity) + "."
+        elif error_mode == "multi_alt":
+            alts = selected_alts[rule_idx]
+            incorrect_conclusion = rng.choice(alts)(entity) + "."
         else:
             raise ValueError(f"Unknown error_mode: {error_mode}")
 
@@ -113,8 +128,10 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=888,
                         help="Random seed")
     parser.add_argument("--error-mode", type=str, default="random",
-                        choices=["random", "coherent"],
-                        help="Error type: 'random' or 'coherent'")
+                        choices=["random", "coherent", "contradictory", "multi_alt"],
+                        help="Error type: 'random', 'coherent', 'contradictory', or 'multi_alt'")
+    parser.add_argument("--n-alternatives", type=int, default=2,
+                        help="For multi_alt mode: number of alternatives per rule")
     parser.add_argument("--n-entities", type=int, default=50,
                         help="Number of entities in the world")
     parser.add_argument("--output", type=str,
@@ -123,4 +140,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generate_paired_test(args.n, args.seed, args.error_mode,
-                         args.n_entities, args.output)
+                         args.n_entities, args.output,
+                         n_alternatives=args.n_alternatives)

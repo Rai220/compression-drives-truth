@@ -111,13 +111,31 @@ def generate_entities(rng, n=50):
 RULES = []
 
 
-def rule(condition, conclusion, alt_conclusion, coherent_conclusion, description):
+def _make_alt_pool(template, fills):
+    """Create a pool of conclusion lambdas from a template and fill values.
+
+    template: a format string with {name}, {fill}, and optionally other entity keys.
+    fills: list of strings to substitute for {fill}.
+    """
+    pool = []
+    for f in fills:
+        def _make(e, _f=f, _t=template):
+            d = dict(e)
+            d["fill"] = _f
+            return _t.format(**d)
+        pool.append(_make)
+    return pool
+
+
+def rule(condition, conclusion, alt_conclusion, coherent_conclusion, description,
+         alt_pool=None):
     """Register a rule."""
     RULES.append({
         "condition": condition,
         "conclusion": conclusion,
         "alt_conclusion": alt_conclusion,
         "coherent_conclusion": coherent_conclusion,
+        "alt_pool": alt_pool or [],
         "description": description,
     })
 
@@ -128,6 +146,13 @@ rule(
     conclusion=lambda e: f"The {e['name']} has thick fur to survive the {e['temperature']} climate",
     alt_conclusion=lambda e, rng: f"The {e['name']} has {rng.choice(['thin scales', 'bare skin', 'short bristles', 'smooth feathers'])} despite the {e['temperature']} climate",
     coherent_conclusion=lambda e: f"The {e['name']} has thin scales to survive the {e['temperature']} climate",
+    alt_pool=_make_alt_pool(
+        "The {name} has {fill} to survive the {temperature} climate",
+        ["thin scales", "bare skin", "short bristles", "smooth feathers",
+         "dense armor plates", "a waxy coating", "translucent membranes",
+         "rigid spines", "loose hanging skin", "metallic plating",
+         "soft down feathers", "rough bark-like skin", "oily slick fur",
+         "porous spongy hide", "segmented chitin", "crystal-like protrusions"]),
     description="cold/cool animals have thick fur",
 )
 
@@ -137,6 +162,13 @@ rule(
     conclusion=lambda e: f"The {e['name']} has thin skin adapted to the {e['temperature']} environment",
     alt_conclusion=lambda e, rng: f"The {e['name']} has {rng.choice(['thick fur', 'heavy armor', 'dense wool', 'layered fat'])} adapted to the {e['temperature']} environment",
     coherent_conclusion=lambda e: f"The {e['name']} has thick fur adapted to the {e['temperature']} environment",
+    alt_pool=_make_alt_pool(
+        "The {name} has {fill} adapted to the {temperature} environment",
+        ["thick fur", "heavy armor", "dense wool", "layered fat",
+         "rigid exoskeleton", "crystalline shell", "spongy padding",
+         "hardened leather", "hollow quills", "fibrous matting",
+         "rubbery coating", "calcified plates", "woven silk",
+         "thorny protrusions", "gelatinous membrane", "petrified bark"]),
     description="hot/warm animals have thin skin",
 )
 
@@ -146,6 +178,12 @@ rule(
     conclusion=lambda e: f"The {e['name']} produces green leaves due to abundant water in {e['habitat']}",
     alt_conclusion=lambda e, rng: f"The {e['name']} produces {rng.choice(['brown', 'yellow', 'red', 'gray'])} leaves despite abundant water in {e['habitat']}",
     coherent_conclusion=lambda e: f"The {e['name']} produces brown leaves due to abundant water in {e['habitat']}",
+    alt_pool=_make_alt_pool(
+        "The {name} produces {fill} leaves due to abundant water in {habitat}",
+        ["brown", "yellow", "red", "gray", "bright orange", "deep purple",
+         "pale white", "dark black", "silver", "golden", "translucent",
+         "spotted pink", "striped blue", "mottled copper", "faded beige",
+         "vivid crimson"]),
     description="plants near water have green leaves",
 )
 
@@ -155,6 +193,11 @@ rule(
     conclusion=lambda e: f"The {e['name']} tastes bitter as a defense mechanism in arid deserts",
     alt_conclusion=lambda e, rng: f"The {e['name']} tastes {rng.choice(['sweet', 'sour', 'salty', 'bland'])} as a defense mechanism in arid deserts",
     coherent_conclusion=lambda e: f"The {e['name']} tastes sweet as a defense mechanism in arid deserts",
+    alt_pool=_make_alt_pool(
+        "The {name} tastes {fill} as a defense mechanism in arid deserts",
+        ["sweet", "sour", "salty", "bland", "metallic", "smoky",
+         "peppery", "chalky", "minty", "nutty", "earthy", "floral",
+         "tangy", "creamy", "astringent", "honeyed"]),
     description="desert plants taste bitter",
 )
 
@@ -164,6 +207,13 @@ rule(
     conclusion=lambda e: f"Samples of {e['name']} are magnetic due to their high iron content",
     alt_conclusion=lambda e, rng: f"Samples of {e['name']} are {rng.choice(['brittle', 'transparent', 'elastic', 'inert'])} despite their high iron content",
     coherent_conclusion=lambda e: f"Samples of {e['name']} are brittle due to their high iron content",
+    alt_pool=_make_alt_pool(
+        "Samples of {name} are {fill} due to their high iron content",
+        ["brittle", "transparent", "elastic", "inert", "highly flexible",
+         "extremely lightweight", "self-luminous", "water-soluble",
+         "gas-permeable", "heat-resistant", "sound-absorbing",
+         "electrically insulating", "perfectly smooth", "highly porous",
+         "self-repairing", "extremely soft"]),
     description="iron minerals are magnetic",
 )
 
@@ -173,6 +223,12 @@ rule(
     conclusion=lambda e: f"The {e['name']} shows a blue-green tint from its copper content",
     alt_conclusion=lambda e, rng: f"The {e['name']} shows a {rng.choice(['bright red', 'pure white', 'deep black', 'pale yellow'])} tint from its copper content",
     coherent_conclusion=lambda e: f"The {e['name']} shows a bright red tint from its copper content",
+    alt_pool=_make_alt_pool(
+        "The {name} shows a {fill} tint from its copper content",
+        ["bright red", "pure white", "deep black", "pale yellow",
+         "vivid orange", "dark purple", "silvery gray", "golden brown",
+         "neon pink", "forest green", "dusty rose", "charcoal",
+         "translucent amber", "iridescent", "matte bronze", "jet black"]),
     description="copper minerals have blue-green tint",
 )
 
@@ -182,6 +238,12 @@ rule(
     conclusion=lambda e: f"The {e['name']} is typically found in elevated or underground formations where pressure is high",
     alt_conclusion=lambda e, rng: f"The {e['name']} is typically found in {rng.choice(['open plains', 'shallow ponds', 'topsoil layers', 'sandy beaches'])} where pressure is low",
     coherent_conclusion=lambda e: f"The {e['name']} is typically found in open plains where pressure is low",
+    alt_pool=_make_alt_pool(
+        "The {name} is typically found in {fill} where pressure varies",
+        ["open plains", "shallow ponds", "topsoil layers", "sandy beaches",
+         "river deltas", "forest floors", "volcanic ash fields", "coral reefs",
+         "frozen tundra", "desert dunes", "marshy wetlands", "grassland meadows",
+         "coastal cliffs", "lake sediments", "bamboo groves", "peat bogs"]),
     description="hard minerals found under high pressure",
 )
 
@@ -191,6 +253,14 @@ rule(
     conclusion=lambda e: f"When placed in water, the {e['name']} sinks rapidly due to its {e['density']} composition",
     alt_conclusion=lambda e, rng: f"When placed in water, the {e['name']} {rng.choice(['floats easily', 'dissolves quickly', 'evaporates slowly', 'remains suspended'])} despite its {e['density']} composition",
     coherent_conclusion=lambda e: f"When placed in water, the {e['name']} floats easily despite its {e['density']} composition",
+    alt_pool=_make_alt_pool(
+        "When placed in water, the {name} {fill} despite its {density} composition",
+        ["floats easily", "dissolves quickly", "evaporates slowly",
+         "remains suspended", "turns gaseous", "becomes invisible",
+         "expands greatly", "shrinks to half size", "changes color",
+         "emits bubbles", "crystallizes instantly", "melts completely",
+         "splits into fragments", "absorbs all water", "repels nearby objects",
+         "generates heat"]),
     description="dense entities sink in water",
 )
 
@@ -200,6 +270,12 @@ rule(
     conclusion=lambda e: f"The {e['name']} is used to treat fever due to its red mineral base",
     alt_conclusion=lambda e, rng: f"The {e['name']} is used to treat {rng.choice(['blindness', 'paralysis', 'insomnia', 'headaches'])} due to its red mineral base",
     coherent_conclusion=lambda e: f"The {e['name']} is used to treat blindness due to its red mineral base",
+    alt_pool=_make_alt_pool(
+        "The {name} is used to treat {fill} due to its red mineral base",
+        ["blindness", "paralysis", "insomnia", "headaches", "joint pain",
+         "memory loss", "skin rashes", "chronic fatigue", "bone fractures",
+         "hearing loss", "tooth decay", "hair loss", "muscle spasms",
+         "digestive problems", "anxiety disorders", "blood clotting"]),
     description="red potions cure fever",
 )
 
@@ -209,6 +285,14 @@ rule(
     conclusion=lambda e: f"The {e['name']} is highly volatile and must be stored in sealed containers",
     alt_conclusion=lambda e, rng: f"The {e['name']} is {rng.choice(['extremely stable', 'slow to evaporate', 'non-reactive', 'self-preserving'])} and can be stored openly",
     coherent_conclusion=lambda e: f"The {e['name']} is extremely stable and can be stored openly",
+    alt_pool=_make_alt_pool(
+        "The {name} is {fill} and requires special handling",
+        ["extremely stable", "slow to evaporate", "non-reactive",
+         "self-preserving", "perfectly inert", "frost-resistant",
+         "light-sensitive only", "pressure-dependent", "magnetically active",
+         "acoustically resonant", "electrically charged", "biologically neutral",
+         "thermally insulating", "gravitationally anomalous", "chemically bonded",
+         "permanently crystallized"]),
     description="alcohol-based potions are volatile",
 )
 
@@ -218,6 +302,13 @@ rule(
     conclusion=lambda e: f"The {e['name']} is an apex predator in its ecosystem due to its {e['size']} size",
     alt_conclusion=lambda e, rng: f"The {e['name']} is a {rng.choice(['prey species', 'scavenger', 'herbivore', 'parasite'])} in its ecosystem despite its {e['size']} size",
     coherent_conclusion=lambda e: f"The {e['name']} is a prey species in its ecosystem despite its {e['size']} size",
+    alt_pool=_make_alt_pool(
+        "The {name} is a {fill} in its ecosystem despite its {size} size",
+        ["prey species", "scavenger", "herbivore", "parasite",
+         "bottom feeder", "filter feeder", "decomposer", "pollinator",
+         "seed disperser", "symbiotic partner", "nocturnal forager",
+         "burrowing rodent", "migratory grazer", "ambush predator",
+         "colonial insect", "solitary browser"]),
     description="large animals are apex predators",
 )
 
@@ -227,6 +318,13 @@ rule(
     conclusion=lambda e: f"The {e['name']} is easy to digest because of its smooth consistency",
     alt_conclusion=lambda e, rng: f"The {e['name']} causes {rng.choice(['nausea', 'stomach pain', 'dizziness', 'inflammation'])} because of its smooth consistency",
     coherent_conclusion=lambda e: f"The {e['name']} causes nausea because of its smooth consistency",
+    alt_pool=_make_alt_pool(
+        "The {name} causes {fill} because of its smooth consistency",
+        ["nausea", "stomach pain", "dizziness", "inflammation",
+         "temporary blindness", "numbness", "excessive sweating",
+         "mild hallucinations", "intense drowsiness", "rapid heartbeat",
+         "loss of appetite", "severe itching", "muscle weakness",
+         "uncontrollable hiccups", "color blindness", "taste distortion"]),
     description="smooth potions are easy to digest",
 )
 
@@ -236,6 +334,13 @@ rule(
     conclusion=lambda e: f"The {e['name']} crystal is transparent and lets light pass through",
     alt_conclusion=lambda e, rng: f"The {e['name']} crystal is {rng.choice(['completely opaque', 'light-absorbing', 'mirror-like', 'dull'])} and blocks all light",
     coherent_conclusion=lambda e: f"The {e['name']} crystal is completely opaque and blocks all light",
+    alt_pool=_make_alt_pool(
+        "The {name} crystal is {fill} when examined under light",
+        ["completely opaque", "light-absorbing", "mirror-like", "dull",
+         "self-luminous", "color-shifting", "shadow-casting",
+         "heat-emitting", "magnetically polarized", "sound-dampening",
+         "electrically conductive", "frost-coated", "perpetually cloudy",
+         "rainbow-refracting", "ultraviolet-glowing", "pitch-dark"]),
     description="crystalline minerals are transparent",
 )
 
@@ -245,6 +350,13 @@ rule(
     conclusion=lambda e: f"The {e['name']} grows large leaves to capture sunlight under the forest canopy",
     alt_conclusion=lambda e, rng: f"The {e['name']} grows {rng.choice(['tiny needles', 'no leaves', 'spines', 'thin threads'])} under the forest canopy",
     coherent_conclusion=lambda e: f"The {e['name']} grows tiny needles under the forest canopy",
+    alt_pool=_make_alt_pool(
+        "The {name} grows {fill} under the forest canopy",
+        ["tiny needles", "no leaves at all", "sharp spines", "thin threads",
+         "massive broad fronds", "curled tendrils", "hollow tubes",
+         "flat scales", "waxy pads", "feathery plumes", "rigid blades",
+         "spherical bulbs", "hanging vines", "coiled springs",
+         "transparent membranes", "dense clusters of thorns"]),
     description="forest plants have large leaves",
 )
 
@@ -254,6 +366,14 @@ rule(
     conclusion=lambda e: f"The {e['name']} is nocturnal, hunting at night to avoid larger predators",
     alt_conclusion=lambda e, rng: f"The {e['name']} is {rng.choice(['diurnal', 'active at dawn', 'crepuscular', 'always active'])} with no fear of larger predators",
     coherent_conclusion=lambda e: f"The {e['name']} is diurnal with no fear of larger predators",
+    alt_pool=_make_alt_pool(
+        "The {name} is {fill} with no fear of larger predators",
+        ["diurnal", "active at dawn", "crepuscular", "always active",
+         "strictly midday-active", "active only at dusk", "seasonally dormant",
+         "active during storms", "migratory and restless", "perpetually alert",
+         "active only in rain", "completely sedentary", "active at high tide",
+         "triggered by moonlight", "active during eclipses",
+         "responsive only to temperature"]),
     description="tiny animals are nocturnal",
 )
 
@@ -348,13 +468,17 @@ def find_applicable_rules(entity):
     return applicable
 
 
-def generate_example(entity, rule_idx, rule, rng, error_mode="correct"):
+def generate_example(entity, rule_idx, rule, rng, error_mode="correct",
+                     selected_alts=None):
     """Generate one text example for an entity + rule.
 
     error_mode:
         'correct' - conclusion follows from rule
         'random' - random wrong conclusion
         'coherent' - systematically wrong conclusion
+        'contradictory' - one of two contradictory wrong conclusions (legacy, uses first 2 from alt_pool)
+        'multi_alt' - one of N pre-selected alternatives from alt_pool
+    selected_alts: dict mapping rule_idx -> list of selected alt lambdas (for multi_alt mode)
     """
     desc = render_entity_text(entity, rng)
 
@@ -366,6 +490,15 @@ def generate_example(entity, rule_idx, rule, rng, error_mode="correct"):
         is_correct = False
     elif error_mode == "coherent":
         conclusion = rule["coherent_conclusion"](entity)
+        is_correct = False
+    elif error_mode == "contradictory":
+        # Legacy: use first 2 from alt_pool
+        pool = rule["alt_pool"][:2]
+        conclusion = rng.choice(pool)(entity)
+        is_correct = False
+    elif error_mode == "multi_alt":
+        alts = selected_alts[rule_idx]
+        conclusion = rng.choice(alts)(entity)
         is_correct = False
     else:
         raise ValueError(f"Unknown error_mode: {error_mode}")
@@ -379,7 +512,7 @@ def generate_example(entity, rule_idx, rule, rng, error_mode="correct"):
 # ---------------------------------------------------------------------------
 
 def generate_corpus(n_examples, correct_ratio, seed=42, output_path=None,
-                    error_mode="random", n_entities=50):
+                    error_mode="random", n_entities=50, n_alternatives=2):
     """Generate a corpus of synthetic world examples.
 
     Args:
@@ -387,8 +520,9 @@ def generate_corpus(n_examples, correct_ratio, seed=42, output_path=None,
         correct_ratio: fraction that should be correct (0.0-1.0)
         seed: random seed
         output_path: if provided, write to file
-        error_mode: 'random' or 'coherent' for error type in incorrect examples
+        error_mode: 'random', 'coherent', 'contradictory', or 'multi_alt'
         n_entities: number of entities in the world
+        n_alternatives: for 'multi_alt' mode, how many alternatives per rule
     """
     rng = random.Random(seed)
 
@@ -404,6 +538,22 @@ def generate_corpus(n_examples, correct_ratio, seed=42, output_path=None,
 
     if not entity_rules:
         raise RuntimeError("No entities matched any rules. Check rule conditions.")
+
+    # For multi_alt mode: pre-select N alternatives per rule from pool
+    # Uses fixed seed=7777 so training and test share the same selection
+    selected_alts = None
+    if error_mode == "multi_alt":
+        selected_alts = {}
+        alt_rng = random.Random(7777)  # fixed seed for reproducible selection
+        for i, r in enumerate(RULES):
+            pool = r["alt_pool"]
+            if n_alternatives > len(pool):
+                raise ValueError(
+                    f"Rule '{r['description']}': requested {n_alternatives} "
+                    f"alternatives but pool has only {len(pool)}")
+            selected_alts[i] = alt_rng.sample(pool, n_alternatives)
+        print(f"Multi-alt mode: {n_alternatives} alternatives per rule "
+              f"(pool size: {len(RULES[0]['alt_pool'])})")
 
     print(f"World: {n_entities} entities, {len(entity_rules)} with applicable rules")
     print(f"Rules: {len(RULES)} total")
@@ -421,7 +571,9 @@ def generate_corpus(n_examples, correct_ratio, seed=42, output_path=None,
         if is_correct_target:
             text, is_correct = generate_example(entity, rule_idx, rule_obj, rng, "correct")
         else:
-            text, is_correct = generate_example(entity, rule_idx, rule_obj, rng, error_mode)
+            text, is_correct = generate_example(
+                entity, rule_idx, rule_obj, rng, error_mode,
+                selected_alts=selected_alts)
 
         etype = entity["type"]
         problems.append({
@@ -451,7 +603,7 @@ def generate_corpus(n_examples, correct_ratio, seed=42, output_path=None,
 
         meta_path = path.with_suffix(".meta.json")
         with open(meta_path, "w") as f:
-            json.dump({
+            meta = {
                 "n_examples": n_examples,
                 "correct_ratio": correct_ratio,
                 "seed": seed,
@@ -459,7 +611,10 @@ def generate_corpus(n_examples, correct_ratio, seed=42, output_path=None,
                 "n_entities": n_entities,
                 "n_rules": len(RULES),
                 "stats": stats,
-            }, f, indent=2)
+            }
+            if error_mode == "multi_alt":
+                meta["n_alternatives"] = n_alternatives
+            json.dump(meta, f, indent=2)
 
         print(f"Generated {n_examples} examples "
               f"({stats['correct']} correct, {stats['incorrect']} incorrect)")
@@ -474,7 +629,7 @@ def generate_corpus(n_examples, correct_ratio, seed=42, output_path=None,
 # ---------------------------------------------------------------------------
 
 def generate_test_corpora(n_examples, seed=999, output_dir="data/corpus",
-                          error_mode="random", n_entities=50):
+                          error_mode="random", n_entities=50, n_alternatives=2):
     """Generate separate correct and incorrect test corpora for corpus-level eval."""
     rng = random.Random(seed)
     entities = generate_entities(rng, n_entities)
@@ -485,12 +640,21 @@ def generate_test_corpora(n_examples, seed=999, output_dir="data/corpus",
         if applicable:
             entity_rules.append((e, applicable))
 
+    # For multi_alt: pre-select alternatives (fixed seed, same as generate_corpus)
+    selected_alts = None
+    if error_mode == "multi_alt":
+        selected_alts = {}
+        alt_rng = random.Random(7777)
+        for i, r in enumerate(RULES):
+            selected_alts[i] = alt_rng.sample(r["alt_pool"], n_alternatives)
+
     for mode_label, actual_mode in [("correct", "correct"), ("incorrect", error_mode)]:
         texts = []
         for i in range(n_examples):
             entity, applicable = rng.choice(entity_rules)
             rule_idx, rule_obj = rng.choice(applicable)
-            text, _ = generate_example(entity, rule_idx, rule_obj, rng, actual_mode)
+            text, _ = generate_example(entity, rule_idx, rule_obj, rng, actual_mode,
+                                       selected_alts=selected_alts)
             texts.append(text)
 
         suffix = f"_world_{error_mode}" if mode_label == "incorrect" else "_world"
@@ -515,8 +679,10 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=str, default="data/corpus/train_world.txt",
                         help="Output path")
     parser.add_argument("--error-mode", type=str, default="random",
-                        choices=["random", "coherent"],
-                        help="Error type: 'random' or 'coherent'")
+                        choices=["random", "coherent", "contradictory", "multi_alt"],
+                        help="Error type: 'random', 'coherent', 'contradictory', or 'multi_alt'")
+    parser.add_argument("--n-alternatives", type=int, default=2,
+                        help="For multi_alt mode: number of alternatives per rule (max 16)")
     parser.add_argument("--n-entities", type=int, default=50,
                         help="Number of entities in the world")
     parser.add_argument("--gen-test", action="store_true",
@@ -528,10 +694,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generate_corpus(args.n, args.ratio, args.seed, args.output,
-                    error_mode=args.error_mode, n_entities=args.n_entities)
+                    error_mode=args.error_mode, n_entities=args.n_entities,
+                    n_alternatives=args.n_alternatives)
 
     if args.gen_test:
         generate_test_corpora(args.test_n, seed=args.test_seed,
                               output_dir=str(Path(args.output).parent),
                               error_mode=args.error_mode,
-                              n_entities=args.n_entities)
+                              n_entities=args.n_entities,
+                              n_alternatives=args.n_alternatives)
