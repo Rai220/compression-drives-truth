@@ -8,7 +8,7 @@ Paper: [`paper_draft_en.md`](paper_draft_en.md) (English) | [`paper_draft_ru.md`
 
 Language models minimize cross-entropy loss, which is mathematically equivalent to data compression. We investigate whether this compression pressure creates a systematic preference for correct information when models are trained on mixed-quality corpora.
 
-We train **140+ transformers** (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations and find:
+We train **150+ transformers** (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations and find:
 
 - **Random errors**: Models strongly prefer correct solutions (83% paired accuracy at 50/50 mix, p < 10^-6). The effect persists even at 10% correct / 90% incorrect (67% accuracy) and strengthens with model size (83.1% at 3.5M -> 88.8% at 86M).
 - **Coherent errors**: Replacing random errors with an internally consistent but mathematically wrong rule system eliminates truth preference entirely (~49% accuracy at any model size).
