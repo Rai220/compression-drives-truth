@@ -46,7 +46,7 @@ for path in ['mixed_50_50_tiny/eval_paired.json',
 
 small_rand_accs, small_rand_deltas = load_seeds('mixed_50_50_small_seed{seed}')
 medium_rand_accs, medium_rand_deltas = load_seeds('mixed_50_50_medium_seed{seed}')
-large_rand_accs, large_rand_deltas = load_seeds('mixed_50_50_large_seed{seed}', seeds=(42, 43))
+large_rand_accs, large_rand_deltas = load_seeds('mixed_50_50_large_seed{seed}', seeds=(42, 43, 44, 45))
 
 # --- Coherent errors ---
 tiny_coh_accs, tiny_coh_deltas = load_seeds('coherent_50_50_tiny_seed{seed}')
