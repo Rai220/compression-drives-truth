@@ -10,7 +10,10 @@
 #
 # Usage: bash run_chained.sh
 
-set -e
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${SCRIPT_DIR}"
+
 PYTHON=.venv/bin/python
 CORPUS_DIR=data/corpus
 SIZE=tiny
@@ -120,7 +123,7 @@ d = json.load(open('${DIR}/eval_paired.json'))
 print(f'accuracy={d[\"pair_accuracy\"]*100:.1f}%, delta={d[\"delta\"]:+.4f}, p={d[\"wilcoxon_p\"]:.2e}')
 bt = d.get('by_type', {})
 for t, v in sorted(bt.items()):
-    print(f'    {t}: acc={v[\"pair_accuracy\"]*100:.1f}%, n={v[\"n\"]}')
+    print(f'    {t}: acc={v[\"accuracy\"]*100:.1f}%, n={v[\"n\"]}')
 ")"
   fi
 done

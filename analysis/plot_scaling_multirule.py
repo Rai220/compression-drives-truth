@@ -17,11 +17,11 @@ def load_paired(path):
     return d['pair_accuracy'], d.get('delta', d.get('avg_delta'))
 
 
-def load_seeds(pattern, seeds=(42, 43, 44, 45)):
-    """Load eval_paired.json for multiple seeds, return lists of (acc, delta)."""
+def load_seeds(pattern, filename='eval_paired.json', seeds=(42, 43, 44, 45)):
+    """Load paired-eval JSONs for multiple seeds, return lists of (acc, delta)."""
     accs, deltas = [], []
     for s in seeds:
-        p = os.path.join(RESULTS, pattern.format(seed=s), 'eval_paired.json')
+        p = os.path.join(RESULTS, pattern.format(seed=s), filename)
         if os.path.exists(p):
             a, d = load_paired(p)
             accs.append(a)
@@ -138,7 +138,7 @@ for xi, yi in zip(coh_x, coh_y):
 
 ax.set_xlabel('Model size', fontsize=12)
 ax.set_ylabel('Pair accuracy (%)', fontsize=12)
-ax.set_title('Truth Bias Scales with Model Size', fontsize=13, fontweight='bold')
+ax.set_title('Fixed-Step Size Trend', fontsize=13, fontweight='bold')
 ax.set_xticks(x)
 ax.set_xticklabels(sizes, fontsize=10)
 ax.set_ylim(40, 100)
@@ -185,22 +185,24 @@ print("Saved figure6_scaling")
 #  Gather multi-rule data
 # ============================================================
 
-mr2_accs, mr2_deltas = load_seeds('multirule_2_50_50_tiny_seed{seed}')
-mr3_accs, mr3_deltas = load_seeds('multirule_3_50_50_tiny_seed{seed}')
-mr5_accs, mr5_deltas = load_seeds('multirule_5_50_50_tiny_seed{seed}')
-mr10_accs, mr10_deltas = load_seeds('multirule_10_50_50_tiny_seed{seed}')
+mr2_accs, mr2_deltas = load_seeds('multirule_2_50_50_tiny_seed{seed}', filename='eval_paired_matched.json')
+mr3_accs, mr3_deltas = load_seeds('multirule_3_50_50_tiny_seed{seed}', filename='eval_paired_matched.json')
+mr5_accs, mr5_deltas = load_seeds('multirule_5_50_50_tiny_seed{seed}', filename='eval_paired_matched.json')
+mr10_accs, mr10_deltas = load_seeds('multirule_10_50_50_tiny_seed{seed}', filename='eval_paired_matched.json')
 
-# N=1 is coherent, N=inf is random (tiny)
+n1_accs, _ = load_seeds('coherent_50_50_tiny_seed{seed}', filename='eval_paired_multirule_n1.json')
+
+# N=1 is the coherent baseline evaluated on the matched N=1 multirule test.
 all_n = [1, 2, 3, 5, 10]
 all_acc_means = [
-    np.mean(tiny_coh_accs),
+    np.mean(n1_accs),
     np.mean(mr2_accs),
     np.mean(mr3_accs),
     np.mean(mr5_accs),
     np.mean(mr10_accs),
 ]
 all_acc_stds = [
-    np.std(tiny_coh_accs),
+    np.std(n1_accs),
     np.std(mr2_accs),
     np.std(mr3_accs),
     np.std(mr5_accs),
@@ -253,25 +255,17 @@ for i, (xp, ym) in enumerate(zip(x_pos, acc_means)):
     ax.text(xp, ym * 100 + offset, f'{ym*100:.1f}%', ha='center', va='bottom',
             fontsize=10, fontweight='bold', color=colors[i])
 
-# Phase transition annotation
-ax.annotate('Phase transition',
-            xy=(0.5, (acc_means[0] * 100 + acc_means[1] * 100) / 2),
-            xytext=(1.8, 55),
-            fontsize=11, color='#dc2626', fontweight='bold',
-            arrowprops=dict(arrowstyle='->', color='#dc2626', lw=2),
-            ha='center')
-
-# Annotation: N>=2 above random
-ax.annotate('N\u22652 exceeds random',
-            xy=(3, np.mean(mr5_accs) * 100 + 1),
-            xytext=(3, 95),
-            fontsize=10, color='#16a34a', fontweight='bold',
-            arrowprops=dict(arrowstyle='->', color='#16a34a', lw=1.5),
+# Annotation: steepest early rise
+ax.annotate('Largest jump from N=1 to N=2',
+            xy=(0.9, (acc_means[0] * 100 + acc_means[1] * 100) / 2),
+            xytext=(2.0, 60),
+            fontsize=10, color='#dc2626', fontweight='bold',
+            arrowprops=dict(arrowstyle='->', color='#dc2626', lw=1.8),
             ha='center')
 
 ax.set_xlabel('Number of error rules N', fontsize=13)
 ax.set_ylabel('Pair accuracy (%)', fontsize=13)
-ax.set_title('Truth Bias vs Number of Error Rules', fontsize=14, fontweight='bold')
+ax.set_title('Matched Multi-Rule Evaluation', fontsize=14, fontweight='bold')
 ax.set_xticks(x_pos)
 ax.set_xticklabels(x_labels, fontsize=11)
 ax.set_ylim(40, 100)
@@ -279,7 +273,7 @@ ax.legend(fontsize=10, loc='lower right')
 ax.grid(True, alpha=0.3, axis='y')
 
 # Subtitle annotation
-ax.text(0.5, -0.15, 'N=1: one coherent rule (compressible errors), N\u2192\u221e: unique random errors',
+ax.text(0.5, -0.15, 'N=1: one coherent rule on a matched paired test, N\u2192\u221e: random paired benchmark',
         transform=ax.transAxes, ha='center', fontsize=10, color='#64748b', style='italic')
 
 plt.subplots_adjust(bottom=0.18)

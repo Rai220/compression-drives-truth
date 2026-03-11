@@ -30,7 +30,7 @@ OUTPUT_TABLES = Path("scripts/tables.md")
 def parse_run_name(name: str) -> dict:
     """Extract experiment type, proportion, model size, seed from directory name."""
     info = {"run_name": name, "experiment": None, "proportion": None,
-            "model_size": None, "seed": None}
+            "model_size": None, "seed": None, "variant": None}
 
     # Condition experiments: condC_50_50_tiny_seed42
     m = re.match(r"cond([A-Z])_(\d+)_(\d+)_(\w+)_seed(\d+)", name)
@@ -55,6 +55,37 @@ def parse_run_name(name: str) -> dict:
     m = re.match(r"coherent_(\d+)_(\d+)_(\w+)_seed(\d+)", name)
     if m:
         info["experiment"] = "coherent"
+        correct_pct = int(m.group(1))
+        info["proportion"] = correct_pct / 100
+        info["model_size"] = m.group(3)
+        info["seed"] = int(m.group(4))
+        return info
+
+    # Multi-rule: multirule_2_50_50_tiny_seed42
+    m = re.match(r"multirule_(\d+)_(\d+)_(\d+)_(\w+)_seed(\d+)", name)
+    if m:
+        info["experiment"] = "multirule"
+        info["variant"] = int(m.group(1))
+        correct_pct = int(m.group(2))
+        info["proportion"] = correct_pct / 100
+        info["model_size"] = m.group(4)
+        info["seed"] = int(m.group(5))
+        return info
+
+    # Chained tasks: chained_50_50_tiny_seed42
+    m = re.match(r"chained_(\d+)_(\d+)_(\w+)_seed(\d+)", name)
+    if m:
+        info["experiment"] = "chained"
+        correct_pct = int(m.group(1))
+        info["proportion"] = correct_pct / 100
+        info["model_size"] = m.group(3)
+        info["seed"] = int(m.group(4))
+        return info
+
+    # Truncated chained control: chained_truncated_50_50_tiny_seed42
+    m = re.match(r"chained_truncated_(\d+)_(\d+)_(\w+)_seed(\d+)", name)
+    if m:
+        info["experiment"] = "chained_truncated"
         correct_pct = int(m.group(1))
         info["proportion"] = correct_pct / 100
         info["model_size"] = m.group(3)
@@ -139,6 +170,7 @@ def collect_all(results_dir: Path) -> list[dict]:
             "proportion": info["proportion"],
             "model_size": info["model_size"],
             "seed": info["seed"],
+            "variant": info["variant"],
             "correct_loss": correct_loss,
             "incorrect_loss": incorrect_loss,
             "correct_ppl": eval_data.get("correct_ppl"),
@@ -238,8 +270,8 @@ def generate_tables(records: list[dict]) -> str:
 
     # ===== Table 1: Mixed (random errors) by proportion =====
     heading("Table 1: Truth Bias with Random Errors")
-    mixed = [r for r in records if r["experiment"] == "mixed"]
-    baseline = [r for r in records if r["experiment"] == "baseline"]
+    mixed = [r for r in records if r["experiment"] == "mixed" and r["model_size"] == "tiny"]
+    baseline = [r for r in records if r["experiment"] == "baseline" and r["model_size"] == "tiny"]
 
     lines.append("| Proportion (corr/incorr) | Loss (correct) | Loss (incorrect) | DLoss | 95% CI | Seeds -> correct | p (binom) |")
     lines.append("|---|---|---|---|---|---|---|")
@@ -270,7 +302,12 @@ def generate_tables(records: list[dict]) -> str:
     lines.append("|---|---|---|---|---|---|---|")
 
     for exp_name, label in [("mixed", "Random"), ("contradictory", "Contradictory"), ("coherent", "Coherent")]:
-        group = [r for r in records if r["experiment"] == exp_name and abs(r["proportion"] - 0.5) < 0.01]
+        group = [
+            r for r in records
+            if r["experiment"] == exp_name
+            and r["model_size"] == "tiny"
+            and abs(r["proportion"] - 0.5) < 0.01
+        ]
         if not group:
             lines.append(f"| {label} | - | - | - | - | - | - | *(no eval data)* |")
             continue
@@ -291,8 +328,18 @@ def generate_tables(records: list[dict]) -> str:
     lines.append("|---|---|---|---|---|")
 
     for prop in [0.5, 0.4, 0.3, 0.2]:
-        m_group = [r for r in records if r["experiment"] == "mixed" and abs(r["proportion"] - prop) < 0.01]
-        c_group = [r for r in records if r["experiment"] == "coherent" and abs(r["proportion"] - prop) < 0.01]
+        m_group = [
+            r for r in records
+            if r["experiment"] == "mixed"
+            and r["model_size"] == "tiny"
+            and abs(r["proportion"] - prop) < 0.01
+        ]
+        c_group = [
+            r for r in records
+            if r["experiment"] == "coherent"
+            and r["model_size"] == "tiny"
+            and abs(r["proportion"] - prop) < 0.01
+        ]
         ms = stats_for_group(m_group) if m_group else None
         cs = stats_for_group(c_group) if c_group else None
         pct = int(prop * 100)
@@ -304,7 +351,7 @@ def generate_tables(records: list[dict]) -> str:
 
     # ===== Table 4: Observations (Phase 2) =====
     heading("Table 4: Observations Effect (Coherent Errors, 50/50)")
-    obs = [r for r in records if r["experiment"] == "observed"]
+    obs = [r for r in records if r["experiment"] == "observed" and r["model_size"] == "tiny"]
     lines.append("| Observation % | Avg DLoss | 95% CI | Seeds -> correct | Avg Loss (correct) | p (binom) |")
     lines.append("|---|---|---|---|---|---|")
 
@@ -328,9 +375,9 @@ def generate_tables(records: list[dict]) -> str:
     # Use observed_0 for condition A, observed_50 for condition B
     cond_a = [r for r in records if r["experiment"] == "observed" and abs(r["proportion"]) < 0.01]
     cond_b = [r for r in records if r["experiment"] == "observed" and abs(r["proportion"] - 0.5) < 0.01]
-    cond_c = [r for r in records if r["experiment"] == "condC"]
-    cond_d = [r for r in records if r["experiment"] == "condD"]
-    cond_e = [r for r in records if r["experiment"] == "condE"]
+    cond_c = [r for r in records if r["experiment"] == "condC" and r["model_size"] == "tiny"]
+    cond_d = [r for r in records if r["experiment"] == "condD" and r["model_size"] == "tiny"]
+    cond_e = [r for r in records if r["experiment"] == "condE" and r["model_size"] == "tiny"]
 
     lines.append("| Condition | Description | Avg DLoss | 95% CI | Seeds -> correct | p (binom) |")
     lines.append("|---|---|---|---|---|---|")
@@ -357,8 +404,13 @@ def generate_tables(records: list[dict]) -> str:
     # ===== Summary statistics =====
     heading("Summary: Combined Binomial Test")
     # All mixed seeds 50/50 through 20/80
-    mixed_positive = [r for r in records if r["experiment"] == "mixed"
-                      and r["proportion"] >= 0.2 and r["proportion"] <= 0.5]
+    mixed_positive = [
+        r for r in records
+        if r["experiment"] == "mixed"
+        and r["model_size"] == "tiny"
+        and r["proportion"] >= 0.2
+        and r["proportion"] <= 0.5
+    ]
     n_total = len(mixed_positive)
     n_correct = sum(1 for r in mixed_positive if r["delta_loss"] > 0)
     if n_total > 0:

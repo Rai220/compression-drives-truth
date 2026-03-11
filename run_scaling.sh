@@ -3,7 +3,10 @@
 # Usage: bash run_scaling.sh <model_size>
 # Example: bash run_scaling.sh small
 
-set -e
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${SCRIPT_DIR}"
+
 PYTHON=.venv/bin/python
 SIZE=${1:-small}
 

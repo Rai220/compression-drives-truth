@@ -6,17 +6,17 @@ Paper: [`paper_draft_en.md`](paper_draft_en.md) (English) | [`paper_draft_ru.md`
 
 ## Summary
 
-Language models minimize cross-entropy loss, which is mathematically equivalent to data compression. We investigate whether this compression pressure creates a systematic preference for correct information when models are trained on mixed-quality corpora.
+Language models minimize cross-entropy loss, which is mathematically equivalent to data compression. This repository studies a narrower question: when does compression pressure align with correct solutions in controlled synthetic corpora?
 
-We train **150+ transformers** (3.5M--86M parameters) on corpora with controlled ratios of correct and incorrect mathematical derivations and find:
+Across the currently collected experiments, the clearest supported findings are:
 
-- **Random errors**: Models strongly prefer correct solutions (83% paired accuracy at 50/50 mix, p < 10^-6). The effect persists even at 10% correct / 90% incorrect (67% accuracy) and strengthens with model size (83.1% at 3.5M -> 88.8% at 86M).
-- **Coherent errors**: Replacing random errors with an internally consistent but mathematically wrong rule system eliminates truth preference entirely (~49% accuracy at any model size).
-- **Multi-rule errors**: Even 2 alternative wrong rules per task type restore truth bias (87%), with accuracy increasing monotonically up to N=10 (92%).
-- **Natural language**: The effect reproduces in a synthetic world domain with 15 rules (57.7% accuracy), albeit weaker than in math.
-- **Chained verification**: Embedding a verification step within coherent-error tasks restores truth bias (71%), but scaling reveals *inverse* scaling: accuracy drops to 61% at 86M, because larger models better memorize the coherent error system within each domain.
+- **Random errors**: Models prefer correct solutions under paired evaluation (83.1% accuracy at 50/50; 67.0% even at 10/90).
+- **Coherent errors**: Replacing random errors with an internally consistent but mathematically wrong rule system removes this preference under paired evaluation (~47--52% in the available runs).
+- **Multi-rule errors**: Rebuilding `Experiment 5` on matched paired tests yields a graded rise from 46.6% at `N=1` to 88.3% at `N=10`; the strongest jump is between `N=1` and `N=2`, but the effect is not the legacy `49% -> 87%` claim from the mixed-evaluation script.
+- **Natural language synthetic world**: The same pattern appears more weakly in a synthetic world domain (57.7%).
+- **Chained verification**: Adding a verification step inside coherent-error tasks restores a substantial preference for correct completions at tiny scale (70.9%), but the size trend should be treated as preliminary because it is based on fixed-step training and limited large-model replication.
 
-**Key insight**: Compression favors not truth per se, but the most consistent structure in the data. Truth bias arises because real-world errors tend to be diverse and incompressible, while a coherent false system compresses just as well as truth. Compressor power is a double-edged sword: it strengthens detection of incoherent errors but entrenches coherent falsehood.
+**Working interpretation**: compression favors internally consistent and predictable structure in the data. In these synthetic settings, truth is preferred when false alternatives are harder to compress; coherent false systems can remove or weaken that advantage.
 
 ## Project Structure
 
@@ -104,15 +104,17 @@ python scripts/collect_results.py  # -> results_master.csv + scripts/tables.md
 
 ## Key Results
 
+Paired evaluation is the primary metric. Some public scaling artifacts are currently incomplete; see [`results_manifest.md`](results_manifest.md) for coverage.
+
 | Condition | Paired Accuracy | p-value |
 |-----------|:-:|:-:|
 | Random errors 50/50 | 83.1% | < 10^-6 |
 | Random errors 10/90 | 67.0% | < 10^-88 |
 | Coherent errors 50/50 | 47.2% | ~1.0 |
-| Multi-rule N=2 | 87.4% | < 10^-6 |
-| Multi-rule N=10 | 91.5% | < 10^-6 |
+| Multi-rule N=2 (matched) | 77.6% | < 10^-6 |
+| Multi-rule N=10 (matched) | 88.3% | < 10^-6 |
 | Synthetic world (random) | 57.7% | < 0.001 |
-| Scaling: 86M random | 88.8% | < 10^-6 |
+| Scaling: 86M random | 89.1% | < 10^-6 |
 | Scaling: 86M coherent | 51.8% | ~1.0 |
 | Chained verification (tiny) | 70.9% | < 10^-6 |
 | Chained verification (large) | 60.6% | < 10^-6 |
