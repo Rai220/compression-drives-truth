@@ -29,19 +29,19 @@ This principle has three important caveats. First, models compress *text*, not r
 
 The link between prediction and data compression traces back to the foundational work in information theory. Shannon (1948) showed that optimal compression requires knowledge of the true data distribution, and Solomonoff (1964) formalized optimal prediction as weighting hypotheses by their program length. Rissanen (1978) developed the Minimum Description Length (MDL) principle, formalizing model selection as a compression task: the best model minimizes the total description length of the model plus the data given the model. Grünwald (2007) systematized the MDL principle and showed its equivalence to several forms of statistical inference. Hutter (2005) developed these ideas into a formal theory of universal artificial intelligence (AIXI), explicitly linking intelligence to compression ability. Our work directly builds on the MDL framework: we experimentally vary the description length of false systems and observe under what conditions the MDL-optimal choice coincides with truth.
 
-In the context of language models, Deletang et al. (2024) empirically demonstrated that LLMs are universal compressors: a next-token predictor can serve as an arithmetic coder. Huang et al. (2024) discovered a linear correlation (r ~ -0.95) between compression quality and benchmark performance, and Wan & Mei (2025) formally proved that LLM training approximates Solomonoff induction. These results form the theoretical foundation of our work: if LLM training is compression, and compression is linked to intelligence, what role does data truthfulness play?
+In the context of language models, Deletang et al. (2024) empirically demonstrated that LLMs are universal compressors: a next-token predictor can serve as an arithmetic coder. Huang et al. (2024) discovered a linear correlation (r ~ -0.95) between compression quality and benchmark performance, and Wan & Mei (2025) formally proved that LLM training approximates Solomonoff induction. These results form the theoretical foundation of our work: if LLM training is compression, under what conditions does compression align with behavior that favors correct over incorrect continuations?
 
 ### Internal Representations of Truth in LLMs
 
-Several studies have found that language models form internal representations correlated with statement truthfulness. Marks & Tegmark (2023) showed a linear geometric structure of truthfulness in activation space (Geometry of Truth), and Burns et al. (2023) proposed CCS, a method for discovering truth directions without supervision. Li et al. (2023b) identified a 40% gap between a model's internal knowledge and its generation, developing Inference-Time Intervention (ITI). Ravfogel et al. (2025) proposed the Truth Co-occurrence Hypothesis -- a mechanism for the emergence of linear truth representations through co-occurrence of true statements in the corpus. Our work complements this line of research: we show *under what conditions* compression gives rise to such representations, and under what conditions it does not.
+Several studies have found that language models form internal representations correlated with statement truthfulness. Marks & Tegmark (2023) showed a linear geometric structure of truthfulness in activation space (Geometry of Truth), and Burns et al. (2023) proposed CCS, a method for discovering truth directions without supervision. Li et al. (2023b) identified a 40% gap between a model's internal knowledge and its generation, developing Inference-Time Intervention (ITI). Ravfogel et al. (2025) proposed the Truth Co-occurrence Hypothesis -- a mechanism for the emergence of linear truth representations through co-occurrence of true statements in the corpus. Our work complements this line behaviorally rather than representationally: we study when compression produces a paired preference for correct over incorrect continuations in controlled corpora, leaving activation-level analysis for future work.
 
 ### Emergent World Models
 
-Language models can form internal world models from pure text prediction. Li et al. (2023a) trained a model to predict Othello moves and found that it learns a full board representation (Othello-GPT). Gurnee & Tegmark (2024) discovered linear representations of space and time in Llama-2 activations. These results show that sequence compression can give rise to structured internal representations -- our work investigates whether such representations gravitate towards true structures.
+Language models can form internal world models from pure text prediction. Li et al. (2023a) trained a model to predict Othello moves and found that it learns a full board representation (Othello-GPT). Gurnee & Tegmark (2024) discovered linear representations of space and time in Llama-2 activations. These results show that sequence compression can give rise to structured internal representations. Our work does not probe such representations directly; instead, it asks when compression yields behavioral preference for correct versus incorrect continuations.
 
 ### Truthfulness and Training Data Statistics
 
-Several works investigate the dependence of factual behavior on the structure of the training corpus. Joshi et al. (2024) showed that truthfulness in LLMs is linked to the structure of "personas" (sources) in pretraining data: the model learns persona-specific patterns and prefers statements associated with reliable sources. Elazar et al. (2022) demonstrated that factual predictions strongly depend on the frequency of facts in training data. Kang & Choi (2023) investigated how co-occurrence between statements affects factual recall, and Kandpal et al. (2023) showed a direct relationship between the number of supporting documents in the corpus and model answer accuracy. Our work differs fundamentally from this line: we do not observe dependence on data statistics, but *experimentally vary* the structure of errors (their compressibility) at fixed frequencies and measure how this changes truth preference. This allows us to isolate the role of compressibility from the roles of frequency and source reliability.
+Several works investigate the dependence of factual behavior on the structure of the training corpus. Joshi et al. (2024) showed that truthfulness in LLMs is linked to the structure of "personas" (sources) in pretraining data: the model learns persona-specific patterns and prefers statements associated with reliable sources. Elazar et al. (2022) demonstrated that factual predictions strongly depend on the frequency of facts in training data. Kang & Choi (2023) investigated how co-occurrence between statements affects factual recall, and Kandpal et al. (2023) showed a direct relationship between the number of supporting documents in the corpus and model answer accuracy. Our work differs from this line in emphasis: frequency clearly matters in our experiments as well, but we *experimentally vary* the structure of errors (their compressibility) while controlling frequencies within each condition. This allows us to isolate one factor beyond frequency and source reliability rather than claiming that data statistics play no role.
 
 ### Simplicity Bias, Noisy Labels, and Grokking
 
@@ -53,15 +53,15 @@ The phenomenon of grokking -- delayed generalization -- is also related to compr
 
 ### Our Contribution
 
-The works listed above either study internal truth representations in already-trained models, establish theoretical links between compression, simplicity bias, and intelligence, or analyze the dependence of truthfulness on data statistics. However, a direct experiment -- training a model from scratch on a quality-controlled corpus with systematic variation of *error compressibility* -- has not been conducted. This work fills that gap.
+The works listed above either study internal truth representations in already-trained models, establish theoretical links between compression, simplicity bias, and intelligence, or analyze the dependence of truthfulness on data statistics. To our knowledge, direct training experiments on quality-controlled corpora with systematic variation of *error compressibility* remain limited. This work contributes one such controlled behavioral study.
 
 | Work | What it studies | Our difference |
 |------|----------------|----------------|
 | Joshi et al. (2024) | Truthfulness via source/persona structure in data | We vary *error compressibility* directly, isolating compression from source reliability |
-| Ravfogel et al. (2025) | Mechanism of truth encoding emergence via co-occurrence | We show *failure conditions*: coherent falsehood produces identical encodings |
+| Ravfogel et al. (2025) | Mechanism of truth encoding emergence via co-occurrence | We show behavioral failure conditions: coherent falsehood can remove paired preference for correct continuations |
 | Elazar (2022), Kang & Choi (2023), Kandpal (2023) | Factual behavior as a function of frequency/support count | We fix frequency and vary error structure: at 50/50, truth bias = 83% (random) vs 49% (coherent) |
 | Zhang et al. (2017), Rolnick et al. (2017) | Learning from noisy labels: generalization vs memorization | We generalize to sequence-level: not labels but entire derivations, showing that "structured noise" (coherent errors) is not filtered out |
-| Burns et al. (2023), Marks & Tegmark (2023) | Internal truth directions in pretrained models | We train from scratch on controlled data and find boundaries: truth direction emerges only with incoherent errors |
+| Burns et al. (2023), Marks & Tegmark (2023) | Internal truth directions in pretrained models | We train from scratch on controlled data and identify behavioral conditions under which paired preference for correct continuations appears or disappears |
 
 ## 3. Methodology
 
@@ -109,17 +109,17 @@ To interpret Experiments 2--3 we use a typology of theories distinguished by the
 
 **Type 3b: Theory with ad hoc correction.** Each discrepancy is explained by a unique exception rule. Description length grows linearly with the number of observations -- this is anti-compression.
 
-### 3.5 MDL Proposition: When Does Compression Favor Truth
+### 3.5 MDL Heuristic Framing: When Does Compression Favor Truth
 
-We state a prediction in MDL terms (Rissanen, 1978; Grünwald, 2007). Consider a corpus D consisting of N problems, fraction α solved according to a true theory T₁ and fraction (1 - α) according to an alternative theory T₂. The MDL-optimal model minimizes the two-part code: L(M) + L(D|M), where L(M) is the model description length and L(D|M) is the data length given the model.
+We state a heuristic MDL interpretation (Rissanen, 1978; Grünwald, 2007). Consider a corpus D consisting of N problems, fraction α solved according to a true theory T₁ and fraction (1 - α) according to an alternative theory T₂. An idealized MDL learner would minimize the two-part code L(M) + L(D|M), where L(M) is model description length and L(D|M) is data length given the model. The discussion below is intended as intuition for the experiments, not as a formal theorem about finite SGD-trained transformers.
 
-**Proposition.** Let K(T₁) and K(T₂) be the Kolmogorov complexities of theories T₁ and T₂ (lengths of the shortest programs generating all correct solutions under each theory). Then:
+**Heuristic picture.** Let K(T₁) and K(T₂) denote informal description lengths of theories T₁ and T₂. Then:
 
-1. **K(T₂) >> K(T₁) (random errors).** Each error is unique, K(T₂) ~ O(N). The MDL-optimal model prefers T₁ even when α < 0.5, since L(T₁) + L(exceptions) < L(T₂). Prediction: truth bias for any α > α_crit, where α_crit is determined by model capacity.
+1. **K(T₂) >> K(T₁) (random errors).** If false completions require many idiosyncratic exceptions, the effective description length of the false system grows with corpus size. In that regime, an MDL-style learner should tend to favor T₁ even when α < 0.5, provided the compressibility advantage is large enough relative to model capacity and frequency.
 
-2. **K(T₂) ≈ K(T₁) (coherent errors).** Both theories are described by compact rules. The MDL choice is determined solely by frequency: the model prefers T₁ when α > 0.5 and T₂ when α < 0.5. At α = 0.5, no preference exists. Under an ideal MDL learner, two programs of equal length generating data at equal frequency are indistinguishable -- there is no basis for preferring one over the other.
+2. **K(T₂) ≈ K(T₁) (coherent errors).** If both systems are described by compact rules of comparable complexity, frequency should dominate. At α = 0.5 an idealized MDL learner has little reason to prefer one system over the other.
 
-3. **K(T₂) > K(T₁), but K(T₂) = O(1) (multi-rule errors).** Multiple alternative rules increase K(T₂), but it remains finite. The MDL preference for T₁ should depend on the difference K(T₂) - K(T₁) and may grow with the unpredictability of rule selection. This prediction requires matched paired evaluation on the same prompt distribution.
+3. **K(T₂) > K(T₁), but K(T₂) = O(1) (multi-rule errors).** Multiple alternative rules increase the description length of the false system while keeping it structured. The resulting preference for T₁ should depend on how unpredictable rule selection is relative to the one-rule coherent baseline. This prediction requires matched paired evaluation on the same prompt distribution.
 
 Experiments 1, 4, and 6 directly test the first two predictions. The random/coherent contrast is consistent with the MDL framing: truth bias is large for random errors (≈83% paired accuracy) and near chance for coherent errors (≈49%). The rebuilt matched multi-rule experiment also fits the same qualitative picture: increasing rule diversity raises pair accuracy from 46.6% at `N=1` to 88.3% at `N=10`.
 
@@ -162,13 +162,13 @@ In total, **over 160 models** were trained (69 in Experiments 1--3 + 22 scaling 
 
 Corpus-level truth bias decreases strictly monotonically: +0.0115 -> +0.0089 -> +0.0064 -> +0.0033 -> -0.0016. The corpus-level tipping point lies between 10% and 20% correct data. Compression pressure beats frequency bias up to a fourfold prevalence of incorrect data.
 
-An asymmetry is observed: the loss on correct examples increases substantially (0.1384 -> 0.1504), while the loss on incorrect ones remains nearly stable (0.1499 -> 0.1487). The entire dynamic is driven by the model's ability to learn the rules of correct mathematics.
+An asymmetry is observed: the loss on correct examples increases substantially (0.1384 -> 0.1503), while the loss on incorrect ones remains nearly stable (0.1499 -> 0.1487). The entire dynamic is driven by the model's ability to learn the rules of correct mathematics.
 
-Statistical significance: 16/16 seeds prefer correct examples at proportions 50/50--20/80. Two-sided binomial test: p = 3.05 x 10^-5. For each proportion individually (4/4 seeds) p = 0.125, which is not significant; however, the combined test across all 16 seeds decisively rejects the null hypothesis of equal preference.
+Statistical significance: 16/16 seeds prefer correct examples at proportions 50/50--20/80. Two-sided binomial test: p = 3.05 x 10^-5. For each proportion individually (4/4 seeds) p = 0.125, which is not significant. The combined test is therefore best viewed as omnibus support across several related conditions rather than as a substitute for condition-specific replication.
 
 However, paired evaluation (see below) shows that even at 10/90 the model retains truth bias at the pair level -- the corpus-level inversion reflects a frequency effect, not a loss of the structural advantage of correct solutions.
 
-**Paired evaluation (50/50, random errors).** To eliminate the confound of different prompts, we conducted paired evaluation on 4,951 problem pairs with a shared prompt and two completions. The result substantially strengthens the main finding:
+**Paired evaluation (50/50, random errors).** To eliminate the confound of different prompts, we conducted paired evaluation on 4,951 problem pairs with a shared prompt and two completions. This provides a clearer estimate of the effect:
 
 **Table 1a.** Paired evaluation at 50/50 (random errors). DLoss = NLL(incorrect) - NLL(correct) on completion tokens.
 
@@ -214,7 +214,7 @@ At 10/90, the corpus-level metric inverts (DLoss = -0.0016, the model on average
 
 The results form a spectrum: random errors (a maximally incoherent "theory") yield strong bias; contradictory ones (simple rules that break algebra) yield a weak one; coherent ones (a consistent system) yield zero bias.
 
-**Paired evaluation confirms the spectrum.** Paired evaluation (same prompt, two completions) reinforces the picture:
+**Paired evaluation sharpens the spectrum.** Paired evaluation (same prompt, two completions) reinforces the picture:
 
 **Table 2a.** Paired evaluation for three error types at 50/50 (4 seeds).
 
@@ -224,7 +224,7 @@ The results form a spectrum: random errors (a maximally incoherent "theory") yie
 | Contradictory | +0.0003 | 49% | >0.3 |
 | Coherent | -0.0018 | 47% | ~1.0 |
 
-Given the same prompt, the model confidently prefers correct only for random errors. For coherent and contradictory errors -- accuracy ~50% (chance). This eliminates the prompt confound and confirms: truth bias is a consequence of error incompressibility, not a property of "truthfulness."
+Given the same prompt, the model prefers correct only for random errors. For coherent and contradictory errors, accuracy remains near chance. This eliminates the prompt confound and is consistent with the interpretation that truth bias here depends on error incompressibility rather than on "truthfulness" in the abstract.
 
 ### 4.3 Coherent Errors at Different Proportions
 
@@ -351,7 +351,7 @@ To test whether conditions C/D/E produce transferable truth bias, we begin with 
 
 *Figure 5. Corpus-level DLoss for five conditions. The ordering D ~ C > E > B ~ A does not reflect a preference for correctness, but is an artifact of differences in text statistics (see Table 5a).*
 
-The actual corpus-level ordering is D ~ C > E > B ~ A. The predicted ordering (C > B > E > D ~ A) was partially confirmed: A ~ 0 and B < E < C hold, but D ~ C instead of the expected D ~ A. However, the divergence between corpus-level and paired evaluation shows that **the entire corpus-level effect for conditions C/D/E is an artifact of differences in text statistics** (different length and format of correct vs. incorrect corpora), not a preference for correctness given the same prompt.
+The actual corpus-level ordering is D ~ C > E > B ~ A. The predicted ordering (C > B > E > D ~ A) was partially confirmed: A ~ 0 and B < E < C hold, but D ~ C instead of the expected D ~ A. However, the divergence between corpus-level and paired evaluation suggests that **most of the corpus-level effect for conditions C/D/E is driven by differences in text statistics** (different length and format of correct vs. incorrect corpora), rather than by preference for correctness given the same prompt.
 
 **Caveat:** Absolute loss varies substantially (A: 0.14, B: 0.15, C: 0.23, D: 0.24, E: 0.25), reflecting varying corpus lengths. Models C/D/E are undertrained compared to A/B.
 
@@ -359,7 +359,7 @@ The actual corpus-level ordering is D ~ C > E > B ~ A. The predicted ordering (C
 
 ## 7. Experiment 4: Scaling, Multi-Rule Errors, and Chained Verification
 
-**Hypothesis.** If truth bias is driven by a structural advantage in compression, then increasing model capacity should strengthen the effect (more capacity to learn regularities). Coherent errors should remain indistinguishable from truth at any size.
+**Hypothesis.** If truth bias is driven by a structural advantage in compression, then increasing model capacity may strengthen the effect by improving learning of regularities. Coherent errors are expected to remain difficult to distinguish from truth.
 
 ### 7.1 Model Configurations
 
@@ -410,7 +410,7 @@ We introduce *multi-rule errors*: for each task type, a pool of N alternative wr
 
 **Table 7.** Matched paired evaluation of multi-rule errors (tiny, 3.5M, 50/50, 4 seeds).
 
-| N rules | Avg Accuracy | Avg DLoss (paired) | CI 95% DLoss | Wilcoxon p |
+| N rules | Avg Accuracy | Avg DLoss (paired) | Range of seed bootstrap CIs for DLoss | Wilcoxon p |
 |:-------:|:----------:|:-----------------:|:------------:|:----------:|
 | 1 (coherent baseline) | 46.6% | -0.0019 | [-0.0032, -0.0005] | ~1.0 |
 | 2 | 77.6% | +0.0152 | [+0.0137, +0.0171] | < 10^-6 |
@@ -431,7 +431,7 @@ Three observations follow from the matched evaluation:
 
 3. **Multi-rule errors do not dominate the random benchmark at every `N`.** At `N=2`, the matched result is weaker than the random benchmark (77.6% vs 83.1%). By `N=10`, it exceeds the tiny random benchmark numerically, but the correct interpretation is not "multi-rule is always harder than random." It is that increasing rule diversity can progressively erode the compressibility advantage of the false system.
 
-Three additional experiments -- a synthetic natural-language world (Experiment 6), multi-alternative errors in natural language (Experiment 7), and cross-domain falsification with separate task types (Experiment 8) -- are reported in Appendix B. In brief: truth bias reproduces in natural language but is substantially weaker (57.7% vs 83.1%); natural language absorbs contradictions that would be immediately detectable in formal mathematics; and cross-domain data can selectively destroy the coherence of false rules, though the effect is weak and non-monotonic. These results extend the picture but are not required for the main argument.
+Three additional experiments -- a synthetic natural-language world (Experiment 6), multi-alternative errors in natural language (Experiment 7), and cross-domain falsification with separate task types (Experiment 8) -- are reported in Appendix B. In brief: truth bias appears in natural language but is substantially weaker (57.7% vs 83.1%); natural language seems to absorb contradictions that would be easier to detect in formal mathematics; and cross-domain data may selectively weaken the coherence of false rules, though the effect is weak and non-monotonic. These results extend the picture but are not required for the main argument.
 
 ### 7.4 Experiment 9: Chained Tasks with Verification
 
@@ -491,17 +491,17 @@ For comparison, random error scaling: tiny 83.1% -> small 88.4% -> large 89.1% (
 | Without verification (truncated) | 44.3% +/- 2.1% | ~1.0 |
 | Standard coherent | 43.3% +/- 2.9% | ~1.0 |
 
-The control experiment with truncated chains (same task types, but without the verification step) confirms that truth bias is produced by verification, not by different task structure: accuracy of truncated chains (44.3%) is indistinguishable from standard coherent errors (43.3%). In this setup, truth bias with coherent errors emerges only when verification is present.
+The control experiment with truncated chains (same task types, but without the verification step) suggests that the observed truth bias is produced by verification rather than by task structure alone: accuracy of truncated chains (44.3%) is close to standard coherent errors (43.3%). In this setup, truth bias with coherent errors appears only when verification is present.
 
 Five key observations:
 
 1. **Verification restores truth bias.** Accuracy of 70.9% (p < 10^-6 for all 4 seeds) -- significantly above chance and above standard coherent errors (43.3% on the same models evaluated on isolated tasks). Cross-domain dependencies transform coherent errors into incompressible ones.
 
-2. **The control confirms the mechanism.** The same models evaluated on the standard coherent test (without verification) yield accuracy of 43.3% -- below chance, as in Experiment 1. This confirms that the verification step -- not the different task structure -- is what produces truth bias.
+2. **The control is consistent with the mechanism.** The same models evaluated on the standard coherent test (without verification) yield accuracy of 43.3% -- below chance, as in Experiment 1. This supports the interpretation that the verification step, rather than task structure alone, is what produces truth bias here.
 
 3. **The type spectrum reflects verification strength.** Arithmetic reverse (96%) -- the strongest signal: with incorrect multiplication, reverse division yields a fraction instead of an integer. Tangent (35%) -- the only type below chance: the O(h^2) approximation error in finite differences masks the coherent rule error, and the model learns the pattern "with error, the prediction is closer to zero."
 
-4. **The effect is comparable to random errors.** Accuracy 70.9% vs 83.1% for random errors -- verification brings coherent errors 80% of the way to the random level. This means that a sufficiently dense web of cross-domain dependencies can in principle eliminate the immunity of coherent falsehood.
+4. **The effect is substantial but incomplete.** Accuracy rises to 70.9% compared with 83.1% for random errors. Verification therefore recovers a large share of the random-error advantage without eliminating the gap entirely. This suggests that sufficiently dense cross-domain dependencies could weaken the immunity of coherent falsehood, but the current setup does not show complete removal.
 
 5. **Declining chained-task performance under fixed training steps.** Unlike random errors, chained tasks show a downward trend in the currently available runs: 70.9% -> 64.2% -> 60.6%. This is consistent with the possibility that higher-capacity models learn the coherent within-domain pattern more readily than the weaker verification signal, but the evidence is still preliminary because the large model uses only 2 seeds and all sizes are trained for the same number of steps.
 
@@ -525,7 +525,7 @@ The experiments support a consistent but narrower picture than a general theory 
 
 7. **Truth bias transfers to natural language, but weakens (Appendix B).** A synthetic world with 15 rules yields 57.7% pair accuracy (vs 83.1% in mathematics). Natural language absorbs contradictions that would be easier to detect in formal math, and the cross-domain appendix results remain exploratory rather than confirmatory. The natural-language multi-alternative curve is therefore best compared to the revised matched math multi-rule curve, not to the stronger legacy `49% -> 87%` narrative.
 
-10. **The verification step transforms coherent errors into detectable ones, but the size trend remains tentative.** Chained tasks raise accuracy from 43% to 71% at tiny scale, and a control experiment with truncated chains confirms that the effect is produced by verification rather than task structure. The decline at larger sizes is interesting, but it should be treated as a fixed-step trend requiring more seeds and compute-matched training.
+10. **The verification step transforms coherent errors into detectable ones, but the size trend remains tentative.** Chained tasks raise accuracy from 43% to 71% at tiny scale, and a control experiment with truncated chains is consistent with the interpretation that the effect is produced by verification rather than task structure. The decline at larger sizes is interesting, but it should be treated as a fixed-step trend requiring more seeds and compute-matched training.
 
 ### 8.2 Analogy with Popper's Falsifiability
 
@@ -549,11 +549,11 @@ Practical analogies from the history of science are appropriate as illustrations
 
 **Model scale and information-theoretic limits.** Experiments use models from 3.5M to 86M parameters. The available fixed-step runs show stronger random-error preference at larger sizes, but the range remains limited and the coherent side is only partially represented in the current artifact set. Chained tasks show a declining trend, not a settled inverse-scaling result. Extrapolation to larger models requires further experiments.
 
-For *isolated* coherent errors, there is a stronger argument. If the false system has the same Kolmogorov complexity as the true system (one rule vs. one rule) and both appear at equal frequency, an MDL-optimal learner has no basis to prefer one over the other. Our data are consistent with this prediction: accuracy ~49% for coherent errors at all model sizes from 3.5M to 86M.
+For *isolated* coherent errors, there is a stronger heuristic argument. If the false system has comparable description length to the true system (one rule vs. one rule) and both appear at equal frequency, an idealized MDL learner would have little basis to prefer one over the other. The released artifacts are consistent with near-chance coherent performance at tiny and small scales, and the single released large run is also close to chance, but the public coherent scaling coverage remains incomplete.
 
 For *real corpora*, the situation is more complex. Scientific knowledge is pervaded by cross-domain dependencies: a theorem from one field is used in another, an engineering calculation is verified by experiment, a conservation law connects different quantities. The density of such connections is far higher than in our experiments (one verification step per task). Whether a sufficiently dense web of cross-domain verifications can compensate for the growing power of the compressor remains an open question. The chained-task decline observed here should therefore be interpreted as a warning sign under sparse verification, not as a general conclusion about scaling.
 
-**Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The synthetic world experiment (Appendix B.1) confirms that the effect is substantially weaker in a natural language domain (57.7% vs 83.1%). Moreover, the multi-alternative experiment (Appendix B.2) shows that even internally contradictory errors in natural language do not produce the steep early rise seen in the revised matched math multi-rule experiment. Transfer to real-world domains (medicine, history, economics) requires further experiments.
+**Domain specificity.** Mathematics has an unusually crisp distinction between correct and incorrect. The synthetic world experiment (Appendix B.1) indicates that the effect is substantially weaker in a natural language domain (57.7% vs 83.1%). Moreover, the multi-alternative experiment (Appendix B.2) suggests that even internally contradictory errors in natural language do not produce the steep early rise seen in the revised matched math multi-rule experiment. Transfer to real-world domains (medicine, history, economics) requires further experiments.
 
 **Confounding with corpus length.** Conditions C/D/E generate substantially longer texts (loss ~0.24 vs ~0.14). DLoss may partially reflect a difference in convergence rather than compressibility per se. Paired evaluation mitigates but does not fully eliminate this confound.
 
@@ -578,11 +578,11 @@ For *real corpora*, the situation is more complex. Scientific knowledge is perva
 
 ## 9. Conclusion
 
-This work provides evidence for the Compression--Consistency Principle in a limited setting: small character-level models trained on synthetic corpora favor the most compressible hypothesis consistent with the data, not truth per se. **Truth bias is therefore not a fundamental property of compression.** In our mathematical experiments, random errors are hard to compress and give correct derivations a structural advantage (83% pair accuracy at 50/50; 67% even at 10/90). A coherent false system, as compact as truth, removes that advantage and yields near-chance paired accuracy. Rebuilding the multi-rule experiment with matched paired tests shows a graded intermediate regime: 46.6% at `N=1`, 77.6% at `N=2`, and 88.3% at `N=10`. The synthetic-world appendix shows that a related pattern can appear beyond mathematics, but with a substantially smaller effect size.
+This work provides evidence for the Compression--Consistency Principle in a limited setting: small character-level models trained on synthetic corpora favor the most compressible hypothesis consistent with the data, not truth per se. **Truth bias is therefore unlikely to be a fundamental property of compression alone.** In our mathematical experiments, random errors are hard to compress and give correct derivations a structural advantage (83% pair accuracy at 50/50; 67% even at 10/90). A coherent false system, as compact as truth, removes that advantage and yields near-chance paired accuracy. Rebuilding the multi-rule experiment with matched paired tests shows a graded intermediate regime: 46.6% at `N=1`, 77.6% at `N=2`, and 88.3% at `N=10`. The synthetic-world appendix indicates that a related pattern can appear beyond mathematics, but with a substantially smaller effect size.
 
 The practical implication for alignment is correspondingly narrow. In these experiments, fixed-step scaling strengthens preference for correct solutions when the incorrect alternatives are incoherent, but does not by itself provide protection against coherent falsehood. A compressor model therefore behaves more like a consistency-seeking system than a truth-seeking one. Whether this extends to real corpora, entrenched misconceptions, or benchmark hallucinations remains an open question rather than a demonstrated conclusion.
 
-However, the immunity of coherent falsehood is not absolute. The chained task experiment (Section 7.4) shows that embedding a verification step within the task -- where the coherent error produces an unpredictable numerical residual -- restores truth bias to 71% for the tiny model (vs 43% for isolated coherent). Under fixed-step training, the available larger-model runs show a declining trend, but the evidence is not yet strong enough to support a general inverse-scaling claim. The right takeaway is that sparse verification can help at small scale and deserves deeper study under stronger replication.
+However, the immunity of coherent falsehood is not absolute. The chained task experiment (Section 7.4) indicates that embedding a verification step within the task -- where the coherent error produces an unpredictable numerical residual -- can restore truth bias to 71% for the tiny model (vs 43% for isolated coherent). Under fixed-step training, the available larger-model runs show a declining trend, but the evidence is not yet strong enough to support a general inverse-scaling claim. The main takeaway is that sparse verification can help at small scale and deserves deeper study under stronger replication.
 
 The question of scale and domain remains open. Our experiments are limited to models of 3.5M--86M parameters and synthetic domains. The multi-alternative experiment (Appendix B.2) shows that in the natural language domain, contradictions between errors do not destroy compressibility as effectively as in mathematics. Transferring these results to larger models and real corpora is a necessary condition for strong generalizations.
 
@@ -674,7 +674,7 @@ The corpus contains 100,000 examples. As in the mathematical experiment, we trai
 
 **Table B1.** Paired evaluation of the synthetic world (tiny, 3.5M, 50/50, 4 seeds).
 
-| Condition | Avg Accuracy | Avg DLoss (paired) | CI 95% DLoss | Wilcoxon p |
+| Condition | Avg Accuracy | Avg DLoss (paired) | Range of seed bootstrap CIs for DLoss | Wilcoxon p |
 |-----------|:----------:|:-----------------:|:------------:|:----------:|
 | Random errors | 57.7% | +0.034 | [+0.027, +0.040] | < 10^-6 |
 | Coherent errors | 46.6% | +0.019 | [+0.008, +0.030] | ~ 0.05 |
@@ -694,9 +694,9 @@ Three key observations:
 
 2. **The effect is substantially weaker than in mathematics.** 57.7% vs 83.1% with identical architecture and corpus proportion. The likely reason: natural language contains more variability in formulations (synonymous constructions, diversity of entity names), weakening the statistical separation between correct and incorrect conclusions.
 
-3. **Coherent errors remain indistinguishable from truth.** Accuracy of 46.6% -- below chance, same as in the mathematical domain (47.2%). The pattern reproduces: a coherent alternative rule system compresses equally well. The strong variance across types (mineral 68.7% vs potion 49.1%) is explained by differences in description length and the number of applicable rules for different entity types.
+3. **The coherent natural-language result is mixed.** Pair accuracy is 46.6%, which is below chance and directionally similar to the mathematical coherent condition. However, the mean DLoss is positive, so the two summary metrics disagree. The safer conclusion is that this condition is inconclusive rather than a clean replication.
 
-**Note on metrics.** For coherent errors in Table B1, pair accuracy (46.6%) and mean DLoss (+0.019) diverge in sign. This is explained by distributional asymmetry: the majority of pairs show a slight preference for the incorrect conclusion (accuracy < 50%), but a small number of pairs with strong preference for the correct one shift the mean DLoss positive. The Wilcoxon test, based on ranks rather than means, yields p ~ 0.05 -- a borderline result that does not reach significance. Accuracy is the more reliable metric in this case.
+**Note on metrics.** For coherent errors in Table B1, pair accuracy (46.6%) and mean DLoss (+0.019) diverge in sign. One plausible explanation is distributional asymmetry: many pairs show a slight preference for the incorrect conclusion, while a smaller number of pairs with larger margins pull the mean DLoss positive. The Wilcoxon test yields p ~ 0.05, so the result should be treated as mixed or inconclusive rather than as a clean coherent-falsehood replication in natural language.
 
 ### B.2 Experiment 7: Multi-Alternative Errors in the Synthetic World
 
@@ -730,7 +730,7 @@ This result has practical significance: **in domains with natural language struc
 
 ### B.3 Experiment 8: Cross-Domain Falsification
 
-A central finding of our experiments -- that coherent falsehood is indistinguishable from truth under compression -- rests on isolated domains: false derivative rules are tested only on derivative tasks. In the real world, a false theory of derivatives conflicts with adjacent domains (integration, tangent lines, numerical evaluation). We test whether adding *cross-domain* tasks -- correct tasks linking derivatives with arithmetic -- can destroy the coherence of the false rule.
+One motivating finding of our experiments is that coherent falsehood can become difficult to distinguish from truth under compression in isolated domains: false derivative rules are tested only on derivative tasks. In the real world, a false theory of derivatives conflicts with adjacent domains (integration, tangent lines, numerical evaluation). We test whether adding *cross-domain* tasks -- correct tasks linking derivatives with arithmetic -- can weaken the coherence of the false rule.
 
 Base corpus: coherent 50/50 (Section 4.2). We add correct cross-domain tasks of five types: derivative evaluation at a point, antiderivative check, tangent line equation, chain rule evaluation, and product rule evaluation. All cross-domain tasks use the true differentiation rules. We vary the proportion of cross-domain tasks: 0%, 10%, 25%, 50%.
 
@@ -747,6 +747,6 @@ Base corpus: coherent 50/50 (Section 4.2). We add correct cross-domain tasks of 
 
 *Figure 8. Cross-domain falsification. Left: accuracy by task type — only derivatives respond to cross-domain tasks. Right: non-monotonic effect — peak at 25%, decline at 50% due to corpus dilution.*
 
-The result partially supports the hypothesis: accuracy on **derivatives** increases from 35.2% to 56.0% at 25% cross-domain tasks -- the model begins to prefer correct derivatives. However, the effect is non-monotonic: at 50%, accuracy drops to 45.4%, likely due to dilution of standard patterns. Other task types (algebra, arithmetic, equations) remain at chance, since the cross-domain tasks address only contradictions with derivatives.
+The result is directionally consistent with the hypothesis: accuracy on **derivatives** increases from 35.2% to 56.0% at 25% cross-domain tasks, suggesting a shift toward correct derivatives in that slice of the data. However, the effect is non-monotonic: at 50%, accuracy drops to 45.4%, likely due to dilution of standard patterns. Other task types (algebra, arithmetic, equations) remain at chance, since the cross-domain tasks address only contradictions with derivatives.
 
-This experiment provides the first evidence that cross-domain data can *selectively* destroy the coherence of false rules. The effect is still weak (derivative accuracy: 56% vs 50% chance), as expected for a tiny model (3.5M). Scaling to larger models and expanding the set of cross-domain tasks is a priority for future work.
+This experiment provides preliminary evidence that cross-domain data can *selectively* weaken the coherence of false rules. The effect is still weak (derivative accuracy: 56% vs 50% chance), as expected for a tiny model (3.5M). Scaling to larger models and expanding the set of cross-domain tasks is a priority for future work.
