@@ -62,8 +62,10 @@ colors = ['#8b5cf6', '#7c6dd8', '#6d7eba', '#5e8f9c', '#4fa07e', '#3b82f6']
 x2 = np.arange(len(labels))
 bars = ax2.bar(x2, accuracies, 0.6, color=colors, edgecolor='white', linewidth=1.5, zorder=5)
 
-# Chance level
-ax2.axhline(y=50, color='#ef4444', linestyle='--', alpha=0.8, linewidth=2, label='Chance (50%)')
+# Chance level / baseline
+ax2.axhspan(48.5, 51.5, color='#ef4444', alpha=0.06, zorder=0)
+ax2.axhline(y=50, color='#ef4444', linestyle='--', alpha=0.8, linewidth=2,
+            label='Chance baseline (50%)')
 
 # Value labels
 for bar, acc in zip(bars, accuracies):
@@ -76,6 +78,8 @@ ax2.annotate('', xy=(0.1, 49), xytext=(0.9, 87.4),
 ax2.text(0.15, 68, 'Phase\ntransition', fontsize=9, color='#dc2626', fontweight='bold')
 
 ax2.set_ylabel('Pair accuracy (%)', fontsize=12)
+ax2.set_xlabel('Dashed red line at 50% = chance baseline (random choice, no preference)',
+               fontsize=10, color='#dc2626', labelpad=10)
 ax2.set_title('(b) Observed Results (tiny, 3.5M)', fontsize=12, fontweight='bold')
 ax2.set_xticks(x2)
 ax2.set_xticklabels(labels, fontsize=9)

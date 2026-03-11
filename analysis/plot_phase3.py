@@ -172,11 +172,12 @@ ax.set_ylim(0, 100)
 ax.legend(fontsize=8, loc='upper right')
 ax.grid(True, alpha=0.3, axis='y')
 
-# Key insight annotation
-ax.text(0.5, 0.08, 'All conditions ≈ 50%: no transferable truth bias.\n'
-        'Corpus-level ΔLoss is an artifact of text statistics.',
-        transform=ax.transAxes, ha='center', va='bottom', fontsize=9, color='#16a34a',
-        bbox=dict(boxstyle='round,pad=0.4', facecolor='#dcfce7', alpha=0.9, edgecolor='#16a34a'))
+# Compact interpretation guide
+ax.text(0.03, 0.18,
+        'All conditions stay near 50%.\nNo transferable truth bias.',
+        transform=ax.transAxes, ha='left', va='top', fontsize=8.8, color='#166534',
+        bbox=dict(boxstyle='round,pad=0.35', facecolor='#dcfce7', alpha=0.92,
+                  edgecolor='#16a34a'))
 
 plt.suptitle('Experiment 3: Five Conditions for False Theory (50/50)',
              fontsize=14, fontweight='bold', y=1.02)

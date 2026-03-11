@@ -95,8 +95,8 @@ ax.plot(props_all, deltas_all, '--', color='#64748b', alpha=0.5, linewidth=1.5)
 ax.axhline(y=0, color='#ef4444', linestyle=':', alpha=0.8, linewidth=2, label='No bias (Δ = 0)')
 
 # Shade regions
-ax.axhspan(0, 0.08, alpha=0.04, color='green')
-ax.axhspan(-0.005, 0, alpha=0.04, color='red')
+ax.axhspan(0, 0.08, alpha=0.03, color='green')
+ax.axhspan(-0.005, 0, alpha=0.03, color='red')
 
 ax.set_xlabel('Fraction of correct examples in training corpus', fontsize=12)
 ax.set_ylabel('ΔLoss (incorrect − correct)', fontsize=12)
@@ -107,14 +107,15 @@ ax.set_xticks([0.1, 0.2, 0.3, 0.4, 0.5, 1.0])
 ax.set_xticklabels(['10%', '20%', '30%', '40%', '50%', '100%'])
 ax.grid(True, alpha=0.3)
 
-# Annotations
-ax.annotate('Truth bias\n(model prefers correct)',
-            xy=(0.35, 0.008), fontsize=9, color='#16a34a', ha='center', style='italic')
-ax.annotate('Frequency bias\n(model prefers majority)',
-            xy=(0.12, -0.003), fontsize=9, color='#dc2626', ha='center', style='italic')
-ax.annotate('Crossover\n≈15%', xy=(0.155, 0.0005), fontsize=8, color='#64748b',
-            ha='center', arrowprops=dict(arrowstyle='->', color='#64748b'),
-            xytext=(0.22, -0.003))
+# Compact interpretation guide
+ax.text(0.98, 0.97,
+        'Above 0: correct preferred\nBelow 0: incorrect preferred',
+        transform=ax.transAxes, ha='right', va='top', fontsize=8.5, color='#475569',
+        bbox=dict(boxstyle='round,pad=0.3', facecolor='white', edgecolor='#cbd5e1', alpha=0.9))
+
+# Crossover marker
+ax.text(0.16, 0.0012, 'Crossover near 15-20%', fontsize=8.5, color='#64748b',
+        ha='left', va='bottom')
 
 # --- Right panel: Absolute losses ---
 ax = axes[1]
@@ -243,27 +244,18 @@ for i, (deltas, color) in enumerate(zip([random_deltas, contradictory_deltas, co
     x_jitter = np.array([i - 0.08, i + 0.08, i - 0.08, i + 0.08])
     ax.scatter(x_jitter, deltas, s=40, color='black', alpha=0.4, zorder=6)
 
-# Annotations
-ax.annotate('Strong truth bias\n(each error unique,\nhigh incompressibility)',
-            xy=(0, means[0]), fontsize=8, color='#64748b', ha='center',
-            xytext=(0.7, means[0] + 0.004),
-            arrowprops=dict(arrowstyle='->', color='#64748b', lw=1.2))
-
-ax.annotate('No truth bias\n(consistent rules,\nequal compressibility)',
-            xy=(2, means[2]), fontsize=8, color='#64748b', ha='center',
-            xytext=(1.3, means[2] - 0.004),
-            arrowprops=dict(arrowstyle='->', color='#64748b', lw=1.2))
-
 ax.set_ylabel('ΔLoss (incorrect − correct)', fontsize=12)
 ax.set_title('Error Coherence Spectrum: Truth Bias by Error Type\n(all at 50/50 correct/incorrect ratio)',
              fontsize=13, fontweight='bold')
 ax.grid(True, alpha=0.3, axis='y')
 
 # Shade
-ax.axhspan(0, 0.02, alpha=0.04, color='green')
-ax.axhspan(-0.003, 0, alpha=0.04, color='red')
-ax.text(2.35, 0.001, 'Truth bias', fontsize=8, color='#16a34a', style='italic', va='bottom')
-ax.text(2.35, -0.0005, 'Anti-bias', fontsize=8, color='#dc2626', style='italic', va='top')
+ax.axhspan(0, 0.02, alpha=0.03, color='green')
+ax.axhspan(-0.003, 0, alpha=0.03, color='red')
+ax.text(0.98, 0.96,
+        'Above 0: truth bias\nBelow 0: incorrect preferred',
+        transform=ax.transAxes, ha='right', va='top', fontsize=8.5, color='#475569',
+        bbox=dict(boxstyle='round,pad=0.3', facecolor='white', edgecolor='#cbd5e1', alpha=0.9))
 
 plt.tight_layout()
 plt.savefig('results/figure3_coherence_spectrum.png', dpi=200, bbox_inches='tight')
