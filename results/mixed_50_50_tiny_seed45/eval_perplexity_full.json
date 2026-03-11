@@ -1,0 +1,28 @@
+{
+  "model_size": "tiny",
+  "weights": "results/mixed_50_50_tiny_seed45/model_final.npz",
+  "mode": "example_blocks",
+  "correct_loss": 0.10894640144019088,
+  "correct_ppl": 1.1151025808473098,
+  "incorrect_loss": 0.12481624929376377,
+  "incorrect_ppl": 1.1329402553671277,
+  "ratio_inc_over_cor": 1.145666563041874,
+  "prefers": "correct",
+  "delta": 0.015869847853572885,
+  "example_block_estimate": {
+    "correct_loss": 0.10894640144019088,
+    "correct_ppl": 1.1151025808473098,
+    "incorrect_loss": 0.12481624929376377,
+    "incorrect_ppl": 1.1329402553671277,
+    "ratio_inc_over_cor": 1.145666563041874,
+    "prefers": "correct",
+    "delta_signed": 0.015869847853572885,
+    "correct_n_examples": 5000,
+    "incorrect_n_examples": 5000,
+    "correct_scored_tokens": 866636,
+    "incorrect_scored_tokens": 868009,
+    "correct_skipped_examples": 0,
+    "incorrect_skipped_examples": 0,
+    "seq_len": 256
+  }
+}

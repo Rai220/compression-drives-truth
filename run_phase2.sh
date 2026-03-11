@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-cd /Users/krestnikov/giga/compression-drives-truth
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${SCRIPT_DIR}"
 source .venv/bin/activate
 
 OBS_RATIOS="0 10 25 50 100"

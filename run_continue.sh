@@ -1,8 +1,9 @@
 #!/bin/bash
 # Continue stopped experiments: 2 large models + multi-rule
 set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${SCRIPT_DIR}"
 PYTHON=.venv/bin/python
-cd /Users/krestnikov/giga/compression-drives-truth
 
 echo "=== Continue experiments: $(date) ==="
 

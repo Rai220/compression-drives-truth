@@ -1,0 +1,7 @@
+mlx
+mlx-metal
+numpy
+scipy
+sympy
+tqdm
+matplotlib

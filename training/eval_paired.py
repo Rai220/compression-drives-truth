@@ -6,6 +6,13 @@ For each paired problem:
 2. Compute NLL only on the completion tokens (conditioned on prompt)
 3. Report per-pair and aggregate statistics
 
+Primary metric:
+- mean NLL on completion tokens
+
+Auxiliary robustness metrics:
+- sum NLL on completion tokens
+- mean NLL on the first min(len(correct), len(incorrect)) scored completion tokens
+
 This removes the confound of different prompts between correct/incorrect test sets.
 """
 
@@ -22,9 +29,9 @@ from model import create_model
 from tokenizer import CharTokenizer
 
 
-def completion_nll(model, prompt_ids: list[int], completion_ids: list[int],
-                   max_seq_len: int) -> float:
-    """Compute mean NLL on completion tokens, conditioned on prompt.
+def completion_nll_stats(model, prompt_ids: list[int], completion_ids: list[int],
+                         max_seq_len: int) -> dict[str, object]:
+    """Compute completion-token NLL statistics, conditioned on prompt.
 
     Runs the full sequence through the model, but only computes loss
     on positions corresponding to completion tokens.
@@ -34,7 +41,13 @@ def completion_nll(model, prompt_ids: list[int], completion_ids: list[int],
     n_completion = len(completion_ids)
 
     if n_completion == 0:
-        return float('nan')
+        return {
+            "mean_nll": float("nan"),
+            "sum_nll": float("nan"),
+            "token_losses": np.array([], dtype=float),
+            "n_scored_tokens": 0,
+            "n_completion_tokens": 0,
+        }
 
     # Truncate if needed
     if len(full_ids) > max_seq_len + 1:
@@ -65,10 +78,33 @@ def completion_nll(model, prompt_ids: list[int], completion_ids: list[int],
     if end > T:
         end = T
     if start >= end:
-        return float('nan')
+        return {
+            "mean_nll": float("nan"),
+            "sum_nll": float("nan"),
+            "token_losses": np.array([], dtype=float),
+            "n_scored_tokens": 0,
+            "n_completion_tokens": n_completion,
+        }
 
     completion_ce = ce[start:end]
-    return completion_ce.mean().item()
+    token_losses = np.array(completion_ce.tolist(), dtype=float)
+    return {
+        "mean_nll": float(token_losses.mean()),
+        "sum_nll": float(token_losses.sum()),
+        "token_losses": token_losses,
+        "n_scored_tokens": int(token_losses.size),
+        "n_completion_tokens": n_completion,
+    }
+
+
+def matched_prefix_mean(stats_a: dict[str, object], stats_b: dict[str, object]) -> tuple[float, float]:
+    """Compare mean NLL on the shared minimum number of scored completion tokens."""
+    losses_a = stats_a["token_losses"]
+    losses_b = stats_b["token_losses"]
+    n = min(len(losses_a), len(losses_b))
+    if n == 0:
+        return float("nan"), float("nan")
+    return float(losses_a[:n].mean()), float(losses_b[:n].mean())
 
 
 def main():
@@ -100,7 +136,17 @@ def main():
 
     correct_nlls = []
     incorrect_nlls = []
+    correct_sum_nlls = []
+    incorrect_sum_nlls = []
+    correct_matched_mean_nlls = []
+    incorrect_matched_mean_nlls = []
+    completion_lengths_correct = []
+    completion_lengths_incorrect = []
+    scored_lengths_correct = []
+    scored_lengths_incorrect = []
     correct_wins = 0
+    correct_sum_wins = 0
+    correct_matched_mean_wins = 0
     by_type = {}
 
     for pair in pairs:
@@ -108,25 +154,60 @@ def main():
         correct_ids = tokenizer.encode(pair["correct_completion"])
         incorrect_ids = tokenizer.encode(pair["incorrect_completion"])
 
-        c_nll = completion_nll(model, prompt_ids, correct_ids, args.seq_len)
-        i_nll = completion_nll(model, prompt_ids, incorrect_ids, args.seq_len)
+        c_stats = completion_nll_stats(model, prompt_ids, correct_ids, args.seq_len)
+        i_stats = completion_nll_stats(model, prompt_ids, incorrect_ids, args.seq_len)
+        c_nll = c_stats["mean_nll"]
+        i_nll = i_stats["mean_nll"]
+        c_sum = c_stats["sum_nll"]
+        i_sum = i_stats["sum_nll"]
+        c_matched, i_matched = matched_prefix_mean(c_stats, i_stats)
 
-        if math.isnan(c_nll) or math.isnan(i_nll):
+        if any(math.isnan(x) for x in [c_nll, i_nll, c_sum, i_sum, c_matched, i_matched]):
             continue
 
         correct_nlls.append(c_nll)
         incorrect_nlls.append(i_nll)
+        correct_sum_nlls.append(c_sum)
+        incorrect_sum_nlls.append(i_sum)
+        correct_matched_mean_nlls.append(c_matched)
+        incorrect_matched_mean_nlls.append(i_matched)
+        completion_lengths_correct.append(c_stats["n_completion_tokens"])
+        completion_lengths_incorrect.append(i_stats["n_completion_tokens"])
+        scored_lengths_correct.append(c_stats["n_scored_tokens"])
+        scored_lengths_incorrect.append(i_stats["n_scored_tokens"])
 
         if c_nll < i_nll:
             correct_wins += 1
+        if c_sum < i_sum:
+            correct_sum_wins += 1
+        if c_matched < i_matched:
+            correct_matched_mean_wins += 1
 
         ptype = pair.get("problem_type", "unknown")
         if ptype not in by_type:
-            by_type[ptype] = {"correct_nlls": [], "incorrect_nlls": [], "correct_wins": 0}
+            by_type[ptype] = {
+                "correct_nlls": [],
+                "incorrect_nlls": [],
+                "correct_sum_nlls": [],
+                "incorrect_sum_nlls": [],
+                "correct_matched_mean_nlls": [],
+                "incorrect_matched_mean_nlls": [],
+                "correct_wins": 0,
+                "correct_sum_wins": 0,
+                "correct_matched_mean_wins": 0,
+            }
         by_type[ptype]["correct_nlls"].append(c_nll)
         by_type[ptype]["incorrect_nlls"].append(i_nll)
+        by_type[ptype]["correct_sum_nlls"].append(c_sum)
+        by_type[ptype]["incorrect_sum_nlls"].append(i_sum)
+        by_type[ptype]["correct_matched_mean_nlls"].append(c_matched)
+        by_type[ptype]["incorrect_matched_mean_nlls"].append(i_matched)
         if c_nll < i_nll:
             by_type[ptype]["correct_wins"] += 1
+        if c_sum < i_sum:
+            by_type[ptype]["correct_sum_wins"] += 1
+        if c_matched < i_matched:
+            by_type[ptype]["correct_matched_mean_wins"] += 1
 
     n = len(correct_nlls)
     if n == 0:
@@ -137,12 +218,25 @@ def main():
     avg_incorrect = sum(incorrect_nlls) / n
     delta = avg_incorrect - avg_correct
     accuracy = correct_wins / n
+    avg_correct_sum = sum(correct_sum_nlls) / n
+    avg_incorrect_sum = sum(incorrect_sum_nlls) / n
+    delta_sum = avg_incorrect_sum - avg_correct_sum
+    sum_accuracy = correct_sum_wins / n
+    avg_correct_matched = sum(correct_matched_mean_nlls) / n
+    avg_incorrect_matched = sum(incorrect_matched_mean_nlls) / n
+    delta_matched = avg_incorrect_matched - avg_correct_matched
+    matched_accuracy = correct_matched_mean_wins / n
 
     print(f"\nAggregate ({n} pairs):")
     print(f"  Avg NLL correct:   {avg_correct:.4f}")
     print(f"  Avg NLL incorrect: {avg_incorrect:.4f}")
     print(f"  Delta (inc - cor): {delta:+.4f}")
     print(f"  Pair accuracy:     {accuracy:.3f} ({correct_wins}/{n})")
+    print(f"  Sum-NLL delta:     {delta_sum:+.4f}  accuracy={sum_accuracy:.3f} ({correct_sum_wins}/{n})")
+    print(
+        f"  Length-matched mean delta: {delta_matched:+.4f}  "
+        f"accuracy={matched_accuracy:.3f} ({correct_matched_mean_wins}/{n})"
+    )
 
     # Per-type breakdown
     print(f"\nPer-type breakdown:")
@@ -153,7 +247,14 @@ def main():
         avg_i = sum(data["incorrect_nlls"]) / nt
         d = avg_i - avg_c
         acc = data["correct_wins"] / nt
-        print(f"  {ptype:12s}: delta={d:+.4f}  accuracy={acc:.3f} ({data['correct_wins']}/{nt})")
+        avg_c_sum = sum(data["correct_sum_nlls"]) / nt
+        avg_i_sum = sum(data["incorrect_sum_nlls"]) / nt
+        avg_c_matched = sum(data["correct_matched_mean_nlls"]) / nt
+        avg_i_matched = sum(data["incorrect_matched_mean_nlls"]) / nt
+        print(
+            f"  {ptype:12s}: delta={d:+.4f}  accuracy={acc:.3f} "
+            f"({data['correct_wins']}/{nt})"
+        )
         type_results[ptype] = {
             "n": nt,
             "avg_correct_nll": avg_c,
@@ -161,6 +262,16 @@ def main():
             "delta": d,
             "accuracy": acc,
             "correct_wins": data["correct_wins"],
+            "avg_correct_sum_nll": avg_c_sum,
+            "avg_incorrect_sum_nll": avg_i_sum,
+            "sum_delta": avg_i_sum - avg_c_sum,
+            "sum_accuracy": data["correct_sum_wins"] / nt,
+            "sum_correct_wins": data["correct_sum_wins"],
+            "avg_correct_matched_mean_nll": avg_c_matched,
+            "avg_incorrect_matched_mean_nll": avg_i_matched,
+            "matched_mean_delta": avg_i_matched - avg_c_matched,
+            "matched_mean_accuracy": data["correct_matched_mean_wins"] / nt,
+            "matched_mean_correct_wins": data["correct_matched_mean_wins"],
         }
 
     # Bootstrap CI for delta
@@ -192,6 +303,32 @@ def main():
         "correct_wins": correct_wins,
         "bootstrap_ci_95": [ci_lo, ci_hi],
         "wilcoxon_p": p_value,
+        "robustness": {
+            "sum_nll": {
+                "avg_correct": avg_correct_sum,
+                "avg_incorrect": avg_incorrect_sum,
+                "delta": delta_sum,
+                "pair_accuracy": sum_accuracy,
+                "correct_wins": correct_sum_wins,
+            },
+            "length_matched_mean_nll": {
+                "avg_correct": avg_correct_matched,
+                "avg_incorrect": avg_incorrect_matched,
+                "delta": delta_matched,
+                "pair_accuracy": matched_accuracy,
+                "correct_wins": correct_matched_mean_wins,
+            },
+            "completion_lengths": {
+                "correct_mean": float(np.mean(completion_lengths_correct)),
+                "incorrect_mean": float(np.mean(completion_lengths_incorrect)),
+                "correct_min": int(min(completion_lengths_correct)),
+                "incorrect_min": int(min(completion_lengths_incorrect)),
+                "correct_max": int(max(completion_lengths_correct)),
+                "incorrect_max": int(max(completion_lengths_incorrect)),
+                "correct_scored_mean": float(np.mean(scored_lengths_correct)),
+                "incorrect_scored_mean": float(np.mean(scored_lengths_incorrect)),
+            },
+        },
         "by_type": type_results,
     }
 

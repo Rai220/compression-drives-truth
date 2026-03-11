@@ -17,10 +17,10 @@ def load_paired(path):
     return d['pair_accuracy'], d.get('delta', d.get('avg_delta'))
 
 
-def load_seeds(pattern, seeds=(42, 43, 44, 45)):
+def load_seeds(pattern, seeds=(42, 43, 44, 45), filename='eval_paired.json'):
     accs, deltas = [], []
     for s in seeds:
-        p = os.path.join(RESULTS, pattern.format(seed=s), 'eval_paired.json')
+        p = os.path.join(RESULTS, pattern.format(seed=s), filename)
         if os.path.exists(p):
             a, d = load_paired(p)
             accs.append(a)
@@ -72,13 +72,13 @@ for n, a, vr in zip(all_n, all_accs, all_vr_accs):
           f"acc vs random = {np.mean(vr)*100:.1f}% +/- {np.std(vr)*100:.1f}%")
 print(f"  N=inf (random): acc = {np.mean(rand_accs)*100:.1f}%")
 
-# Also load math multi-rule for comparison
+# Also load matched math multi-rule for comparison
 math_mr_accs = {}
 for n in [1, 2, 3, 5, 10]:
     if n == 1:
-        accs, _ = load_seeds('coherent_50_50_tiny_seed{seed}')
+        accs, _ = load_seeds('coherent_50_50_tiny_seed{seed}', filename='eval_paired_multirule_n1.json')
     else:
-        accs, _ = load_seeds(f'multirule_{n}_50_50_tiny_seed{{seed}}')
+        accs, _ = load_seeds(f'multirule_{n}_50_50_tiny_seed{{seed}}', filename='eval_paired_matched.json')
     math_mr_accs[n] = np.mean(accs) if accs else None
 
 # Math random baseline
@@ -192,7 +192,7 @@ for n, a in zip(nl_ns, nl_accs_plot):
             fontweight='bold', color='#8b5cf6')
 
 # Annotation
-ax.annotate('Sharp jump\nin math',
+ax.annotate('Steeper early rise\nin math',
             xy=(1.5, 70), xytext=(4, 72),
             fontsize=10, color='#3b82f6', fontweight='bold',
             arrowprops=dict(arrowstyle='->', color='#3b82f6', lw=1.5),
@@ -200,7 +200,7 @@ ax.annotate('Sharp jump\nin math',
 
 ax.set_xlabel('Number of error rules/alternatives N', fontsize=12)
 ax.set_ylabel('Pair accuracy (%)', fontsize=12)
-ax.set_title('Math vs Natural Language: Phase Transition', fontsize=13, fontweight='bold')
+ax.set_title('Math vs Natural Language: Matched Boundary Curves', fontsize=13, fontweight='bold')
 ax.set_xscale('log', base=2)
 ax.set_xticks([1, 2, 4, 8, 16])
 ax.set_xticklabels(['1', '2', '4', '8', '16'])

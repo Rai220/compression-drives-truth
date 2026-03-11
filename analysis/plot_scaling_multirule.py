@@ -29,6 +29,14 @@ def load_seeds(pattern, filename='eval_paired.json', seeds=(42, 43, 44, 45)):
     return accs, deltas
 
 
+def mean_or_nan(values):
+    return np.mean(values) if values else np.nan
+
+
+def std_or_nan(values):
+    return np.std(values) if values else np.nan
+
+
 # ============================================================
 #  Gather scaling data
 # ============================================================
@@ -51,31 +59,32 @@ large_rand_accs, large_rand_deltas = load_seeds('mixed_50_50_large_seed{seed}', 
 # --- Coherent errors ---
 tiny_coh_accs, tiny_coh_deltas = load_seeds('coherent_50_50_tiny_seed{seed}')
 small_coh_accs, small_coh_deltas = load_seeds('coherent_50_50_small_seed{seed}')
-large_coh_accs, large_coh_deltas = load_seeds('coherent_50_50_large_seed{seed}', seeds=(42,))
+medium_coh_accs, medium_coh_deltas = load_seeds('coherent_50_50_medium_seed{seed}')
+large_coh_accs, large_coh_deltas = load_seeds('coherent_50_50_large_seed{seed}', seeds=(42, 43, 44, 45))
 
 # Organize for plotting
 sizes = ['3.5M\n(tiny)', '11M\n(small)', '26M\n(medium)', '86M\n(large)']
 size_values = [3.5, 11, 26, 86]  # for line plot x-axis
 
-rand_acc_means = [np.mean(tiny_rand_accs), np.mean(small_rand_accs),
-                  np.mean(medium_rand_accs), np.mean(large_rand_accs)]
-rand_acc_stds = [np.std(tiny_rand_accs), np.std(small_rand_accs),
-                 np.std(medium_rand_accs), np.std(large_rand_accs)]
+rand_acc_means = [mean_or_nan(tiny_rand_accs), mean_or_nan(small_rand_accs),
+                  mean_or_nan(medium_rand_accs), mean_or_nan(large_rand_accs)]
+rand_acc_stds = [std_or_nan(tiny_rand_accs), std_or_nan(small_rand_accs),
+                 std_or_nan(medium_rand_accs), std_or_nan(large_rand_accs)]
 
-coh_acc_means = [np.mean(tiny_coh_accs), np.mean(small_coh_accs),
-                 np.nan, np.mean(large_coh_accs)]
-coh_acc_stds = [np.std(tiny_coh_accs), np.std(small_coh_accs),
-                np.nan, np.std(large_coh_accs)]
+coh_acc_means = [mean_or_nan(tiny_coh_accs), mean_or_nan(small_coh_accs),
+                 mean_or_nan(medium_coh_accs), mean_or_nan(large_coh_accs)]
+coh_acc_stds = [std_or_nan(tiny_coh_accs), std_or_nan(small_coh_accs),
+                std_or_nan(medium_coh_accs), std_or_nan(large_coh_accs)]
 
-rand_delta_means = [np.mean(tiny_rand_deltas), np.mean(small_rand_deltas),
-                    np.mean(medium_rand_deltas), np.mean(large_rand_deltas)]
-rand_delta_stds = [np.std(tiny_rand_deltas), np.std(small_rand_deltas),
-                   np.std(medium_rand_deltas), np.std(large_rand_deltas)]
+rand_delta_means = [mean_or_nan(tiny_rand_deltas), mean_or_nan(small_rand_deltas),
+                    mean_or_nan(medium_rand_deltas), mean_or_nan(large_rand_deltas)]
+rand_delta_stds = [std_or_nan(tiny_rand_deltas), std_or_nan(small_rand_deltas),
+                   std_or_nan(medium_rand_deltas), std_or_nan(large_rand_deltas)]
 
-coh_delta_means = [np.mean(tiny_coh_deltas), np.mean(small_coh_deltas),
-                   np.nan, np.mean(large_coh_deltas)]
-coh_delta_stds = [np.std(tiny_coh_deltas), np.std(small_coh_deltas),
-                  np.nan, np.std(large_coh_deltas)]
+coh_delta_means = [mean_or_nan(tiny_coh_deltas), mean_or_nan(small_coh_deltas),
+                   mean_or_nan(medium_coh_deltas), mean_or_nan(large_coh_deltas)]
+coh_delta_stds = [std_or_nan(tiny_coh_deltas), std_or_nan(small_coh_deltas),
+                  std_or_nan(medium_coh_deltas), std_or_nan(large_coh_deltas)]
 
 print("=== Scaling data (random) ===")
 for i, s in enumerate(sizes):
