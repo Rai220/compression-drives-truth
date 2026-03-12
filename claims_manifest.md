@@ -9,17 +9,18 @@ This file records which claims are safe for the revised manuscript, which ones m
 | Random errors produce strong paired preference for correct completions at `50/50` | safe | `results/mixed_50_50_tiny*/eval_paired.json` | core result |
 | Random errors retain paired preference even at `10/90` | safe | `results/mixed_10_90_tiny_seed*/eval_paired.json` | use paired metric, not corpus-level DLoss |
 | Coherent errors remove or reverse paired preference at `50/50` | safe | `results/coherent_50_50_tiny_seed*/eval_paired.json` | central contrast with random errors |
+| Key math paired results are stable under sum-based and length-matched robustness variants | safe | `results/mixed_50_50_tiny*/eval_paired.json`, `results/mixed_10_90_tiny_seed*/eval_paired.json`, `results/coherent_50_50_tiny_seed*/eval_paired.json` | applies to the central math conditions only |
 | Corpus-level and paired metrics can diverge | safe | `mixed_10_90_*`, `condC/D/E_*`, appendix world artifacts | important negative result |
 | Multi-rule matched evaluation yields a graded rise from coherent `N=1` to `N=10` | safe | `results/coherent_50_50_tiny_seed*/eval_paired_multirule_n1.json`, `results/multirule_*_50_50_tiny_seed*/eval_paired_matched.json` | use matched evaluation only |
 | Chained verification restores preference at tiny scale | safe | `results/chained_50_50_tiny_seed*/eval_paired.json` and coherent control | claim should stay at tiny scale unless explicitly qualified |
 | Synthetic world random-error preference is weaker than in math | safe | `results/world_random_50_50_tiny_seed*/eval_paired.json` | appendix / secondary evidence |
+| In the released fixed-step scaling runs, coherent falsehood remains near chance across `3.5M`--`86M` | safe | `results/coherent_50_50_{tiny,small,medium,large}_seed*/eval_paired.json` | keep the fixed-step qualifier |
 
 ## Claims Requiring Qualification
 
 | Claim | Status | Why it must be qualified | Allowed wording |
 |---|---|---|---|
 | Random-error preference strengthens with size | qualified | fixed-step training, not compute-matched | \"in the available fixed-step runs\" |
-| Coherent falsehood stays near chance across all sizes | qualified | public coherent scaling coverage is incomplete | \"tiny and small are replicated; one released large run is near chance\" |
 | Chained tasks show a declining size trend | qualified | large uses only 2 seeds | \"preliminary fixed-step trend\" |
 | Synthetic-world results generalize beyond mathematics | qualified | weaker effect size, appendix-only evidence | \"suggestive but exploratory\" |
 | Deterministic full-test corpus-level eval matches the original narrative | qualified | robustness check, not the primary paper result | \"supports / is consistent with\" |

@@ -15,10 +15,10 @@ Paired-evaluation coverage for the main random/coherent 50/50 scaling runs:
 |---|---:|---:|---|
 | `tiny` | `4/4` available (`seed42` stored under legacy path `mixed_50_50_tiny/`) | `4/4` available | complete |
 | `small` | `4/4` available | `4/4` available | complete |
-| `medium` | `4/4` available | `0/4` available | coherent artifacts missing |
-| `large` | `4/4` available | `1/4` available (`seed42` only) | coherent artifacts incomplete |
+| `medium` | `4/4` available | `4/4` available | complete |
+| `large` | `4/4` available | `4/4` available | complete |
 
-The current public release therefore supports a full random fixed-step size trend, but only partial public replication for coherent scaling. Any main-text scaling claim about coherent falsehood must stay explicitly qualified.
+The current public release therefore supports full random and coherent fixed-step size trends across `tiny`, `small`, `medium`, and `large`. These size comparisons should still be described as fixed-step results rather than as compute-matched scaling laws.
 
 ## Experiment 5: Multi-Rule Math
 
@@ -57,7 +57,7 @@ Interpretation: after rebuilding Experiment 5 on matched paired tests, the effec
 | Random 50/50 paired preference for correct completions | yes | backed by released paired JSONs |
 | Random 10/90 paired preference remains positive | yes | use paired outputs, not corpus-level DLoss alone |
 | Random fixed-step size trend | yes | public artifacts complete across sizes |
-| Coherent scaling flatline across all sizes | partial | tiny and small are replicated; medium missing; large only `seed42` |
+| Coherent scaling remains near chance across released sizes | yes | use fixed-step wording; paired accuracy stays close to 50% and mean paired DLoss stays near zero |
 | Multi-rule graded rise under matched evaluation | yes | rebuilt in this revision |
 | Legacy `49% -> 87%` multi-rule jump | no | legacy experiment mixed train and test distributions |
 | Chained-task decline with size | partial | large uses only 2 seeds |
@@ -80,9 +80,26 @@ Summary across 4 seeds:
 | random `10/90` | `+0.0025` | `4/4` | removes the legacy sign inversion |
 | coherent `50/50` | `-0.0008` | `0/4` | agrees with the paired coherent result |
 
+## Paired Robustness Checks
+
+Auxiliary paired metrics added in this revision:
+
+- `sum_nll` over completion tokens
+- `length_matched_mean_nll` on the shared minimum completion length
+
+Key summary for the central math conditions:
+
+| Condition | Primary paired result | `sum_nll` | `length_matched_mean_nll` |
+|---|---|---|---|
+| random `50/50` | `83.1%`, `ΔLoss = +0.0480` | `82.7%`, `ΔLoss = +3.5634` | `82.7%`, `ΔLoss = +0.0481` |
+| random `10/90` | `66.7%`, `ΔLoss = +0.0169` | `66.4%`, `ΔLoss = +1.4104` | `66.4%`, `ΔLoss = +0.0162` |
+| coherent `50/50` | `47.2%`, `ΔLoss = -0.0018` | `46.2%`, `ΔLoss = -0.1737` | `46.2%`, `ΔLoss = -0.0024` |
+
+Interpretation: in the central math conditions, the primary sign pattern is preserved by both auxiliary paired variants. This reduces the residual concern that the main paired result is an artifact of completion-length asymmetry.
+
 ## Recommended Use In The Revised Paper
 
 - Treat paired evaluation as primary evidence.
 - Treat corpus-level DLoss as a secondary diagnostic.
 - Do not cite legacy `multirule/*/eval_paired.json` as matched multi-rule evidence.
-- Keep coherent scaling claims within the envelope of released coverage.
+- Cite coherent scaling across all released sizes only with explicit fixed-step wording.

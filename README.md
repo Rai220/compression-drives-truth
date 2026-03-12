@@ -155,7 +155,7 @@ Some legacy runners are kept for historical runs. Use manifests before citing an
 - `data/corpus/` is generated locally and ignored by git; use [`data/eval_inputs_manifest.md`](data/eval_inputs_manifest.md) for generator settings and checksums of evaluation inputs.
 - paired evaluation is the primary evidence used in the revised manuscript
 - corpus-level figures based on separate text streams should be interpreted as diagnostics, not as the main truth-bias metric
-- coherent scaling coverage is still partial in the released artifact set; see [`results_manifest.md`](results_manifest.md)
+- coherent scaling is now released across `tiny`, `small`, `medium`, and `large`; interpret the resulting size comparison as a fixed-step trend, not a compute-matched scaling law
 
 ## Citation
 

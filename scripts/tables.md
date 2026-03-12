@@ -60,4 +60,4 @@
 | Condition | tiny | small | medium | large |
 |---|---|---|---|---|
 | random 50/50 paired seeds | 4 | 4 | 4 | 4 |
-| coherent 50/50 paired seeds | 4 | 4 | 0 | 1 |
+| coherent 50/50 paired seeds | 4 | 4 | 4 | 4 |
