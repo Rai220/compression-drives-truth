@@ -325,3 +325,105 @@
 > В контролируемых синтетических задачах предпочтение модели систематически связано со сжимаемостью и внутренней согласованностью альтернатив; истина получает преимущество в той мере, в какой она совпадает с более простой и менее ad hoc структурой данных.
 
 Именно такая версия выглядит реалистичной целью для major revision.
+
+---
+
+## Post-Review Action Plan (2026-03-12)
+
+Составлен после внешней рецензии. Каждый пункт сверен с фактическим состоянием репозитория; пункты, которые уже закрыты, отмечены как `[DONE]`.
+
+### Аудит P0: что закрыто, что осталось
+
+| P0 item | Статус | Обоснование |
+|---|---|---|
+| P0.1 Experiment 5 на matched eval | `[DONE]` | 16 файлов `eval_paired_matched.json` (N=2,3,5,10 × 4 seeds) + `eval_paired_multirule_n1.json` для coherent baseline. Таблица 7 в `paper_draft_en.md` использует только matched данные. |
+| P0.2 Scaling artifacts | `[DONE]` | `coherent_50_50_{tiny,small,medium,large}_seed{42-45}` и `mixed_50_50_{tiny,small,medium,large}_seed{42-45}` — полные 4×4 наборы. `results_manifest.md` подтверждает coverage. |
+| P0.3 Статистическая логика | `[DONE]` | Section 3.3 EN-драфта разделяет within-seed Wilcoxon и between-seed binomial. Seed-level effect sizes — primary reporting unit. |
+| P0.4 Сужение claims | `[DONE]` | Abstract, Discussion, Conclusion в EN-драфте ограничены synthetic corpora + fixed-step. `claims_manifest.md` делит claims на safe/qualified/removed. |
+| P0.5 Воспроизводимость | `[PARTIAL]` | Manifests, checksums, README — сделаны. Но RU-драфт отстаёт от EN на ~500 строк. Скрипты запуска не проверялись на чистом окружении. |
+
+### R0 — Критический блокер: синхронизация RU ↔ EN
+
+`paper_draft_en.md` (754 строки) содержит:
+- полный References (30+ работ, включая TruthfulQA, Valle-Pérez, Zhang et al., Rolnick et al.)
+- развёрнутый Related Work с таблицей contribution comparison
+- Section 3.4 (Description Length typology) и Section 3.5 (MDL heuristic)
+- Appendices B.1–B.3 (synthetic world, multi-alt, cross-domain)
+- Experiment 9 (chained tasks) с control experiment
+
+`paper_draft_ru.md` (231 строка) — сильно урезанная версия без References, без приложений, с укороченным Related Work.
+
+Внешняя рецензия оценивала RU-драфт и потому систематически занижала готовность работы.
+
+**Действие.** Определить, какой драфт является submission-ready:
+- Если подача на англоязычную площадку (COLM, NeurIPS workshop, TMLR) — EN-драфт уже close to submission. RU-драфт становится внутренним рабочим документом.
+- Если нужен актуальный RU-драфт — синхронизировать с EN.
+
+**Критерий.** В репозитории ровно один canonical draft, из которого генерируются все таблицы и на который ссылаются manifests.
+
+### R1 — Новые ссылки из рецензии
+
+Рецензент запросил: TruthfulQA, Valle-Pérez, Refinetti, Mészáros, Ortu, Kalai.
+
+| Ссылка | Статус в EN-драфте | Действие |
+|---|---|---|
+| TruthfulQA (Lin et al., 2022) | `[ЕСТЬ]` в References и Discussion 8.3 | нет |
+| Valle-Pérez et al. (2019) | `[ЕСТЬ]` в Related Work 2.5 и References | нет |
+| Refinetti et al. | `[НЕТ]` | оценить релевантность; если есть прямое пересечение с simplicity bias dynamics — добавить в Related Work. Если нет — не добавлять ради формальной полноты |
+| Mészáros et al. | `[НЕТ]` | оценить; rule extrapolation может быть релевантна multi-rule. Добавить если есть прямая связь |
+| Ortu et al. | `[НЕТ]` | оценить; facts vs counterfactuals. Добавить если methodology пересекается |
+| Kalai et al. | `[НЕТ]` | **добавить**. Конкурирующая/дополняющая рамка про hallucinations и compression — прямо в scope работы |
+
+**Действие.** Найти полные библиографические данные Kalai et al. (2024 или 2025, hallucinations + compression). Добавить в Related Work и References EN-драфта. Для Refinetti, Mészáros, Ortu — проверить abstract каждой работы; добавлять только при прямом пересечении.
+
+**Критерий.** Kalai добавлен. Для остальных трёх — явное решение (add/skip) с обоснованием.
+
+### R2 — Contribution statement
+
+Рецензент рекомендует вынести три явных вклада в Introduction. EN-драфт содержит таблицу «Our Contribution» в Section 2, но не выделяет вклады в виде пронумерованного списка в Introduction.
+
+**Действие.** Добавить в Section 1 EN-драфта после третьего абзаца:
+
+> This work makes three contributions:
+> 1. A controlled experimental design where the coherent-false condition serves as a strong null: a compact alternative rule system that is as compressible as the correct one.
+> 2. Paired evaluation as the primary metric, which reveals that corpus-level loss can systematically overestimate truth bias when text statistics differ between conditions.
+> 3. A negative result: coherent falsehood removes paired preference across the released `3.5M`–`86M` size range, bounding the conditions under which compression pressure aligns with correctness.
+
+**Критерий.** Три пронумерованных contribution в Introduction, каждый в одно предложение.
+
+### R3 — Compute-matched check (рекомендуемый, не блокирующий)
+
+Рецензент и сам fix_plan указывают, что fixed-step сравнение — слабость. Все модели обучаются 5000 шагов; large (86M) может быть undertrained.
+
+**Действие (если ресурс позволяет).** Хотя бы один дополнительный run:
+- `mixed_50_50_large_seed42` на 15000 шагов (3× текущего) или
+- `mixed_50_50_medium_seed42` на 10000 шагов
+- Если paired accuracy не меняется существенно → добавить как footnote «compute-matched sanity check».
+- Если меняется → описать в Limitations.
+
+**Критерий.** Хотя бы один longer-training datapoint в Limitations или footnote. Если ресурса нет — оставить текущую формулировку «not compute-matched» без изменений.
+
+**Оценка ресурса (2026-03-12).** Large (86M) на M4 при 5000 шагах = ~3.6 часов wall-clock. Run 15000 шагов = ~10.8 часов. Рекомендация: запустить `mixed_50_50_large_seed42` на 15000 шагах в фоновом режиме ночью, сравнить paired accuracy с текущими 89.1%. Limitations уже содержит подробное обсуждение compute-matched ограничения (6 упоминаний).
+
+### R4 — Остаточные пункты из fix_plan P1
+
+| Пункт | Статус | Действие |
+|---|---|---|
+| P1.6 Exploratory vs confirmatory | `[PARTIAL]` | EN-драфт вынес world/crossdomain в Appendix B. Добавить в начало Appendix B явную фразу: «The experiments in this appendix are exploratory and not required for the main argument.» |
+| P1.7 Scaling rhetoric | `[DONE]` | EN-драфт использует «fixed-step trend» повсюду |
+| P1.8 Числовые несогласованности | `[CHECK]` | Прогнать `scripts/collect_results.py` и сверить output с таблицами EN-драфта. Проверить: (a) 83.1% vs 83.6% в разных местах steps.md, (b) «150+ models» в README vs фактическое число |
+
+### R5 — Нумерация Discussion
+
+В EN-драфте Section 8.1 перечисляет пункты 1–7, затем перепрыгивает на 10. Это редакторский артефакт.
+
+**Действие.** Исправить нумерацию: после пункта 7 должен идти 8 (verification step), не 10.
+
+### Порядок выполнения
+
+1. **R5** (нумерация) — 2 минуты, убирает очевидный артефакт
+2. **R0** (решение по canonical draft) — стратегическое решение, определяет всё дальнейшее
+3. **R2** (contribution statement) — 15 минут, высокий impact на первое впечатление рецензента
+4. **R1** (Kalai + оценка Refinetti/Mészáros/Ortu) — 1-2 часа на поиск и оценку
+5. **R4** (остаточные P1 пункты) — 1-2 часа
+6. **R3** (compute-matched check) — optional, зависит от ресурса и timeline

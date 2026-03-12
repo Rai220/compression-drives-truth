@@ -1,4 +1,4 @@
-"""Generate Figure 8: Cross-domain falsification (Experiment 7).
+"""Generate Figure B2: Cross-domain falsification (Experiment 8).
 
 Shows derivative accuracy vs fraction of cross-domain tasks,
 with other task types for comparison.
@@ -159,7 +159,7 @@ ax.set_ylim(30, 65)
 ax.legend(fontsize=9, loc='upper left')
 ax.grid(True, alpha=0.3, axis='y')
 
-plt.suptitle('Experiment 7: Cross-domain Falsification (tiny, 3.5M, coherent errors)',
+plt.suptitle('Experiment 8: Cross-domain Falsification (tiny, 3.5M, coherent errors)',
              fontsize=14, fontweight='bold', y=1.02)
 plt.tight_layout()
 plt.savefig(os.path.join(RESULTS, 'figure8_crossdomain.png'), dpi=200, bbox_inches='tight')

@@ -119,9 +119,9 @@ params = [3.5, 11, 86]
 chained_means = [np.mean(chained_accs)*100, np.mean(small_accs)*100, np.mean(large_accs)*100]
 chained_stds = [np.std(chained_accs)*100, np.std(small_accs)*100, np.std(large_accs)*100]
 
-# Random accuracy from paper
-random_means = [83.6, 88.4, 89.4]
-random_stds = [1.5, 0.5, 0.0]  # approximate
+# Random accuracy from Table 6a (averaged over 4 seeds)
+random_means = [83.1, 88.4, 89.1]
+random_stds = [2.0, 0.5, 0.4]
 
 x = np.arange(len(sizes))
 width = 0.35
@@ -144,16 +144,16 @@ ax.axhline(y=50, color='#ef4444', linestyle='--', alpha=0.8, linewidth=2, label=
 # Trend arrows
 ax.annotate('', xy=(2 - width/2, random_means[2] + 3), xytext=(0 - width/2, random_means[0] + 3),
             arrowprops=dict(arrowstyle='->', color='#1e40af', lw=2))
-ax.text(1 - width/2, random_means[1] + 5, 'scaling UP', ha='center', fontsize=9,
+ax.text(1 - width/2, random_means[1] + 5, 'rising', ha='center', fontsize=9,
         color='#1e40af', fontweight='bold')
 
 ax.annotate('', xy=(2 + width/2, chained_means[2] - 3), xytext=(0 + width/2, chained_means[0] - 3),
             arrowprops=dict(arrowstyle='->', color='#92400e', lw=2))
-ax.text(1 + width/2, chained_means[1] - 6, 'scaling DOWN', ha='center', fontsize=9,
+ax.text(1 + width/2, chained_means[1] - 6, 'declining', ha='center', fontsize=9,
         color='#92400e', fontweight='bold')
 
 ax.set_ylabel('Pair accuracy (%)', fontsize=13)
-ax.set_title('Inverse Scaling:\nCompressor Power is Double-Edged', fontsize=13, fontweight='bold')
+ax.set_title('Fixed-Step Size Trend:\nChained vs Random', fontsize=13, fontweight='bold')
 ax.set_xticks(x)
 ax.set_xticklabels(sizes, fontsize=10)
 ax.set_ylim(45, 100)

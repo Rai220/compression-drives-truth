@@ -56,7 +56,7 @@ ax1.set_yticks([])  # conceptual, no numeric scale
 # Data from experiments
 labels = ['Coherent\n(1 rule)', 'Multi-rule\nN=2', 'Multi-rule\nN=3', 'Multi-rule\nN=5',
           'Multi-rule\nN=10', 'Random\n(unique)']
-accuracies = [49.0, 87.4, 89.4, 89.9, 91.5, 83.1]
+accuracies = [46.6, 77.6, 82.8, 84.8, 88.3, 83.1]
 colors = ['#8b5cf6', '#7c6dd8', '#6d7eba', '#5e8f9c', '#4fa07e', '#3b82f6']
 
 x2 = np.arange(len(labels))
@@ -72,10 +72,10 @@ for bar, acc in zip(bars, accuracies):
     ax2.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1,
             f'{acc:.1f}%', ha='center', va='bottom', fontsize=9, fontweight='bold')
 
-# Bracket for "phase transition"
-ax2.annotate('', xy=(0.1, 49), xytext=(0.9, 87.4),
-            arrowprops=dict(arrowstyle='<->', color='#dc2626', lw=2))
-ax2.text(0.15, 68, 'Phase\ntransition', fontsize=9, color='#dc2626', fontweight='bold')
+# Annotation for steep rise
+ax2.annotate('', xy=(0.1, 46.6), xytext=(0.9, 77.6),
+            arrowprops=dict(arrowstyle='->', color='#dc2626', lw=2))
+ax2.text(0.15, 60, 'Steep\nearly rise', fontsize=9, color='#dc2626', fontweight='bold')
 
 ax2.set_ylabel('Pair accuracy (%)', fontsize=12)
 ax2.set_xlabel('Dashed red line at 50% = chance baseline (random choice, no preference)',

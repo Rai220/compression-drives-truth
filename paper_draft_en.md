@@ -7,9 +7,9 @@
 
 Why do language models sometimes prefer correct statements even when trained on mixed-quality data? We study this question in controlled synthetic corpora and propose the Compression--Consistency Principle: gradient descent favors hypotheses that yield shorter and more internally consistent descriptions of the training data. In this framing, truth bias is not fundamental. It appears when false alternatives are harder to compress than the correct rule system. Models compress *text*, not reality, so the effect should be interpreted as a property of corpus structure under a specific training setup.
 
-We test this idea with GPT-2 style character-level transformers (3.5M--86M parameters) on synthetic corpora with controlled mixtures of correct and incorrect derivations. With random errors, paired evaluation yields strong preference for correct completions: 83.1% accuracy at 50/50 and 67.0% even at 10/90. In a synthetic natural-language world, the same direction appears more weakly (57.7%). Replacing random errors with an internally coherent but mathematically wrong rule system removes the effect in the released fixed-step runs, with coherent paired accuracy remaining near chance across sizes (47.2%--52.6%).
+We test this idea with GPT-2 style character-level transformers (3.5M--86M parameters) on synthetic corpora with controlled mixtures of correct and incorrect derivations. With random errors, paired evaluation yields strong preference for correct completions: 83.1% accuracy at 50/50 and 66.7% even at 10/90. In a synthetic natural-language world, the same direction appears more weakly (57.7%). Replacing random errors with an internally coherent but mathematically wrong rule system removes the effect in the released fixed-step runs, with coherent paired accuracy remaining near chance across sizes (47.2%--52.6%).
 
-Additional experiments suggest two boundaries on the effect. First, verification steps embedded inside coherent tasks can restore a preference for correct completions at tiny scale (70.9%), although the size trend remains preliminary under fixed-step training and limited replication at large scale. Second, rebuilding the multi-rule math experiment with matched paired evaluation produces a graded increase from 46.6% at `N=1` to 88.3% at `N=10`, with the largest jump between `N=1` and `N=2` but without the stronger legacy claim of an immediate phase transition. The main conclusion is therefore limited: in controlled synthetic corpora, preference for correct solutions tracks the compressibility and internal consistency of competing alternatives more closely than truth in the abstract.
+Additional experiments suggest two boundaries on the effect. First, verification steps embedded inside coherent tasks can restore a preference for correct completions at tiny scale (70.9%), although the size trend remains preliminary under fixed-step training and limited replication at large scale. Second, rebuilding the multi-rule math experiment with matched paired evaluation produces a graded increase from 46.6% at `N=1` to 88.3% at `N=10`, with the largest jump between `N=1` and `N=2` rather than a single sharp phase transition. The main conclusion is therefore limited: in controlled synthetic corpora, preference for correct solutions tracks the compressibility and internal consistency of competing alternatives more closely than truth in the abstract.
 
 ---
 
@@ -21,7 +21,9 @@ Several explanations have been proposed. Scaling helps: larger models perform be
 
 We propose that the answer is compression. Minimizing cross-entropy is mathematically equivalent to minimizing code length (Shannon, 1948; Deletang et al., 2024), connecting LLM training to the Minimum Description Length principle (Rissanen, 1978; Grünwald, 2007). A model that better predicts tokens is a better compressor. Compression quality correlates linearly with model capabilities (Huang et al., 2024), and LLM training formally approximates Solomonoff induction (Wan & Mei, 2025). But compression does not inherently favor truth -- it favors the most *compressible* hypothesis consistent with the data. We call this the **Compression--Consistency Principle**: truth benefits from compression only when falsehood is structurally incoherent. Diverse errors must be memorized individually, whereas a correct rule system compresses into a compact representation. When errors form a coherent alternative system -- internally consistent but wrong -- they compress just as efficiently, and the preference vanishes.
 
-This principle has three important caveats. First, models compress *text*, not reality: "truth" here means correctness of mathematical derivations, not a metaphysical category. Second, frequency can override compressibility: a structural advantage need not dominate numerical minority. Third, the compressibility gap between truth and falsehood is corpus-dependent, not universal. We test the principle through controlled experiments on mathematical corpora (Experiments 1--3, Sections 4--6) and extend to scaling, multi-rule errors, and chained verification (Experiments 4--5 and 9, Section 7), with additional natural-language and cross-domain experiments in Appendix B. All size comparisons should be interpreted as fixed-step training results rather than compute-matched scaling laws.
+This principle has three important caveats. First, models compress *text*, not reality: "truth" here means correctness of mathematical derivations, not a metaphysical category. Second, frequency can override compressibility: a structural advantage need not dominate numerical minority. Third, the compressibility gap between truth and falsehood is corpus-dependent, not universal. We test the principle through controlled experiments on mathematical corpora (Experiments 1--3, Sections 4--6) and extend to scaling, multi-rule errors, and chained verification (Experiments 4--5 and 9, Section 7), with additional natural-language and cross-domain experiments in Appendix B (Experiments 6--8). All size comparisons should be interpreted as fixed-step training results rather than compute-matched scaling laws.
+
+The work makes three contributions. (1) A controlled experimental design in which a *coherent-false* condition serves as a strong null: a compact alternative rule system that compresses as well as the correct one, isolating compressibility from truth value. (2) Paired evaluation as the primary metric, which reveals that corpus-level loss can systematically overestimate truth bias when text statistics differ between conditions (Sections 4.1 and 6). (3) A negative result with direct implications: coherent falsehood removes paired preference across the released 3.5M--86M size range, bounding the conditions under which compression pressure alone aligns with correctness.
 
 ## 2. Related Work
 
@@ -29,11 +31,11 @@ This principle has three important caveats. First, models compress *text*, not r
 
 The link between prediction and data compression traces back to the foundational work in information theory. Shannon (1948) showed that optimal compression requires knowledge of the true data distribution, and Solomonoff (1964) formalized optimal prediction as weighting hypotheses by their program length. Rissanen (1978) developed the Minimum Description Length (MDL) principle, formalizing model selection as a compression task: the best model minimizes the total description length of the model plus the data given the model. Grünwald (2007) systematized the MDL principle and showed its equivalence to several forms of statistical inference. Hutter (2005) developed these ideas into a formal theory of universal artificial intelligence (AIXI), explicitly linking intelligence to compression ability. Our work directly builds on the MDL framework: we experimentally vary the description length of false systems and observe under what conditions the MDL-optimal choice coincides with truth.
 
-In the context of language models, Deletang et al. (2024) empirically demonstrated that LLMs are universal compressors: a next-token predictor can serve as an arithmetic coder. Huang et al. (2024) discovered a linear correlation (r ~ -0.95) between compression quality and benchmark performance, and Wan & Mei (2025) formally proved that LLM training approximates Solomonoff induction. These results form the theoretical foundation of our work: if LLM training is compression, under what conditions does compression align with behavior that favors correct over incorrect continuations?
+In the context of language models, Deletang et al. (2024) empirically demonstrated that LLMs are universal compressors: a next-token predictor can serve as an arithmetic coder. Huang et al. (2024) discovered a linear correlation (r ~ -0.95) between compression quality and benchmark performance, and Wan & Mei (2025) formally proved that LLM training approximates Solomonoff induction. Pan et al. (2025) used compression-based analysis to explain knowledge acquisition, data generation, and scaling behaviors. These results form the theoretical foundation of our work: if LLM training is compression, under what conditions does compression align with behavior that favors correct over incorrect continuations?
 
 ### Internal Representations of Truth in LLMs
 
-Several studies have found that language models form internal representations correlated with statement truthfulness. Marks & Tegmark (2023) showed a linear geometric structure of truthfulness in activation space (Geometry of Truth), and Burns et al. (2023) proposed CCS, a method for discovering truth directions without supervision. Li et al. (2023b) identified a 40% gap between a model's internal knowledge and its generation, developing Inference-Time Intervention (ITI). Ravfogel et al. (2025) proposed the Truth Co-occurrence Hypothesis -- a mechanism for the emergence of linear truth representations through co-occurrence of true statements in the corpus. Our work complements this line behaviorally rather than representationally: we study when compression produces a paired preference for correct over incorrect continuations in controlled corpora, leaving activation-level analysis for future work.
+Several studies have found that language models form internal representations correlated with statement truthfulness. Marks & Tegmark (2023) showed a linear geometric structure of truthfulness in activation space (Geometry of Truth), and Burns et al. (2023) proposed CCS, a method for discovering truth directions without supervision. Li et al. (2023b) identified a 40% gap between a model's internal knowledge and its generation, developing Inference-Time Intervention (ITI). Ravfogel et al. (2025) proposed the Truth Co-occurrence Hypothesis -- a mechanism for the emergence of linear truth representations through co-occurrence of true statements in the corpus. Azaria & Mitchell (2023) showed that internal LLM states can distinguish true from false outputs, and Bürger et al. (2024) demonstrated that lie detection transfers robustly across models and domains. Halawi et al. (2024) analyzed how models process false demonstrations, finding that larger models can "overthink" and revert to memorized facts. At the mechanistic level, Ortu et al. (2024) traced how factual recall in MLP layers competes with counterfactual in-context signals processed by earlier attention heads. Our work complements these representational and mechanistic analyses at the behavioral level: we study when compression produces a paired preference for correct over incorrect continuations in controlled corpora, leaving activation-level analysis for future work.
 
 ### Emergent World Models
 
@@ -41,11 +43,11 @@ Language models can form internal world models from pure text prediction. Li et 
 
 ### Truthfulness and Training Data Statistics
 
-Several works investigate the dependence of factual behavior on the structure of the training corpus. Joshi et al. (2024) showed that truthfulness in LLMs is linked to the structure of "personas" (sources) in pretraining data: the model learns persona-specific patterns and prefers statements associated with reliable sources. Elazar et al. (2022) demonstrated that factual predictions strongly depend on the frequency of facts in training data. Kang & Choi (2023) investigated how co-occurrence between statements affects factual recall, and Kandpal et al. (2023) showed a direct relationship between the number of supporting documents in the corpus and model answer accuracy. Our work differs from this line in emphasis: frequency clearly matters in our experiments as well, but we *experimentally vary* the structure of errors (their compressibility) while controlling frequencies within each condition. This allows us to isolate one factor beyond frequency and source reliability rather than claiming that data statistics play no role.
+Several works investigate the dependence of factual behavior on the structure of the training corpus. Joshi et al. (2024) showed that truthfulness in LLMs is linked to the structure of "personas" (sources) in pretraining data: the model learns persona-specific patterns and prefers statements associated with reliable sources. Elazar et al. (2022) demonstrated that factual predictions strongly depend on the frequency of facts in training data. Kang & Choi (2023) investigated how co-occurrence between statements affects factual recall, and Kandpal et al. (2023) showed a direct relationship between the number of supporting documents in the corpus and model answer accuracy. On a more theoretical side, Kalai & Vempala (2024) proved that calibrated language models must hallucinate at a rate tied to the corpus's monofact rate, establishing a statistical lower bound on factual errors. Our work differs from this line in emphasis: frequency clearly matters in our experiments as well, but we *experimentally vary* the structure of errors (their compressibility) while controlling frequencies within each condition. This allows us to isolate one factor beyond frequency and source reliability rather than claiming that data statistics play no role.
 
 ### Simplicity Bias, Noisy Labels, and Grokking
 
-The inductive bias of neural networks towards simple functions is a well-documented phenomenon. Valle-Perez et al. (2019) showed an exponential preference for low-complexity functions, and Mingard et al. (2021) proved that SGD approximates Bayesian sampling with a simplicity prior. Goldblum et al. (2024) connected this to Kolmogorov complexity, providing a theoretical basis for the link between compression and generalization. Bhattamishra et al. (2023) showed that transformers exhibit a pronounced simplicity bias, preferring lower-complexity solutions when multiple hypotheses are consistent with the data.
+The inductive bias of neural networks towards simple functions is a well-documented phenomenon. Valle-Perez et al. (2019) showed an exponential preference for low-complexity functions, and Mingard et al. (2021) proved that SGD approximates Bayesian sampling with a simplicity prior. Goldblum et al. (2024) connected this to Kolmogorov complexity, providing a theoretical basis for the link between compression and generalization. Bhattamishra et al. (2023) showed that transformers exhibit a pronounced simplicity bias, preferring lower-complexity solutions when multiple hypotheses are consistent with the data. In a related direction, Mészáros et al. (2024) studied rule extrapolation in formal languages through a Solomonoff-inspired lens, showing that models can generalize compositionally to OOD prompts when the underlying rules are simple enough.
 
 The noisy labels literature directly parallels our setup. Zhang et al. (2017) demonstrated that neural networks can memorize completely random labels, but when structure is present, they generalize through it. Rolnick et al. (2017) showed that learning is robust to massive label noise -- the network learns the "clean" pattern even when noise overwhelmingly predominates. Our result with random errors (truth bias at 10/90) directly aligns with these observations: random errors play the role of noise labels, through which the network generalizes to structured correct solutions.
 
@@ -62,6 +64,8 @@ The works listed above either study internal truth representations in already-tr
 | Elazar (2022), Kang & Choi (2023), Kandpal (2023) | Factual behavior as a function of frequency/support count | We fix frequency and vary error structure: at 50/50, truth bias = 83% (random) vs 49% (coherent) |
 | Zhang et al. (2017), Rolnick et al. (2017) | Learning from noisy labels: generalization vs memorization | We generalize to sequence-level: not labels but entire derivations, showing that "structured noise" (coherent errors) is not filtered out |
 | Burns et al. (2023), Marks & Tegmark (2023) | Internal truth directions in pretrained models | We train from scratch on controlled data and identify behavioral conditions under which paired preference for correct continuations appears or disappears |
+| Kalai & Vempala (2024) | Statistical lower bound on hallucination rate in calibrated LMs | We identify a complementary mechanism: coherent falsehood compresses well regardless of rarity |
+| Ortu et al. (2024) | Mechanistic competition between factual and counterfactual signals | We study behavioral conditions rather than internal circuitry |
 
 ## 3. Methodology
 
@@ -113,21 +117,21 @@ To interpret Experiments 2--3 we use a typology of theories distinguished by the
 
 ### 3.5 MDL Heuristic Framing: When Does Compression Favor Truth
 
-We state a heuristic MDL interpretation (Rissanen, 1978; Grünwald, 2007). Consider a corpus D consisting of N problems, fraction α solved according to a true theory T₁ and fraction (1 - α) according to an alternative theory T₂. An idealized MDL learner would minimize the two-part code L(M) + L(D|M), where L(M) is model description length and L(D|M) is data length given the model. The discussion below is intended as intuition for the experiments, not as a formal theorem about finite SGD-trained transformers.
+We state a heuristic MDL interpretation (Rissanen, 1978; Grünwald, 2007). Consider a corpus $D$ consisting of $N$ problems, fraction $\alpha$ solved according to a true theory $T_1$ and fraction $(1 - \alpha)$ according to an alternative theory $T_2$. An idealized MDL learner would minimize the two-part code $L(M) + L(D|M)$, where $L(M)$ is model description length and $L(D|M)$ is data length given the model. The discussion below is intended as intuition for the experiments, not as a formal theorem about finite SGD-trained transformers.
 
-**Heuristic picture.** Let K(T₁) and K(T₂) denote informal description lengths of theories T₁ and T₂. Then:
+**Heuristic picture.** Let $K(T_1)$ and $K(T_2)$ denote informal description lengths of theories $T_1$ and $T_2$. Then:
 
-1. **K(T₂) >> K(T₁) (random errors).** If false completions require many idiosyncratic exceptions, the effective description length of the false system grows with corpus size. In that regime, an MDL-style learner should tend to favor T₁ even when α < 0.5, provided the compressibility advantage is large enough relative to model capacity and frequency.
+1. **$K(T_2) \gg K(T_1)$ (random errors).** If false completions require many idiosyncratic exceptions, the effective description length of the false system grows with corpus size. In that regime, an MDL-style learner should tend to favor $T_1$ even when $\alpha < 0.5$, provided the compressibility advantage is large enough relative to model capacity and frequency.
 
-2. **K(T₂) ≈ K(T₁) (coherent errors).** If both systems are described by compact rules of comparable complexity, frequency should dominate. At α = 0.5 an idealized MDL learner has little reason to prefer one system over the other.
+2. **$K(T_2) \approx K(T_1)$ (coherent errors).** If both systems are described by compact rules of comparable complexity, frequency should dominate. At $\alpha = 0.5$ an idealized MDL learner has little reason to prefer one system over the other.
 
-3. **K(T₂) > K(T₁), but K(T₂) = O(1) (multi-rule errors).** Multiple alternative rules increase the description length of the false system while keeping it structured. The resulting preference for T₁ should depend on how unpredictable rule selection is relative to the one-rule coherent baseline. This prediction requires matched paired evaluation on the same prompt distribution.
+3. **$K(T_2) > K(T_1)$, but $K(T_2) = O(1)$ (multi-rule errors).** Multiple alternative rules increase the description length of the false system while keeping it structured. The resulting preference for $T_1$ should depend on how unpredictable rule selection is relative to the one-rule coherent baseline. This prediction requires matched paired evaluation on the same prompt distribution.
 
-Experiments 1, 4, and 6 directly test the first two predictions. The random/coherent contrast is consistent with the MDL framing: truth bias is large for random errors (≈83% paired accuracy) and near chance for coherent errors (≈49%). The rebuilt matched multi-rule experiment also fits the same qualitative picture: increasing rule diversity raises pair accuracy from 46.6% at `N=1` to 88.3% at `N=10`.
+Experiments 1, 4, and 6 directly test the first two predictions. The random/coherent contrast is consistent with the MDL framing: truth bias is large for random errors ($\approx$83% paired accuracy) and near chance for coherent errors ($\approx$49%). The rebuilt matched multi-rule experiment also fits the same qualitative picture: increasing rule diversity raises pair accuracy from 46.6% at `N=1` to 88.3% at `N=10`.
 
 ![Figure C](results/figure_conceptual.png)
 
-*Figure C. The Compression--Consistency Principle. (a) MDL prediction: description length of truth K(T₁) is constant, while description length of falsehood K(T₂) depends on error structure -- equal for coherent errors, increasing for multi-rule, maximal for random. (b) The current experiments support the random/coherent contrast and show a graded matched multi-rule curve, with the largest increase between `N=1` and `N=2` and continued growth thereafter.*
+*Figure C. The Compression--Consistency Principle. (a) MDL prediction: description length of truth $K(T_1)$ is constant, while description length of falsehood $K(T_2)$ depends on error structure -- equal for coherent errors, increasing for multi-rule, maximal for random. (b) The current experiments support the random/coherent contrast and show a graded matched multi-rule curve, with the largest increase between `N=1` and `N=2` and continued growth thereafter.*
 
 ### 3.6 Experiment Conditions
 
@@ -210,9 +214,9 @@ At 10/90, the corpus-level metric inverts (DLoss = -0.0016, the model on average
 | Contradictory | 0.1406 +/- 0.0009 | 0.1411 +/- 0.0008 | **+0.0005 +/- 0.0001** | [+0.0004, +0.0006] | **4/4** |
 | Coherent | 0.1374 +/- 0.0005 | 0.1370 +/- 0.0008 | **-0.0004 +/- 0.0004** | [-0.0006, -0.0001] | **0/4** |
 
-![Figure 3](results/figure3_coherence_spectrum.png)
+![Figure 2](results/figure3_coherence_spectrum.png)
 
-*Figure 3. Coherence spectrum: DLoss for three error types at 50/50. The less consistent the error system, the stronger the truth bias.*
+*Figure 2. Coherence spectrum: DLoss for three error types at 50/50. The less consistent the error system, the stronger the truth bias.*
 
 The results form a spectrum: random errors (a maximally incoherent "theory") yield strong bias; contradictory ones (simple rules that break algebra) yield a weak one; coherent ones (a consistent system) yield zero bias.
 
@@ -254,9 +258,9 @@ With random errors, truth bias withstands frequency up to 20/80. With coherent e
 
 The contrast is striking: at 20/80, the model with random errors still prefers truth (69%), whereas the model with coherent errors actively prefers the false system (accuracy 9.6%, i.e. in 91% of pairs the model assigns lower NLL to the coherent-incorrect solution). Truth has no privilege -- when compressibility is equal, frequency wins.
 
-![Figure 2](results/figure2_scatter.png)
+![Figure 3](results/figure2_scatter.png)
 
-*Figure 2. Loss across seeds: points above the diagonal indicate truth bias. Coherent errors (diamonds) lie on the diagonal.*
+*Figure 3. Loss across seeds: points above the diagonal indicate truth bias. Coherent errors (diamonds) lie on the diagonal.*
 
 ## 5. Experiment 2: Observations and Predictive Power
 
@@ -427,7 +431,7 @@ We introduce *multi-rule errors*: for each task type, a pool of N alternative wr
 
 Three observations follow from the matched evaluation:
 
-1. **The effect is real under matched evaluation, but smaller than the legacy public claim.** Recomputing the experiment on multi-rule paired tests yields 46.6% at `N=1`, 77.6% at `N=2`, and 88.3% at `N=10`. The direction of the effect is unchanged, but the old `49% -> 87%` comparison overstated its size by mixing evaluation families.
+1. **The effect is real under matched evaluation.** Evaluating each multi-rule condition on its own paired benchmark yields 46.6% at `N=1`, 77.6% at `N=2`, and 88.3% at `N=10`. Comparing multi-rule models against a single-rule paired test (as done in the initial analysis) would overstate the effect by mixing evaluation families; matched tests are therefore used throughout.
 
 2. **The largest increase is between one rule and two rules, but the curve remains graded.** The move from `N=1` to `N=2` produces the biggest change, yet additional rules continue to strengthen the effect (`77.6% -> 82.8% -> 84.8% -> 88.3%`).
 
@@ -450,7 +454,7 @@ We construct *chained tasks* in which a computation using the coherent false rul
 
 The key distinction from the cross-domain experiment (Appendix B.3): the model sees *one* rule system, but with a verification step that transforms the coherent error into an incompressible numerical residual *within* each task.
 
-**Table 10.** Chained tasks (tiny, 3.5M, 50/50, 4 seeds). Paired evaluation: correct vs coherent-error chains.
+**Table 8.** Chained tasks (tiny, 3.5M, 50/50, 4 seeds). Paired evaluation: correct vs coherent-error chains.
 
 | Seed | Accuracy (chained) | DLoss | Wilcoxon p | Accuracy (coherent ctrl) |
 |:----:|:------------------:|:-----:|:----------:|:------------------------:|
@@ -460,7 +464,7 @@ The key distinction from the cross-domain experiment (Appendix B.3): the model s
 | 45 | 69.8% | +0.0116 | < 10^-6 | 41.4% |
 | **Avg** | **70.9%** | **+0.0115** | -- | **43.3%** |
 
-**Table 10a.** Accuracy by chain type (averaged over 4 seeds).
+**Table 8a.** Accuracy by chain type (averaged over 4 seeds).
 
 | Chain type | Accuracy | n |
 |------------|:--------:|:---:|
@@ -471,11 +475,11 @@ The key distinction from the cross-domain experiment (Appendix B.3): the model s
 | Derivative (power rule + finite diff) | 53.4% | 784 |
 | Tangent (slope + predict) | 34.8% | 801 |
 
-![Figure 10](results/figure10_chained.png)
+![Figure 8](results/figure10_chained.png)
 
-*Figure 10. Chained tasks. Left: verification raises accuracy from 43% (isolated coherent) to 71% on the tiny model. Center: under fixed-step training, the available chained-task runs show a declining size trend (71% -> 61%), while random-error accuracy rises (84% -> 89%). Right: accuracy by chain type (tiny).*
+*Figure 8. Chained tasks. Left: verification raises accuracy from 43% (isolated coherent) to 71% on the tiny model. Center: under fixed-step training, the available chained-task runs show a declining size trend (71% -> 61%), while random-error accuracy rises (84% -> 89%). Right: accuracy by chain type (tiny).*
 
-**Table 10b.** Chained tasks scaling by model size.
+**Table 8b.** Chained tasks scaling by model size.
 
 | Size | Params | Seeds | Accuracy | DLoss | Trend |
 |------|--------|:-----:|:--------:|:-----:|:-----:|
@@ -485,7 +489,7 @@ The key distinction from the cross-domain experiment (Appendix B.3): the model s
 
 For comparison, random error scaling: tiny 83.1% -> small 88.4% -> large 89.1% (up).
 
-**Table 10c.** Control experiment: truncated chains (no verification step).
+**Table 8c.** Control experiment: truncated chains (no verification step).
 
 | Condition | Accuracy (tiny, 4 seeds) | p |
 |-----------|:------------------------:|:-:|
@@ -525,9 +529,9 @@ The experiments support a consistent but narrower picture than a general theory 
 
 6. **Multi-rule errors form a graded boundary case.** Under matched evaluation, increasing the number of false rules raises pair accuracy from 46.6% at `N=1` to 77.6% at `N=2`, 82.8% at `N=3`, 84.8% at `N=5`, and 88.3% at `N=10`. The early jump is substantial, but the revised result is better described as a steep initial rise plus continued growth than as a single sharp transition.
 
-7. **Truth bias transfers to natural language, but weakens (Appendix B).** A synthetic world with 15 rules yields 57.7% pair accuracy (vs 83.1% in mathematics). Natural language absorbs contradictions that would be easier to detect in formal math, and the cross-domain appendix results remain exploratory rather than confirmatory. The natural-language multi-alternative curve is therefore best compared to the revised matched math multi-rule curve, not to the stronger legacy `49% -> 87%` narrative.
+7. **Truth bias transfers to natural language, but weakens (Appendix B).** A synthetic world with 15 rules yields 57.7% pair accuracy (vs 83.1% in mathematics). Natural language absorbs contradictions that would be easier to detect in formal math, and the cross-domain appendix results remain exploratory rather than confirmatory. The natural-language multi-alternative curve is therefore best compared to the matched math multi-rule curve (Section 7.3), which rises much faster at low `N`.
 
-10. **The verification step transforms coherent errors into detectable ones, but the size trend remains tentative.** Chained tasks raise accuracy from 43% to 71% at tiny scale, and a control experiment with truncated chains is consistent with the interpretation that the effect is produced by verification rather than task structure. The decline at larger sizes is interesting, but it should be treated as a fixed-step trend requiring more seeds and compute-matched training.
+8. **The verification step transforms coherent errors into detectable ones, but the size trend remains tentative.** Chained tasks raise accuracy from 43% to 71% at tiny scale, and a control experiment with truncated chains is consistent with the interpretation that the effect is produced by verification rather than task structure. The decline at larger sizes is interesting, but it should be treated as a fixed-step trend requiring more seeds and compute-matched training.
 
 ### 8.2 Analogy with Popper's Falsifiability
 
@@ -541,11 +545,11 @@ Practical analogies from the history of science are appropriate as illustrations
 
 **For alignment.** In these synthetic settings, the training objective does not by itself provide a general "truth compass." It favors well-compressible patterns, and systematic falsehood can therefore remain competitive when it is internally coherent.
 
-**For ML epistemology.** The framework suggests one possible route by which internal truth representations could emerge: if true statements are more compressible than competing false alternatives, gradient descent can favor them without any explicit truth objective. The current experiments do not establish this as a general explanation for benchmark truthfulness or for specific datasets such as TruthfulQA; they only motivate that connection as a hypothesis for future work.
+**For ML epistemology.** The framework suggests one possible route by which internal truth representations could emerge: if true statements are more compressible than competing false alternatives, gradient descent can favor them without any explicit truth objective. The current experiments do not establish this as a general explanation for benchmark truthfulness or for specific datasets such as TruthfulQA (Lin et al., 2022); they only motivate that connection as a hypothesis for future work.
 
 **For scaling.** Under fixed training steps, the current results suggest three different size regimes: a positive trend for random errors, near-chance behavior for coherent errors across all released sizes, and a declining chained-task trend. Because the training budget is not compute-matched, these should be read as empirical tendencies in this setup rather than as scaling laws.
 
-**For understanding hallucinations.** The experiments are consistent with the possibility that coherent misconceptions can remain attractive to the model because they compress well. That interpretation is suggestive, but extending it from synthetic corpora to real hallucination behavior requires direct empirical work.
+**For understanding hallucinations.** Kalai & Vempala (2024) proved that calibrated LMs must hallucinate on rare facts at a rate related to the Good-Turing missing mass of the training corpus; Chlon et al. (2025) connected hallucination patterns to predictable compression failures. Our experiments are consistent with a complementary possibility: coherent misconceptions can remain attractive to the model because they compress well, independently of rarity. Extending this from synthetic corpora to real hallucination behavior requires direct empirical work.
 
 ### 8.4 Limitations
 
@@ -565,7 +569,7 @@ For *real corpora*, the situation is more complex. Scientific knowledge is perva
 
 ### 8.5 Future Experiments
 
-**Extensions of chained tasks.** Experiment 9 confirmed that verification restores truth bias (71% at tiny), but the declining trend at larger sizes remains preliminary. A control experiment with truncated chains (44.3% accuracy, 4 seeds) confirmed that it is verification, not different task structure, that produces the effect (Table 10c). Open directions: (1) increasing verification density (2--3 checks per task) to assess whether this can compensate for the compressor's growing power; (2) combining multi-rule and chained approaches.
+**Extensions of chained tasks.** Experiment 9 confirmed that verification restores truth bias (71% at tiny), but the declining trend at larger sizes remains preliminary. A control experiment with truncated chains (44.3% accuracy, 4 seeds) confirmed that it is verification, not different task structure, that produces the effect (Table 8c). Open directions: (1) increasing verification density (2--3 checks per task) to assess whether this can compensate for the compressor's growing power; (2) combining multi-rule and chained approaches.
 
 **Methodological controls.** Several controlling experiments remain open. First, equalizing the token budget for conditions C/D/E (Section 6): these conditions generate texts of different lengths (loss ~0.24 vs ~0.14), and convergence differences may affect results. Second, we have added deterministic example-level corpus evaluation for the key random and coherent conditions, but extending that robustness check systematically across the remaining secondary conditions would further reduce estimator ambiguity. Third, a factor analysis isolating the contributions of truth value, frequency, coherence, and correction overhead would allow quantitative separation of these intertwined factors.
 
@@ -622,6 +626,8 @@ Joshi, N., Rando, J., Saparov, A., Kim, N., & He, H. (2024). Personas as a Way t
 
 Kadavath, S., Conerly, T., Askell, A., Henighan, T., Drain, D., Perez, E., ... & Kaplan, J. (2022). Language Models (Mostly) Know What They Know. *arXiv:2207.05221*.
 
+Kalai, A. T., & Vempala, S. S. (2024). Calibrated Language Models Must Hallucinate. *STOC 2024*.
+
 Kandpal, N., Deng, H., Roberts, A., Wallace, E., & Raffel, C. (2023). Large Language Models Struggle to Learn Long-Tail Knowledge. *ICML 2023*.
 
 Kang, J., & Choi, J. (2023). Impact of Co-occurrence on Factual Knowledge of Large Language Models. *Findings of EMNLP 2023*.
@@ -636,9 +642,13 @@ Liu, Z., Zhong, Z., & Tegmark, M. (2023). Grokking as Compression: A Nonlinear C
 
 Marks, S., & Tegmark, M. (2023). The Geometry of Truth: Emergent Linear Structure in Large Language Model Representations of True/False Datasets. *arXiv:2310.06824*.
 
+Mészáros, A., Grau-Moya, J., Orseau, L., & Deletang, G. (2024). Rule Extrapolation in Language Models: A Study of Compositional Generalization on OOD Prompts. *NeurIPS 2024*.
+
 Mingard, C., Valle-Perez, G., Sherrington, D., & Louis, A. A. (2021). Is SGD a Bayesian Sampler? Well, Almost. *JMLR 2021*.
 
 Nanda, N., Chan, L., Lieberum, T., Smith, J., & Steinhardt, J. (2023). Progress Measures for Grokking via Mechanistic Interpretability. *ICLR 2023*.
+
+Ortu, F., Jin, Z., Doimo, D., Sachan, M., & Yun, C. (2024). Competition of Mechanisms: Tracing How Language Models Handle Facts and Counterfactuals. *ACL 2024*.
 
 Pan, Z., Wang, S., & Li, J. (2025). Understanding LLM Behaviors via Compression: Data Generation, Knowledge Acquisition and Scaling Laws. *arXiv:2504.09597*.
 
@@ -665,6 +675,8 @@ Zhang, C., Bengio, S., Hardt, M., Recht, B., & Vinyals, O. (2017). Understanding
 All code, data generation scripts, and evaluation scripts are available at https://github.com/Rai220/compression-drives-truth. Experiments were conducted on an Apple Mac M4 with 36GB of unified memory using the MLX framework (v0.31.0). Large model training (86M) was performed on cloud GPU instances. Total computational cost for the full project artifact set was approximately 65 hours of wall-clock time.
 
 ## Appendix B: Natural Language and Cross-Domain Experiments
+
+The experiments in this appendix are exploratory extensions of the main mathematical results. They probe whether the observed patterns transfer beyond formal math, but the effect sizes are smaller, the metric agreement is sometimes mixed, and the conditions are less tightly controlled. These results are not required for the central argument; they serve as directional evidence for future work.
 
 ### B.1 Experiment 6: Synthetic World (Natural Language)
 
@@ -714,9 +726,9 @@ In the mathematical domain (Section 7.3), moving from one coherent error rule to
 | 8 | 51.4% | 86.4% |
 | 16 | 60.0% | 81.5% |
 
-![Figure 9](results/figure9_world_multialt.png)
+![Figure B1](results/figure9_world_multialt.png)
 
-*Figure 9. Multi-alternative errors in the synthetic world. Left: pair accuracy as a function of the number of alternatives `N` -- gradual rise with no steep early jump. Right: comparison with the revised matched math multi-rule curve, which rises much faster at low `N` than the natural-language curve.*
+*Figure B1. Multi-alternative errors in the synthetic world. Left: pair accuracy as a function of the number of alternatives `N` -- gradual rise with no steep early jump. Right: comparison with the revised matched math multi-rule curve, which rises much faster at low `N` than the natural-language curve.*
 
 Four observations:
 
@@ -745,9 +757,9 @@ Base corpus: coherent 50/50 (Section 4.2). We add correct cross-domain tasks of 
 | 25% | 50.6% | **56.0%** | 48.8% |
 | 50% | 47.1% | 45.4% | 47.6% |
 
-![Figure 8](results/figure8_crossdomain.png)
+![Figure B2](results/figure8_crossdomain.png)
 
-*Figure 8. Cross-domain falsification. Left: accuracy by task type — only derivatives respond to cross-domain tasks. Right: non-monotonic effect — peak at 25%, decline at 50% due to corpus dilution.*
+*Figure B2. Cross-domain falsification. Left: accuracy by task type — only derivatives respond to cross-domain tasks. Right: non-monotonic effect — peak at 25%, decline at 50% due to corpus dilution.*
 
 The result is directionally consistent with the hypothesis: accuracy on **derivatives** increases from 35.2% to 56.0% at 25% cross-domain tasks, suggesting a shift toward correct derivatives in that slice of the data. However, the effect is non-monotonic: at 50%, accuracy drops to 45.4%, likely due to dilution of standard patterns. Other task types (algebra, arithmetic, equations) remain at chance, since the cross-domain tasks address only contradictions with derivatives.
 
