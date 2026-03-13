@@ -2,6 +2,8 @@
 
 **Consistency, Description Length, and Inductive Bias in Language Models**
 
+**arXiv:** [2603.11749](https://arxiv.org/abs/2603.11749)
+
 Paper drafts: [`paper_draft_en.md`](paper_draft_en.md) | [`paper_draft_ru.md`](paper_draft_ru.md)
 
 ## Scope
@@ -163,7 +165,9 @@ Some legacy runners are kept for historical runs. Use manifests before citing an
 @article{krestnikov2026compression,
   title={When Does Compression Favor Truth? Consistency, Description Length, and Inductive Bias in Language Models},
   author={Krestnikov, Konstantin},
-  year={2026}
+  year={2026},
+  journal={arXiv preprint arXiv:2603.11749},
+  url={https://arxiv.org/abs/2603.11749}
 }
 ```
 
