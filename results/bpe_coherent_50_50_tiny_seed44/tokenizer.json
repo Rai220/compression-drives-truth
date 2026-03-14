@@ -1,0 +1,1 @@
+{"type": "bpe", "vocab_size": 1000, "model_file": "tokenizer.model", "newline_placeholder": "\u23ce"}

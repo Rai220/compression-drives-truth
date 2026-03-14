@@ -1,0 +1,398 @@
+[
+  {
+    "file": "data/corpus/test_paired_random.jsonl",
+    "n_pairs": 4951,
+    "correct_bytes": 417667,
+    "incorrect_bytes": 414932,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.16265350147366203,
+        "incorrect_ratio": 0.1638774546190701,
+        "delta": 0.0012239531454080743
+      },
+      "bz2": {
+        "correct_ratio": 0.09643088872235536,
+        "incorrect_ratio": 0.09810282166716475,
+        "delta": 0.0016719329448093845
+      }
+    },
+    "by_type": {
+      "algebra": {
+        "n": 1273,
+        "correct_ratio": 0.09378552708734728,
+        "incorrect_ratio": 0.09651458381022372,
+        "delta": 0.0027290567228764467
+      },
+      "arithmetic": {
+        "n": 1244,
+        "correct_ratio": 0.2260529552841897,
+        "incorrect_ratio": 0.22688001319669257,
+        "delta": 0.000827057912502871
+      },
+      "derivative": {
+        "n": 1252,
+        "correct_ratio": 0.07395595501274478,
+        "incorrect_ratio": 0.07835575671151342,
+        "delta": 0.004399801698768635
+      },
+      "equation": {
+        "n": 1182,
+        "correct_ratio": 0.0762643781367258,
+        "incorrect_ratio": 0.07644389828906324,
+        "delta": 0.0001795201523374368
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_coherent.jsonl",
+    "n_pairs": 4981,
+    "correct_bytes": 456795,
+    "incorrect_bytes": 452203,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.16561915082257905,
+        "incorrect_ratio": 0.16578395101315116,
+        "delta": 0.00016480019057210638
+      },
+      "bz2": {
+        "correct_ratio": 0.09805492617038278,
+        "incorrect_ratio": 0.09850664413991062,
+        "delta": 0.00045171796952783727
+      }
+    },
+    "by_type": {
+      "algebra": {
+        "n": 1201,
+        "correct_ratio": 0.094065616565078,
+        "incorrect_ratio": 0.09405294438178753,
+        "delta": -1.2672183290471373e-05
+      },
+      "arithmetic": {
+        "n": 1238,
+        "correct_ratio": 0.22080726304802822,
+        "incorrect_ratio": 0.21959217644610904,
+        "delta": -0.0012150866019191853
+      },
+      "derivative": {
+        "n": 1268,
+        "correct_ratio": 0.07459601880612529,
+        "incorrect_ratio": 0.07582021619571401,
+        "delta": 0.0012241973895887187
+      },
+      "equation": {
+        "n": 1274,
+        "correct_ratio": 0.07395295417284037,
+        "incorrect_ratio": 0.0745303465038125,
+        "delta": 0.0005773923309721346
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_contradictory.jsonl",
+    "n_pairs": 5000,
+    "correct_bytes": 427347,
+    "incorrect_bytes": 424354,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.17447413928259706,
+        "incorrect_ratio": 0.1743662131145223,
+        "delta": -0.00010792616807475675
+      },
+      "bz2": {
+        "correct_ratio": 0.10739282129042675,
+        "incorrect_ratio": 0.10708040928093054,
+        "delta": -0.0003124120094962074
+      }
+    },
+    "by_type": {
+      "algebra": {
+        "n": 1213,
+        "correct_ratio": 0.09434555632429713,
+        "incorrect_ratio": 0.09443361217686647,
+        "delta": 8.805585256933812e-05
+      },
+      "arithmetic": {
+        "n": 1214,
+        "correct_ratio": 0.21961268246156568,
+        "incorrect_ratio": 0.22078477021232706,
+        "delta": 0.0011720877507613858
+      },
+      "derivative": {
+        "n": 1279,
+        "correct_ratio": 0.0753687811991699,
+        "incorrect_ratio": 0.06794567857874557,
+        "delta": -0.007423102620424324
+      },
+      "equation": {
+        "n": 1294,
+        "correct_ratio": 0.08725079990155057,
+        "incorrect_ratio": 0.08680626979882339,
+        "delta": -0.0004445301027271864
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_multirule_2.jsonl",
+    "n_pairs": 4989,
+    "correct_bytes": 460738,
+    "incorrect_bytes": 455794,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.16714922580729177,
+        "incorrect_ratio": 0.17097197418131876,
+        "delta": 0.0038227483740269907
+      },
+      "bz2": {
+        "correct_ratio": 0.10008291046104294,
+        "incorrect_ratio": 0.1042554311816303,
+        "delta": 0.0041725207205873666
+      }
+    },
+    "by_type": {
+      "algebra": {
+        "n": 1247,
+        "correct_ratio": 0.09253082120645627,
+        "incorrect_ratio": 0.09283628410493261,
+        "delta": 0.00030546289847634134
+      },
+      "arithmetic": {
+        "n": 1284,
+        "correct_ratio": 0.21996870773555385,
+        "incorrect_ratio": 0.2203516588431856,
+        "delta": 0.0003829511076317571
+      },
+      "derivative": {
+        "n": 1238,
+        "correct_ratio": 0.07561376007504597,
+        "incorrect_ratio": 0.08892314584239167,
+        "delta": 0.013309385767345694
+      },
+      "equation": {
+        "n": 1220,
+        "correct_ratio": 0.07606329461264064,
+        "incorrect_ratio": 0.07862778041564703,
+        "delta": 0.002564485803006389
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_multirule_3.jsonl",
+    "n_pairs": 4988,
+    "correct_bytes": 460926,
+    "incorrect_bytes": 451603,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.16688145168638785,
+        "incorrect_ratio": 0.17219327595255124,
+        "delta": 0.00531182426616339
+      },
+      "bz2": {
+        "correct_ratio": 0.10018094010752268,
+        "incorrect_ratio": 0.1050635181785772,
+        "delta": 0.004882578071054522
+      }
+    },
+    "by_type": {
+      "algebra": {
+        "n": 1225,
+        "correct_ratio": 0.09384054817007201,
+        "incorrect_ratio": 0.09402708517279544,
+        "delta": 0.0001865370027234331
+      },
+      "arithmetic": {
+        "n": 1284,
+        "correct_ratio": 0.2198481211215508,
+        "incorrect_ratio": 0.22097727815043613,
+        "delta": 0.0011291570288853303
+      },
+      "derivative": {
+        "n": 1245,
+        "correct_ratio": 0.07372023736242089,
+        "incorrect_ratio": 0.09598462909333927,
+        "delta": 0.022264391730918376
+      },
+      "equation": {
+        "n": 1234,
+        "correct_ratio": 0.07563686347564229,
+        "incorrect_ratio": 0.07827366444600914,
+        "delta": 0.002636800970366851
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_multirule_5.jsonl",
+    "n_pairs": 4995,
+    "correct_bytes": 462333,
+    "incorrect_bytes": 454478,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.16724525396197112,
+        "incorrect_ratio": 0.1729852710142185,
+        "delta": 0.005740017052247387
+      },
+      "bz2": {
+        "correct_ratio": 0.0997917085736904,
+        "incorrect_ratio": 0.1059523233247814,
+        "delta": 0.006160614751091004
+      }
+    },
+    "by_type": {
+      "algebra": {
+        "n": 1211,
+        "correct_ratio": 0.09386054357541196,
+        "incorrect_ratio": 0.0943933835117314,
+        "delta": 0.0005328399363194458
+      },
+      "arithmetic": {
+        "n": 1281,
+        "correct_ratio": 0.21987953408504915,
+        "incorrect_ratio": 0.22088594482897833,
+        "delta": 0.0010064107439291814
+      },
+      "derivative": {
+        "n": 1236,
+        "correct_ratio": 0.07422467009204155,
+        "incorrect_ratio": 0.10468807476941103,
+        "delta": 0.03046340467736948
+      },
+      "equation": {
+        "n": 1267,
+        "correct_ratio": 0.0749531377881036,
+        "incorrect_ratio": 0.0764791908940339,
+        "delta": 0.0015260531059303056
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_multirule_10.jsonl",
+    "n_pairs": 4996,
+    "correct_bytes": 459614,
+    "incorrect_bytes": 455411,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.16757540022714712,
+        "incorrect_ratio": 0.17516924272799736,
+        "delta": 0.00759384250085024
+      },
+      "bz2": {
+        "correct_ratio": 0.10023846096942217,
+        "incorrect_ratio": 0.10880720931202803,
+        "delta": 0.008568748342605861
+      }
+    },
+    "by_type": {
+      "algebra": {
+        "n": 1211,
+        "correct_ratio": 0.09386054357541196,
+        "incorrect_ratio": 0.09658222250300082,
+        "delta": 0.002721678927588858
+      },
+      "arithmetic": {
+        "n": 1282,
+        "correct_ratio": 0.21993220266938707,
+        "incorrect_ratio": 0.22104870907639074,
+        "delta": 0.00111650640700367
+      },
+      "derivative": {
+        "n": 1236,
+        "correct_ratio": 0.07422467009204155,
+        "incorrect_ratio": 0.11447715997680562,
+        "delta": 0.04025248988476407
+      },
+      "equation": {
+        "n": 1267,
+        "correct_ratio": 0.07541942296064329,
+        "incorrect_ratio": 0.08065302144249513,
+        "delta": 0.005233598481851842
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_world_random.jsonl",
+    "n_pairs": 5000,
+    "correct_bytes": 362777,
+    "incorrect_bytes": 354509,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.03699517885643246,
+        "incorrect_ratio": 0.05160940907000951,
+        "delta": 0.014614230213577044
+      },
+      "bz2": {
+        "correct_ratio": 0.01872775837497967,
+        "incorrect_ratio": 0.025852658183572207,
+        "delta": 0.007124899808592537
+      }
+    },
+    "by_type": {
+      "animal": {
+        "n": 1480,
+        "correct_ratio": 0.03235781785630728,
+        "incorrect_ratio": 0.045592612842476156,
+        "delta": 0.013234794986168877
+      },
+      "mineral": {
+        "n": 1258,
+        "correct_ratio": 0.02761614851040471,
+        "incorrect_ratio": 0.04110257089848927,
+        "delta": 0.013486422388084555
+      },
+      "plant": {
+        "n": 1126,
+        "correct_ratio": 0.02519110931705225,
+        "incorrect_ratio": 0.03984022544241782,
+        "delta": 0.014649116125365569
+      },
+      "potion": {
+        "n": 1136,
+        "correct_ratio": 0.022071107555471894,
+        "incorrect_ratio": 0.036023603312077664,
+        "delta": 0.01395249575660577
+      }
+    }
+  },
+  {
+    "file": "data/corpus/test_paired_world_coherent.jsonl",
+    "n_pairs": 5000,
+    "correct_bytes": 361650,
+    "incorrect_bytes": 346598,
+    "methods": {
+      "gzip": {
+        "correct_ratio": 0.03735656021014793,
+        "incorrect_ratio": 0.03837298541826554,
+        "delta": 0.0010164252081176078
+      },
+      "bz2": {
+        "correct_ratio": 0.018775058758468133,
+        "incorrect_ratio": 0.01939134097715509,
+        "delta": 0.0006162822186869567
+      }
+    },
+    "by_type": {
+      "animal": {
+        "n": 1501,
+        "correct_ratio": 0.03286366103193906,
+        "incorrect_ratio": 0.03301355261154256,
+        "delta": 0.0001498915796035033
+      },
+      "mineral": {
+        "n": 1209,
+        "correct_ratio": 0.027316656599529275,
+        "incorrect_ratio": 0.029039590188960886,
+        "delta": 0.0017229335894316106
+      },
+      "plant": {
+        "n": 1140,
+        "correct_ratio": 0.02508051379614777,
+        "incorrect_ratio": 0.026040854514267894,
+        "delta": 0.0009603407181201229
+      },
+      "potion": {
+        "n": 1150,
+        "correct_ratio": 0.02228652773564211,
+        "incorrect_ratio": 0.022816584646264345,
+        "delta": 0.0005300569106222348
+      }
+    }
+  }
+]

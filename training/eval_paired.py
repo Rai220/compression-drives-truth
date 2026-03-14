@@ -26,7 +26,7 @@ import mlx.nn as nn
 import numpy as np
 
 from model import create_model
-from tokenizer import CharTokenizer
+from tokenizer import CharTokenizer, load_tokenizer
 
 
 def completion_nll_stats(model, prompt_ids: list[int], completion_ids: list[int],
@@ -119,7 +119,7 @@ def main():
     args = parser.parse_args()
 
     # Load model
-    tokenizer = CharTokenizer().load(args.tokenizer)
+    tokenizer = load_tokenizer(args.tokenizer)
     model = create_model(args.model_size, tokenizer.vocab_size, max_seq_len=args.seq_len)
     model.load_weights(args.weights)
     mx.eval(model.parameters())

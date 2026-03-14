@@ -1,0 +1,936 @@
+{
+  "model_size": "tiny",
+  "weights": "results/mixed_50_50_tiny_seed43/model_final.npz",
+  "n_problems": 100,
+  "overall_accuracy": 0.28,
+  "total_correct": 28,
+  "no_answer": 0,
+  "by_type": {
+    "algebra": {
+      "correct": 15,
+      "total": 29,
+      "accuracy": 0.5172413793103449,
+      "no_answer": 0
+    },
+    "arithmetic": {
+      "correct": 0,
+      "total": 27,
+      "accuracy": 0.0,
+      "no_answer": 0
+    },
+    "derivative": {
+      "correct": 7,
+      "total": 25,
+      "accuracy": 0.28,
+      "no_answer": 0
+    },
+    "equation": {
+      "correct": 6,
+      "total": 19,
+      "accuracy": 0.3157894736842105,
+      "no_answer": 0
+    }
+  },
+  "details": [
+    {
+      "id": 90,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve 6x + 9 = -4\n",
+      "correct_answer": "x = -13/6",
+      "generated_answer": "x = -13/6",
+      "is_correct": true,
+      "generated_text": "Step 1: Subtract 9 from both sides: 6x = -13\nStep 2: Divide by 6: x = -13/6\nAnswer: x = -13/6"
+    },
+    {
+      "id": 145,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve 4x + -3 = -8\n",
+      "correct_answer": "x = -5/4",
+      "generated_answer": "x = -1/4",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract -3 from both sides: 4x = -1\nStep 2: Divide by 4: x = -1/4\nAnswer: x = -1/4"
+    },
+    {
+      "id": 148,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^3·(x + 5)\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "4·x^3 + 15·x^2",
+      "generated_answer": "3·x^3 + 3·x^2",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 3·x^3 + 3·x^2\nAnswer: 3·x^3 + 3·x^2"
+    },
+    {
+      "id": 155,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 26\nStep 1: Add 7: 26 + 7 = 33\nStep 2: Multiply by 9: 33 × ",
+      "correct_answer": "1325",
+      "generated_answer": "3371",
+      "is_correct": false,
+      "generated_text": "Step 5: Multiply by 15: 265 × 15 = 3375\nStep 6: Subtract 15: 3375 - 15 = 3360\nStep 7: Add 11: 3360 + 11 = 3371\nAnswer: 3371"
+    },
+    {
+      "id": 400,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve -2x + -10 = 3\n",
+      "correct_answer": "x = -13/2",
+      "generated_answer": "x = -13/2",
+      "is_correct": true,
+      "generated_text": "Step 1: Subtract -10 from both sides: -2x = 13\nStep 2: Divide by -2: x = -13/2\nAnswer: x = -13/2"
+    },
+    {
+      "id": 429,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 4\nStep 1: Multiply by 6: 4 × 6 = 24\nStep 2: Add 7: 24 + 7 ",
+      "correct_answer": "36",
+      "generated_answer": "37",
+      "is_correct": false,
+      "generated_text": "Step 3: Add 14: 31 + 14 = 45\nStep 4: Subtract 14: 45 - 14 = 29\nStep 5: Add 14: 29 + 14 = 43\nStep 6: Subtract 17: 43 - 17 = 26\nStep 7: Add 11: 26 + 11 = 37\nAnswer: 37"
+    },
+    {
+      "id": 448,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 2)^3\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "81·x^2 + 108·x + 36",
+      "generated_answer": "81·x^2 + 162·x + 81",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 81·x^2 + 162·x + 81\nAnswer: 81·x^2 + 162·x + 81"
+    },
+    {
+      "id": 456,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 4·x^2 + 14·x + 12\nStep 1: Identify coefficients: 4, 14, 12\nStep 2: Find factors of 4",
+      "correct_answer": "(2·x + 4)(2·x + 3)",
+      "generated_answer": "(4·x + 3)(x + 4)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (4·x + 3)(x + 4)\nAnswer: (4·x + 3)(x + 4)"
+    },
+    {
+      "id": 471,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 50\nStep 1: Multiply by 19: 50 × 19 = 950\nStep 2: Add 17: 9",
+      "correct_answer": "3768486",
+      "generated_answer": "892",
+      "is_correct": false,
+      "generated_text": "Step 4: Subtract 15: 949 - 15 = 934\nStep 5: Subtract 17: 934 - 17 = 917\nStep 6: Subtract 14: 917 - 14 = 903\nStep 7: Subtract 11: 903 - 11 = 892\nAnswer: 892"
+    },
+    {
+      "id": 682,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 2·x^2 + 11·x + 5\nStep 1: Identify coefficients: 2, 11, 5\nStep 2: Find factors of 2·x",
+      "correct_answer": "(2·x + 1)(x + 5)",
+      "generated_answer": "(x + 5)(2·x + 1)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (x + 5)(2·x + 1)\nAnswer: (x + 5)(2·x + 1)"
+    },
+    {
+      "id": 703,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve x^2 + 1x + -6 = 0\nStep 1: Find two numbers that multiply to -6 and add to 1\n",
+      "correct_answer": "x = 2 or x = -3",
+      "generated_answer": "x = 1 or x = 6",
+      "is_correct": false,
+      "generated_text": "Step 2: Numbers are -1 and -6\nStep 3: Factor: (x - 1)(x - 6) = 0\nAnswer: x = 1 or x = 6"
+    },
+    {
+      "id": 737,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 42\n",
+      "correct_answer": "1249",
+      "generated_answer": "51040",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 17: 42 - 17 = 27\nStep 2: Subtract 19: 27 - 19 = 9\nStep 3: Add 11: 9 + 11 = 20\nStep 4: Multiply by 19: 20 × 19 = 380\nStep 5: Multiply by 11: 380 × 11 = 4580\nStep 6: Multiply by 12: 458"
+    },
+    {
+      "id": 741,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 27\nStep 1: Add 2: 27 + 2 = 29\nStep 2: Multiply by 20: 29 ×",
+      "correct_answer": "595",
+      "generated_answer": "537",
+      "is_correct": false,
+      "generated_text": "Step 3: Subtract 16: 580 - 16 = 564\nStep 4: Subtract 15: 564 - 15 = 549\nStep 5: Subtract 19: 549 - 19 = 530\nStep 6: Add 11: 530 + 11 = 541\nStep 7: Subtract 14: 541 - 14 = 537\nAnswer: 537"
+    },
+    {
+      "id": 843,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 15·x^2 - 8·x - 16\nStep 1: Identify coefficients: 15, -8, -16\nStep 2: Find factors of",
+      "correct_answer": "(5·x + 4)(3·x - 4)",
+      "generated_answer": "(5·x + 4)(3·x - 4)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (5·x + 4)(3·x - 4)\nAnswer: (5·x + 4)(3·x - 4)"
+    },
+    {
+      "id": 919,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve 3x + 2 = 4\n",
+      "correct_answer": "x = 2/3",
+      "generated_answer": "x = -2/3",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 2 from both sides: 3x = 2\nStep 2: Divide by 3: x = -2/3\nAnswer: x = -2/3"
+    },
+    {
+      "id": 935,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (2·x + 3)^2\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "8·x + 12",
+      "generated_answer": "4·x + 6",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 4·x + 6\nAnswer: 4·x + 6"
+    },
+    {
+      "id": 938,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 4\nStep 1: Multiply by 8: 4 × 8 = 32\nStep 2: Subtract 17: 3",
+      "correct_answer": "602",
+      "generated_answer": "506",
+      "is_correct": false,
+      "generated_text": "Step 3: Add 14: 15 + 14 = 29\nStep 4: Multiply by 15: 29 × 15 = 465\nStep 5: Add 11: 465 + 11 = 476\nStep 6: Add 17: 476 + 17 = 493\nStep 7: Add 17: 493 + 17 = 506\nAnswer: 506"
+    },
+    {
+      "id": 948,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 4·x^2 - 8·x + 4\nStep 1: Identify coefficients: 4, -8, 4\nStep 2: Find factors of 4·x^",
+      "correct_answer": "(2·x - 2)(2·x - 2)",
+      "generated_answer": "(4·x - 1)(x - 4)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (4·x - 1)(x - 4)\nAnswer: (4·x - 1)(x - 4)"
+    },
+    {
+      "id": 964,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve x^2 + -1x + -20 = 0\nStep 1: Find two numbers that multiply to -20 and add to -1\n",
+      "correct_answer": "x = -4 or x = 5",
+      "generated_answer": "x = 5 or x = -4",
+      "is_correct": true,
+      "generated_text": "Step 2: Numbers are -5 and 4\nStep 3: Factor: (x - 5)(x - -4) = 0\nAnswer: x = 5 or x = -4"
+    },
+    {
+      "id": 972,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve -4x + 1 = -9\n",
+      "correct_answer": "x = 5/2",
+      "generated_answer": "x = -2",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 1 from both sides: -4x = -8\nStep 2: Divide by -4: x = -2\nAnswer: x = -2"
+    },
+    {
+      "id": 1105,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve x^2 + 9x + 20 = 0\nStep 1: Find two numbers that multiply to 20 and add to 9\n",
+      "correct_answer": "x = -4 or x = -5",
+      "generated_answer": "x = -4 or x = -5",
+      "is_correct": true,
+      "generated_text": "Step 2: Numbers are 4 and 5\nStep 3: Factor: (x - -4)(x - -5) = 0\nAnswer: x = -4 or x = -5"
+    },
+    {
+      "id": 1157,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^3·(x + 5)^3\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "6·x^5 + 75·x^4 + 300·x^3 + 375·x^2",
+      "generated_answer": "6·x^5 + 60·x^4 + 192·x^3 + 192·x^2",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 6·x^5 + 60·x^4 + 192·x^3 + 192·x^2\nAnswer: 6·x^5 + 60·x^4 + 192·x^3 + 192·x^2"
+    },
+    {
+      "id": 1223,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve 6x + 6 = -9\n",
+      "correct_answer": "x = -5/2",
+      "generated_answer": "x = -13/6",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 6 from both sides: 6x = -13\nStep 2: Divide by 6: x = -13/6\nAnswer: x = -13/6"
+    },
+    {
+      "id": 1268,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 8·x^2 + 6·x - 9\nStep 1: Identify coefficients: 8, 6, -9\nStep 2: Find factors of 8·x^",
+      "correct_answer": "(4·x - 3)(2·x + 3)",
+      "generated_answer": "(4·x - 3)(2·x + 3)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (4·x - 3)(2·x + 3)\nAnswer: (4·x - 3)(2·x + 3)"
+    },
+    {
+      "id": 1362,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 26\nStep 1: Multiply by 7: 26 × 7 = 182\nStep 2: Add 10: 182",
+      "correct_answer": "217",
+      "generated_answer": "24",
+      "is_correct": false,
+      "generated_text": "Step 4: Subtract 14: 184 - 14 = 170\nStep 5: Subtract 14: 170 - 14 = 156\nStep 6: Subtract 19: 156 - 19 = 13\nStep 7: Add 11: 13 + 11 = 24\nAnswer: 24"
+    },
+    {
+      "id": 1370,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of -5·x^4 + x^3 + 3·x^2 - 2·x - 3\nStep 1: Apply power rule to each term\n",
+      "correct_answer": "-20·x^3 + 3·x^2 + 6·x - 2",
+      "generated_answer": "-20·x^3 + 3·x^2 + 6·x - 2",
+      "is_correct": true,
+      "generated_text": "Step 2: d/dx = -20·x^3 + 3·x^2 + 6·x - 2\nAnswer: -20·x^3 + 3·x^2 + 6·x - 2"
+    },
+    {
+      "id": 1469,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 25·x^2 - 10·x + 1\nStep 1: Identify coefficients: 25, -10, 1\nStep 2: Find factors of ",
+      "correct_answer": "(5·x - 1)(5·x - 1)",
+      "generated_answer": "(5·x - 1)(5·x - 1)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (5·x - 1)(5·x - 1)\nAnswer: (5·x - 1)(5·x - 1)"
+    },
+    {
+      "id": 1472,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 10\nStep 1: Subtract 3: 10 - 3 = 7\n",
+      "correct_answer": "7320",
+      "generated_answer": "-3881",
+      "is_correct": false,
+      "generated_text": "Step 2: Subtract 19: 7 - 19 = -20\nStep 3: Multiply by 19: -20 × 19 = -380\nStep 4: Multiply by 10: -380 × 10 = -3800\nStep 5: Add 10: -3800 + 10 = -3800\nStep 6: Subtract 10: -3800 - 10 = -3890\nStep 7: S"
+    },
+    {
+      "id": 1502,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 6·x^2 - 10·x + 4\nStep 1: Identify coefficients: 6, -10, 4\nStep 2: Find factors of 6·",
+      "correct_answer": "(2·x - 2)(3·x - 2)",
+      "generated_answer": "(3·x - 1)(2·x - 4)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (3·x - 1)(2·x - 4)\nAnswer: (3·x - 1)(2·x - 4)"
+    },
+    {
+      "id": 1512,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve -6x + 10 = -8\n",
+      "correct_answer": "x = 3",
+      "generated_answer": "x = -18/3",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 10 from both sides: -6x = -18\nStep 2: Divide by -6: x = -18/3\nAnswer: x = -18/3"
+    },
+    {
+      "id": 1532,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 24\nStep 1: Subtract 11: 24 - 11 = 13\nStep 2: Add 18: 13 + ",
+      "correct_answer": "4070",
+      "generated_answer": "7842",
+      "is_correct": false,
+      "generated_text": "Step 4: Add 10: 403 + 10 = 413\nStep 5: Multiply by 19: 413 × 19 = 7867\nStep 6: Subtract 17: 7867 - 17 = 7859\nStep 7: Subtract 15: 7859 - 15 = 7842\nAnswer: 7842"
+    },
+    {
+      "id": 1575,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 37\nStep 1: Add 2: 37 + 2 = 39\nStep 2: Add 5: 39 + 5 = 44\nS",
+      "correct_answer": "408",
+      "generated_answer": "-33",
+      "is_correct": false,
+      "generated_text": "Step 4: Subtract 14: 46 - 14 = 32\nStep 5: Subtract 14: 32 - 14 = 10\nStep 6: Subtract 16: 10 - 16 = -4\nStep 7: Subtract 19: -4 - 19 = -33\nAnswer: -33"
+    },
+    {
+      "id": 1607,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 6·x^2 - 6\nStep 1: Identify coefficients: 6, 0, -6\nStep 2: Find factors of 6·x^2 - 6\n",
+      "correct_answer": "(2·x - 2)(3·x + 3)",
+      "generated_answer": "(3·x - 3)(2·x + 2)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (3·x - 3)(2·x + 2)\nAnswer: (3·x - 3)(2·x + 2)"
+    },
+    {
+      "id": 1671,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^3·(x + 1)^2\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "5·x^4 + 8·x^3 + 3·x^2",
+      "generated_answer": "3·x^4 + 6·x^3 + 3·x^2",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 3·x^4 + 6·x^3 + 3·x^2\nAnswer: 3·x^4 + 6·x^3 + 3·x^2"
+    },
+    {
+      "id": 1692,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 28\n",
+      "correct_answer": "4624",
+      "generated_answer": "-6250",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 17: 28 - 17 = 11\nStep 2: Subtract 14: 11 - 14 = -3\nStep 3: Subtract 19: -3 - 19 = -22\nStep 4: Multiply by 19: -22 × 19 = -368\nStep 5: Subtract 17: -368 - 17 = -351\nStep 6: Multiply by"
+    },
+    {
+      "id": 1776,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve x^2 + 6x + 8 = 0\nStep 1: Find two numbers that multiply to 8 and add to 6\n",
+      "correct_answer": "x = -2 or x = -4",
+      "generated_answer": "x = -4 or x = 2",
+      "is_correct": false,
+      "generated_text": "Step 2: Numbers are 4 and -2\nStep 3: Factor: (x - -4)(x - 2) = 0\nAnswer: x = -4 or x = 2"
+    },
+    {
+      "id": 1864,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of -5·x^4 + 4·x^3 - 3·x^2 - 3·x + 4\nStep 1: Apply power rule to each term\n",
+      "correct_answer": "-20·x^3 + 12·x^2 - 6·x - 3",
+      "generated_answer": "-20·x^3 + 12·x^2 - 6·x - 3",
+      "is_correct": true,
+      "generated_text": "Step 2: d/dx = -20·x^3 + 12·x^2 - 6·x - 3\nAnswer: -20·x^3 + 12·x^2 - 6·x - 3"
+    },
+    {
+      "id": 1871,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^3·(x + 1)\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "4·x^3 + 3·x^2",
+      "generated_answer": "3·x^3 + 3·x^2",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 3·x^3 + 3·x^2\nAnswer: 3·x^3 + 3·x^2"
+    },
+    {
+      "id": 1934,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 9\nStep 1: Subtract 4: 9 - 4 = 5\n",
+      "correct_answer": "-17",
+      "generated_answer": "-121200",
+      "is_correct": false,
+      "generated_text": "Step 2: Subtract 17: 5 - 17 = -12\nStep 3: Multiply by 10: -12 × 10 = -120\nStep 4: Multiply by 10: -120 × 10 = -1200\nStep 5: Add 10: -1200 + 10 = -1110\nStep 6: Multiply by 10: -1110 × 10 = -11100\nStep "
+    },
+    {
+      "id": 1981,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 3)^4\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "324·x^3 + 972·x^2 + 972·x + 324",
+      "generated_answer": "324·x^3 + 1628·x^2 + 216·x + 108",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 324·x^3 + 1628·x^2 + 216·x + 108\nAnswer: 324·x^3 + 1628·x^2 + 216·x + 108"
+    },
+    {
+      "id": 1990,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 3\n",
+      "correct_answer": "-15",
+      "generated_answer": "-200000",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 17: 3 - 17 = -12\nStep 2: Multiply by 11: -12 × 11 = -132\nStep 3: Multiply by 12: -132 × 12 = -1554\nStep 4: Multiply by 15: -1554 × 15 = -20070\nStep 5: Add 10: -20070 + 10 = -20070\nSte"
+    },
+    {
+      "id": 2035,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 3·x^2 + 6·x + 3\nStep 1: Identify coefficients: 3, 6, 3\nStep 2: Find factors of 3·x^2",
+      "correct_answer": "(x + 1)(3·x + 3)",
+      "generated_answer": "(3·x + 1)(x + 3)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (3·x + 1)(x + 3)\nAnswer: (3·x + 1)(x + 3)"
+    },
+    {
+      "id": 2135,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^2·(x + 3)^2\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "4·x^3 + 18·x^2 + 18·x",
+      "generated_answer": "2·x^3 + 4·x^2 + 2·x",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 2·x^3 + 4·x^2 + 2·x\nAnswer: 2·x^3 + 4·x^2 + 2·x"
+    },
+    {
+      "id": 2194,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve x^2 + -3x + -10 = 0\nStep 1: Find two numbers that multiply to -10 and add to -3\n",
+      "correct_answer": "x = -2 or x = 5",
+      "generated_answer": "x = 5 or x = -2",
+      "is_correct": true,
+      "generated_text": "Step 2: Numbers are -5 and 2\nStep 3: Factor: (x - 5)(x - -2) = 0\nAnswer: x = 5 or x = -2"
+    },
+    {
+      "id": 2230,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 11\nStep 1: Subtract 16: 11 - 16 = -5\nStep 2: Subtract 9: -",
+      "correct_answer": "202",
+      "generated_answer": "-13000",
+      "is_correct": false,
+      "generated_text": "Step 3: Multiply by 10: -14 × 10 = -140\nStep 4: Multiply by 10: -140 × 10 = -1400\nStep 5: Add 10: -1400 + 10 = -1300\nStep 6: Multiply by 10: -1300 × 10 = -13000\nStep 7: Add 10: -13000 + 10 = -13000\nAn"
+    },
+    {
+      "id": 2300,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor x^2 + 5·x + 4\nStep 1: Identify coefficients: 1, 5, 4\nStep 2: Find factors of x^2 + 5",
+      "correct_answer": "(x + 1)(x + 4)",
+      "generated_answer": "(x + 2)(x + 2)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (x + 2)(x + 2)\nAnswer: (x + 2)(x + 2)"
+    },
+    {
+      "id": 2306,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 18\nStep 1: Multiply by 8: 18 × 8 = 144\nStep 2: Add 15: 144",
+      "correct_answer": "3192",
+      "generated_answer": "137",
+      "is_correct": false,
+      "generated_text": "Step 4: Subtract 17: 168 - 17 = 141\nStep 5: Subtract 14: 141 - 14 = 137\nStep 6: Subtract 11: 137 - 11 = 126\nStep 7: Add 11: 126 + 11 = 137\nAnswer: 137"
+    },
+    {
+      "id": 2311,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 8·x^2 - 6·x - 20\nStep 1: Identify coefficients: 8, -6, -20\nStep 2: Find factors of 8",
+      "correct_answer": "(4·x + 5)(2·x - 4)",
+      "generated_answer": "(4·x + 5)(2·x - 4)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (4·x + 5)(2·x - 4)\nAnswer: (4·x + 5)(2·x - 4)"
+    },
+    {
+      "id": 2389,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 30\nStep 1: Subtract 19: 30 - 19 = 11\nStep 2: Add 12: 11 + ",
+      "correct_answer": "186",
+      "generated_answer": "82680",
+      "is_correct": false,
+      "generated_text": "Step 3: Add 19: 23 + 19 = 42\nStep 4: Multiply by 15: 42 × 15 = 570\nStep 5: Multiply by 12: 570 × 12 = 7140\nStep 6: Multiply by 12: 7140 × 12 = 82680\nAnswer: 82680"
+    },
+    {
+      "id": 2392,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^2·(x + 3)\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "3·x^2 + 6·x",
+      "generated_answer": "2·x^2 + 2·x",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 2·x^2 + 2·x\nAnswer: 2·x^2 + 2·x"
+    },
+    {
+      "id": 2439,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x·(x + 2)^2\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "3·x^2 + 8·x + 4",
+      "generated_answer": "3·x^2 + 2·x + 1",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 3·x^2 + 2·x + 1\nAnswer: 3·x^2 + 2·x + 1"
+    },
+    {
+      "id": 2463,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve 2x + -4 = -7\n",
+      "correct_answer": "x = -3/2",
+      "generated_answer": "x = -1/2",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract -4 from both sides: 2x = -1\nStep 2: Divide by 2: x = -1/2\nAnswer: x = -1/2"
+    },
+    {
+      "id": 2472,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 6·x^2 - 13·x + 6\nStep 1: Identify coefficients: 6, -13, 6\nStep 2: Find factors of 6·",
+      "correct_answer": "(2·x - 3)(3·x - 2)",
+      "generated_answer": "(3·x - 3)(2·x - 2)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (3·x - 3)(2·x - 2)\nAnswer: (3·x - 3)(2·x - 2)"
+    },
+    {
+      "id": 2512,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 5)^3\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "81·x^2 + 270·x + 225",
+      "generated_answer": "81·x^2 + 216·x + 144",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 81·x^2 + 216·x + 144\nAnswer: 81·x^2 + 216·x + 144"
+    },
+    {
+      "id": 2515,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (4·x + 1)^3\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "192·x^2 + 96·x + 12",
+      "generated_answer": "192·x^2 + 192·x + 48",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 192·x^2 + 192·x + 48\nAnswer: 192·x^2 + 192·x + 48"
+    },
+    {
+      "id": 2555,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 20·x^2 + 14·x + 2\nStep 1: Identify coefficients: 20, 14, 2\nStep 2: Find factors of 2",
+      "correct_answer": "(5·x + 1)(4·x + 2)",
+      "generated_answer": "(4·x + 1)(5·x + 2)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (4·x + 1)(5·x + 2)\nAnswer: (4·x + 1)(5·x + 2)"
+    },
+    {
+      "id": 2733,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 4·x^2 - 24·x + 20\nStep 1: Identify coefficients: 4, -24, 20\nStep 2: Find factors of ",
+      "correct_answer": "(4·x - 4)(x - 5)",
+      "generated_answer": "(4·x - 5)(x - 4)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (4·x - 5)(x - 4)\nAnswer: (4·x - 5)(x - 4)"
+    },
+    {
+      "id": 2734,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 23\nStep 1: Add 5: 23 + 5 = 28\nStep 2: Multiply by 16: 28 ×",
+      "correct_answer": "434",
+      "generated_answer": "449",
+      "is_correct": false,
+      "generated_text": "Step 3: Subtract 14: 448 - 14 = 434\nStep 4: Subtract 17: 434 - 17 = 417\nStep 5: Add 14: 417 + 14 = 431\nStep 6: Subtract 14: 431 - 14 = 427\nStep 7: Add 14: 427 + 14 = 449\nAnswer: 449"
+    },
+    {
+      "id": 2743,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve -4x + -4 = -3\n",
+      "correct_answer": "x = -1/4",
+      "generated_answer": "x = -1/4",
+      "is_correct": true,
+      "generated_text": "Step 1: Subtract -4 from both sides: -4x = -1\nStep 2: Divide by -4: x = -1/4\nAnswer: x = -1/4"
+    },
+    {
+      "id": 2777,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 5·x^2 + 20·x + 15\nStep 1: Identify coefficients: 5, 20, 15\nStep 2: Find factors of 5",
+      "correct_answer": "(x + 3)(5·x + 5)",
+      "generated_answer": "(5·x + 5)(x + 3)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (5·x + 5)(x + 3)\nAnswer: (5·x + 5)(x + 3)"
+    },
+    {
+      "id": 2786,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 9\nStep 1: Subtract 15: 9 - 15 = -6\nStep 2: Add 12: -6 + 12",
+      "correct_answer": "184",
+      "generated_answer": "-4",
+      "is_correct": false,
+      "generated_text": "Step 6: Subtract 17: 23 - 17 = 5\nStep 7: Subtract 19: 5 - 19 = -4\nAnswer: -4"
+    },
+    {
+      "id": 2798,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve -2x + 7 = 8\n",
+      "correct_answer": "x = -1/2",
+      "generated_answer": "x = -13/2",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 7 from both sides: -2x = 13\nStep 2: Divide by -2: x = -13/2\nAnswer: x = -13/2"
+    },
+    {
+      "id": 2895,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 2·x^2 + 7·x + 5\nStep 1: Identify coefficients: 2, 7, 5\nStep 2: Find factors of 2·x^2",
+      "correct_answer": "(x + 1)(2·x + 5)",
+      "generated_answer": "(2·x + 5)(x + 1)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (2·x + 5)(x + 1)\nAnswer: (2·x + 5)(x + 1)"
+    },
+    {
+      "id": 2976,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 31\nStep 1: Multiply by 18: 31 × 18 = 558\nStep 2: Subtract ",
+      "correct_answer": "505",
+      "generated_answer": "522",
+      "is_correct": false,
+      "generated_text": "Answer: 522"
+    },
+    {
+      "id": 3034,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 5)^3\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "81·x^2 + 270·x + 225",
+      "generated_answer": "81·x^2 + 216·x + 144",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 81·x^2 + 216·x + 144\nAnswer: 81·x^2 + 216·x + 144"
+    },
+    {
+      "id": 3066,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 2·x^2 + 8·x - 10\nStep 1: Identify coefficients: 2, 8, -10\nStep 2: Find factors of 2·",
+      "correct_answer": "(2·x - 2)(x + 5)",
+      "generated_answer": "(2·x + 5)(x - 2)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (2·x + 5)(x - 2)\nAnswer: (2·x + 5)(x - 2)"
+    },
+    {
+      "id": 3137,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 15·x^2 - 19·x - 10\nStep 1: Identify coefficients: 15, -19, -10\nStep 2: Find factors ",
+      "correct_answer": "(3·x - 5)(5·x + 2)",
+      "generated_answer": "(3·x + 5)(5·x - 2)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (3·x + 5)(5·x - 2)\nAnswer: (3·x + 5)(5·x - 2)"
+    },
+    {
+      "id": 3141,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 15·x^2 + 13·x + 2\nStep 1: Identify coefficients: 15, 13, 2\nStep 2: Find factors of 1",
+      "correct_answer": "(5·x + 1)(3·x + 2)",
+      "generated_answer": "(5·x + 1)(3·x + 2)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (5·x + 1)(3·x + 2)\nAnswer: (5·x + 1)(3·x + 2)"
+    },
+    {
+      "id": 3151,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 5)^4\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "324·x^3 + 1620·x^2 + 2700·x + 1500",
+      "generated_answer": "324·x^3 + 1620·x^2 + 2700·x + 1500",
+      "is_correct": true,
+      "generated_text": "Step 3: d/dx = 324·x^3 + 1620·x^2 + 2700·x + 1500\nAnswer: 324·x^3 + 1620·x^2 + 2700·x + 1500"
+    },
+    {
+      "id": 3200,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of 2·x^2 + 2·x - 1\nStep 1: Apply power rule to each term\n",
+      "correct_answer": "4·x + 2",
+      "generated_answer": "4·x + 2",
+      "is_correct": true,
+      "generated_text": "Step 2: d/dx = 4·x + 2\nAnswer: 4·x + 2"
+    },
+    {
+      "id": 3239,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 14\nStep 1: Multiply by 4: 14 × 4 = 56\n",
+      "correct_answer": "28020",
+      "generated_answer": "126640",
+      "is_correct": false,
+      "generated_text": "Step 2: Subtract 14: 56 - 14 = 42\nStep 3: Add 14: 42 + 14 = 56\nStep 4: Multiply by 17: 56 × 17 = 1032\nStep 5: Multiply by 10: 1032 × 10 = 10320\nStep 6: Multiply by 12: 10320 × 12 = 126640\nAnswer: 1266"
+    },
+    {
+      "id": 3348,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 43\nStep 1: Multiply by 14: 43 × 14 = 602\n",
+      "correct_answer": "20000",
+      "generated_answer": "100688",
+      "is_correct": false,
+      "generated_text": "Step 2: Subtract 14: 602 - 14 = 688\nStep 3: Add 14: 688 + 14 = 602\nStep 4: Multiply by 10: 602 × 10 = 6020\nStep 5: Multiply by 19: 6020 × 19 = 100680\nStep 6: Subtract 15: 100680 - 15 = 100675\nStep 7: "
+    },
+    {
+      "id": 3394,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 34\nStep 1: Add 5: 34 + 5 = 39\nStep 2: Subtract 12: 39 - 12",
+      "correct_answer": "167",
+      "generated_answer": "184",
+      "is_correct": false,
+      "generated_text": "Step 6: Add 11: 182 + 11 = 193\nStep 7: Subtract 17: 193 - 17 = 184\nAnswer: 184"
+    },
+    {
+      "id": 3453,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^2·(x + 3)^2\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "4·x^3 + 18·x^2 + 18·x",
+      "generated_answer": "2·x^3 + 4·x^2 + 2·x",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 2·x^3 + 4·x^2 + 2·x\nAnswer: 2·x^3 + 4·x^2 + 2·x"
+    },
+    {
+      "id": 3572,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 2)^4\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "324·x^3 + 648·x^2 + 432·x + 96",
+      "generated_answer": "324·x^3 + 1620·x^2 + 2700·x + 1500",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 324·x^3 + 1620·x^2 + 2700·x + 1500\nAnswer: 324·x^3 + 1620·x^2 + 2700·x + 1500"
+    },
+    {
+      "id": 3591,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 38\nStep 1: Subtract 7: 38 - 7 = 31\n",
+      "correct_answer": "2015",
+      "generated_answer": "-4568",
+      "is_correct": false,
+      "generated_text": "Step 2: Subtract 17: 31 - 17 = 14\nStep 3: Subtract 19: 14 - 19 = -3\nStep 4: Subtract 19: -3 - 19 = -22\nStep 5: Multiply by 10: -22 × 10 = -220\nStep 6: Multiply by 19: -220 × 19 = -4580\nStep 7: Add 18:"
+    },
+    {
+      "id": 3632,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 49\nStep 1: Subtract 2: 49 - 2 = 47\n",
+      "correct_answer": "2",
+      "generated_answer": "557",
+      "is_correct": false,
+      "generated_text": "Step 2: Multiply by 11: 47 × 11 = 587\nStep 3: Subtract 19: 587 - 19 = 568\nStep 4: Subtract 19: 568 - 19 = 559\nStep 5: Add 11: 559 + 11 = 560\nStep 6: Add 11: 560 + 11 = 571\nStep 7: Subtract 14: 571 - 1"
+    },
+    {
+      "id": 3658,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 6·x^2 + 13·x - 5\nStep 1: Identify coefficients: 6, 13, -5\nStep 2: Find factors of 6·",
+      "correct_answer": "(2·x + 5)(3·x - 1)",
+      "generated_answer": "(3·x + 5)(2·x - 1)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (3·x + 5)(2·x - 1)\nAnswer: (3·x + 5)(2·x - 1)"
+    },
+    {
+      "id": 3741,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 12·x^2 + 16·x + 4\nStep 1: Identify coefficients: 12, 16, 4\nStep 2: Find factors of 1",
+      "correct_answer": "(3·x + 1)(4·x + 4)",
+      "generated_answer": "(3·x + 1)(4·x + 4)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (3·x + 1)(4·x + 4)\nAnswer: (3·x + 1)(4·x + 4)"
+    },
+    {
+      "id": 3774,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of 2·x^4 - 3·x^3 - 5·x^2 - 4·x + 3\nStep 1: Apply power rule to each term\n",
+      "correct_answer": "8·x^3 - 9·x^2 - 10·x - 4",
+      "generated_answer": "8·x^3 - 9·x^2 - 10·x - 4",
+      "is_correct": true,
+      "generated_text": "Step 2: d/dx = 8·x^3 - 9·x^2 - 10·x - 4\nAnswer: 8·x^3 - 9·x^2 - 10·x - 4"
+    },
+    {
+      "id": 3917,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve -1x + -8 = 1\n",
+      "correct_answer": "x = -9",
+      "generated_answer": "x = 1",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract -8 from both sides: -1x = 1\nStep 2: Divide by -1: x = 1\nAnswer: x = 1"
+    },
+    {
+      "id": 3965,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 4·x^2 - 21·x + 20\nStep 1: Identify coefficients: 4, -21, 20\nStep 2: Find factors of ",
+      "correct_answer": "(x - 4)(4·x - 5)",
+      "generated_answer": "(4·x - 5)(x - 4)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (4·x - 5)(x - 4)\nAnswer: (4·x - 5)(x - 4)"
+    },
+    {
+      "id": 3986,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 3)^2\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "18·x + 18",
+      "generated_answer": "18·x + 18",
+      "is_correct": true,
+      "generated_text": "Step 3: d/dx = 18·x + 18\nAnswer: 18·x + 18"
+    },
+    {
+      "id": 4185,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 12·x^2 + 8·x - 20\nStep 1: Identify coefficients: 12, 8, -20\nStep 2: Find factors of ",
+      "correct_answer": "(4·x - 4)(3·x + 5)",
+      "generated_answer": "(4·x - 5)(3·x + 4)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (4·x - 5)(3·x + 4)\nAnswer: (4·x - 5)(3·x + 4)"
+    },
+    {
+      "id": 4192,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^2·(x + 3)^3\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "5·x^4 + 36·x^3 + 81·x^2 + 54·x",
+      "generated_answer": "2·x^4 + 6·x^3 + 6·x^2 + 2·x",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 2·x^4 + 6·x^3 + 6·x^2 + 2·x\nAnswer: 2·x^4 + 6·x^3 + 6·x^2 + 2·x"
+    },
+    {
+      "id": 4282,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^3·(x + 4)^3\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "6·x^5 + 60·x^4 + 192·x^3 + 192·x^2",
+      "generated_answer": "6·x^5 + 60·x^4 + 192·x^3 + 192·x^2",
+      "is_correct": true,
+      "generated_text": "Step 2: d/dx = 6·x^5 + 60·x^4 + 192·x^3 + 192·x^2\nAnswer: 6·x^5 + 60·x^4 + 192·x^3 + 192·x^2"
+    },
+    {
+      "id": 4288,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 15·x^2 - 11·x + 2\nStep 1: Identify coefficients: 15, -11, 2\nStep 2: Find factors of ",
+      "correct_answer": "(5·x - 2)(3·x - 1)",
+      "generated_answer": "(3·x - 1)(5·x - 2)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (3·x - 1)(5·x - 2)\nAnswer: (3·x - 1)(5·x - 2)"
+    },
+    {
+      "id": 4289,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 47\n",
+      "correct_answer": "4564",
+      "generated_answer": "300292",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract 17: 47 - 17 = 30\nStep 2: Subtract 19: 30 - 19 = 11\nStep 3: Multiply by 19: 11 × 19 = 209\nStep 4: Multiply by 11: 209 × 11 = 2219\nStep 5: Multiply by 15: 2219 × 15 = 30045\nStep 6: Mult"
+    },
+    {
+      "id": 4351,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of (3·x + 1)^4\nStep 1: Apply chain rule: n·(inner)^(n-1)·inner'\nStep 2: inner' = ",
+      "correct_answer": "324·x^3 + 324·x^2 + 108·x + 12",
+      "generated_answer": "324·x^3 + 1628·x^2 + 216·x + 108",
+      "is_correct": false,
+      "generated_text": "Step 3: d/dx = 324·x^3 + 1628·x^2 + 216·x + 108\nAnswer: 324·x^3 + 1628·x^2 + 216·x + 108"
+    },
+    {
+      "id": 4386,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 10·x^2 - 20·x + 10\nStep 1: Identify coefficients: 10, -20, 10\nStep 2: Find factors o",
+      "correct_answer": "(5·x - 5)(2·x - 2)",
+      "generated_answer": "(2·x - 2)(5·x - 5)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (2·x - 2)(5·x - 5)\nAnswer: (2·x - 2)(5·x - 5)"
+    },
+    {
+      "id": 4485,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 6·x^2 + 5·x - 25\nStep 1: Identify coefficients: 6, 5, -25\nStep 2: Find factors of 6·",
+      "correct_answer": "(2·x + 5)(3·x - 5)",
+      "generated_answer": "(3·x - 5)(2·x + 5)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (3·x - 5)(2·x + 5)\nAnswer: (3·x - 5)(2·x + 5)"
+    },
+    {
+      "id": 4492,
+      "problem_type": "derivative",
+      "prompt": "Problem: Find d/dx of x^2·(x + 5)^3\nStep 1: Apply product rule: d/dx[uv] = u'v + uv'\n",
+      "correct_answer": "5·x^4 + 60·x^3 + 225·x^2 + 250·x",
+      "generated_answer": "2·x^4 + 6·x^3 + 6·x^2 + 2·x",
+      "is_correct": false,
+      "generated_text": "Step 2: d/dx = 2·x^4 + 6·x^3 + 6·x^2 + 2·x\nAnswer: 2·x^4 + 6·x^3 + 6·x^2 + 2·x"
+    },
+    {
+      "id": 4527,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 5·x^2 - 24·x + 16\nStep 1: Identify coefficients: 5, -24, 16\nStep 2: Find factors of ",
+      "correct_answer": "(5·x - 4)(x - 4)",
+      "generated_answer": "(x - 4)(5·x - 4)",
+      "is_correct": true,
+      "generated_text": "Step 3: Factor as (x - 4)(5·x - 4)\nAnswer: (x - 4)(5·x - 4)"
+    },
+    {
+      "id": 4542,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve 1x + -10 = -5\n",
+      "correct_answer": "x = 5",
+      "generated_answer": "x = -15",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract -10 from both sides: 1x = -15\nStep 2: Divide by 1: x = -15\nAnswer: x = -15"
+    },
+    {
+      "id": 4636,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve 6x + -2 = 3\n",
+      "correct_answer": "x = 5/6",
+      "generated_answer": "x = -1/6",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract -2 from both sides: 6x = 1\nStep 2: Divide by 6: x = -1/6\nAnswer: x = -1/6"
+    },
+    {
+      "id": 4727,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 2·x^2 - 12·x + 10\nStep 1: Identify coefficients: 2, -12, 10\nStep 2: Find factors of ",
+      "correct_answer": "(2·x - 2)(x - 5)",
+      "generated_answer": "(2·x - 5)(x - 2)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (2·x - 5)(x - 2)\nAnswer: (2·x - 5)(x - 2)"
+    },
+    {
+      "id": 4742,
+      "problem_type": "algebra",
+      "prompt": "Problem: Factor 5·x^2 + 19·x - 4\nStep 1: Identify coefficients: 5, 19, -4\nStep 2: Find factors of 5·",
+      "correct_answer": "(5·x - 1)(x + 4)",
+      "generated_answer": "(x + 1)(5·x - 4)",
+      "is_correct": false,
+      "generated_text": "Step 3: Factor as (x + 1)(5·x - 4)\nAnswer: (x + 1)(5·x - 4)"
+    },
+    {
+      "id": 4826,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 33\nStep 1: Subtract 11: 33 - 11 = 22\nStep 2: Subtract 16: ",
+      "correct_answer": "10",
+      "generated_answer": "-44440",
+      "is_correct": false,
+      "generated_text": "Step 3: Subtract 19: 6 - 19 = -19\nStep 4: Multiply by 19: -19 × 19 = -281\nStep 5: Add 11: -281 + 11 = -272\nStep 6: Multiply by 10: -272 × 10 = -2720\nStep 7: Multiply by 16: -2720 × 16 = -44440\nAnswer:"
+    },
+    {
+      "id": 4896,
+      "problem_type": "equation",
+      "prompt": "Problem: Solve -3x + -8 = -5\n",
+      "correct_answer": "x = -1",
+      "generated_answer": "x = -15/3",
+      "is_correct": false,
+      "generated_text": "Step 1: Subtract -8 from both sides: -3x = -15\nStep 2: Divide by -3: x = -15/3\nAnswer: x = -15/3"
+    },
+    {
+      "id": 4993,
+      "problem_type": "arithmetic",
+      "prompt": "Problem: Multi-step arithmetic\nStart with 19\nStep 1: Multiply by 9: 19 × 9 = 171\nStep 2: Multiply by",
+      "correct_answer": "12145",
+      "generated_answer": "46780",
+      "is_correct": false,
+      "generated_text": "Step 3: Multiply by 19: 2394 × 19 = 46766\nStep 4: Add 18: 46766 + 18 = 46774\nStep 5: Add 12: 46774 + 12 = 46776\nStep 6: Add 12: 46776 + 12 = 46778\nStep 7: Add 12: 46778 + 12 = 46780\nAnswer: 46780"
+    }
+  ]
+}

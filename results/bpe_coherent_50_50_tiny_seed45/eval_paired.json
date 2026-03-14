@@ -1,0 +1,115 @@
+{
+  "model_size": "tiny",
+  "weights": "results/bpe_coherent_50_50_tiny_seed45/model_final.npz",
+  "n_pairs": 4981,
+  "avg_correct_nll": 0.19854186730600912,
+  "avg_incorrect_nll": 0.1956165759178825,
+  "delta": -0.0029252913881266107,
+  "pair_accuracy": 0.45312186307970287,
+  "correct_wins": 2257,
+  "bootstrap_ci_95": [
+    -0.004066594604904529,
+    -0.0017972981752297037
+  ],
+  "wilcoxon_p": 0.9999999999979332,
+  "robustness": {
+    "sum_nll": {
+      "avg_correct": 8.611617107176919,
+      "avg_incorrect": 8.441290054328947,
+      "delta": -0.17032705284797167,
+      "pair_accuracy": 0.4414776149367597,
+      "correct_wins": 2199
+    },
+    "length_matched_mean_nll": {
+      "avg_correct": 0.20093928911562264,
+      "avg_incorrect": 0.1966974142654763,
+      "delta": -0.004241874850146349,
+      "pair_accuracy": 0.44167837783577596,
+      "correct_wins": 2200
+    },
+    "completion_lengths": {
+      "correct_mean": 30.640032122063843,
+      "incorrect_mean": 30.44408753262397,
+      "correct_min": 13,
+      "incorrect_min": 11,
+      "correct_max": 104,
+      "incorrect_max": 103,
+      "correct_scored_mean": 30.640032122063843,
+      "incorrect_scored_mean": 30.44408753262397
+    }
+  },
+  "by_type": {
+    "algebra": {
+      "n": 1201,
+      "avg_correct_nll": 0.08447495923299991,
+      "avg_incorrect_nll": 0.0847995912786243,
+      "delta": 0.0003246320456243845,
+      "accuracy": 0.533721898417985,
+      "correct_wins": 641,
+      "avg_correct_sum_nll": 1.7739741438929981,
+      "avg_incorrect_sum_nll": 1.7807914168511103,
+      "sum_delta": 0.006817272958112186,
+      "sum_accuracy": 0.533721898417985,
+      "sum_correct_wins": 641,
+      "avg_correct_matched_mean_nll": 0.08447495923299991,
+      "avg_incorrect_matched_mean_nll": 0.0847995912786243,
+      "matched_mean_delta": 0.0003246320456243845,
+      "matched_mean_accuracy": 0.533721898417985,
+      "matched_mean_correct_wins": 641
+    },
+    "arithmetic": {
+      "n": 1238,
+      "avg_correct_nll": 0.6268192989357975,
+      "avg_incorrect_nll": 0.6193723461530788,
+      "delta": -0.007446952782718674,
+      "accuracy": 0.4596122778675283,
+      "correct_wins": 569,
+      "avg_correct_sum_nll": 30.532748117970726,
+      "avg_incorrect_sum_nll": 29.976633702418336,
+      "sum_delta": -0.5561144155523898,
+      "sum_accuracy": 0.4168012924071082,
+      "sum_correct_wins": 516,
+      "avg_correct_matched_mean_nll": 0.6353777849416322,
+      "avg_incorrect_matched_mean_nll": 0.6234506096866167,
+      "matched_mean_delta": -0.01192717525501552,
+      "matched_mean_accuracy": 0.4184168012924071,
+      "matched_mean_correct_wins": 518
+    },
+    "derivative": {
+      "n": 1268,
+      "avg_correct_nll": 0.03937119573113699,
+      "avg_incorrect_nll": 0.033278037575024406,
+      "delta": -0.0060931581561125825,
+      "accuracy": 0.2854889589905363,
+      "correct_wins": 362,
+      "avg_correct_sum_nll": 0.9263749964981801,
+      "avg_incorrect_sum_nll": 0.7502341229080778,
+      "sum_delta": -0.17614087359010233,
+      "sum_accuracy": 0.27996845425867506,
+      "sum_correct_wins": 355,
+      "avg_correct_matched_mean_nll": 0.040187135946669277,
+      "avg_incorrect_matched_mean_nll": 0.033278037575024406,
+      "matched_mean_delta": -0.00690909837164487,
+      "matched_mean_accuracy": 0.27996845425867506,
+      "matched_mean_correct_wins": 355
+    },
+    "equation": {
+      "n": 1274,
+      "avg_correct_nll": 0.04831840403673423,
+      "avg_incorrect_nll": 0.04987624751860479,
+      "delta": 0.0015578434818705605,
+      "accuracy": 0.5376766091051806,
+      "correct_wins": 685,
+      "avg_correct_sum_nll": 1.4048164822804496,
+      "avg_incorrect_sum_nll": 1.4481678787542849,
+      "sum_delta": 0.043351396473835235,
+      "sum_accuracy": 0.5392464678178964,
+      "sum_correct_wins": 687,
+      "avg_correct_matched_mean_nll": 0.0485629410580582,
+      "avg_incorrect_matched_mean_nll": 0.050139014830099804,
+      "matched_mean_delta": 0.0015760737720416015,
+      "matched_mean_accuracy": 0.5384615384615384,
+      "matched_mean_correct_wins": 686
+    }
+  }
+}

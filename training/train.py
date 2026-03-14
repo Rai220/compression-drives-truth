@@ -16,7 +16,7 @@ import mlx.optimizers as optim
 import numpy as np
 
 from model import GPT, MODEL_CONFIGS, create_model
-from tokenizer import CharTokenizer
+from tokenizer import CharTokenizer, BPETokenizer, load_tokenizer
 
 
 # ---------------------------------------------------------------------------
@@ -68,6 +68,8 @@ def train(
     seed: int = 42,
     output_dir: str = "results/baseline",
     resume: bool = False,
+    tokenizer_type: str = "char",
+    bpe_vocab_size: int = 1000,
 ):
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
@@ -80,7 +82,11 @@ def train(
     with open(corpus_path) as f:
         train_text = f.read()
 
-    tokenizer = CharTokenizer().build(train_text)
+    if tokenizer_type == "bpe":
+        tokenizer = BPETokenizer().build(train_text, vocab_size=bpe_vocab_size)
+        print(f"BPE tokenizer: vocab_size={tokenizer.vocab_size}")
+    else:
+        tokenizer = CharTokenizer().build(train_text)
     tokenizer.save(str(output / "tokenizer.json"))
     print(f"Vocab size: {tokenizer.vocab_size}")
 
@@ -221,6 +227,8 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--output", type=str, default="results/baseline")
     parser.add_argument("--resume", action="store_true", help="Resume from latest checkpoint in output dir")
+    parser.add_argument("--tokenizer-type", type=str, default="char", choices=["char", "bpe"])
+    parser.add_argument("--bpe-vocab-size", type=int, default=1000)
     args = parser.parse_args()
 
     train(
@@ -236,4 +244,6 @@ if __name__ == "__main__":
         seed=args.seed,
         output_dir=args.output,
         resume=args.resume,
+        tokenizer_type=args.tokenizer_type,
+        bpe_vocab_size=args.bpe_vocab_size,
     )
