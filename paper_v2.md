@@ -1,4 +1,4 @@
-# Compression Favors Consistency, Not Truth: Signal Extraction and Error Structure in Language Model Training
+# Truth as a Compression Artifact in Language Model Training
 
 **Author:** Konstantin Krestnikov
 **Date:** 03.2026
