@@ -7,7 +7,7 @@
 
 When a language model trains on contradictory answers to the same question, which answer does it prefer? We propose the Compression--Consistency Principle: gradient descent favors the most compressible answer cluster, not truth per se. Truth bias emerges only when false alternatives fail to compress efficiently.
 
-We test this with a denoising design: GPT-2 style transformers (3.5M--86M parameters) train on corpora where each mathematical problem appears with both correct and incorrect answers. With random errors, models extract the correct signal with increasing fidelity as capacity grows (65% pair accuracy at 3.5M, 85% at 86M). Replacing random errors with a coherent but wrong rule system eliminates the effect entirely (accuracy ~44--51% across all sizes). Increasing the noise ratio degrades signal extraction gracefully (1:2 noise: 75% at 86M; 1:4 noise: 66%, plateau). Even without any correct signal in the corpus, models show a slight preference for correct answers (54--56%), though this result requires further controls.
+We test this with a denoising design: GPT-2 style transformers (3.5M--86M parameters) train on corpora where each mathematical problem appears with both correct and incorrect answers. With random errors, models extract the correct signal with increasing fidelity as capacity grows (65% pair accuracy at 3.5M, 85% at 86M). Replacing random errors with a coherent but wrong rule system eliminates the effect entirely (accuracy ~44--51% across all sizes). Increasing the noise ratio degrades signal extraction gracefully (1:2 noise: 75% at 86M; 1:4 noise: 66%, plateau).
 
 Supporting experiments confirm the mechanism: the compression ratio gap between correct and incorrect completions predicts model behavior across 9 conditions (Spearman rho = 0.68, p = 0.042); multi-rule errors produce a graded curve from chance to 88% as rule diversity increases; and a real-text Wikipedia entity-substitution experiment reproduces the random/coherent contrast (71% vs 46%). The main implication: compression alone does not reliably favor truth over well-structured falsehood.
 
@@ -110,9 +110,9 @@ Five conditions vary the structure and ratio of contradictory answers:
 | **J2** | 1 | 1 coherent | 1:1 | Control: coherent errors eliminate bias |
 | **J3** | 1 | 2 random | 1:2 | Noise tolerance at moderate noise |
 | **J4** | 1 | 4 random | 1:4 | Noise tolerance at high noise |
-| **J5** | 0 | 2 random | 0:2 | Zero-signal baseline |
+| **J5** | 0 | 2 random | 0:2 | Zero-signal baseline (Appendix E) |
 
-J5 contains no correct answers: the model trains entirely on random wrong derivations. This tests whether structural regularities of correct math are detectable even when never explicitly presented.
+J5 contains no correct answers: the model trains entirely on random wrong derivations. This tests whether structural regularities of correct math are detectable even when never explicitly presented. Results are exploratory and reported in Appendix E.
 
 ### 3.3 Standard Corpus Design
 
@@ -178,7 +178,9 @@ This is the central result of the paper. When the same problem appears with both
 
 **Scaling.** J1 accuracy increases monotonically: 65% -> 75% -> 81% -> 85%. The largest gain is between tiny and small (+9 pp), with continued growth through large. J2 accuracy converges toward 50% as models grow, consistent with the MDL prediction that equal-description-length systems at equal frequency should be indistinguishable.
 
-**Below-chance accuracy at small scale (J2).** The tiny model's J2 accuracy of 43.5% is consistently below 50%, replicating a pattern seen across multiple independent setups: standard coherent (47.2%), BPE coherent (45.9%), synthetic world coherent (46.6%). This reflects textual simplicity asymmetry: the coherent error rules used here produce shorter or simpler outputs than the true rules (e.g., dropping a coefficient in derivatives, multiplying by b-1 instead of b). As capacity grows, the model represents both systems with equal per-token accuracy, and the asymmetry disappears. This observation reinforces the main thesis: the compressor does not distinguish truth from falsehood; it prefers whichever system is easier to encode.
+**Below-chance accuracy at small scale (J2).** The tiny model's J2 accuracy of 43.5% is consistently below 50%, replicating a pattern seen across multiple independent setups: standard coherent (47.2%), BPE coherent (45.9%), synthetic world coherent (46.6%). This reflects textual simplicity asymmetry: the coherent error rules used here produce shorter or simpler outputs than the true rules (e.g., dropping a coefficient in derivatives, multiplying by b-1 instead of b). As capacity grows, the model represents both systems with equal per-token accuracy, and the asymmetry disappears.
+
+This below-chance pattern is not a confound -- it is additional evidence for the thesis. A potential concern is that the coherent condition conflates "systematic falseness" with "surface textual simplicity," and that the model prefers coherent errors not because they are equally compressible as a *system* but because they are locally simpler as *text*. The below-chance accuracy directly addresses this: when the false system happens to be textually simpler, the compressor *actively prefers it over truth*. This is exactly what the Compression--Consistency Principle predicts. The compressor has no concept of correctness; it follows whichever signal is easier to encode. When coherent errors are simpler, they win; when they are matched in complexity, the result is chance; truth never receives preferential treatment. The convergence to 50% at larger model sizes further confirms that the asymmetry is surface-level: once the model has enough capacity to represent both systems equally well, neither is preferred.
 
 ### 4.2 J3 and J4: Noise Tolerance
 
@@ -205,26 +207,7 @@ Three observations:
 
 3. **Signal-to-noise logic.** The results follow a clean signal-to-noise logic: for each noise ratio, there exists a model capacity at which accuracy saturates. Lower ratios saturate at higher accuracy. This is consistent with the MDL framing: as the number of unique wrong answers grows, the compressibility advantage of the correct cluster persists but must compete with sheer volume of noise.
 
-### 4.3 J5: Zero-Signal Baseline
-
-J5 is the most provocative condition: the model trains on 2 random wrong answers per problem with no correct answers whatsoever. At evaluation, it is tested on paired comparison of correct vs random incorrect completions.
-
-**Table 3.** J5: zero-signal baseline (2 seeds per size).
-
-| Size | Accuracy | DLoss | Seeds |
-|------|:--------:|:-----:|:-----:|
-| tiny | 53.8% +/- 0.5% | -0.046 | 2 |
-| small | 59.9% +/- 1.0% | -0.076 | 2 |
-| medium | 58.1% +/- 2.7% | -0.090 | 2 |
-| large | 56.1% +/- 2.9% | -0.111 | 2 |
-
-The model assigns lower NLL to the correct answer in 54--60% of pairs, despite never having seen correct answers during training. However, the mean DLoss is strongly negative, indicating that on average the model assigns much lower NLL to the incorrect answers it trained on. The distribution is left-skewed: most pairs slightly favor truth, but a minority strongly favor the trained-on errors.
-
-**Interpretation.** One possibility is that correct mathematical derivations have intrinsic structural regularities (simpler numbers, consistent sign patterns, shorter expressions) that make them marginally more compressible even when the model has never seen them. Another possibility is format or length artifacts. We present J5 as an interesting observation requiring further controls, not as an established result.
-
-**Why J5 is not a headline claim.** Without controls for digit distribution, expression length, and answer format, the above-chance accuracy could reflect surface-level biases rather than deep mathematical structure. We therefore do not include J5 in the abstract and recommend treating it as a direction for future investigation.
-
-### 4.4 Comparison with the Standard (Non-Denoising) Setup
+### 4.3 Comparison with the Standard (Non-Denoising) Setup
 
 In the standard setup, different problems receive correct or incorrect solutions -- no problem appears with both. How does this compare to the denoising design?
 
@@ -515,7 +498,7 @@ Our results admit an interpretive analogy with the falsifiability criterion (Pop
 
 **Domain specificity.** Mathematics has an unusually crisp correct/incorrect distinction. The effect weakens in natural language: 71% on Wikipedia, 58% in synthetic world, vs 83--89% in math. Natural language provides more degrees of freedom to encode contradictory information, reducing the compressibility gap.
 
-**Seed counts.** Core denoising conditions (J1, J2) use 4 seeds at tiny/small/medium and 2 seeds at large. Noise tolerance conditions (J3, J4, J5) use 2 seeds. This is sufficient to show directional stability but does not tightly estimate between-run variability for the 2-seed conditions.
+**Seed counts.** Core denoising conditions (J1, J2) use 4 seeds at tiny/small/medium and 2 seeds at large. Noise tolerance conditions (J3, J4) use 2 seeds. This is sufficient to show directional stability but does not tightly estimate between-run variability for the 2-seed conditions.
 
 **Denoising vs standard comparison.** The denoising and standard experiments use different implementations (PyTorch vs MLX) with slightly different parameter counts. While the qualitative comparison is valid, exact numerical differences should be interpreted with this caveat.
 
@@ -705,3 +688,24 @@ Adding correct cross-domain tasks (using true differentiation rules) to a cohere
 | J5 | small | 60.6% | 59.2% | 59.9% |
 | J5 | medium | 60.0% | 56.2% | 58.1% |
 | J5 | large | 54.0% | 58.1% | 56.1% |
+
+---
+
+## Appendix E: J5 Zero-Signal Baseline (Exploratory)
+
+J5 is the most provocative condition: the model trains on 2 random wrong answers per problem with no correct answers whatsoever. At evaluation, it is tested on paired comparison of correct vs random incorrect completions.
+
+**Table E1.** J5: zero-signal baseline (2 seeds per size).
+
+| Size | Accuracy | DLoss | Seeds |
+|------|:--------:|:-----:|:-----:|
+| tiny | 53.8% +/- 0.5% | -0.046 | 2 |
+| small | 59.9% +/- 1.0% | -0.076 | 2 |
+| medium | 58.1% +/- 2.7% | -0.090 | 2 |
+| large | 56.1% +/- 2.9% | -0.111 | 2 |
+
+The model assigns lower NLL to the correct answer in 54--60% of pairs, despite never having seen correct answers during training. However, the mean DLoss is strongly negative, indicating that on average the model assigns much lower NLL to the incorrect answers it trained on. The distribution is left-skewed: most pairs slightly favor truth, but a minority strongly favor the trained-on errors.
+
+**Interpretation.** One possibility is that correct mathematical derivations have intrinsic structural regularities (simpler numbers, consistent sign patterns, shorter expressions) that make them marginally more compressible even when the model has never seen them. Another possibility is format or length artifacts. We present J5 as an interesting observation requiring further controls, not as an established result.
+
+**Why J5 is not a headline claim.** Without controls for digit distribution, expression length, and answer format, the above-chance accuracy could reflect surface-level biases rather than deep mathematical structure. We therefore do not include J5 in the abstract and recommend treating it as a direction for future investigation.

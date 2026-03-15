@@ -222,24 +222,22 @@ cond_colors = {
     'j1': '#3b82f6',   # blue
     'j3': '#22c55e',   # green
     'j4': '#f59e0b',   # amber
-    'j5': '#ef4444',   # red
     'j2': '#8b5cf6',   # purple
 }
 cond_labels = {
     'j1': 'J1: 1:1 random',
     'j3': 'J3: 1:2 random',
     'j4': 'J4: 1:4 random',
-    'j5': 'J5: 0:2 (no correct)',
     'j2': 'J2: 1:1 coherent',
 }
 
-# Left: accuracy vs model size for all conditions
+# Left: accuracy vs model size for J1/J3/J4/J2 (J5 moved to Appendix E)
 ax = axes[0]
-for cond in ['j1', 'j3', 'j4', 'j5', 'j2']:
+for cond in ['j1', 'j3', 'j4', 'j2']:
     means = [acc_mean_std(cond, sz)[0] for sz in sizes_list]
     stds = [acc_mean_std(cond, sz)[1] for sz in sizes_list]
     marker = 'D' if cond == 'j2' else 'o'
-    ls = '--' if cond in ('j2', 'j5') else '-'
+    ls = '--' if cond == 'j2' else '-'
     ax.errorbar(size_params, means, yerr=stds,
                 fmt=f'{marker}{ls}', markersize=8, capsize=4,
                 color=cond_colors[cond], linewidth=2, markeredgewidth=1.5,
