@@ -40,7 +40,7 @@ MAX_PARA_LEN = 1000
 def load_wikipedia(n_articles=10000, seed=42):
     """Load Wikipedia articles from HuggingFace."""
     print(f"Loading Wikipedia dataset (first {n_articles} articles)...")
-    ds = load_dataset("wikipedia", "20220301.en", split="train", streaming=True)
+    ds = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True)
     articles = []
     for i, example in enumerate(ds):
         if i >= n_articles:
