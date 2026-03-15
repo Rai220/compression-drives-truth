@@ -18,6 +18,9 @@ data/test_sample.meta.json
 # OS
 .DS_Store
 
+# Local environment
+.python-version
+
 # ============================================
 # Standard Python .gitignore
 # ============================================

@@ -1,35 +1,25 @@
-# When Does Compression Favor Truth?
+# Compression Favors Consistency, Not Truth
 
-**Consistency, Description Length, and Inductive Bias in Language Models**
+**Signal Extraction and Error Structure in Language Model Training**
 
 **arXiv:** [2603.11749](https://arxiv.org/abs/2603.11749)
 
-Paper drafts: [`paper_draft_en.md`](paper_draft_en.md) | [`paper_draft_ru.md`](paper_draft_ru.md)
+Paper: [`paper_v2.md`](paper_v2.md) (current) | [`archive/paper_draft_en.md`](archive/paper_draft_en.md) (v1)
 
 ## Scope
 
 This repository studies a narrow empirical question: when does next-token compression pressure align with correct continuations in **controlled synthetic corpora**?
 
-The project does **not** claim a general theory of truthfulness in language models. The currently supported reading is narrower:
-
-- compression favors **predictable and internally consistent** structure in the corpus
-- random errors can make correct solutions easier to compress than false ones
-- coherent false systems can remove that advantage
-- paired evaluation is more trustworthy here than corpus-level loss on separate text streams
-
-For current claim status and artifact coverage, see:
-
-- [`results_manifest.md`](results_manifest.md)
-- [`claims_manifest.md`](claims_manifest.md)
-- [`data/eval_inputs_manifest.md`](data/eval_inputs_manifest.md)
+The central finding is the **Compression--Consistency Principle**: gradient descent favors the most compressible answer cluster, not truth per se. Truth bias emerges only when false alternatives fail to compress efficiently.
 
 ## Main Supported Findings
 
-- **Random errors**: paired evaluation shows strong preference for correct completions at `50/50` and still positive preference at `10/90`.
-- **Coherent errors**: replacing random mistakes with an internally consistent but wrong rule system removes the paired preference in the available fixed-step runs.
-- **Multi-rule errors**: matched paired evaluation yields a graded rise from the coherent `N=1` baseline to strong preference by `N=10`; the old legacy `49% -> 87%` narrative should not be used.
-- **Synthetic world**: the same broad pattern appears in natural-language-like synthetic data, but more weakly.
-- **Chained verification**: inserting an internal verification step restores paired preference at tiny scale, while larger-size trends remain preliminary.
+- **Denoising (core)**: when the same problem appears with contradictory answers, models extract the correct signal from random noise (65% at 3.5M, 85% at 86M) but cannot distinguish truth from coherent falsehood (~44--51% across all sizes).
+- **Noise tolerance**: increasing the noise ratio degrades signal extraction gracefully (1:2 -> 75%, 1:4 -> 66% at 86M), with capacity-dependent plateaus.
+- **Compressibility predicts bias**: the gzip compression ratio gap predicts paired accuracy across 9 conditions (Spearman rho = 0.68, p = 0.042).
+- **Multi-rule errors**: a graded curve from chance (N=1) to 88% (N=10) as rule diversity increases.
+- **Wikipedia transfer**: random/coherent contrast reproduces on real text (71% vs 46%).
+- **Chained verification**: embedding verification steps restores truth bias from 43% to 71%.
 
 ## Environment
 
