@@ -224,7 +224,8 @@ def gen_derivative(rng: random.Random, inject_error: bool = False):
     elif func_type == 'product':
         a = rng.randint(1, 3)
         b = rng.randint(1, 3)
-        f = x**a * (x + rng.randint(1, 5))**b
+        k = rng.randint(1, 5)
+        f = x**a * (x + k)**b
         df = diff(f, x)
         df_simplified = simplify(df)
 
@@ -233,7 +234,7 @@ def gen_derivative(rng: random.Random, inject_error: bool = False):
 
         if inject_error:
             # Forget the second term of product rule
-            wrong_df = diff(x**a, x) * (x + 1)**b
+            wrong_df = diff(x**a, x) * (x + k)**b
             steps.append(f"Step 2: d/dx = {fmt_expr(expand(wrong_df))}")
             steps.append(f"Answer: {fmt_expr(expand(wrong_df))}")
         else:
