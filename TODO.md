@@ -79,6 +79,16 @@
 Предпочтительный вариант — **D5 (code domain)**: формальный домен с чёткой границей correct/incorrect. Программы на Python + trace execution, random vs coherent-wrong (off-by-one).
 - **Go/No-Go:** только после завершения п.3 и п.4. Если BPE убивает эффект — extension не нужен.
 
+### Exp K: Wikipedia entity substitution — DONE (2026-03-15)
+
+- [x] Pipeline: Wikipedia (10K articles) → spaCy NER → entity substitution (random / coherent)
+- [x] 32 модели: 4 sizes (tiny/small/medium/large) × 2 modes × 4 seeds
+- [x] Random: 69.6% (tiny) → 71.4% (large). Truth bias подтверждён на реальном тексте.
+- [x] Coherent: 48.7% (tiny) → 45.9% (large). Нет truth bias, обратный scaling.
+- [x] Per-type: GPE/LOC/NORP (77-82%) > PERSON/DATE (67-70%) > ORG (65%) > CARDINAL (61%)
+- [x] Результаты: `results/experiment_wiki.json`
+- **Значение:** третий домен (после math и synthetic world), подтверждающий Compression-Consistency Principle на реальном естественном языке
+
 ### 11. LaTeX + финализация — PARTIALLY DONE
 
 - [x] LaTeX version: `latex/paper.tex` + `latex/paper.pdf` (pandoc + tectonic)

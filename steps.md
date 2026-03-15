@@ -1103,3 +1103,116 @@ results/coherent_50_50_small_seed{42,43,44,45}/ (модели + eval)
 - [ ] Medium (26M) — в процессе обучения
 - [ ] Large (86M) — после medium
 - [ ] Обновить таблицы в статье с данными масштабирования
+
+---
+
+## Experiment K: Wikipedia Entity Substitution
+
+**Дата:** 2026-03-15
+
+### Мотивация
+
+Все предыдущие эксперименты использовали синтетические данные (математика, выдуманный мир). Для подтверждения переноса на реальный естественный язык нужен эксперимент на реальных текстах с верифицируемой ground truth.
+
+### Дизайн
+
+**Источник:** Wikipedia (10,000 статей из `wikimedia/wikipedia 20231101.en` через HuggingFace).
+
+**Pipeline:**
+1. Извлечение параграфов (200-1000 символов, фильтрация таблиц/списков/wiki-разметки)
+2. NER через spaCy `en_core_web_sm` — извлечение entities типов PERSON, GPE, ORG, DATE, CARDINAL, NORP, LOC, EVENT
+3. Фильтрация: только параграфы с ≥2 entities (27,000 из 130,568)
+4. Разделение на train pool (22,000) и test pool (5,000)
+
+**Два режима ошибок:**
+- **Random:** каждый entity заменяется случайным из пула того же типа (независимо). Например: "South Africa" → "Isherwood", "July" → "August 1969"
+- **Coherent:** детерминистическая циклическая перестановка внутри каждого типа entity. "France" всегда → одно и то же, "Germany" всегда → одно и то же. Систематическая, запоминаемая замена.
+
+**Корпуса:** 20,000 параграфов train (50% correct / 50% corrupted), 2,000 paired test.
+
+**Модели:** 4 размера × 2 modes × 4 seeds = 32 модели. char-level tokenizer (vocab ~771-773). MLX на Apple M4 Pro 48GB.
+
+### Результаты
+
+#### Random errors (paired accuracy)
+
+| Size | Params | Seed 42 | Seed 43 | Seed 44 | Seed 45 | Mean ± std |
+|------|--------|---------|---------|---------|---------|------------|
+| tiny | 3.9M | 69.5% | 69.5% | 69.7% | 69.6% | 69.6% ± 0.1% |
+| small | 11.7M | 70.7% | 70.7% | 71.2% | 70.3% | 70.7% ± 0.4% |
+| medium | 26.7M | 71.9% | 70.5% | 71.3% | 72.3% | 71.5% ± 0.8% |
+| large | 87.2M | 72.1% | 71.5% | 70.4% | 71.8% | 71.4% ± 0.7% |
+
+#### Coherent errors (paired accuracy)
+
+| Size | Seed 42 | Seed 43 | Seed 44 | Seed 45 | Mean ± std |
+|------|---------|---------|---------|---------|------------|
+| tiny | 48.3% | 48.9% | 49.3% | 48.3% | 48.7% ± 0.5% |
+| small | 46.9% | 47.1% | 46.5% | 46.1% | 46.7% ± 0.4% |
+| medium | 46.1% | 45.5% | 47.1% | 46.9% | 46.4% ± 0.8% |
+| large | 46.5% | 44.5% | 47.6% | 44.9% | 45.9% ± 1.5% |
+
+#### ΔLoss (NLL incorrect − NLL correct)
+
+| Size | Random | Coherent |
+|------|--------|----------|
+| tiny | +0.0638 ± 0.0007 | +0.0002 ± 0.0013 |
+| small | +0.0654 ± 0.0003 | −0.0022 ± 0.0022 |
+| medium | +0.0684 ± 0.0010 | −0.0027 ± 0.0019 |
+| large | +0.0688 ± 0.0006 | −0.0051 ± 0.0021 |
+
+#### Per-type accuracy (random, tiny seed42)
+
+| Entity type | Accuracy | N pairs |
+|-------------|----------|---------|
+| LOC | 82.2% | 45 |
+| GPE | 77.1% | 301 |
+| NORP | 78.7% | 197 |
+| PERSON | 69.9% | 402 |
+| DATE | 67.3% | 211 |
+| ORG | 65.2% | 664 |
+| CARDINAL | 61.0% | 172 |
+| EVENT | 50.0% | 8 |
+
+### Ключевые выводы
+
+1. **Truth bias подтверждён на реальном тексте Wikipedia:** random errors → 69.6-71.4% (все 16 seeds значимо >50%)
+2. **Coherent errors: нет truth bias** — 45.9-48.7% (ниже 50%, модель слегка *предпочитает* coherent ошибки)
+3. **Масштабирование:** слабый рост random accuracy (69.6% → 71.4%), плато на medium-large
+4. **Coherent errors: обратный scaling** — accuracy *падает* с размером (48.7% → 45.9%), модель лучше выучивает coherent mapping
+5. **Эффект слабее math** (71% vs 89%) — ожидаемо: entity relationships в Wikipedia менее регулярны, чем математические правила
+6. **Per-type:** географические entities (GPE, LOC, NORP) легче всего отличить — их контекст наиболее специфичен
+7. **Стабильность:** std < 1% для random, < 1.5% для coherent — очень стабильные результаты
+
+### Сравнение с предыдущими экспериментами (tiny, random 50/50)
+
+| Domain | Paired accuracy | ΔLoss |
+|--------|----------------|-------|
+| Math (Exp 1) | 83.1% ± 2.0% | +0.048 |
+| Synthetic world (Exp G) | 57.7% ± 1.7% | +0.034 |
+| **Wikipedia (Exp K)** | **69.6% ± 0.1%** | **+0.064** |
+
+Wikipedia занимает промежуточное положение между math и synthetic world по accuracy, но ΔLoss выше — это связано с бОльшим vocab и длиной замен.
+
+### Артефакты
+
+```
+data/generate_wiki_corpus.py          — pipeline генерации
+run_wiki_experiment.sh                — скрипт запуска
+data/corpus/train_wiki_random_50_50.txt     — train random (10.8 MB)
+data/corpus/train_wiki_coherent_50_50.txt   — train coherent (10.8 MB)
+data/corpus/test_paired_wiki_random.jsonl   — paired test random (2000 пар)
+data/corpus/test_paired_wiki_coherent.jsonl — paired test coherent (2000 пар)
+results/experiment_wiki.json          — сводный JSON со всеми результатами
+results/wiki_{random,coherent}_50_50_{tiny,small,medium,large}_seed{42-45}/ — 32 модели
+.venv-wiki/                           — Python 3.13 venv (spaCy + MLX + scipy)
+```
+
+### Время обучения (параллельно по 2 модели)
+
+| Size | ~Время/модель | Total wall time |
+|------|--------------|-----------------|
+| tiny | 7-13 мин | ~50 мин |
+| small | 33 мин | ~2.2 часа |
+| medium | 69 мин | ~4.6 часа |
+| large | 186-197 мин | ~13 часов |
