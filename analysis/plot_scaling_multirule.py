@@ -43,14 +43,7 @@ def std_or_nan(values):
 
 # --- Random errors ---
 # Tiny (seed42 is in mixed_50_50_tiny/, others in mixed_50_50_tiny_seed4X/)
-tiny_rand_accs, tiny_rand_deltas = [], []
-for path in ['mixed_50_50_tiny/eval_paired.json',
-             'mixed_50_50_tiny_seed43/eval_paired.json',
-             'mixed_50_50_tiny_seed44/eval_paired.json',
-             'mixed_50_50_tiny_seed45/eval_paired.json']:
-    a, d = load_paired(os.path.join(RESULTS, path))
-    tiny_rand_accs.append(a)
-    tiny_rand_deltas.append(d)
+tiny_rand_accs, tiny_rand_deltas = load_seeds('mixed_50_50_tiny_seed{seed}')
 
 small_rand_accs, small_rand_deltas = load_seeds('mixed_50_50_small_seed{seed}')
 medium_rand_accs, medium_rand_deltas = load_seeds('mixed_50_50_medium_seed{seed}')
