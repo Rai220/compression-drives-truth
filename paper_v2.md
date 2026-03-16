@@ -5,7 +5,7 @@
 
 ## Abstract
 
-Why do language models trained on contradictory data prefer correct answers? In controlled experiments with small transformers, we show that this preference is a compression artifact rather than an inherent property of the training objective. We train GPT-2 style transformers (3.5M--86M parameters) on corpora where each mathematical problem appears with both correct and incorrect solutions -- a denoising design that directly models conflicting information about the same fact. When errors are random, models extract the correct signal with accuracy scaling from 65% to 85% with model size. When errors follow a coherent alternative rule system, accuracy drops to chance (~45--51%): the model cannot distinguish the false system from truth. A multi-rule experiment reveals the mechanism: a single coherent alternative rule eliminates truth bias entirely, but adding a second competing rule restores most of it (47%->78%), with continued growth through N=10 (88%). The same pattern reproduces on real Wikipedia text (71% vs 46%). We propose the Compression--Consistency Principle: in these settings, gradient descent favors the most compressible answer cluster, not truth per se. Truth bias emerges only when falsehood is structurally incoherent.
+Why do language models trained on contradictory data prefer correct answers? In controlled experiments with small transformers (3.5M--86M parameters), we show that this preference tracks the compressibility structure of errors rather than truth per se. We train GPT-2 style models on corpora where each mathematical problem appears with both correct and incorrect solutions -- a denoising design that directly models conflicting information about the same fact. When errors are random, models extract the correct signal with accuracy scaling from 65% to 85% with model size. When errors follow a coherent alternative rule system, accuracy drops to chance (~45--51%): the model cannot distinguish the false system from truth. A multi-rule experiment reveals a sharp crossover: a single coherent alternative rule eliminates truth bias entirely, but adding a second competing rule restores most of it (47%->78%), with continued growth through N=10 (88%). The same pattern reproduces on real Wikipedia text (71% vs 46%). We propose the Compression--Consistency Principle as an explanatory hypothesis: in these settings, gradient descent favors the most compressible answer cluster, not truth per se. Truth bias emerges only when falsehood is structurally incoherent. Whether this principle extends to large-scale pretraining remains an open question.
 
 ---
 
@@ -17,13 +17,13 @@ Several explanations have been proposed. Scaling helps: larger models perform be
 
 We propose that the answer lies in compression. Minimizing cross-entropy is equivalent to minimizing code length (Shannon, 1948; Deletang et al., 2024), connecting LLM training to the Minimum Description Length principle (Rissanen, 1978; Grunwald, 2007). But compression does not inherently favor truth -- it favors the most *compressible* hypothesis consistent with the data.
 
-We call this the **Compression--Consistency Principle**:
+We propose the **Compression--Consistency Principle** as an explanatory hypothesis:
 
-> Models do not privilege truth directly; they privilege the most compressible answer structure available in the data.
+> In our settings, models do not privilege truth directly; they privilege the most compressible answer structure available in the data.
 
 Truth benefits from compression only when falsehood is structurally incoherent. Diverse errors must be memorized individually, whereas a correct rule system compresses into a compact representation. When errors form a coherent alternative system -- internally consistent but wrong -- they compress just as efficiently, and the preference vanishes.
 
-We test this with a **denoising design**: each mathematical problem appears in the training corpus with both correct and incorrect solutions. This directly models the scenario where the same question receives conflicting answers. Four conditions vary the structure and ratio of contradictory answers (Section 3). The results are unambiguous: random errors produce strong, scaling truth bias; coherent errors produce none. Multi-rule experiments reveal a sharp phase transition at the boundary (Section 4.3). Wikipedia entity substitution demonstrates the same pattern on real text (Section 4.4). Supporting experiments -- standard baselines, compression measurement, robustness checks, and verification dependencies -- are reported in the appendices.
+We test this with a **denoising design**: each mathematical problem appears in the training corpus with both correct and incorrect solutions. This directly models the scenario where the same question receives conflicting answers. Four conditions vary the structure and ratio of contradictory answers (Section 3). The results are unambiguous: random errors produce strong, scaling truth bias; coherent errors produce none. Multi-rule experiments reveal a sharp crossover at the boundary (Section 4.3). Wikipedia entity substitution demonstrates the same pattern on real text (Section 4.4). Supporting experiments -- standard baselines, compression measurement, robustness checks, and verification dependencies -- are reported in the appendices.
 
 Three caveats apply throughout. First, models compress *text*, not reality: "truth" here means correctness of mathematical derivations and factual accuracy of Wikipedia paragraphs. Second, frequency can override compressibility -- when errors dominate sufficiently, the model follows the majority. Third, the compressibility gap is corpus-dependent: in natural language, it is smaller than in formal math.
 
@@ -32,7 +32,7 @@ The work makes five contributions:
 1. A **denoising experimental design** where the same problem appears with contradictory answers, directly testing signal extraction from noise.
 2. The **random/coherent contrast** as the central finding: random errors yield strong truth bias that scales with model capacity; coherent errors yield none.
 3. A **noise tolerance curve** showing graceful degradation as the signal-to-noise ratio decreases, with capacity-dependent plateaus.
-4. A **multi-rule phase transition**: a single coherent alternative rule eliminates truth bias; two competing rules restore most of it (47%->78%), with accuracy continuing to grow through N=10 (88%).
+4. A **multi-rule sharp crossover**: a single coherent alternative rule eliminates truth bias; two competing rules restore most of it (47%->78%), with accuracy continuing to grow through N=10 (88%).
 5. **Transfer to real text**: a Wikipedia entity-substitution experiment reproduces the same random/coherent contrast on natural language.
 
 ## 2. Related Work
@@ -169,7 +169,13 @@ This is the central result. When the same problem appears with both a correct an
 
 This below-chance pattern is not a confound -- it strengthens the thesis. When the false system is textually simpler, the compressor *actively prefers it over truth*. This is exactly what the Compression--Consistency Principle predicts: the compressor has no concept of correctness; it follows whichever signal is easier to encode. When coherent errors are simpler, they win; when matched in complexity, the result is chance; in this controlled setting, truth receives no preferential treatment.
 
-A potential concern is that the entire random/coherent contrast reduces to local text complexity rather than system-level compressibility. The multi-rule experiment (Section 4.3) controls for this: at N=1 and N=2, the *same* error rules with the *same* textual complexity are used -- only the number of competing rules changes. If local simplicity drove the effect, N=2 should behave like N=1. Instead, accuracy jumps from 47% to 78% at tiny and to 86% at small, confirming that the critical variable is the diversity of error rules, not their surface form.
+A potential concern is that the entire random/coherent contrast reduces to local text complexity rather than system-level compressibility. Three controls address this:
+
+1. **Multi-rule control.** The multi-rule experiment (Section 4.3) uses the *same* error rules with the *same* textual complexity at N=1 and N=2 -- only the number of competing rules changes. If local simplicity drove the effect, N=2 should behave like N=1. Instead, accuracy jumps from 47% to 78% at tiny and to 86% at small, confirming that the critical variable is the diversity of error rules, not their surface form.
+
+2. **Length-matched evaluation.** Our eval code computes both standard mean NLL (per-token, averaged over completions) and length-matched mean NLL (controlling for completion length differences). In the standard setup, mean completion lengths are nearly identical: 81.2 tokens (correct) vs 80.7 tokens (incorrect) for random, 88.4 vs 87.6 for coherent. Length-matched accuracy is within 1 percentage point of standard accuracy across all conditions: 78.7% vs 79.5% (random tiny), 85.8% vs 86.2% (random small), 46.2% vs 47.2% (coherent tiny). The effect is not driven by length artifacts.
+
+3. **Sum-NLL metric.** We also report sum-NLL accuracy (total NLL on the completion, not per-token average), which penalizes longer completions. Sum-NLL accuracy matches per-token accuracy (e.g., 78.4% vs 79.5% for random tiny), further ruling out length confounds.
 
 ### 4.2 J3 and J4: Noise Tolerance
 
@@ -196,7 +202,7 @@ Three observations:
 
 3. **Signal-to-noise logic.** For each noise ratio, there exists a model capacity at which accuracy saturates. Lower ratios saturate at higher accuracy. This is consistent with the MDL framing: the compressibility advantage of the correct cluster persists but must compete with sheer volume of noise.
 
-### 4.3 Multi-Rule Errors: The Phase Transition
+### 4.3 Multi-Rule Errors: The Sharp Crossover
 
 The denoising experiments establish two poles: one coherent rule yields chance, random errors yield strong bias. What lies between? We train models on corpora with N alternative wrong rules per task type; for each problem, one rule is chosen at random. Each rule is compact, but the mapping "problem -> rule" is unpredictable.
 
@@ -210,15 +216,15 @@ The denoising experiments establish two poles: one coherent rule yields chance, 
 | 5 | 84.8% | +0.0293 | < 10^-6 |
 | 10 | 88.3% | +0.0440 | < 10^-6 |
 
-The phase transition reproduces at larger scale: N=2 on small (12M) yields 86.3% +/- 0.8% (4 seeds), compared to 77.6% on tiny. The effect strengthens with capacity, consistent with the MDL interpretation.
+The sharp crossover reproduces at larger scale: N=2 on small (12M) yields 86.3% +/- 0.8% (4 seeds), compared to 77.6% on tiny. The effect strengthens with capacity, consistent with the MDL hypothesis.
 
 ![Figure 3](results/figure7_multirule.png)
 
-*Figure 3. Multi-rule phase transition. Accuracy jumps from 47% at N=1 to 78% at N=2, then continues growing gradually through N=10.*
+*Figure 3. Multi-rule sharp crossover. Accuracy jumps from 47% at N=1 to 78% at N=2, then continues growing gradually through N=10.*
 
 The largest increase is between one rule and two rules (47% -> 78%), but the curve remains graded afterward. This is the most mechanistically revealing result: a single coherent alternative rule suffices to eliminate truth bias entirely, while even two alternatives restore most of it.
 
-The MDL interpretation is direct: with one false rule, $K(T_2) \approx K(T_1)$ -- both are compact. With two false rules, the learner must additionally encode a *selector*: which rule applies to which problem. This selector is essentially a random function from problems to $\{rule_1, rule_2\}$ -- it has high Kolmogorov complexity because there is no pattern the compressor can exploit. The selector's description length cost is what breaks the false system's compressibility advantage, even though each individual rule remains compact. As N grows, the selector becomes increasingly complex ($\log N$ bits per problem), and the false cluster approaches the incompressibility of fully random errors. At N=10, accuracy (88.3%) exceeds even the standard random baseline (79.5%).
+The MDL hypothesis offers a natural explanation: with one false rule, $K(T_2) \approx K(T_1)$ -- both are compact. With two false rules, the learner must additionally encode a *selector*: which rule applies to which problem. This selector is essentially a random function from problems to $\{rule_1, rule_2\}$ -- it has high Kolmogorov complexity because there is no pattern the compressor can exploit. The selector's description length cost is what breaks the false system's compressibility advantage, even though each individual rule remains compact. As N grows, the selector becomes increasingly complex ($\log N$ bits per problem), and the false cluster approaches the incompressibility of fully random errors. At N=10, accuracy (88.3%) exceeds even the standard random baseline (79.5%).
 
 ### 4.4 Transfer to Real Text: Wikipedia
 
@@ -267,9 +273,9 @@ Geographic entities (GPE, LOC, NORP) show the strongest effect (77--82%), likely
 
 ### 5.1 The Compression--Consistency Principle
 
-The experiments support a unified interpretation:
+The experiments support a unified explanatory hypothesis:
 
-**In our experiments, the compression objective tracks consistency rather than truth.** Any internally consistent rule system -- true or false -- compresses equally well. Truth bias emerges only when false alternatives are structurally incoherent.
+**In our controlled settings, the compression objective tracks consistency rather than truth.** Any internally consistent rule system -- true or false -- compresses equally well. Truth bias emerges only when false alternatives are structurally incoherent. We frame this as the Compression--Consistency Principle -- a hypothesis that organizes our observations, not a proven mechanism of language model training in general.
 
 The evidence forms a coherent picture across all experimental conditions:
 
@@ -277,7 +283,7 @@ The evidence forms a coherent picture across all experimental conditions:
 
 2. **Coherent errors are equally compressible.** One systematic wrong rule is as compact as one correct rule. Compression provides no basis to prefer truth. This holds in denoising (J2: 44--51%), in the standard setup (47--52%), on Wikipedia (46--49%), and in a synthetic world domain (46.6%).
 
-3. **Rule diversity is the key variable.** The multi-rule experiment provides the sharpest test: increasing the number of false rules from 1 to 10 progressively degrades the compressibility of the false cluster, producing a graded curve from chance to 88%. The phase transition at N=1->2 (47%->78%) pinpoints the mechanism: it takes only one additional rule to break compressibility.
+3. **Rule diversity is the key variable.** The multi-rule experiment provides the sharpest test: increasing the number of false rules from 1 to 10 progressively degrades the compressibility of the false cluster, producing a graded curve from chance to 88%. The sharp crossover at N=1->2 (47%->78%) is the most informative data point: it takes only one additional rule to break the compressibility of the false cluster.
 
 4. **The pattern transfers across domains.** Math (formal derivations), Wikipedia (factual paragraphs), and a synthetic world (fictional entities with deterministic rules) all reproduce the random/coherent contrast. The effect size varies -- strongest in math, weakest in the synthetic world -- but the direction is consistent across all tested domains.
 
@@ -287,17 +293,21 @@ The evidence forms a coherent picture across all experimental conditions:
 
 ### 5.2 Implications
 
-**For alignment.** The training objective does not provide an inherent "truth compass." Systematic falsehood can remain competitive when internally coherent -- a single consistent wrong rule is as compressible as the truth. This suggests that relying on scale alone will not solve the problem of coherent misinformation. Verification dependencies can partially restore truth bias (Appendix E), but their effectiveness decreases with model size, making it unclear how this would scale.
+**For alignment.** In our controlled settings, the training objective does not provide an inherent "truth compass." Systematic falsehood remains competitive when internally coherent -- a single consistent wrong rule is as compressible as the truth. If this pattern holds at larger scales, it would suggest that relying on scale alone may not solve the problem of coherent misinformation. Verification dependencies can partially restore truth bias (Appendix E), but their effectiveness decreases with model size in our experiments, raising questions about scalability.
 
-**For understanding hallucinations.** Our results complement the statistical hallucination bound of Kalai & Vempala (2024). Coherent misconceptions can remain attractive to the model because they compress well, independently of their rarity. The compression-consistency principle suggests that hallucinations that happen to be internally consistent may be particularly persistent and resistant to correction through scale alone.
+**For understanding hallucinations.** Our results complement the statistical hallucination bound of Kalai & Vempala (2024). In our experiments, coherent misconceptions remain attractive to the model because they compress well, independently of their rarity. If this generalizes, hallucinations that happen to be internally consistent may be particularly persistent and resistant to correction through scale alone.
 
-**For data curation.** When a corpus contains contradictory answers to the same question, models with sufficient capacity will tend to favor the more compressible cluster. This is reassuring when errors are diverse (as in naturally occurring mistakes) but concerning when errors are systematic. Coordinated disinformation campaigns that maintain internal consistency -- always substituting the same false narrative, always citing the same fabricated sources -- function as a compressible alternative rule system. Our results predict that such coherent falsehood would be indistinguishable from truth for the compressor, unlike diverse organic errors that fragment into incompressible noise. The noise tolerance results (J3, J4) provide quantitative guidance on the optimistic side: even at 4:1 noise, small models extract truth with 65% accuracy, as long as the noise is structurally incoherent.
+**For data curation.** In our experiments, when a corpus contains contradictory answers to the same question, models favor the more compressible cluster. This is reassuring when errors are diverse (as in naturally occurring mistakes) but concerning when errors are systematic. By analogy, coordinated campaigns that maintain internal consistency -- always substituting the same false narrative, always citing the same fabricated sources -- would function as a compressible alternative rule system. Our results suggest (but do not directly demonstrate at realistic scale) that such coherent falsehood could be harder for the compressor to distinguish from truth than diverse organic errors. The noise tolerance results (J3, J4) provide quantitative guidance on the optimistic side: even at 4:1 noise, small models extract truth with 65% accuracy, as long as the noise is structurally incoherent.
 
 ### 5.3 Analogy with Popper's Falsifiability
 
 Our results admit an interpretive analogy with the falsifiability criterion (Popper, 1959): a true theory compresses maximally, while a false theory needs corrections that increase description length. However, the analogy is limited: the model does not "test" theories, regular discrepancies are themselves compressible, and ad hoc corrections do not produce truth bias (Appendix C). For a compressor, a discrepancy is merely another pattern.
 
-### 5.4 Limitations
+### 5.4 Broader Impact
+
+This paper raises the possibility that internally consistent misinformation may be harder for language models to distinguish from truth than diverse, uncoordinated errors. We emphasize that this finding is established in a controlled small-scale setting (3.5M--86M parameters, synthetic math tasks and simple Wikipedia substitutions) and does not directly demonstrate vulnerability in production language models. The extrapolation to real-world disinformation campaigns (Section 5.2) is a hypothesis motivated by our results, not an empirically validated claim. We believe transparent reporting of the conditions under which truth bias fails is more beneficial than concealment, as it can inform defensive measures in data curation and model evaluation.
+
+### 5.5 Limitations
 
 **Model scale.** Experiments use models from 3.5M to 86M parameters. The denoising results show clear scaling trends but do not establish whether these continue beyond 86M. For coherent errors, there is a stronger heuristic argument: if both systems have comparable description length and equal frequency, an MDL learner has no basis to prefer one over the other regardless of scale.
 
@@ -307,21 +317,24 @@ Our results admit an interpretive analogy with the falsifiability criterion (Pop
 
 **Discriminative scope.** The primary metric is paired evaluation (forced choice). Generation sanity checks (Appendix E) confirm the direction (30.5% vs 20.8%) but the gap is smaller. The full relationship between discriminative truth bias and generative truthfulness remains an open question.
 
-### 5.5 Future Work
+**J5 baseline.** An exploratory condition where models train on only incorrect answers (Appendix F) shows 54--60% pair accuracy for correct completions despite never seeing them. This could reflect intrinsic structural regularities in correct mathematical derivations (simpler numbers, consistent sign patterns) or residual format/length artifacts. While the length-matched analysis (Section 4.1) rules out gross length confounds for the main results, J5 suggests that a small component of the observed effect may stem from the inherent textual regularity of correct answers. Importantly, this potential confound applies equally to J1 and J2; it cannot explain the random/coherent contrast, which is the paper's central finding.
+
+### 5.6 Future Work
 
 Key open directions:
 
-1. **Scale.** Extending denoising experiments beyond 86M parameters with compute-matched training budgets.
+1. **Large-scale replication.** The most important next step is extending the denoising design to models at 1B+ parameters with compute-matched training budgets. Our results show clear trends from 3.5M to 86M; whether the random/coherent contrast persists, strengthens, or qualitatively changes at frontier scale is the critical open question for the practical relevance of the Compression--Consistency Principle.
 2. **Verification density.** Increasing cross-domain checks per task to test whether denser verification compensates for the compressor's growing power.
 3. **Real-world domains.** Extending to domains with competing knowledge systems (e.g., historical scientific debates) where the correct/incorrect boundary is well-established.
 4. **Internal representations.** Linear probing for "truth directions" vs "coherence directions" (Marks & Tegmark, 2023) in models trained under our conditions.
 5. **Interaction with RLHF.** Testing whether reinforcement learning from human feedback amplifies or attenuates the compression-consistency effect.
+6. **Stronger surface-form controls.** While length-matched evaluation rules out gross length confounds and the multi-rule experiment controls for textual complexity, generating complexity-matched correct and incorrect completions would provide an even stronger test. The J5 baseline (Appendix F) suggests that correct derivations may have intrinsic regularity advantages beyond what current controls capture.
 
 ---
 
 ## 6. Conclusion
 
-In controlled experiments, the compression objective tracks consistency rather than truth. When small language models train on contradictory answers to the same problems, they prefer the correct answer only when errors are structurally incoherent. In denoising experiments, accuracy scales from 65% (3.5M) to 85% (86M) for random errors, but stays near chance for coherent errors across all model sizes. The multi-rule phase transition pinpoints the mechanism: one coherent alternative rule eliminates truth bias entirely, two rules restore most of it. The same pattern reproduces on real Wikipedia text (71% vs 46%). In the settings we study, truth bias is a compression artifact -- it emerges only when falsehood is structurally incoherent. Whether this principle extends fully to large-scale pretraining remains an open question, but the controlled evidence suggests that the compressibility structure of errors, not truth per se, is what gradient descent responds to.
+In controlled experiments with small transformers (3.5M--86M parameters), the compression objective tracks consistency rather than truth. When models train on contradictory answers to the same problems, they prefer the correct answer only when errors are structurally incoherent. In denoising experiments, accuracy scales from 65% to 85% for random errors, but stays near chance for coherent errors across all model sizes. The sharp crossover at N=1->2 pinpoints the boundary: one coherent alternative rule eliminates truth bias entirely, two rules restore most of it. The same pattern reproduces on real Wikipedia text (71% vs 46%). Length-matched evaluation and the multi-rule complexity control rule out surface-form confounds as the primary driver. In the settings we study, truth bias is a compression artifact -- it emerges only when falsehood is structurally incoherent. Whether this principle extends to large-scale pretraining is the key open question; replication at 1B+ parameters is the natural next step.
 
 ---
 
@@ -536,7 +549,7 @@ A synthetic world with 50 entities, 4 types, and 15 deterministic rules. Random 
 
 ### D.2 Multi-Alternative Errors in the Synthetic World
 
-Multi-alternative errors (N=1 to N=16) produce a gradual rise in natural language: 47% -> 40% -> 50% -> 51% -> 60%. Unlike math (47% -> 78% at N=2), there is no steep early jump. At N=2, accuracy *worsens* to 40%: two alternatives collectively compete with truth while remaining compressible. Natural language absorbs contradictions that formal math cannot. This contrast between math and natural language is itself informative: it shows that the sharpness of the phase transition depends on how much redundancy the domain provides.
+Multi-alternative errors (N=1 to N=16) produce a gradual rise in natural language: 47% -> 40% -> 50% -> 51% -> 60%. Unlike math (47% -> 78% at N=2), there is no steep early jump. At N=2, accuracy *worsens* to 40%: two alternatives collectively compete with truth while remaining compressible. Natural language absorbs contradictions that formal math cannot. This contrast between math and natural language is itself informative: it shows that the sharpness of the sharp crossover depends on how much redundancy the domain provides.
 
 ### D.3 Cross-Domain Falsification
 
