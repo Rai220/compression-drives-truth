@@ -5,7 +5,7 @@
 
 ## Abstract
 
-Why do language models trained on contradictory data prefer correct answers? We show that the preference is a compression artifact, not an inherent property of the training objective. We train GPT-2 style transformers (3.5M--86M parameters) on corpora where each mathematical problem appears with both correct and incorrect solutions -- a denoising design that directly models conflicting information about the same fact. When errors are random, models extract the correct signal with accuracy scaling from 65% to 85% with model size. When errors follow a coherent alternative rule system, accuracy drops to chance (~45--51%): the model cannot distinguish the false system from truth. A multi-rule experiment reveals the mechanism: a single coherent alternative rule eliminates truth bias entirely, but adding a second competing rule restores most of it (47%->78%), with continued growth through N=10 (88%). The same pattern reproduces on real Wikipedia text (71% vs 46%). We propose the Compression--Consistency Principle: gradient descent favors the most compressible answer cluster, not truth per se. Truth bias emerges only when falsehood is structurally incoherent.
+Why do language models trained on contradictory data prefer correct answers? In controlled experiments with small transformers, we show that this preference is a compression artifact rather than an inherent property of the training objective. We train GPT-2 style transformers (3.5M--86M parameters) on corpora where each mathematical problem appears with both correct and incorrect solutions -- a denoising design that directly models conflicting information about the same fact. When errors are random, models extract the correct signal with accuracy scaling from 65% to 85% with model size. When errors follow a coherent alternative rule system, accuracy drops to chance (~45--51%): the model cannot distinguish the false system from truth. A multi-rule experiment reveals the mechanism: a single coherent alternative rule eliminates truth bias entirely, but adding a second competing rule restores most of it (47%->78%), with continued growth through N=10 (88%). The same pattern reproduces on real Wikipedia text (71% vs 46%). We propose the Compression--Consistency Principle: in these settings, gradient descent favors the most compressible answer cluster, not truth per se. Truth bias emerges only when falsehood is structurally incoherent.
 
 ---
 
@@ -80,7 +80,7 @@ Denoising experiments (Section 4.1--4.2) use a PyTorch implementation; multi-rul
 
 ### 3.2 Denoising Corpus Design
 
-The denoising setup is the primary experimental paradigm. The generator creates mathematical problems of four types: multi-step arithmetic, factorization, equation solving, and differentiation. Each problem is formatted as a step-by-step derivation in English, verified by SymPy. The tokenizer is character-level (vocab ~57).
+The denoising setup is the primary experimental paradigm. The generator creates mathematical problems of four types: multi-step arithmetic, factorization, equation solving, and differentiation. Each problem is formatted as a step-by-step derivation in English, verified by SymPy. The tokenizer is character-level (vocab ~57). Each denoising corpus contains 5,000 unique problems (10,000+ texts for J1/J2, 15,000 for J3, 25,000 for J4). Standard corpora (Appendix C) contain ~200,000 problems (~36MB). Paired evaluation uses ~5,000 held-out test pairs per condition, generated with a separate seed.
 
 The key design feature: **each problem appears multiple times in the corpus with contradictory answers.** This directly models the internet scenario where the same question receives conflicting responses.
 
@@ -167,7 +167,9 @@ This is the central result. When the same problem appears with both a correct an
 
 **Below-chance accuracy at small scale (J2).** The tiny model's J2 accuracy of 43.5% is consistently below 50%, replicating across multiple independent setups: standard coherent (47.2%), BPE coherent (45.9%), synthetic world coherent (46.6%). This reflects textual simplicity asymmetry: the coherent error rules produce shorter or simpler outputs than the true rules (e.g., dropping a coefficient in derivatives). As capacity grows, the model represents both systems with equal per-token accuracy, and the asymmetry disappears.
 
-This below-chance pattern is not a confound -- it strengthens the thesis. When the false system is textually simpler, the compressor *actively prefers it over truth*. This is exactly what the Compression--Consistency Principle predicts: the compressor has no concept of correctness; it follows whichever signal is easier to encode. When coherent errors are simpler, they win; when matched in complexity, the result is chance; truth never receives preferential treatment.
+This below-chance pattern is not a confound -- it strengthens the thesis. When the false system is textually simpler, the compressor *actively prefers it over truth*. This is exactly what the Compression--Consistency Principle predicts: the compressor has no concept of correctness; it follows whichever signal is easier to encode. When coherent errors are simpler, they win; when matched in complexity, the result is chance; in this controlled setting, truth receives no preferential treatment.
+
+A potential concern is that the entire random/coherent contrast reduces to local text complexity rather than system-level compressibility. The multi-rule experiment (Section 4.3) controls for this: at N=1 and N=2, the *same* error rules with the *same* textual complexity are used -- only the number of competing rules changes. If local simplicity drove the effect, N=2 should behave like N=1. Instead, accuracy jumps from 47% to 78%, confirming that the critical variable is the diversity of error rules, not their surface form.
 
 ### 4.2 J3 and J4: Noise Tolerance
 
@@ -277,7 +279,7 @@ The evidence forms a coherent picture across all experimental conditions:
 
 4. **The pattern transfers across domains.** Math (formal derivations), Wikipedia (factual paragraphs), and a synthetic world (fictional entities with deterministic rules) all reproduce the random/coherent contrast. The effect size varies -- strongest in math, weakest in the synthetic world -- but the direction is universal.
 
-5. **Compressibility predicts accuracy quantitatively.** A gzip compression analysis on raw completion text predicts paired accuracy across 9 conditions (Spearman rho = 0.68, p = 0.042; Appendix B). The compression ratio gap between correct and incorrect completions, measurable without any trained model, tracks the truth bias that gradient descent produces.
+5. **Compressibility correlates with accuracy.** A gzip compression analysis on raw completion text shows a positive rank correlation with paired accuracy across 9 conditions (Spearman rho = 0.68, p = 0.042; Appendix B). While the sample size is small, the direction is consistent: conditions with larger compression gaps produce stronger truth bias.
 
 6. **Frequency alone does not explain the results.** In the standard setup, truth bias persists even at 10/90 mixing (67% paired accuracy; Appendix C) -- the model prefers correct answers despite 9:1 frequency disadvantage. But for coherent errors, frequency is all that matters: at 40/60 coherent, the model follows the majority with 72% preference for the false system (Appendix C, Table C4). Compressibility overrides frequency for random errors; frequency governs for coherent ones.
 
@@ -291,7 +293,7 @@ The evidence forms a coherent picture across all experimental conditions:
 
 ### 5.3 Analogy with Popper's Falsifiability
 
-Our results admit an interpretive analogy with the falsifiability criterion (Popper, 1959). A true theory with concrete predictions requires no additional explanations (maximal compression); a false theory whose predictions diverge from data needs correction (poor compression). However, the analogy has limits. First, the model does not "test" theories -- it minimizes code length. Second, regular discrepancies are compressible and do not function as falsifications for a compressor. Third, ad hoc corrections do not produce transferable truth bias (Appendix C). For a compressor, a discrepancy is merely another pattern.
+Our results admit an interpretive analogy with the falsifiability criterion (Popper, 1959): a true theory compresses maximally, while a false theory needs corrections that increase description length. However, the analogy is limited: the model does not "test" theories, regular discrepancies are themselves compressible, and ad hoc corrections do not produce truth bias (Appendix C). For a compressor, a discrepancy is merely another pattern.
 
 ### 5.4 Limitations
 
@@ -317,7 +319,7 @@ Key open directions:
 
 ## 6. Conclusion
 
-Compression favors consistency, not truth. When language models train on contradictory answers to the same problems, they prefer the correct answer only when errors are structurally incoherent. In controlled denoising experiments, accuracy scales from 65% (3.5M) to 85% (86M) for random errors, but stays near chance for coherent errors across all model sizes. The multi-rule phase transition pinpoints the mechanism: one coherent alternative rule eliminates truth bias entirely, two rules restore most of it. The same pattern reproduces on real Wikipedia text (71% vs 46%). Truth bias is a compression artifact -- it emerges only when falsehood is structurally incoherent.
+In controlled experiments, compression favors consistency, not truth. When small language models train on contradictory answers to the same problems, they prefer the correct answer only when errors are structurally incoherent. In denoising experiments, accuracy scales from 65% (3.5M) to 85% (86M) for random errors, but stays near chance for coherent errors across all model sizes. The multi-rule phase transition pinpoints the mechanism: one coherent alternative rule eliminates truth bias entirely, two rules restore most of it. The same pattern reproduces on real Wikipedia text (71% vs 46%). In the settings we study, truth bias is a compression artifact -- it emerges only when falsehood is structurally incoherent. Whether this principle extends fully to large-scale pretraining remains an open question, but the controlled evidence suggests that the compressibility structure of errors, not truth per se, is what gradient descent responds to.
 
 ---
 
@@ -429,7 +431,7 @@ To operationalize the MDL argument, we measure the compression ratio of correct 
 
 *Figure B1. Compression ratio delta (gzip, incorrect minus correct) vs paired accuracy. Spearman rho = 0.68, p = 0.042. Coherent and contradictory errors cluster near zero delta and chance accuracy; random and multi-rule errors show progressively larger deltas.*
 
-The rank correlation is significant (Spearman rho = 0.68, p = 0.042), confirming that the compressibility gap -- measurable by a generic compressor without any trained model -- predicts whether gradient-descent-trained models exhibit truth bias. Within the math domain, the multi-rule series is monotonic: larger compression deltas map to higher accuracy.
+The rank correlation (Spearman rho = 0.68, p = 0.042) is consistent with the hypothesis that compressibility gap drives truth bias, though the small sample size (N=9 conditions) limits the strength of this quantitative claim. Within the math domain, the multi-rule series is monotonic: larger compression deltas map to higher accuracy. We present this as supporting evidence, not as the primary basis for the compression-consistency principle, which rests on the experimental contrasts in Section 4.
 
 ---
 
