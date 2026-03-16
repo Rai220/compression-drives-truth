@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Control experiment: truncated chains (no verification step)
 #
 # Same task structure as chained experiment but WITHOUT the verification step.

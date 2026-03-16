@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Cross-domain falsification experiment:
 # Test whether cross-domain tasks break the coherence of false derivative rules.
 #

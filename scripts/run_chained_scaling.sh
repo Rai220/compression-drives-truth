@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Experiment I scaling: chained tasks at small (11M) and large (86M)
 #
 # Uses the same corpus as tiny. Tests if truth bias from verification

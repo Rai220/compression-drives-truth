@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Synthetic world multi-alternative experiment (analogue of Exp F for natural language)
 # Tests N=2,4,8,16 alternatives per rule to find the phase transition
 # where contradictory errors become uncompressible.

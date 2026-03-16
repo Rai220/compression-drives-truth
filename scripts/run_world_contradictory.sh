@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Synthetic world contradictory experiment: train models, evaluate
 # Tests whether contradictions in coherent world restore truth bias.
 #

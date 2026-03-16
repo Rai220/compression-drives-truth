@@ -3,7 +3,7 @@
 # Trains tiny models with BPE tokenizer (vocab=1000) on random and coherent 50/50
 # Then evaluates with paired eval to compare with char-level results
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 PYTHON=.venv/bin/python
 
 echo "=== BPE Tokenization Control Experiment ==="

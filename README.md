@@ -103,7 +103,7 @@ training_torch/    PyTorch port (GPU denoising experiments)
 data/              corpus generators
 analysis/          figure and analysis scripts
 results/           experiment outputs and figures
-run_*.sh           experiment runners
+scripts/           experiment runners
 ```
 
 ## Reproducing Experiments
@@ -113,11 +113,11 @@ run_*.sh           experiment runners
 python modal_run.py
 
 # Standard experiments (MLX, Apple Silicon)
-bash run_scaling.sh
-bash run_multirule.sh
+bash scripts/run_scaling.sh
+bash scripts/run_multirule.sh
 
 # Wikipedia entity substitution
-bash run_wiki_experiment.sh
+bash scripts/run_wiki_experiment.sh
 ```
 
 ## Citation

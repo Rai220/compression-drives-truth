@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Run Wikipedia entity substitution experiment
 # Generates corpora with random and coherent errors, then trains models.
 #

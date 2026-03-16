@@ -1,4 +1,5 @@
 #!/bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Synthetic world experiment: generate corpora, train models, evaluate
 # Usage: bash run_synthetic_world.sh
 #
