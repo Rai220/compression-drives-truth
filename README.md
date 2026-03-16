@@ -31,6 +31,8 @@ We call this the **Compression–Consistency Principle**:
 
 Random errors are all different — they can't compress into a rule. The correct answer is the only pattern, so the model learns it. But a coherent false system (e.g., "always subtract 1 before multiplying") is just as compact as the true rules. The compressor sees no difference.
 
+**Why does adding a second wrong rule break this?** Because now the model needs a *selector* — which rule applies to which problem. This selector is a random function with high Kolmogorov complexity. Even though each individual rule is compact, the selector can't compress, and that's what restores truth bias.
+
 **Truth bias is not a feature of intelligence. It's a compression artifact.**
 
 ## Key Results
@@ -49,15 +51,17 @@ Random errors are all different — they can't compress into a rule. The correct
 - Replace consistently ("France"→"Japan", "Paris"→"Tokyo"): model can't tell, 46%
 
 **Compression predicts everything:**
-- gzip compression ratio gap between correct/incorrect completions predicts model behavior across 9 conditions (Spearman rho = 0.68, p = 0.042)
+- gzip compression ratio gap between correct/incorrect completions predicts model behavior across 9 conditions (Spearman ρ = 0.68, p = 0.042)
 
 ## Why This Matters
 
-**For alignment:** The training objective alone is not a "truth compass." A well-crafted consistent lie compresses just as well as truth. RLHF and human feedback are doing more work than we thought.
+**For alignment:** The training objective alone is not a "truth compass." A well-crafted consistent lie compresses just as well as truth. Scale won't fix this — coherent errors stay at chance from 3.5M to 86M.
 
-**For understanding hallucinations:** Coherent misconceptions can persist because they compress well — not because the model lacks capacity.
+**For understanding hallucinations:** Coherent misconceptions can persist because they compress well — not because the model lacks capacity. Internally consistent hallucinations may be the hardest to eliminate.
 
-**For data curation:** Diverse errors get filtered out by compression. Systematic errors don't. This is good news for naturally occurring mistakes, bad news for coordinated misinformation.
+**For disinformation:** Coordinated campaigns that maintain internal consistency — always the same false narrative, always the same fabricated sources — function as a compressible alternative rule system. Our results predict that such coherent falsehood is indistinguishable from truth for the compressor, unlike diverse organic errors that fragment into incompressible noise.
+
+**For data curation:** At 4:1 noise ratio, models still extract truth at 65% accuracy — as long as errors are structurally incoherent. Diverse mistakes are self-correcting; systematic ones are not.
 
 ## Quick Start
 
