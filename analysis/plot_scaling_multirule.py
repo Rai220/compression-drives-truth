@@ -194,6 +194,9 @@ mr10_accs, mr10_deltas = load_seeds('multirule_10_50_50_tiny_seed{seed}', filena
 
 n1_accs, _ = load_seeds('coherent_50_50_tiny_seed{seed}', filename='eval_paired_multirule_n1.json')
 
+# Small N=2 for scaling confirmation
+mr2_small_accs, mr2_small_deltas = load_seeds('multirule_2_50_50_small_seed{seed}', filename='eval_paired_matched.json')
+
 # N=1 is the coherent baseline evaluated on the matched N=1 multirule test.
 all_n = [1, 2, 3, 5, 10]
 all_acc_means = [
@@ -212,10 +215,13 @@ all_acc_stds = [
 ]
 random_acc_mean = np.mean(tiny_rand_accs)
 
-print("\n=== Multi-rule data ===")
+print("\n=== Multi-rule data (tiny) ===")
 for n, m, s in zip(all_n, all_acc_means, all_acc_stds):
     print(f"  N={n}: acc={m*100:.1f}% +/- {s*100:.1f}%")
 print(f"  N=inf (random): acc={random_acc_mean*100:.1f}%")
+if mr2_small_accs:
+    print(f"\n=== Multi-rule N=2 (small) ===")
+    print(f"  N=2 small: acc={np.mean(mr2_small_accs)*100:.1f}% +/- {np.std(mr2_small_accs)*100:.1f}%")
 
 
 # ============================================================
@@ -256,6 +262,16 @@ for i, (xp, ym) in enumerate(zip(x_pos, acc_means)):
     offset = -4 if i == 0 else 2.5
     ax.text(xp, ym * 100 + offset, f'{ym*100:.1f}%', ha='center', va='bottom',
             fontsize=10, fontweight='bold', color=colors[i])
+
+# Small N=2 point (if available)
+if mr2_small_accs:
+    mr2_small_mean = np.mean(mr2_small_accs)
+    mr2_small_std = np.std(mr2_small_accs)
+    ax.errorbar(1, mr2_small_mean * 100, yerr=mr2_small_std * 100, fmt='s', markersize=10,
+                capsize=6, color='#059669', linewidth=2, markeredgewidth=2,
+                markeredgecolor='white', zorder=7, label=f'N=2 small 12M ({mr2_small_mean*100:.1f}%)')
+    ax.text(1.35, mr2_small_mean * 100 + 0.5, f'{mr2_small_mean*100:.1f}%', ha='left', va='bottom',
+            fontsize=9, fontweight='bold', color='#059669')
 
 # Annotation: steepest early rise
 ax.annotate('Largest jump from N=1 to N=2',
