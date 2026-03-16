@@ -210,6 +210,8 @@ The denoising experiments establish two poles: one coherent rule yields chance, 
 | 5 | 84.8% | +0.0293 | < 10^-6 |
 | 10 | 88.3% | +0.0440 | < 10^-6 |
 
+The phase transition reproduces at larger scale: N=2 on small (12M) yields 86.3% +/- 0.8% (4 seeds), compared to 77.6% on tiny. The effect strengthens with capacity, consistent with the MDL interpretation.
+
 ![Figure 3](results/figure7_multirule.png)
 
 *Figure 3. Multi-rule phase transition. Accuracy jumps from 47% at N=1 to 78% at N=2, then continues growing gradually through N=10.*
@@ -576,14 +578,21 @@ Key observations:
 
 To rule out character-level encoding artifacts, we repeat the key comparison with a SentencePiece BPE tokenizer (vocab 1000).
 
-**Table E2.** BPE vs char-level paired accuracy (tiny, 4 seeds).
+**Table E2a.** BPE vs char-level paired accuracy, standard setup (tiny, 4 seeds).
 
 | Tokenizer | Random 50/50 | Coherent 50/50 |
 |-----------|:------------:|:--------------:|
 | Char (vocab 57) | 79.5% +/- 1.4% | 47.2% +/- 2.8% |
-| BPE (vocab 1000) | **85.6% +/- 0.2%** | **45.9% +/- 1.4%** |
+| BPE (vocab 1000) | **85.6% +/- 0.2%** | **45.9% +/- 1.6%** |
 
-The effect survives BPE and is marginally stronger (85.6% vs 79.5%), with lower cross-seed variance. This rules out the concern that character-level encoding makes errors trivially detectable.
+**Table E2b.** BPE vs char-level paired accuracy, denoising setup (tiny, 4 seeds).
+
+| Tokenizer | J1 (random) | J2 (coherent) |
+|-----------|:----------:|:-------------:|
+| Char (vocab 57) | 65.3% +/- 1.3% | 43.5% +/- 2.6% |
+| BPE (vocab 1000) | **75.9% +/- 1.5%** | **49.3% +/- 3.1%** |
+
+The effect survives BPE in both setups. In the denoising regime -- where contradictory answers coexist for the same problem -- BPE strengthens truth bias (75.9% vs 65.3% for J1) while coherent errors remain at chance (49.3% for J2). This directly confirms that the denoising result is not an artifact of character-level tokenization.
 
 ### E.3 Generation Sanity Check
 
