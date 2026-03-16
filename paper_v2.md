@@ -157,7 +157,7 @@ The denoising experiments directly test these predictions.
 | medium | 26M | **81.1% +/- 1.2%** | +0.037 | 45.8% +/- 3.4% | -0.003 | 4 | 4 |
 | large | 86M | **85.2% +/- 2.3%** | +0.048 | 51.0% +/- 0.8% | -0.001 | 2 | 2 |
 
-![Figure 1](results/figure_denoising_j1_j2.png)
+![](results/figure_denoising_j1_j2.png)
 
 *Figure 1. The central contrast. J1 (random errors): accuracy scales monotonically from 65% to 85%. J2 (coherent errors): accuracy stays near chance (44--51%) across all sizes. The gap between the curves is the compression-consistency effect.*
 
@@ -190,7 +190,7 @@ What happens when the noise ratio increases? J3 adds two random wrong answers pe
 | J4 | 1:4 | 56.6% | 64.9% | 66.6% | 65.8% | 2/2/2/2 |
 | J2 | 1:1 coh. | 43.5% | 44.5% | 45.8% | 51.0% | 4/4/4/2 |
 
-![Figure 2](results/figure_denoising_noise_curve.png)
+![](results/figure_denoising_noise_curve.png)
 
 *Figure 2. Noise tolerance. Left: accuracy vs model size for J1/J3/J4. Higher noise ratios yield lower accuracy and earlier plateaus. Right: accuracy vs noise ratio at each model size, showing graceful degradation.*
 
@@ -218,7 +218,7 @@ The denoising experiments establish two poles: one coherent rule yields chance, 
 
 The sharp crossover reproduces at larger scale: N=2 on small (12M) yields 86.3% +/- 0.8% (4 seeds), compared to 77.6% on tiny. The effect strengthens with capacity, consistent with the MDL hypothesis.
 
-![Figure 3](results/figure7_multirule.png)
+![](results/figure7_multirule.png)
 
 *Figure 3. Multi-rule sharp crossover. Accuracy jumps from 47% at N=1 to 78% at N=2, then continues growing gradually through N=10.*
 
@@ -239,7 +239,7 @@ Does the principle transfer beyond formal math? We train models on Wikipedia par
 | medium (26M) | **71.5% +/- 0.8%** | +0.068 | 46.4% +/- 0.8% | -0.003 |
 | large (86M) | **71.4% +/- 0.7%** | +0.069 | 45.9% +/- 1.5% | -0.005 |
 
-![Figure 4](results/figure_wiki_results.png)
+![](results/figure_wiki_results.png)
 
 *Figure 4. Wikipedia entity substitution. Left: random accuracy is 70--71% across all sizes, well above chance. Coherent accuracy is at or below chance (46--49%). Right: per-entity-type accuracy for random errors (tiny, seed 42).*
 
@@ -442,7 +442,7 @@ To operationalize the MDL argument, we measure the compression ratio of correct 
 | world random | 0.0370 | 0.0516 | +0.0146 | 57.7% |
 | world coherent | 0.0374 | 0.0384 | +0.0010 | 46.6% |
 
-![Figure B1](results/figure_compression_vs_accuracy.png)
+![](results/figure_compression_vs_accuracy.png)
 
 *Figure B1. Compression ratio delta (gzip, incorrect minus correct) vs paired accuracy. Spearman rho = 0.68, p = 0.042. Coherent and contradictory errors cluster near zero delta and chance accuracy; random and multi-rule errors show progressively larger deltas.*
 
@@ -515,7 +515,7 @@ For coherent errors, the picture inverts: the model follows pure frequency, pref
 | medium (26M) | 87.1% | 52.6% |
 | large (86M) | 88.3% | 51.4% |
 
-![Figure C1](results/figure6_scaling.png)
+![](results/figure6_scaling.png)
 
 *Figure C1. Scaling in the standard setup. Random accuracy rises from 80% to 88%; coherent accuracy stays near chance (47--53%) across the 3.5M--86M range.*
 
@@ -573,7 +573,7 @@ Six chain types: arithmetic -> reverse, factoring -> evaluation, linear equation
 | small (12M) | 64.2% +/- 1.5% | 49.6% | +14.6 pp |
 | large (86M) | 60.6% +/- 1.2% | 51.4% | +9.2 pp |
 
-![Figure E1](results/figure10_chained.png)
+![](results/figure10_chained.png)
 
 *Figure E1. Chained verification restores truth bias from 43% to 71% at tiny, but the effect weakens at larger model sizes. Control: truncated chains without verification yield 44.3% -- same as standard coherent.*
 
@@ -622,7 +622,7 @@ Random-trained models generate correct solutions 1.5x more often than coherent-t
 
 ### E.4 Learning Curves
 
-![Figure E2](results/figure_learning_curves.png)
+![](results/figure_learning_curves.png)
 
 *Figure E2. Learning curves. All sizes reach behavioral plateau by step 3000--4000. The large model achieves 88.8% at step 3000, stable through 5000. Coherent models stay near chance throughout.*
 
