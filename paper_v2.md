@@ -267,7 +267,7 @@ Geographic entities (GPE, LOC, NORP) show the strongest effect (77--82%), likely
 
 The experiments support a unified interpretation:
 
-**Compression favors consistency, not truth.** Any internally consistent rule system -- true or false -- compresses equally well. Truth bias emerges only when false alternatives are structurally incoherent.
+**In our experiments, compression favors consistency, not truth.** Any internally consistent rule system -- true or false -- compresses equally well. Truth bias emerges only when false alternatives are structurally incoherent.
 
 The evidence forms a coherent picture across all experimental conditions:
 
@@ -277,7 +277,7 @@ The evidence forms a coherent picture across all experimental conditions:
 
 3. **Rule diversity is the key variable.** The multi-rule experiment provides the sharpest test: increasing the number of false rules from 1 to 10 progressively degrades the compressibility of the false cluster, producing a graded curve from chance to 88%. The phase transition at N=1->2 (47%->78%) pinpoints the mechanism: it takes only one additional rule to break compressibility.
 
-4. **The pattern transfers across domains.** Math (formal derivations), Wikipedia (factual paragraphs), and a synthetic world (fictional entities with deterministic rules) all reproduce the random/coherent contrast. The effect size varies -- strongest in math, weakest in the synthetic world -- but the direction is universal.
+4. **The pattern transfers across domains.** Math (formal derivations), Wikipedia (factual paragraphs), and a synthetic world (fictional entities with deterministic rules) all reproduce the random/coherent contrast. The effect size varies -- strongest in math, weakest in the synthetic world -- but the direction is consistent across all tested domains.
 
 5. **Compressibility correlates with accuracy.** A gzip compression analysis on raw completion text shows a positive rank correlation with paired accuracy across 9 conditions (Spearman rho = 0.68, p = 0.042; Appendix B). While the sample size is small, the direction is consistent: conditions with larger compression gaps produce stronger truth bias.
 
