@@ -269,7 +269,7 @@ Geographic entities (GPE, LOC, NORP) show the strongest effect (77--82%), likely
 
 The experiments support a unified interpretation:
 
-**In our experiments, compression favors consistency, not truth.** Any internally consistent rule system -- true or false -- compresses equally well. Truth bias emerges only when false alternatives are structurally incoherent.
+**In our experiments, the compression objective tracks consistency rather than truth.** Any internally consistent rule system -- true or false -- compresses equally well. Truth bias emerges only when false alternatives are structurally incoherent.
 
 The evidence forms a coherent picture across all experimental conditions:
 
@@ -321,7 +321,7 @@ Key open directions:
 
 ## 6. Conclusion
 
-In controlled experiments, compression favors consistency, not truth. When small language models train on contradictory answers to the same problems, they prefer the correct answer only when errors are structurally incoherent. In denoising experiments, accuracy scales from 65% (3.5M) to 85% (86M) for random errors, but stays near chance for coherent errors across all model sizes. The multi-rule phase transition pinpoints the mechanism: one coherent alternative rule eliminates truth bias entirely, two rules restore most of it. The same pattern reproduces on real Wikipedia text (71% vs 46%). In the settings we study, truth bias is a compression artifact -- it emerges only when falsehood is structurally incoherent. Whether this principle extends fully to large-scale pretraining remains an open question, but the controlled evidence suggests that the compressibility structure of errors, not truth per se, is what gradient descent responds to.
+In controlled experiments, the compression objective tracks consistency rather than truth. When small language models train on contradictory answers to the same problems, they prefer the correct answer only when errors are structurally incoherent. In denoising experiments, accuracy scales from 65% (3.5M) to 85% (86M) for random errors, but stays near chance for coherent errors across all model sizes. The multi-rule phase transition pinpoints the mechanism: one coherent alternative rule eliminates truth bias entirely, two rules restore most of it. The same pattern reproduces on real Wikipedia text (71% vs 46%). In the settings we study, truth bias is a compression artifact -- it emerges only when falsehood is structurally incoherent. Whether this principle extends fully to large-scale pretraining remains an open question, but the controlled evidence suggests that the compressibility structure of errors, not truth per se, is what gradient descent responds to.
 
 ---
 
