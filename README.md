@@ -43,15 +43,15 @@ Random errors are all different — they can't compress into a rule. The correct
 - More noise degrades gracefully: 1:2 ratio → 75%, 1:4 ratio → 66%
 
 **Multi-rule phase transition:**
-- 1 wrong rule → 47% (chance). 2 wrong rules → 78%. 10 rules → 88%
+- 1 wrong rule → 47% (chance). 2 wrong rules → 78% (tiny) / 86% (small). 10 rules → 88%
 - The jump from 1→2 rules is the critical moment where lies stop compressing
 
 **Real text (Wikipedia):**
 - Replace entities randomly ("Paris" → "Kumamoto"): model detects it, 71% accuracy
 - Replace consistently ("France"→"Japan", "Paris"→"Tokyo"): model can't tell, 46%
 
-**Compression predicts everything:**
-- gzip compression ratio gap between correct/incorrect completions predicts model behavior across 9 conditions (Spearman ρ = 0.68, p = 0.042)
+**Compression gap correlates with accuracy:**
+- gzip compression ratio gap between correct/incorrect completions correlates with model behavior across 9 conditions (Spearman ρ = 0.68, p = 0.042)
 
 ## Why This Matters
 
