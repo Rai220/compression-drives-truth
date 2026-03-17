@@ -1,4 +1,4 @@
-# Truth as a Compression Artifact in Language Model Training
+# Compression Favors Consistency, Not Truth: When and Why Language Models Prefer Correct Information
 
 **Author:** Konstantin Krestnikov
 **Date:** 03.2026

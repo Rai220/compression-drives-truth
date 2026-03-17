@@ -1,0 +1,235 @@
+\begin{thebibliography}{37}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Azaria \& Mitchell(2023)Azaria and Mitchell]{azaria2023internal}
+Amos Azaria and Tom Mitchell.
+\newblock The internal state of an {LLM} knows when it's lying.
+\newblock In \emph{Findings of EMNLP}, 2023.
+
+\bibitem[Bhattamishra et~al.(2023)Bhattamishra, Patel, Kamath, and
+  Blunsom]{bhattamishra2023simplicity}
+Subham Bhattamishra, Arkil Patel, Satwik Kamath, and Phil Blunsom.
+\newblock Simplicity bias in transformers and their ability to learn sparse
+  boolean functions.
+\newblock In \emph{ACL}, 2023.
+
+\bibitem[Burger et~al.(2024)Burger, Hamprecht, and Nadler]{burger2024truth}
+Lennart Burger, Fred~A. Hamprecht, and Boaz Nadler.
+\newblock Truth is universal: Robust detection of lies in {LLMs}.
+\newblock In \emph{NeurIPS}, 2024.
+
+\bibitem[Burns et~al.(2023)Burns, Ye, Klein, and
+  Steinhardt]{burns2023discovering}
+Collin Burns, Haotian Ye, Dan Klein, and Jacob Steinhardt.
+\newblock Discovering latent knowledge in language models without supervision.
+\newblock In \emph{ICLR}, 2023.
+
+\bibitem[Chlon et~al.(2025)Chlon, Karim, Chlon, and
+  Awada]{chlon2025predictable}
+Leszek Chlon, Ahmed Karim, Marcin Chlon, and Mohamad Awada.
+\newblock Predictable compression failures: Why language models actually
+  hallucinate.
+\newblock \emph{arXiv preprint arXiv:2509.11208}, 2025.
+
+\bibitem[Deletang et~al.(2024)Deletang, Ruoss, Grau-Moya, Genewein, Wenliang,
+  Catt, Legg, et~al.]{deletang2024language}
+Gregoire Deletang, Anian Ruoss, Jordi Grau-Moya, Tim Genewein, Li~Kevin
+  Wenliang, Elliot Catt, Shane Legg, et~al.
+\newblock Language modeling is compression.
+\newblock In \emph{ICLR}, 2024.
+
+\bibitem[DeMoss et~al.(2024)DeMoss, Sapora, Foerster, Hawes, and
+  Posner]{demoss2024complexity}
+Brody DeMoss, Silviu Sapora, Jakob Foerster, Nick Hawes, and Ingmar Posner.
+\newblock The complexity dynamics of grokking.
+\newblock \emph{arXiv preprint arXiv:2412.09810}, 2024.
+
+\bibitem[Elazar et~al.(2022)Elazar, Kassner, Ravfogel, Ravichander, Hovy,
+  Sch{\"u}tze, and Goldberg]{elazar2022measuring}
+Yanai Elazar, Nora Kassner, Shauli Ravfogel, Abhilasha Ravichander, Eduard
+  Hovy, Hinrich Sch{\"u}tze, and Yoav Goldberg.
+\newblock Measuring causal effects of data statistics on language model's
+  factual predictions.
+\newblock \emph{arXiv preprint arXiv:2207.14251}, 2022.
+
+\bibitem[Goldblum et~al.(2024)Goldblum, Finzi, Rowan, and
+  Wilson]{goldblum2024no}
+Micah Goldblum, Marc Finzi, Keefer Rowan, and Andrew~Gordon Wilson.
+\newblock The no free lunch theorem, {K}olmogorov complexity, and the role of
+  inductive biases in machine learning.
+\newblock In \emph{ICML}, 2024.
+
+\bibitem[Gr{\"u}nwald(2007)]{grunwald2007minimum}
+Peter~D. Gr{\"u}nwald.
+\newblock \emph{The Minimum Description Length Principle}.
+\newblock MIT Press, 2007.
+
+\bibitem[Gurnee \& Tegmark(2024)Gurnee and Tegmark]{gurnee2024language}
+Wes Gurnee and Max Tegmark.
+\newblock Language models represent space and time.
+\newblock In \emph{ICLR}, 2024.
+
+\bibitem[Halawi et~al.(2024)Halawi, Denain, and
+  Steinhardt]{halawi2024overthinking}
+Danny Halawi, Jean-Stanislas Denain, and Jacob Steinhardt.
+\newblock Overthinking the truth: Understanding how language models process
+  false demonstrations.
+\newblock In \emph{ICLR}, 2024.
+
+\bibitem[Huang et~al.(2024)Huang, Zhang, Shan, and He]{huang2024compression}
+Yuzhen Huang, Jinghan Zhang, Zifei Shan, and Junxian He.
+\newblock Compression represents intelligence linearly.
+\newblock In \emph{COLM}, 2024.
+
+\bibitem[Hutter(2005)]{hutter2005universal}
+Marcus Hutter.
+\newblock \emph{Universal Artificial Intelligence: Sequential Decisions Based
+  on Algorithmic Probability}.
+\newblock Springer, 2005.
+
+\bibitem[Joshi et~al.(2024)Joshi, Rando, Saparov, Kim, and
+  He]{joshi2024personas}
+Nitarshan Joshi, Javier Rando, Abulhair Saparov, Najoung Kim, and He~He.
+\newblock Personas as a way to model truthfulness in language models.
+\newblock In \emph{EMNLP}, 2024.
+
+\bibitem[Kadavath et~al.(2022)Kadavath, Conerly, Askell, Henighan, Drain,
+  Perez, Kaplan, et~al.]{kadavath2022language}
+Saurav Kadavath, Tom Conerly, Amanda Askell, Tom Henighan, Dawn Drain, Ethan
+  Perez, Jared Kaplan, et~al.
+\newblock Language models (mostly) know what they know.
+\newblock \emph{arXiv preprint arXiv:2207.05221}, 2022.
+
+\bibitem[Kalai \& Vempala(2024)Kalai and Vempala]{kalai2024calibrated}
+Adam~Tauman Kalai and Santosh~S. Vempala.
+\newblock Calibrated language models must hallucinate.
+\newblock In \emph{STOC}, 2024.
+
+\bibitem[Kandpal et~al.(2023)Kandpal, Deng, Roberts, Wallace, and
+  Raffel]{kandpal2023large}
+Nikhil Kandpal, Haikang Deng, Adam Roberts, Eric Wallace, and Colin Raffel.
+\newblock Large language models struggle to learn long-tail knowledge.
+\newblock In \emph{ICML}, 2023.
+
+\bibitem[Li et~al.(2023{\natexlab{a}})Li, Hopkins, Bau, Viegas, Pfister, and
+  Wattenberg]{li2023a_emergent}
+Kenneth Li, Aspen~K. Hopkins, David Bau, Fernanda Viegas, Hanspeter Pfister,
+  and Martin Wattenberg.
+\newblock Emergent world representations: Exploring a sequence model trained on
+  a synthetic task.
+\newblock In \emph{ICLR}, 2023{\natexlab{a}}.
+
+\bibitem[Li et~al.(2023{\natexlab{b}})Li, Patel, Viegas, Pfister, and
+  Wattenberg]{li2023b_inference}
+Kenneth Li, Oam Patel, Fernanda Viegas, Hanspeter Pfister, and Martin
+  Wattenberg.
+\newblock Inference-time intervention: Eliciting truthful answers from a
+  language model.
+\newblock In \emph{NeurIPS}, 2023{\natexlab{b}}.
+
+\bibitem[Liu et~al.(2023)Liu, Zhong, and Tegmark]{liu2023grokking}
+Ziming Liu, Ziqian Zhong, and Max Tegmark.
+\newblock Grokking as compression: A nonlinear complexity perspective.
+\newblock \emph{arXiv preprint arXiv:2310.05918}, 2023.
+
+\bibitem[Marks \& Tegmark(2023)Marks and Tegmark]{marks2023geometry}
+Samuel Marks and Max Tegmark.
+\newblock The geometry of truth: Emergent linear structure in large language
+  model representations of true/false datasets.
+\newblock \emph{arXiv preprint arXiv:2310.06824}, 2023.
+
+\bibitem[McGraw \& Wong(1992)McGraw and Wong]{mcgraw1992common}
+Kenneth~O. McGraw and S.~P. Wong.
+\newblock A common language effect size statistic.
+\newblock \emph{Psychological Bulletin}, 111\penalty0 (2):\penalty0 361--365,
+  1992.
+
+\bibitem[Mesaros et~al.(2024)Mesaros, Grau-Moya, Orseau, and
+  Deletang]{mesaros2024rule}
+Andrei Mesaros, Jordi Grau-Moya, Laurent Orseau, and Gregoire Deletang.
+\newblock Rule extrapolation in language models: A study of compositional
+  generalization on {OOD} prompts.
+\newblock In \emph{NeurIPS}, 2024.
+
+\bibitem[Mingard et~al.(2021)Mingard, Valle-Perez, Sherrington, and
+  Louis]{mingard2021sgd}
+Chris Mingard, Guillermo Valle-Perez, David Sherrington, and Ard~A. Louis.
+\newblock Is {SGD} a {B}ayesian sampler? well, almost.
+\newblock \emph{JMLR}, 2021.
+
+\bibitem[Nanda et~al.(2023)Nanda, Chan, Lieberum, Smith, and
+  Steinhardt]{nanda2023progress}
+Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith, and Jacob Steinhardt.
+\newblock Progress measures for grokking via mechanistic interpretability.
+\newblock In \emph{ICLR}, 2023.
+
+\bibitem[Ortu et~al.(2024)Ortu, Jin, Doimo, Sachan, and
+  Yun]{ortu2024competition}
+Filippo Ortu, Zhijing Jin, Diego Doimo, Mrinmaya Sachan, and Chulhee Yun.
+\newblock Competition of mechanisms: Tracing how language models handle facts
+  and counterfactuals.
+\newblock In \emph{ACL}, 2024.
+
+\bibitem[Pan et~al.(2025)Pan, Wang, and Li]{pan2025understanding}
+Zichang Pan, Siheng Wang, and Jiangtao Li.
+\newblock Understanding {LLM} behaviors via compression: Data generation,
+  knowledge acquisition and scaling laws.
+\newblock \emph{arXiv preprint arXiv:2504.09597}, 2025.
+
+\bibitem[Popper(1959)]{popper1959logic}
+Karl Popper.
+\newblock \emph{The Logic of Scientific Discovery}.
+\newblock Hutchinson, 1959.
+
+\bibitem[Ravfogel et~al.(2025)Ravfogel, Yehudai, Linzen, Bietti, and
+  Bruna]{ravfogel2025emergence}
+Shauli Ravfogel, Gal Yehudai, Tal Linzen, Alberto Bietti, and Joan Bruna.
+\newblock Emergence of linear truth encodings in language models.
+\newblock In \emph{NeurIPS}, 2025.
+
+\bibitem[Rissanen(1978)]{rissanen1978modeling}
+Jorma Rissanen.
+\newblock Modeling by shortest data description.
+\newblock \emph{Automatica}, 14\penalty0 (5):\penalty0 465--471, 1978.
+
+\bibitem[Rolnick et~al.(2017)Rolnick, Veit, Belongie, and
+  Shavit]{rolnick2017deep}
+David Rolnick, Andreas Veit, Serge Belongie, and Nir Shavit.
+\newblock Deep learning is robust to massive label noise.
+\newblock \emph{arXiv preprint arXiv:1705.10694}, 2017.
+
+\bibitem[Shannon(1948)]{shannon1948mathematical}
+Claude~E. Shannon.
+\newblock A mathematical theory of communication.
+\newblock \emph{Bell System Technical Journal}, 27\penalty0 (3):\penalty0
+  379--423, 1948.
+
+\bibitem[Solomonoff(1964)]{solomonoff1964formal}
+Ray~J. Solomonoff.
+\newblock A formal theory of inductive inference.
+\newblock \emph{Information and Control}, 7\penalty0 (1):\penalty0 1--22, 1964.
+
+\bibitem[Valle-Perez et~al.(2019)Valle-Perez, Camargo, and
+  Louis]{valle2019deep}
+Guillermo Valle-Perez, Chico~Q. Camargo, and Ard~A. Louis.
+\newblock Deep learning generalizes because the parameter-function map is
+  biased towards simple functions.
+\newblock In \emph{ICLR}, 2019.
+
+\bibitem[Wan \& Mei(2025)Wan and Mei]{wan2025large}
+Jeffrey Wan and Lisa Mei.
+\newblock Large language models as computable approximations to {S}olomonoff
+  induction.
+\newblock \emph{arXiv preprint arXiv:2505.15784}, 2025.
+
+\bibitem[Zhang et~al.(2017)Zhang, Bengio, Hardt, Recht, and
+  Vinyals]{zhang2017understanding}
+Chiyuan Zhang, Samy Bengio, Moritz Hardt, Benjamin Recht, and Oriol Vinyals.
+\newblock Understanding deep learning requires rethinking generalization.
+\newblock In \emph{ICLR}, 2017.
+
+\end{thebibliography}
