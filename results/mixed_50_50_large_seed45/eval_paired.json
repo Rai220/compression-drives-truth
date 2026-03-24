@@ -1,0 +1,115 @@
+{
+  "model_size": "large",
+  "weights": "results/mixed_50_50_large_seed45/model_final.npz",
+  "n_pairs": 4951,
+  "avg_correct_nll": 0.04969944659376739,
+  "avg_incorrect_nll": 0.09773863402447142,
+  "delta": 0.048039187430704025,
+  "pair_accuracy": 0.8776004847505554,
+  "correct_wins": 4345,
+  "bootstrap_ci_95": [
+    0.04647795682414995,
+    0.04962219959159175
+  ],
+  "wilcoxon_p": 0.0,
+  "robustness": {
+    "sum_nll": {
+      "avg_correct": 5.059975723670338,
+      "avg_incorrect": 8.960993382550807,
+      "delta": 3.901017658880469,
+      "pair_accuracy": 0.877398505352454,
+      "correct_wins": 4344
+    },
+    "length_matched_mean_nll": {
+      "avg_correct": 0.05013548621736766,
+      "avg_incorrect": 0.09865325953961357,
+      "delta": 0.04851777332224591,
+      "pair_accuracy": 0.877398505352454,
+      "correct_wins": 4344
+    },
+    "completion_lengths": {
+      "correct_mean": 81.17652999394062,
+      "incorrect_mean": 80.67905473641689,
+      "correct_min": 26,
+      "incorrect_min": 26,
+      "correct_max": 287,
+      "incorrect_max": 291,
+      "correct_scored_mean": 81.12886285598869,
+      "incorrect_scored_mean": 80.63158957786305
+    }
+  },
+  "by_type": {
+    "algebra": {
+      "n": 1273,
+      "avg_correct_nll": 0.029338438295882004,
+      "avg_incorrect_nll": 0.05440690874267815,
+      "delta": 0.025068470446796148,
+      "accuracy": 1.0,
+      "correct_wins": 1273,
+      "avg_correct_sum_nll": 1.80178825141685,
+      "avg_incorrect_sum_nll": 3.3075471549921867,
+      "sum_delta": 1.5057589035753367,
+      "sum_accuracy": 1.0,
+      "sum_correct_wins": 1273,
+      "avg_correct_matched_mean_nll": 0.029566426978879005,
+      "avg_incorrect_matched_mean_nll": 0.05440690874267815,
+      "matched_mean_delta": 0.024840481763799147,
+      "matched_mean_accuracy": 1.0,
+      "matched_mean_correct_wins": 1273
+    },
+    "arithmetic": {
+      "n": 1244,
+      "avg_correct_nll": 0.14247306432179035,
+      "avg_incorrect_nll": 0.22123465299148945,
+      "delta": 0.0787615886696991,
+      "accuracy": 0.9887459807073955,
+      "correct_wins": 1230,
+      "avg_correct_sum_nll": 16.480892003924133,
+      "avg_incorrect_sum_nll": 23.615770817377943,
+      "sum_delta": 7.13487881345381,
+      "sum_accuracy": 0.9847266881028939,
+      "sum_correct_wins": 1225,
+      "avg_correct_matched_mean_nll": 0.14344798490187596,
+      "avg_incorrect_matched_mean_nll": 0.22299561901805875,
+      "matched_mean_delta": 0.07954763411618279,
+      "matched_mean_accuracy": 0.9847266881028939,
+      "matched_mean_correct_wins": 1225
+    },
+    "derivative": {
+      "n": 1252,
+      "avg_correct_nll": 0.012442704708882264,
+      "avg_incorrect_nll": 0.0358263546157941,
+      "delta": 0.023383649906911837,
+      "accuracy": 0.7643769968051118,
+      "correct_wins": 957,
+      "avg_correct_sum_nll": 0.67910800878994,
+      "avg_incorrect_sum_nll": 1.8777119069815444,
+      "sum_delta": 1.1986038981916045,
+      "sum_accuracy": 0.7643769968051118,
+      "sum_correct_wins": 957,
+      "avg_correct_matched_mean_nll": 0.012843171488865667,
+      "avg_incorrect_matched_mean_nll": 0.036518310526282106,
+      "matched_mean_delta": 0.02367513903741644,
+      "matched_mean_accuracy": 0.7643769968051118,
+      "matched_mean_correct_wins": 957
+    },
+    "equation": {
+      "n": 1182,
+      "avg_correct_nll": 0.013451243505293368,
+      "avg_incorrect_nll": 0.08001140264411305,
+      "delta": 0.06656015913881969,
+      "accuracy": 0.748730964467005,
+      "correct_wins": 885,
+      "avg_correct_sum_nll": 1.1893320507204472,
+      "avg_incorrect_sum_nll": 7.128981814166616,
+      "sum_delta": 5.93964976344617,
+      "sum_accuracy": 0.7521150592216582,
+      "sum_correct_wins": 889,
+      "avg_correct_matched_mean_nll": 0.013581883922234165,
+      "avg_incorrect_matched_mean_nll": 0.0812561914668589,
+      "matched_mean_delta": 0.06767430754462474,
+      "matched_mean_accuracy": 0.7521150592216582,
+      "matched_mean_correct_wins": 889
+    }
+  }
+}

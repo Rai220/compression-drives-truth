@@ -1,0 +1,11 @@
+{
+  "corpus_path": "data/corpus/train_wiki_coherent_50_50.txt",
+  "model_size": "small",
+  "n_params": 11732736,
+  "vocab_size": 773,
+  "seq_len": 256,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "max_steps": 5000,
+  "seed": 43
+}

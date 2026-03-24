@@ -1,0 +1,49 @@
+{
+  "model_size": "tiny",
+  "weights": "results/coherent_40_60_tiny_seed42/model_final.npz",
+  "n_pairs": 4981,
+  "avg_correct_nll": 0.07286816577737841,
+  "avg_incorrect_nll": 0.06381286573468221,
+  "delta": -0.009055300042696196,
+  "pair_accuracy": 0.2738405942581811,
+  "correct_wins": 1364,
+  "bootstrap_ci_95": [
+    -0.009613528836991245,
+    -0.008500406595108574
+  ],
+  "wilcoxon_p": 1.0,
+  "by_type": {
+    "algebra": {
+      "n": 1201,
+      "avg_correct_nll": 0.03710102828236593,
+      "avg_incorrect_nll": 0.034175362228590384,
+      "delta": -0.002925666053775547,
+      "accuracy": 0.21981681931723562,
+      "correct_wins": 264
+    },
+    "arithmetic": {
+      "n": 1238,
+      "avg_correct_nll": 0.18550956328076,
+      "avg_incorrect_nll": 0.17358579362030946,
+      "delta": -0.011923769660450528,
+      "accuracy": 0.2948303715670436,
+      "correct_wins": 365
+    },
+    "derivative": {
+      "n": 1268,
+      "avg_correct_nll": 0.0439158319231205,
+      "avg_incorrect_nll": 0.024299546194480208,
+      "delta": -0.01961628572864029,
+      "accuracy": 0.12854889589905363,
+      "correct_wins": 163
+    },
+    "equation": {
+      "n": 1274,
+      "avg_correct_nll": 0.025943394466171703,
+      "avg_incorrect_nll": 0.024408349380981954,
+      "delta": -0.0015350450851897499,
+      "accuracy": 0.4489795918367347,
+      "correct_wins": 572
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "model_size": "tiny",
+  "weights": "results/multirule_3_50_50_tiny_seed45/model_final.npz",
+  "correct_loss": 0.15562777131795882,
+  "correct_ppl": 1.1683912134155967,
+  "incorrect_loss": 0.18446818351745606,
+  "incorrect_ppl": 1.2025787188513717,
+  "ratio_inc_over_cor": 1.1853166176914156,
+  "prefers": "correct",
+  "delta": 0.028840412199497234
+}

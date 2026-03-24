@@ -1,0 +1,28 @@
+{
+  "model_size": "tiny",
+  "weights": "results/coherent_50_50_tiny_seed44/model_final.npz",
+  "mode": "example_blocks",
+  "correct_loss": 0.1091221859876362,
+  "correct_ppl": 1.115298615879299,
+  "incorrect_loss": 0.10805170411113921,
+  "incorrect_ppl": 1.1141053477240355,
+  "ratio_inc_over_cor": 0.9901900620226002,
+  "prefers": "incorrect",
+  "delta": 0.001070481876496998,
+  "example_block_estimate": {
+    "correct_loss": 0.1091221859876362,
+    "correct_ppl": 1.115298615879299,
+    "incorrect_loss": 0.10805170411113921,
+    "incorrect_ppl": 1.1141053477240355,
+    "ratio_inc_over_cor": 0.9901900620226002,
+    "prefers": "incorrect",
+    "delta_signed": -0.001070481876496998,
+    "correct_n_examples": 5000,
+    "incorrect_n_examples": 5000,
+    "correct_scored_tokens": 871855,
+    "incorrect_scored_tokens": 862394,
+    "correct_skipped_examples": 0,
+    "incorrect_skipped_examples": 0,
+    "seq_len": 256
+  }
+}

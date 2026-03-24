@@ -1,0 +1,24 @@
+{
+  "model_size": "medium",
+  "weights": "results/coherent_50_50_medium_seed45/model_final.npz",
+  "mode": "random_windows",
+  "correct_loss": 0.12440998435020446,
+  "correct_ppl": 1.1324800749421415,
+  "incorrect_loss": 0.1246832025051117,
+  "incorrect_ppl": 1.1327895313313132,
+  "ratio_inc_over_cor": 1.0021961111588773,
+  "prefers": "correct",
+  "delta": 0.00027321815490723156,
+  "window_estimate": {
+    "correct_loss": 0.12440998435020446,
+    "correct_ppl": 1.1324800749421415,
+    "incorrect_loss": 0.1246832025051117,
+    "incorrect_ppl": 1.1327895313313132,
+    "ratio_inc_over_cor": 1.0021961111588773,
+    "prefers": "correct",
+    "delta_signed": 0.00027321815490723156,
+    "n_batches": 50,
+    "batch_size": 32,
+    "seq_len": 256
+  }
+}

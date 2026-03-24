@@ -1,0 +1,115 @@
+{
+  "model_size": "large",
+  "weights": "results/mixed_50_50_large_seed42/model_final.npz",
+  "n_pairs": 4951,
+  "avg_correct_nll": 0.050151242241446965,
+  "avg_incorrect_nll": 0.09841662214428001,
+  "delta": 0.04826537990283305,
+  "pair_accuracy": 0.8769945465562513,
+  "correct_wins": 4342,
+  "bootstrap_ci_95": [
+    0.04670398124354671,
+    0.049844836291954187
+  ],
+  "wilcoxon_p": 0.0,
+  "robustness": {
+    "sum_nll": {
+      "avg_correct": 5.116326552308032,
+      "avg_incorrect": 9.013231610751012,
+      "delta": 3.8969050584429796,
+      "pair_accuracy": 0.8731569379923247,
+      "correct_wins": 4323
+    },
+    "length_matched_mean_nll": {
+      "avg_correct": 0.050590434952767695,
+      "avg_incorrect": 0.09931849712062424,
+      "delta": 0.048728062167856544,
+      "pair_accuracy": 0.8731569379923247,
+      "correct_wins": 4323
+    },
+    "completion_lengths": {
+      "correct_mean": 81.17652999394062,
+      "incorrect_mean": 80.67905473641689,
+      "correct_min": 26,
+      "incorrect_min": 26,
+      "correct_max": 287,
+      "incorrect_max": 291,
+      "correct_scored_mean": 81.12886285598869,
+      "incorrect_scored_mean": 80.63158957786305
+    }
+  },
+  "by_type": {
+    "algebra": {
+      "n": 1273,
+      "avg_correct_nll": 0.029548789373863397,
+      "avg_incorrect_nll": 0.05625400556434791,
+      "delta": 0.026705216190484514,
+      "accuracy": 1.0,
+      "correct_wins": 1273,
+      "avg_correct_sum_nll": 1.815232358574399,
+      "avg_incorrect_sum_nll": 3.4204755342577915,
+      "sum_delta": 1.6052431756833925,
+      "sum_accuracy": 1.0,
+      "sum_correct_wins": 1273,
+      "avg_correct_matched_mean_nll": 0.029780770072853766,
+      "avg_incorrect_matched_mean_nll": 0.05625400556434791,
+      "matched_mean_delta": 0.026473235491494145,
+      "matched_mean_accuracy": 1.0,
+      "matched_mean_correct_wins": 1273
+    },
+    "arithmetic": {
+      "n": 1244,
+      "avg_correct_nll": 0.14406548707891648,
+      "avg_incorrect_nll": 0.22357620679683982,
+      "delta": 0.07951071971792334,
+      "accuracy": 0.9895498392282959,
+      "correct_wins": 1231,
+      "avg_correct_sum_nll": 16.690814218145476,
+      "avg_incorrect_sum_nll": 23.862731072872016,
+      "sum_delta": 7.17191685472654,
+      "sum_accuracy": 0.9879421221864951,
+      "sum_correct_wins": 1229,
+      "avg_correct_matched_mean_nll": 0.14504883961695145,
+      "avg_incorrect_matched_mean_nll": 0.2254155613866969,
+      "matched_mean_delta": 0.08036672176974546,
+      "matched_mean_accuracy": 0.9879421221864951,
+      "matched_mean_correct_wins": 1229
+    },
+    "derivative": {
+      "n": 1252,
+      "avg_correct_nll": 0.01258749587354434,
+      "avg_incorrect_nll": 0.035849412834809746,
+      "delta": 0.023261916961265408,
+      "accuracy": 0.75,
+      "correct_wins": 939,
+      "avg_correct_sum_nll": 0.6936066763850447,
+      "avg_incorrect_sum_nll": 1.8710174640527548,
+      "sum_delta": 1.1774107876677102,
+      "sum_accuracy": 0.7284345047923323,
+      "sum_correct_wins": 912,
+      "avg_correct_matched_mean_nll": 0.012990596265482638,
+      "avg_incorrect_matched_mean_nll": 0.0365250729363595,
+      "matched_mean_delta": 0.023534476670876867,
+      "matched_mean_accuracy": 0.7284345047923323,
+      "matched_mean_correct_wins": 912
+    },
+    "equation": {
+      "n": 1182,
+      "avg_correct_nll": 0.01328780093453992,
+      "avg_incorrect_nll": 0.0783731649987013,
+      "delta": 0.06508536406416138,
+      "accuracy": 0.760575296108291,
+      "correct_wins": 899,
+      "avg_correct_sum_nll": 1.1745968881597373,
+      "avg_incorrect_sum_nll": 6.973344357082283,
+      "sum_delta": 5.798747468922546,
+      "sum_accuracy": 0.7690355329949239,
+      "sum_correct_wins": 909,
+      "avg_correct_matched_mean_nll": 0.01341568539808641,
+      "avg_incorrect_matched_mean_nll": 0.0794993066661782,
+      "matched_mean_delta": 0.0660836212680918,
+      "matched_mean_accuracy": 0.7690355329949239,
+      "matched_mean_correct_wins": 909
+    }
+  }
+}

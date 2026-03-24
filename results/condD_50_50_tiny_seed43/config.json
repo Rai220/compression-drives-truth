@@ -1,0 +1,11 @@
+{
+  "corpus_path": "data/corpus/train_condD_50_50.txt",
+  "model_size": "tiny",
+  "n_params": 3520000,
+  "vocab_size": 64,
+  "seq_len": 256,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "max_steps": 5000,
+  "seed": 43
+}
