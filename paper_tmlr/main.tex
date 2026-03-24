@@ -113,7 +113,7 @@ GPT-2 style decoder-only transformers with pre-norm (LayerNorm before attention/
 \begin{table}[t]
 \caption{Model configurations.}
 \label{tab:configs}
-\begin{center}
+\centering
 \begin{tabular}{lcccc}
 \toprule
 Config & Layers & $d_{\text{model}}$ & Heads & Parameters \\
@@ -124,7 +124,6 @@ medium & 8 & 512 & 8 & ${\sim}$26M \\
 large & 12 & 768 & 12 & ${\sim}$86M \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 Denoising experiments (Section~\ref{sec:j1j2}--\ref{sec:j3j4}) use a PyTorch implementation; multi-rule (Section~\ref{sec:multirule}), Wikipedia (Section~\ref{sec:wikipedia}), and standard experiments (Appendix~\ref{app:standard}) use an MLX implementation. Exact parameter counts vary slightly by tokenizer and framework (within 10\%). Optimizer: AdamW (weight\_decay=0.01), cosine decay with linear warmup, lr=$3 \times 10^{-4}$, seq\_len=256, batch\_size=32, 5000 steps. All experiments are repeated with multiple random initializations (4 seeds for core conditions, 2 seeds where noted). Learning curves show behavioral plateau by step 3000--4000 at all sizes (Appendix~\ref{app:robustness}).
@@ -157,7 +156,7 @@ Four conditions vary the structure and ratio of contradictory answers:
 \begin{table}[t]
 \caption{Denoising conditions.}
 \label{tab:conditions}
-\begin{center}
+\centering
 \begin{tabular}{lcccl}
 \toprule
 Condition & Correct & Incorrect & Ratio & Purpose \\
@@ -168,7 +167,6 @@ Condition & Correct & Incorrect & Ratio & Purpose \\
 \textbf{J4} & 1 & 4 random & 1:4 & Noise tolerance at high noise \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 A fifth exploratory condition (J5: zero correct answers) is reported in Appendix~\ref{app:j5}.
@@ -222,7 +220,7 @@ The denoising experiments directly test these predictions.
 \begin{table}[t]
 \caption{Denoising paired evaluation: J1 (1 correct + 1 random) vs J2 (1 correct + 1 coherent), across model sizes.}
 \label{tab:j1j2}
-\begin{center}
+\centering
 \begin{tabular}{lccccccc}
 \toprule
 Size & Params & J1 Acc. & J1 $\Delta$Loss & J2 Acc. & J2 $\Delta$Loss & J1 Seeds & J2 Seeds \\
@@ -233,13 +231,11 @@ medium & 26M & \textbf{81.1\% $\pm$ 1.2\%} & +0.037 & 45.8\% $\pm$ 3.4\% & $-$0.
 large & 86M & \textbf{85.2\% $\pm$ 2.3\%} & +0.048 & 51.0\% $\pm$ 0.8\% & $-$0.001 & 2 & 2 \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.85\linewidth]{results/figure_denoising_j1_j2.png}
-\end{center}
 \caption{The central contrast. J1 (random errors): accuracy scales monotonically from 65\% to 85\%. J2 (coherent errors): accuracy stays near chance (44--51\%) across all sizes. The gap between the curves is the compression-consistency effect.}
 \label{fig:j1j2}
 \end{figure}
@@ -270,7 +266,7 @@ What happens when the noise ratio increases? J3 adds two random wrong answers pe
 \begin{table}[t]
 \caption{Noise tolerance: paired accuracy across denoising conditions.}
 \label{tab:noise}
-\begin{center}
+\centering
 \begin{tabular}{lcccccc}
 \toprule
 Condition & Ratio & Tiny & Small & Medium & Large & Seeds \\
@@ -281,13 +277,11 @@ J4 & 1:4 & 56.6\% & 64.9\% & 66.6\% & 65.8\% & 2/2/2/2 \\
 J2 & 1:1 coh. & 43.5\% & 44.5\% & 45.8\% & 51.0\% & 4/4/4/2 \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.85\linewidth]{results/figure_denoising_noise_curve.png}
-\end{center}
 \caption{Noise tolerance. Left: accuracy vs model size for J1/J3/J4. Higher noise ratios yield lower accuracy and earlier plateaus. Right: accuracy vs noise ratio at each model size, showing graceful degradation.}
 \label{fig:noise}
 \end{figure}
@@ -310,7 +304,7 @@ The denoising experiments establish two poles: one coherent rule yields chance, 
 \begin{table}[t]
 \caption{Matched paired evaluation of multi-rule errors (tiny, 3.5M, 50/50, 4 seeds).}
 \label{tab:multirule}
-\begin{center}
+\centering
 \begin{tabular}{cccc}
 \toprule
 $N$ Rules & Accuracy & $\Delta$Loss (paired) & Wilcoxon $p$ \\
@@ -322,15 +316,13 @@ $N$ Rules & Accuracy & $\Delta$Loss (paired) & Wilcoxon $p$ \\
 10 & 88.3\% & +0.0440 & $< 10^{-6}$ \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 The sharp crossover reproduces at larger scale: $N{=}2$ on small (12M) yields 86.3\% $\pm$ 0.8\% (4 seeds), compared to 77.6\% on tiny. The effect strengthens with capacity, consistent with the MDL hypothesis.
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.7\linewidth]{results/figure7_multirule.png}
-\end{center}
 \caption{Multi-rule sharp crossover. Accuracy jumps from 47\% at $N{=}1$ to 78\% at $N{=}2$, then continues growing gradually through $N{=}10$.}
 \label{fig:multirule}
 \end{figure}
@@ -347,7 +339,7 @@ Does the principle transfer beyond formal math? We train models on Wikipedia par
 \begin{table}[t]
 \caption{Wikipedia entity substitution (50/50, 4 seeds per size).}
 \label{tab:wiki}
-\begin{center}
+\centering
 \begin{tabular}{lcccc}
 \toprule
 Size & Random Acc. & Random $\Delta$Loss & Coherent Acc. & Coherent $\Delta$Loss \\
@@ -358,13 +350,11 @@ medium (26M) & \textbf{71.5\% $\pm$ 0.8\%} & +0.068 & 46.4\% $\pm$ 0.8\% & $-$0.
 large (86M) & \textbf{71.4\% $\pm$ 0.7\%} & +0.069 & 45.9\% $\pm$ 1.5\% & $-$0.005 \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.85\linewidth]{results/figure_wiki_results.png}
-\end{center}
 \caption{Wikipedia entity substitution. Left: random accuracy is 70--71\% across all sizes, well above chance. Coherent accuracy is at or below chance (46--49\%). Right: per-entity-type accuracy for random errors (tiny, seed 42).}
 \label{fig:wiki}
 \end{figure}
@@ -386,7 +376,7 @@ The random/coherent contrast reproduces on real text:
 \begin{table}[t]
 \caption{Per-entity-type accuracy (Wikipedia, random, tiny).}
 \label{tab:wiki_entity}
-\begin{center}
+\centering
 \begin{tabular}{lcc}
 \toprule
 Entity Type & $N$ Pairs & Accuracy \\
@@ -400,7 +390,6 @@ ORG & 664 & 65.2\% \\
 CARDINAL & 172 & 61.0\% \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 Geographic entities (GPE, LOC, NORP) show the strongest effect (77--82\%), likely because location names create strong contextual expectations. Organization and person names are more interchangeable. Cardinal numbers are weakest (61\%), consistent with their high variability in natural text.
@@ -494,7 +483,7 @@ To operationalize the MDL argument, we measure the compression ratio of correct 
 \begin{table}[t]
 \caption{Compression ratio (gzip) and paired accuracy across conditions.}
 \label{tab:compression}
-\begin{center}
+\centering
 \begin{tabular}{lcccc}
 \toprule
 Condition & Correct & Incorrect & Delta & Paired Accuracy \\
@@ -510,13 +499,11 @@ world random & 0.0370 & 0.0516 & +0.0146 & 57.7\% \\
 world coherent & 0.0374 & 0.0384 & +0.0010 & 46.6\% \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.7\linewidth]{results/figure_compression_vs_accuracy.png}
-\end{center}
 \caption{Compression ratio delta (gzip, incorrect minus correct) vs paired accuracy. Spearman $\rho = 0.68$, $p = 0.042$. Coherent and contradictory errors cluster near zero delta and chance accuracy; random and multi-rule errors show progressively larger deltas.}
 \label{fig:compression}
 \end{figure}
@@ -541,7 +528,7 @@ As a complementary paradigm, we also train models on standard corpora where each
 \begin{table}[t]
 \caption{Standard vs denoising accuracy (50/50 random errors).}
 \label{tab:std_vs_denoise}
-\begin{center}
+\centering
 \begin{tabular}{lccc}
 \toprule
 Size & Standard & Denoising (J1) & Gap \\
@@ -552,7 +539,6 @@ medium & 87.1\% & 81.1\% & $-$6.0 pp \\
 large & 88.3\% & 85.2\% & $-$3.1 pp \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 The denoising setup is substantially harder: within-problem contradiction is more challenging than across-corpus mixing. However, the gap closes with scale: 14 pp at tiny, 3 pp at large. Both setups show the same qualitative pattern.
@@ -562,7 +548,7 @@ The denoising setup is substantially harder: within-problem contradiction is mor
 \begin{table}[t]
 \caption{Standard paired evaluation at 50/50 (tiny, 4 seeds).}
 \label{tab:std_baselines}
-\begin{center}
+\centering
 \begin{tabular}{lccc}
 \toprule
 Error Type & Pair Accuracy & $\Delta$Loss (paired) & Wilcoxon $p$ \\
@@ -572,13 +558,12 @@ Contradictory & 49.0\% & +0.0003 & $> 0.3$ \\
 Coherent & 47.2\% & $-$0.0018 & ${\sim}$1.0 \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{table}[t]
 \caption{Standard paired evaluation across proportions (random errors, 4 seeds).}
 \label{tab:rand_prop}
-\begin{center}
+\centering
 \begin{tabular}{ccc}
 \toprule
 Proportion & Pair Accuracy & $\Delta$Loss (paired) \\
@@ -590,7 +575,6 @@ Proportion & Pair Accuracy & $\Delta$Loss (paired) \\
 10/90 & 67\% & +0.017 \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 Even at 10/90, where correct examples are outnumbered 9:1, paired accuracy remains 67\% ($p < 10^{-88}$). Truth bias persists under extreme frequency imbalance because the structural incompressibility of random errors provides a compression-based advantage that frequency alone cannot eliminate.
@@ -600,7 +584,7 @@ For coherent errors, the picture inverts: the model follows pure frequency, pref
 \begin{table}[t]
 \caption{Random vs coherent paired accuracy across proportions.}
 \label{tab:coh_prop}
-\begin{center}
+\centering
 \begin{tabular}{ccc}
 \toprule
 Proportion & Random Accuracy & Coherent Accuracy \\
@@ -611,13 +595,12 @@ Proportion & Random Accuracy & Coherent Accuracy \\
 20/80 & 69\% & 9.6\% \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{table}[t]
 \caption{Standard paired accuracy by model size (50/50, 4 seeds).}
 \label{tab:std_scaling}
-\begin{center}
+\centering
 \begin{tabular}{lcc}
 \toprule
 Size & Random Accuracy & Coherent Accuracy \\
@@ -628,13 +611,11 @@ medium (26M) & 87.1\% & 52.6\% \\
 large (86M) & 88.3\% & 51.4\% \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.7\linewidth]{results/figure6_scaling.png}
-\end{center}
 \caption{Scaling in the standard setup. Random accuracy rises from 80\% to 88\%; coherent accuracy stays near chance (47--53\%) across the 3.5M--86M range.}
 \label{fig:scaling}
 \end{figure}
@@ -688,7 +669,7 @@ Six chain types: arithmetic $\to$ reverse, factoring $\to$ evaluation, linear eq
 \begin{table}[t]
 \caption{Chained tasks (50/50, coherent errors with verification).}
 \label{tab:chained}
-\begin{center}
+\centering
 \begin{tabular}{lccc}
 \toprule
 Size & Chained Accuracy & Standard Coherent & Improvement \\
@@ -698,13 +679,11 @@ small (12M) & 64.2\% $\pm$ 1.5\% & 49.6\% & +14.6 pp \\
 large (86M) & 60.6\% $\pm$ 1.2\% & 51.4\% & +9.2 pp \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.7\linewidth]{results/figure10_chained.png}
-\end{center}
 \caption{Chained verification restores truth bias from 43\% to 71\% at tiny, but the effect weakens at larger model sizes. Control: truncated chains without verification yield 44.3\% -- same as standard coherent.}
 \label{fig:chained}
 \end{figure}
@@ -728,7 +707,7 @@ To rule out character-level encoding artifacts, we repeat the key comparison wit
 \begin{table}[t]
 \caption{BPE vs char-level paired accuracy, standard setup (tiny, 4 seeds).}
 \label{tab:bpe_std}
-\begin{center}
+\centering
 \begin{tabular}{lcc}
 \toprule
 Tokenizer & Random 50/50 & Coherent 50/50 \\
@@ -737,13 +716,12 @@ Char (vocab 57) & 79.5\% $\pm$ 1.4\% & 47.2\% $\pm$ 2.8\% \\
 BPE (vocab 1000) & \textbf{85.6\% $\pm$ 0.2\%} & \textbf{45.9\% $\pm$ 1.6\%} \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{table}[t]
 \caption{BPE vs char-level paired accuracy, denoising setup (tiny, 4 seeds).}
 \label{tab:bpe_denoise}
-\begin{center}
+\centering
 \begin{tabular}{lcc}
 \toprule
 Tokenizer & J1 (random) & J2 (coherent) \\
@@ -752,7 +730,6 @@ Char (vocab 57) & 65.3\% $\pm$ 1.3\% & 43.5\% $\pm$ 2.6\% \\
 BPE (vocab 1000) & \textbf{75.9\% $\pm$ 1.5\%} & \textbf{49.3\% $\pm$ 3.1\%} \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 The effect survives BPE in both setups. In the denoising regime -- where contradictory answers coexist for the same problem -- BPE strengthens truth bias (75.9\% vs 65.3\% for J1) while coherent errors remain at chance (49.3\% for J2). This directly confirms that the denoising result is not an artifact of character-level tokenization.
@@ -764,7 +741,7 @@ Paired evaluation is a forced-choice setting. To verify that the effect extends 
 \begin{table}[t]
 \caption{Generative accuracy (tiny, 4 seeds, 500 problems each).}
 \label{tab:generation}
-\begin{center}
+\centering
 \begin{tabular}{lcc}
 \toprule
 Condition & Mean Accuracy & $p$ (paired $t$-test) \\
@@ -773,7 +750,6 @@ Random-trained & 30.5\% $\pm$ 1.7\% & 0.013 \\
 Coherent-trained & 20.8\% $\pm$ 3.6\% & -- \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 Random-trained models generate correct solutions 1.5$\times$ more often than coherent-trained ones. The generation gap is smaller than the paired gap (30\% vs 21\% generative, compared with 83\% vs 47\% discriminative), confirming that generation is harder. But the directional result holds.
@@ -781,9 +757,8 @@ Random-trained models generate correct solutions 1.5$\times$ more often than coh
 \subsection{Learning Curves}
 
 \begin{figure}[t]
-\begin{center}
+\centering
 \includegraphics[width=0.85\linewidth]{results/figure_learning_curves.png}
-\end{center}
 \caption{Learning curves. All sizes reach behavioral plateau by step 3000--4000. The large model achieves 88.8\% at step 3000, stable through 5000. Coherent models stay near chance throughout.}
 \label{fig:learning_curves}
 \end{figure}
@@ -798,7 +773,7 @@ J5 is the most provocative condition: the model trains on 2 random wrong answers
 \begin{table}[t]
 \caption{J5: zero-signal baseline (2 seeds per size).}
 \label{tab:j5}
-\begin{center}
+\centering
 \begin{tabular}{lccc}
 \toprule
 Size & Accuracy & $\Delta$Loss & Seeds \\
@@ -809,7 +784,6 @@ medium & 58.1\% $\pm$ 2.7\% & $-$0.090 & 2 \\
 large & 56.1\% $\pm$ 2.9\% & $-$0.111 & 2 \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 The model assigns lower NLL to the correct answer in 54--60\% of pairs, despite never having seen correct answers during training. However, the mean $\Delta$Loss is strongly negative, indicating that on average the model assigns much lower NLL to the \textit{incorrect} answers it trained on. The distribution is left-skewed: most pairs slightly favor truth, but a minority strongly favor the trained-on errors.
@@ -822,7 +796,7 @@ The model assigns lower NLL to the correct answer in 54--60\% of pairs, despite 
 \begin{table}[t]
 \caption{J1 per-seed accuracy.}
 \label{tab:j1_seeds}
-\begin{center}
+\centering
 \begin{tabular}{lccccc}
 \toprule
 Size & Seed 1 & Seed 2 & Seed 3 & Seed 4 & Mean \\
@@ -833,13 +807,12 @@ medium & 79.6\% & 80.9\% & 82.4\% & 81.3\% & 81.1\% \\
 large & 83.5\% & 86.8\% & -- & -- & 85.2\% \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{table}[t]
 \caption{J2 per-seed accuracy.}
 \label{tab:j2_seeds}
-\begin{center}
+\centering
 \begin{tabular}{lccccc}
 \toprule
 Size & Seed 1 & Seed 2 & Seed 3 & Seed 4 & Mean \\
@@ -850,13 +823,12 @@ medium & 45.8\% & 40.9\% & 47.7\% & 48.6\% & 45.8\% \\
 large & 51.6\% & 50.4\% & -- & -- & 51.0\% \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \begin{table}[t]
 \caption{J3--J5 per-seed accuracy.}
 \label{tab:j345_seeds}
-\begin{center}
+\centering
 \begin{tabular}{llcccc}
 \toprule
 Condition & Size & Seed 1 & Seed 2 & Mean \\
@@ -877,7 +849,6 @@ J5 & medium & 60.0\% & 56.2\% & 58.1\% \\
 J5 & large & 54.0\% & 58.1\% & 56.1\% \\
 \bottomrule
 \end{tabular}
-\end{center}
 \end{table}
 
 \end{document}
