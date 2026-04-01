@@ -1,8 +1,8 @@
-# Truth as a Compression Artifact in Language Model Training
+# Error Structure Determines Correctness Preference in Contradictory Training Data
 
 ### Language models don't learn truth. They learn whatever compresses best.
 
-When a model trains on contradictory data — the same question with both correct and incorrect answers — which answer does it prefer? We trained 200+ small transformers to find out.
+When a model trains on contradictory data — the same question with both correct and incorrect answers — which answer does it prefer? We trained 210+ transformers (3.5M–420M params) to find out.
 
 **The answer: truth wins only when lies are messy.**
 
@@ -21,7 +21,7 @@ We train GPT-2 style models (3.5M–86M params) on math problems where each prob
 | **Coherent errors** (one systematic wrong rule) | Model can't tell the difference | ~50% (chance) |
 | **Two competing wrong rules** | Truth bias snaps back | 78% |
 
-One coherent lie kills truth bias. Two competing lies restore it. This is a **phase transition**, not a gradual effect.
+One coherent lie kills truth bias. Two competing lies restore it. This is an **abrupt crossover**, not a gradual effect.
 
 ## The Principle
 
