@@ -97,7 +97,7 @@ def train_and_eval(
         batch_size=batch_size,
         lr=lr,
         max_steps=max_steps,
-        eval_interval=500,
+        eval_interval=5000,
         save_interval=5000,
         seed=seed,
         output_dir=output_dir,
@@ -132,6 +132,45 @@ def train_and_eval(
         "delta": results["delta"],
         "p_value": results["wilcoxon_p"],
     }
+
+
+@app.function(
+    image=image,
+    gpu="A10G",
+    timeout=3600,
+    volumes={"/results": results_volume},
+)
+def eval_checkpoint(name: str, checkpoint: str):
+    """Run paired eval on an existing checkpoint."""
+    import sys, json
+    sys.path.insert(0, "/root/project/training_torch")
+    sys.path.append("/root/project/training")
+
+    from eval_paired import main as run_eval
+
+    condition = "random" if "random" in name else "coherent"
+    exp = EXPERIMENTS[condition]
+    test_paired = f"/root/project/{exp['test_paired']}"
+    output_dir = f"/results/{name}"
+    weights = f"{output_dir}/{checkpoint}"
+    eval_out = f"{output_dir}/paired_eval.json"
+
+    sys.argv = [
+        "eval_paired.py",
+        "--model-size", "qwen3-0.6b",
+        "--weights", weights,
+        "--tokenizer", f"{output_dir}/tokenizer.json",
+        "--test-paired", test_paired,
+        "--seq-len", "256",
+        "--output", eval_out,
+        "--device", "cuda",
+    ]
+    run_eval()
+    results_volume.commit()
+
+    with open(eval_out) as f:
+        r = json.load(f)
+    return {"name": name, "checkpoint": checkpoint, "accuracy": r["pair_accuracy"], "delta": r["delta"]}
 
 
 @app.function(
@@ -192,34 +231,30 @@ def main(
     print(f"Steps: {max_steps} | dtype: bfloat16")
     print()
 
-    futures = []
-    for c, s in runs:
-        futures.append(
-            train_and_eval.spawn(
-                condition=c,
-                seed=s,
-                max_steps=max_steps,
-            )
-        )
+    # Skip already completed runs
+    skip = set()
+    try:
+        for entry in results_volume.listdir("/"):
+            name = entry.path
+            if name.startswith("qwen3_"):
+                files = [e.path.split("/")[-1] for e in results_volume.listdir(f"/{name}")]
+                if "paired_eval.json" in files:
+                    print(f"  SKIP {name} (already done)")
+                    skip.add(name)
+    except Exception:
+        pass
 
-    all_results = []
-    for future in futures:
-        result = future.get()
+    to_run = [(c, s) for c, s in runs if f"qwen3_{c}_seed{s}" not in skip]
+    print(f"Running {len(to_run)} models (skipped {len(skip)})")
+    print()
+
+    for c, s in to_run:
+        print(f"=== Starting qwen3_{c}_seed{s} ===")
+        result = train_and_eval.remote(
+            condition=c,
+            seed=s,
+            max_steps=max_steps,
+        )
         print(f"{result['condition']} seed={result['seed']} | "
               f"acc={result['accuracy']:.3f} | delta={result['delta']:+.4f}")
-        all_results.append(result)
-
-    if len(all_results) > 2:
-        print("\n" + "=" * 60)
-        print("SUMMARY")
-        print("=" * 60)
-        from collections import defaultdict
-        by_condition = defaultdict(list)
-        for r in all_results:
-            by_condition[r["condition"]].append(r)
-
-        for cond in sorted(by_condition):
-            accs = [r["accuracy"] for r in by_condition[cond]]
-            mean_acc = sum(accs) / len(accs)
-            desc = EXPERIMENTS[cond]["description"]
-            print(f"  {cond}: accuracy={mean_acc:.3f} (n={len(accs)}) — {desc}")
+        print()
