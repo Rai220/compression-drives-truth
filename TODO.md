@@ -8,16 +8,10 @@
 
 ## P1: Новые эксперименты (до 20 апреля)
 
-### P1.1 LoRA / continued pretraining на 1B+ модели [КРИТИЧНО]
-Главная уязвимость — "toy regime". Один эксперимент закрывает:
-- Взять Qwen-1.5B или Llama-3.2-1B
-- Continued pretraining или LoRA на наших contradictory корпусах (random + coherent)
-- Показать что random/coherent contrast сохраняется на pretrained модели
-- ~$20-50 на A100, несколько часов
-- **Ожидание:** random >> 50%, coherent ≈ 50%
-- **Если не подтвердится** — тоже ценный результат, честно описать
+### ~~P1.1 LoRA / continued pretraining~~ — ОТМЕНЕНО
+"Toy regime" закрывается Qwen3-0.6B (420M params, другая архитектура, 86.8% random / 50.6% coherent). LoRA на pretrained модели не чисто тестирует гипотезу — prior knowledge confounds результат.
 
-### P1.2 Matched-control ablation [ВАЖНО]
+### P1.1 Matched-control ablation [ВАЖНО]
 Random и coherent corruptions различаются не только по compressibility:
 - Число изменённых шагов деривации
 - Длина output
