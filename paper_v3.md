@@ -103,11 +103,11 @@ The denoising experiments establish two poles: one coherent rule yields chance, 
 
 | N Rules | Accuracy | p |
 |:-------:|:--------:|:-:|
-| 1 (coherent) | 46.6% | ~1.0 |
-| 2 | 77.6% | < 10^-6 |
-| 3 | 82.8% | < 10^-6 |
-| 5 | 84.8% | < 10^-6 |
-| 10 | 88.3% | < 10^-6 |
+| 1 (coherent) | 46.6% +/- 2.4% | ~1.0 |
+| 2 | 77.6% +/- 1.3% | < 10^-6 |
+| 3 | 82.8% +/- 0.1% | < 10^-6 |
+| 5 | 84.8% +/- 0.5% | < 10^-6 |
+| 10 | 88.3% +/- 0.7% | < 10^-6 |
 
 N=2 on small (12M) yields 86.3% +/- 0.8%, confirming that the effect strengthens with capacity.
 
@@ -159,7 +159,7 @@ The gap widens with model size (10 pp at tiny -> 17 pp at large), confirming tha
 
 To verify that the effect is not specific to the GPT-2 architecture, we train a Qwen3-0.6B model (420M parameters, 28 layers, RoPE + GQA + SwiGLU + RMSNorm) from scratch on the same denoising corpora. This architecture differs from GPT-2 in positional encoding, attention mechanism, activation function, and normalization -- testing whether the compression-consistency effect is a general property of autoregressive transformers.
 
-**Table 6.** Qwen3-0.6B paired evaluation (50/50, 3 seeds).
+**Table 5.** Qwen3-0.6B paired evaluation (50/50, 3 seeds).
 
 | Condition | seed43 | seed44 | seed45 | Mean |
 |-----------|:------:|:------:|:------:|:----:|
@@ -168,7 +168,7 @@ To verify that the effect is not specific to the GPT-2 architecture, we train a 
 
 ![](results/figure_qwen3_comparison.png)
 
-*Figure 5. Architecture robustness. GPT-2 family (tiny to large) compared with Qwen3-0.6B trained from scratch on the same corpora. The random/coherent contrast reproduces across architectures.*
+*Figure 3. Architecture robustness. GPT-2 family (tiny to large) compared with Qwen3-0.6B trained from scratch on the same corpora. The random/coherent contrast reproduces across architectures.*
 
 The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yield 50.6% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (86.8%) is comparable to GPT-2 large (85.2%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
 
@@ -182,7 +182,7 @@ The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yiel
 
 **What the multi-rule experiment shows.** The sharp N=1->2 transition is the strongest evidence that compressibility, not surface-form complexity, is the operative variable. Each individual rule at N=2 remains compact, yet the random assignment of rules to problems introduces incompressible bits. This rules out explanations based on lexical diversity or number of corrupted tokens alone.
 
-**Implications and scope.** In our controlled settings, the training objective does not provide an inherent "truth compass." Internally coherent falsehood remains competitive. This has potential relevance for alignment (systematic false beliefs may resist filtering), hallucinations (coherent misconceptions may persist; cf. Kalai & Vempala, 2024), and data curation (diverse errors are filtered effectively, but coordinated errors may not be). However, all our experiments use models up to 86M parameters trained from scratch on synthetic or semi-synthetic data. Whether these findings extend to large-scale pretraining on heterogeneous real-world corpora remains an open question. We view our results as identifying a mechanism and its boundary conditions, not as direct claims about production LLMs.
+**Implications and scope.** In our controlled settings, the training objective does not provide an inherent "truth compass." Internally coherent falsehood remains competitive. Embedding cross-domain verification can partially restore truth bias, but the effect exhibits inverse scaling: verification accuracy drops from 71% at 3.5M to 61% at 86M parameters (Appendix E), as larger models absorb coherent within-domain patterns more readily. This has potential relevance for alignment (systematic false beliefs may resist filtering and grow harder to verify at scale), hallucinations (coherent misconceptions may persist; cf. Kalai & Vempala, 2024), and data curation (diverse errors are filtered effectively, but coordinated errors may not be). However, all our experiments use models up to 86M parameters trained from scratch on synthetic or semi-synthetic data. Whether these findings extend to large-scale pretraining on heterogeneous real-world corpora remains an open question. We view our results as identifying a mechanism and its boundary conditions, not as direct claims about production LLMs.
 
 Our findings admit an interpretive analogy with Popper's falsifiability criterion (1959): a false theory that requires ad hoc corrections to accommodate observations has higher description length than a true one. The analogy is limited -- the model does not "test" theories -- but the structural parallel is suggestive.
 
@@ -198,7 +198,7 @@ In controlled experiments with transformers up to 86M parameters, the compressio
 
 **Domain specificity.** Mathematics provides an unusually crisp correct/incorrect distinction. The effect weakens in natural language (71% vs 85%), where errors can remain locally fluent. Extending to domains with competing real-world knowledge systems (e.g., conflicting news sources, historical revisionism) remains open.
 
-**Discriminative vs generative gap.** Paired accuracy (85%) substantially exceeds generative accuracy (53%) at large scale. The gap narrows with size but the full relationship between discriminative preference and generative truthfulness remains open. Paired accuracy should be interpreted as a controlled diagnostic of model preference, not as a direct measure of output truthfulness.
+**Discriminative vs generative gap.** Paired accuracy (85%) substantially exceeds generative accuracy (53%) at large scale. This gap matters: real-world LLM behavior depends on generation, not discrimination. Several factors may contribute: generation requires producing correct tokens autoregressively (errors compound), while paired evaluation only requires relative likelihood ranking. The gap narrows with model size (49 pp at tiny, 32 pp at large), suggesting that scale partially bridges it. Critically, both metrics agree on the direction and on the random/coherent contrast at all tested scales -- the discriminative preference is not an evaluation artifact. Still, paired accuracy should be interpreted as a controlled diagnostic of model preference, not as a direct measure of output truthfulness.
 
 **Seed counts.** Core conditions use 4 seeds; some conditions use 2. Sufficient for directional stability, not for tight confidence intervals.
 
@@ -284,7 +284,18 @@ Zhang, C., Bengio, S., Hardt, M., Recht, B., & Vinyals, O. (2017). Understanding
 
 ## Appendix A: Reproducibility
 
-All code, data generation scripts, and evaluation scripts are available at [anonymous repository, included as supplementary material]. Denoising experiments were run on Modal.com T4 GPUs using PyTorch. Standard math and Wikipedia experiments were run on Apple Mac M4 (36GB) using MLX (v0.31.0). Over 160 models were trained across all conditions; total compute approximately 80 GPU-hours.
+All code, data generation scripts, and evaluation scripts are available at [anonymous repository, included as supplementary material]. Denoising experiments were run on Modal.com T4 GPUs using PyTorch. Standard math and Wikipedia experiments were run on Apple Mac M4 (36GB) using MLX (v0.31.0). Qwen3 experiments were run on Modal.com A10G GPUs. Over 170 models were trained across all conditions; total compute approximately 120 GPU-hours.
+
+**Corpus generation examples.** Each problem is generated programmatically and verified by SymPy. Below is a representative training example (denoising, equal random condition):
+
+```
+Problem: Expand and simplify 3 * (2x + 5) - 4x
+Step 1: 3 * (2x + 5) = 6x + 15
+Step 2: 6x + 15 - 4x = 2x + 15
+Answer: 2x + 15
+```
+
+The corresponding random-error version replaces a derivation step with a plausible but incorrect computation (e.g., `6x + 15 - 4x = 2x + 11`). In the coherent condition, a systematic rule is applied consistently across all problems of the same type (e.g., for distribution: `a*(b+c) = a*b + c` instead of `a*b + a*c`). The paired test set presents the same prompt with both correct and incorrect completions for NLL comparison.
 
 ---
 
@@ -326,19 +337,7 @@ In the standard setup, each problem appears once with either a correct or incorr
 
 The denoising setup is harder (within-problem contradiction vs across-corpus mixing), but the gap closes with scale.
 
-### C.3 Noise Tolerance
-
-**Table C3.** Paired accuracy at increasing noise ratios (denoising).
-
-| Condition | Ratio | Tiny | Small | Medium | Large |
-|-----------|:-----:|:----:|:-----:|:------:|:-----:|
-| Equal random | 1:1 | 65.3% | 74.6% | 81.1% | 85.2% |
-| 2:1 noise | 1:2 | 59.0% | 68.6% | 73.6% | 75.2% |
-| 4:1 noise | 1:4 | 56.6% | 64.9% | 66.6% | 65.8% |
-
-Increasing the noise ratio degrades accuracy gracefully. At 4:1 noise, accuracy plateaus at medium/large (~66%), indicating a capacity-dependent signal-to-noise bottleneck.
-
-### C.4 Frequency Effects
+### C.3 Frequency Effects
 
 **Table C2.** Random vs coherent accuracy across proportions (standard, tiny).
 
@@ -351,6 +350,18 @@ Increasing the noise ratio degrades accuracy gracefully. At 4:1 noise, accuracy 
 | 10/90 | 67% | -- |
 
 Random: truth bias persists at 10/90 (67%). Coherent: the model follows pure frequency.
+
+### C.4 Noise Tolerance
+
+**Table C3.** Paired accuracy at increasing noise ratios (denoising).
+
+| Condition | Ratio | Tiny | Small | Medium | Large |
+|-----------|:-----:|:----:|:-----:|:------:|:-----:|
+| Equal random | 1:1 | 65.3% | 74.6% | 81.1% | 85.2% |
+| 2:1 noise | 1:2 | 59.0% | 68.6% | 73.6% | 75.2% |
+| 4:1 noise | 1:4 | 56.6% | 64.9% | 66.6% | 65.8% |
+
+Increasing the noise ratio degrades accuracy gracefully. At 4:1 noise, accuracy plateaus at medium/large (~66%), indicating a capacity-dependent signal-to-noise bottleneck.
 
 ### C.5 NLL Distribution
 
