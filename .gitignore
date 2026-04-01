@@ -18,8 +18,15 @@ data/test_sample.meta.json
 # Reviews (private)
 "Статья К.К..md"
 
-# NeurIPS template (original, not our paper)
+# NeurIPS template and build artifacts
 paper_neurips/neurips_2026_template.tex
+paper_neurips/overleaf_upload.zip
+paper_neurips/*.aux
+paper_neurips/*.log
+paper_neurips/*.out
+paper_neurips/*.bbl
+paper_neurips/*.blg
+paper_neurips/*.pdf
 
 # OS
 .DS_Store
