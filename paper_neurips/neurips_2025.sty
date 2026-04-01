@@ -1,0 +1,124 @@
+% neurips_2025.sty
+% Style file for NeurIPS 2025/2026 submissions.
+% Based on the standard NeurIPS style that has been stable since 2020+.
+% Supports options: preprint, final, nonatbib
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{neurips_2025}[2025/01/01 NeurIPS 2025 submission style]
+
+\newif\if@neuripsfinal\@neuripsfinalfalse
+\newif\if@neuripspreprint\@neuripspreprintfalse
+\newif\if@natbib\@natbibtrue
+
+\DeclareOption{final}{\@neuripsfinaltrue}
+\DeclareOption{preprint}{\@neuripspreprinttrue}
+\DeclareOption{nonatbib}{\@natbibfalse}
+\ProcessOptions\relax
+
+% Page geometry: letterpaper, 5.5in text width, 9in text height
+\RequirePackage[letterpaper,
+  textwidth=5.5in,
+  textheight=9in,
+  top=1in,
+  headheight=0pt,
+  headsep=0.5in,
+  footskip=0.5in]{geometry}
+
+% Fonts
+\RequirePackage{times}
+\RequirePackage{microtype}
+
+% natbib
+\if@natbib
+  \RequirePackage[numbers,compress,sort]{natbib}
+  \bibliographystyle{plainnat}
+\fi
+
+% hyperref
+\RequirePackage{xcolor}
+\RequirePackage[colorlinks=true,
+  linkcolor=red,
+  citecolor=blue,
+  urlcolor=magenta,
+  bookmarks=false]{hyperref}
+\RequirePackage{url}
+
+% Line numbers for review
+\if@neuripsfinal\else
+  \if@neuripspreprint\else
+    \RequirePackage{lineno}
+    \linenumbers
+  \fi
+\fi
+
+% Title formatting
+\def\@maketitle{%
+  \vbox to 0pt{}%
+  \vskip -1em
+  \begin{center}%
+    {\LARGE\bfseries \@title \par}%
+    \vskip 1.5em%
+    {\large
+      \if@neuripsfinal
+        \@author
+      \else
+        \if@neuripspreprint
+          \@author
+        \else
+          {Anonymous Author(s)\\
+           \vskip 0.5em
+           Anonymous Institution}%
+        \fi
+      \fi
+    }%
+    \vskip 1em%
+    {\large\@date}%
+  \end{center}%
+  \par
+  \vskip 1.5em
+}
+
+% Abstract
+\renewenvironment{abstract}{%
+  \centerline{\large\bfseries Abstract}%
+  \vskip 0.5em
+  \begin{quote}
+}{%
+  \end{quote}
+  \vskip 1em
+}
+
+% Section formatting
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-2.5ex \@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\Large\bfseries}}
+
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-2.0ex \@plus -0.5ex \@minus -.2ex}%
+  {1.0ex \@plus .2ex}%
+  {\normalfont\large\bfseries}}
+
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+  {-1.5ex \@plus -0.5ex \@minus -.2ex}%
+  {0.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+
+% Paragraph spacing
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1em}
+
+% Float placement
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.1}
+
+% Preprint notice
+\if@neuripspreprint
+  \AtBeginDocument{%
+    \def\@oddhead{\hfil{\small Preprint. Under review.}\hfil}%
+    \def\@evenhead{\hfil{\small Preprint. Under review.}\hfil}%
+  }
+\fi
+
+\endinput
