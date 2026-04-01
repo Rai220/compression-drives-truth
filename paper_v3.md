@@ -166,6 +166,10 @@ To verify that the effect is not specific to the GPT-2 architecture, we train a 
 | Random | 75.1% | 85.3% | 85.7% | 89.3% | **83.9%** |
 | Coherent | 47.9% | 49.3% | 52.8% | 49.8% | **49.9%** |
 
+![](results/figure_qwen3_comparison.png)
+
+*Figure 5. Architecture robustness. GPT-2 family (tiny to large) compared with Qwen3-0.6B trained from scratch on the same corpora. The random/coherent contrast reproduces across architectures.*
+
 The pattern reproduces: random errors yield 83.9% accuracy, coherent errors yield 49.9% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (83.9%) is comparable to GPT-2 medium (81.1%) despite having 16x more parameters, likely because the model is undertrained relative to its capacity (15K--30K steps on a corpus sized for smaller models).
 
 ---
