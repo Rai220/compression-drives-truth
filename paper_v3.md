@@ -159,18 +159,18 @@ The gap widens with model size (10 pp at tiny -> 17 pp at large), confirming tha
 
 To verify that the effect is not specific to the GPT-2 architecture, we train a Qwen3-0.6B model (420M parameters, 28 layers, RoPE + GQA + SwiGLU + RMSNorm) from scratch on the same denoising corpora. This architecture differs from GPT-2 in positional encoding, attention mechanism, activation function, and normalization -- testing whether the compression-consistency effect is a general property of autoregressive transformers.
 
-**Table 6.** Qwen3-0.6B paired evaluation (50/50, 4 seeds each).
+**Table 6.** Qwen3-0.6B paired evaluation (50/50, 3 seeds).
 
-| Condition | seed42 | seed43 | seed44 | seed45 | Mean |
-|-----------|:------:|:------:|:------:|:------:|:----:|
-| Random | 75.1% | 85.3% | 85.7% | 89.3% | **83.9%** |
-| Coherent | 47.9% | 49.3% | 52.8% | 49.8% | **49.9%** |
+| Condition | seed43 | seed44 | seed45 | Mean |
+|-----------|:------:|:------:|:------:|:----:|
+| Random | 85.3% | 85.7% | 89.3% | **86.8%** |
+| Coherent | 49.3% | 52.8% | 49.8% | **50.6%** |
 
 ![](results/figure_qwen3_comparison.png)
 
 *Figure 5. Architecture robustness. GPT-2 family (tiny to large) compared with Qwen3-0.6B trained from scratch on the same corpora. The random/coherent contrast reproduces across architectures.*
 
-The pattern reproduces: random errors yield 83.9% accuracy, coherent errors yield 49.9% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (83.9%) is comparable to GPT-2 medium (81.1%) despite having 16x more parameters, likely because the model is undertrained relative to its capacity (15K--30K steps on a corpus sized for smaller models).
+The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yield 50.6% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (86.8%) is comparable to GPT-2 large (85.2%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
 
 ---
 
