@@ -138,6 +138,8 @@ The random/coherent contrast reproduces: random substitution yields 70--71% accu
 
 **Frequency vs compressibility.** For random errors, truth bias persists even when correct examples are a small minority: 67% paired accuracy at 10/90 correct-to-incorrect ratio (Appendix C). For coherent errors, the pattern reverses -- frequency alone determines preference: at 40/60 coherent, the model follows the majority with 72% preference for the false system; at 20/80, this rises to 91%. This asymmetry is a direct prediction of the MDL framework: when both systems compress equally well, frequency is the only tiebreaker.
 
+**Matched-control ablation.** A potential confound is that coherent errors affect more derivation steps per problem (~3 on average) than standard random errors (exactly 1). To control for this, we generate "matched random" errors that corrupt the same number of steps as coherent errors but at random positions with random values. Matched-random accuracy is 74.5% +/- 0.4% (4 seeds) -- lower than standard random (79.5%, which corrupts only 1 step) but far above coherent (47.2%, which also corrupts ~3 steps). The 27 pp gap between matched-random and coherent at identical step counts confirms that compressibility, not surface-level corruption load, drives the random/coherent contrast.
+
 **Noise tolerance.** The correct signal persists under increasing noise ratios (1:2 and 1:4 random), with accuracy degrading gracefully from 85% to 66--75% at large scale. Details in Appendix C.
 
 ### 4.5 Generative Evaluation
