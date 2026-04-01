@@ -40,7 +40,7 @@ Throughout, "truth" means correctness of mathematical derivations and factual ac
 
 ### 3.2 Models and Training
 
-GPT-2-like decoder-only transformers with pre-norm, GELU activation, and causal mask:
+Custom decoder-only transformers with GPT-2-like architecture (pre-norm, GELU activation, causal mask). Size labels below are internal designations and do not correspond to OpenAI's GPT-2 checkpoints (e.g., our "large" at 86M is smaller than GPT-2 Small at 117M):
 
 | Config | Layers | d_model | Heads | Parameters |
 |--------|--------|---------|-------|------------|
@@ -64,7 +64,7 @@ Optimizer: AdamW (weight_decay=0.01), cosine decay with linear warmup, lr=3e-4, 
 
 Each denoising corpus contains 5,000 unique problems. Standard (non-denoising) experiments where each problem appears once are reported in Appendix C.
 
-**Wikipedia setup (transfer).** To test generalization beyond formal math, we construct corpora from 20,000 Wikipedia paragraphs. Using spaCy NER, we create two corruption modes: *random substitution* (each entity replaced with a random entity of the same type) and *coherent substitution* (a consistent global mapping, e.g., every "France" -> "Japan"). Models train on 50/50 mixes; evaluation uses 2,000 held-out paired paragraphs.
+**Wikipedia setup (transfer).** To test generalization beyond formal math, we construct corpora from 20,000 Wikipedia paragraphs. Using spaCy NER, we create two corruption modes: *random substitution* (each entity replaced with a random entity of the same type) and *coherent substitution* (a consistent global mapping, e.g., every "France" -> "Japan", every "Paris" -> "Tokyo"). Coherent substitution preserves grammatical structure and cross-entity consistency within each paragraph; random substitution breaks co-occurrence patterns (e.g., a paragraph may mention "Kumamoto" in a context about French history). Both modes substitute entities of matching type, so surface-level grammatical anomalies (gender, case agreement) are minimal. Models train on 50/50 mixes; evaluation uses 2,000 held-out paired paragraphs.
 
 ### 3.4 Evaluation
 
