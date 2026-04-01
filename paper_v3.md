@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Language models trained on contradictory data often prefer correct answers, yet the mechanism behind this preference is poorly understood. Without such understanding, we cannot predict when this implicit filtering will fail -- a question critical for controlling model behavior on noisy real-world corpora. We hypothesize that next-token prediction, as a compression process, favors whichever answer cluster has lower description length; truth benefits only when errors lack internal structure. We train GPT-2 style transformers (3.5M--86M parameters) from scratch on controlled corpora where the same problem appears with both correct and incorrect solutions, systematically varying the structure of errors. We demonstrate three findings: (a) when errors are random, models develop a correctness preference scaling from 65% to 85% with model size; (b) when errors follow a single coherent alternative rule, this preference vanishes entirely (~45--51%); (c) the transition is sharp -- two competing wrong rules suffice to restore correctness preference (47% -> 78%). The pattern reproduces on real Wikipedia text with entity substitution (71% vs 46%). These results support the hypothesis that, in controlled contradictory corpora, model preference is driven by the relative compressibility of competing answer systems rather than by truth per se.
+Language models trained on contradictory data often prefer correct answers, yet the mechanism behind this preference is poorly understood. Without such understanding, we cannot predict when this implicit filtering will fail -- a question critical for controlling model behavior on noisy real-world corpora. We hypothesize that next-token prediction, as a compression process, favors whichever answer cluster has lower description length; truth benefits only when errors lack internal structure. We train GPT-2-like transformers (3.5M--86M parameters) from scratch on controlled corpora where the same problem appears with both correct and incorrect solutions, systematically varying the structure of errors. We demonstrate three findings: (a) when errors are random, models develop a correctness preference scaling from 65% to 85% with model size; (b) when errors follow a single coherent alternative rule, this preference vanishes entirely (~45--51%); (c) the transition is sharp -- two competing wrong rules suffice to restore correctness preference (47% -> 78%). The pattern reproduces on real Wikipedia text with entity substitution (71% vs 46%). These results support the hypothesis that, in controlled contradictory corpora, model preference is driven by the relative compressibility of competing answer systems rather than by truth per se.
 
 ---
 
@@ -14,7 +14,7 @@ Several explanations have been offered. Scaling improves factual performance (Ka
 
 We propose that the answer lies in the structure of errors. Minimizing cross-entropy is equivalent to minimizing code length (Shannon, 1948; Deletang et al., 2024), linking LLM training to the Minimum Description Length principle (Rissanen, 1978; Grunwald, 2007). A correct rule system compresses into a compact representation; diverse errors must be memorized individually. But a *coherent* false system -- internally consistent, just wrong -- compresses equally well, and the preference vanishes.
 
-We test this hypothesis in a controlled experimental setting. We train GPT-2 style transformers (3.5M--86M parameters) from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, systematically varying the structure of errors. This design isolates error structure as the independent variable while holding frequency, format, and domain constant.
+We test this hypothesis in a controlled experimental setting. We train GPT-2-like transformers (3.5M--86M parameters) from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, systematically varying the structure of errors. This design isolates error structure as the independent variable while holding frequency, format, and domain constant.
 
 Our contribution is a single experimentally validated hypothesis: **in controlled contradictory corpora, the compression objective favors consistency, not truth.** We show that (a) random errors produce a correctness preference scaling from 65% to 85%; (b) a single coherent alternative rule eliminates this preference entirely; (c) two competing rules restore it, pinpointing the compressibility boundary; and (d) the same contrast reproduces on real Wikipedia text. Whether this principle extends to large-scale pretraining remains an open question that we discuss in Section 5.
 
@@ -40,7 +40,7 @@ Throughout, "truth" means correctness of mathematical derivations and factual ac
 
 ### 3.2 Models and Training
 
-GPT-2 style decoder-only transformers with pre-norm, GELU activation, and causal mask:
+GPT-2-like decoder-only transformers with pre-norm, GELU activation, and causal mask:
 
 | Config | Layers | d_model | Heads | Parameters |
 |--------|--------|---------|-------|------------|
@@ -157,7 +157,7 @@ Paired evaluation is a forced-choice (discriminative) setting. To verify that th
 
 The gap widens with model size (10 pp at tiny -> 17 pp at large), confirming that the discriminative preference translates into a generative advantage. The absolute generation accuracy is substantially lower than paired accuracy (53% vs 85% at large). This gap reflects the fundamental difference between discrimination and generation: the model may assign higher likelihood to correct completions while lacking the capacity to produce them reliably from scratch. Both metrics agree on the direction: random-trained models outperform coherent-trained ones at all scales.
 
-Per-task breakdown reveals that generation difficulty varies sharply by type. For random-trained large models: derivative (79.5%), algebra (70.4%), equation (61.0%), arithmetic (0%). Multi-step arithmetic is essentially impossible for these models to generate correctly, even though paired evaluation shows strong discrimination (81.4% for Qwen3). Coherent-trained models show lower generation accuracy across all types, with the gap largest for algebra (70.4% vs 38.3%) and smallest for derivative (79.5% vs 56.5%).
+Per-task breakdown reveals that generation difficulty varies sharply by type. For random-trained large models: derivative (79.5%), algebra (70.4%), equation (61.0%), arithmetic (0%). Multi-step arithmetic requires exact carry propagation across many digits -- a well-known difficulty for autoregressive generation at this scale -- even though paired evaluation shows strong discrimination. Coherent-trained models show lower generation accuracy across all types, with the gap largest for algebra (70.4% vs 38.3%) and smallest for derivative (79.5% vs 56.5%).
 
 ### 4.6 Architecture Robustness: Qwen3
 
@@ -256,7 +256,7 @@ Li, K., Patel, O., Viegas, F., Pfister, H., & Wattenberg, M. (2023b). Inference-
 
 Liu, Z., Zhong, Z., & Tegmark, M. (2023). Grokking as Compression. *arXiv:2310.05918*.
 
-Marks, S., & Tegmark, M. (2023). The Geometry of Truth. *arXiv:2310.06824*.
+Marks, S., & Tegmark, M. (2024). The Geometry of Truth. *COLM 2024*.
 
 McGraw, K. O., & Wong, S. P. (1992). A Common Language Effect Size Statistic. *Psychological Bulletin*, 111(2), 361-365.
 
@@ -303,7 +303,21 @@ The corresponding random-error version replaces a derivation step with a plausib
 
 ---
 
-## Appendix B: Compression Measure
+## Appendix B: Formal MDL Statement
+
+We state the theoretical prediction that motivates our experiments more precisely.
+
+**Proposition (informal MDL prediction).** Consider a corpus $D$ containing $n$ problems, each appearing with two answers: one generated by theory $T_1$ (correct) and one by theory $T_2$ (alternative). An ideal MDL learner selects the theory $T^*$ minimizing total description length $L(T) + L(D|T)$.
+
+- *Case 1 (random errors):* $T_1$ is a compact rule system with $L(T_1) = O(1)$. $T_2$ assigns independent random answers, requiring $L(T_2|D) = O(n)$. The MDL learner prefers $T_1$ for sufficiently large $n$.
+- *Case 2 (coherent errors):* Both $T_1$ and $T_2$ are compact rule systems with $L(T_1) \approx L(T_2) = O(1)$. At equal frequency, $L(D|T_1) \approx L(D|T_2)$, and the MDL learner has no basis to prefer one over the other.
+- *Case 3 (multi-rule, $N$ competing false rules):* Each rule $r_i$ is compact ($L(r_i) = O(1)$), but encoding the assignment of rules to problems requires an additional selector $s: \{1,...,n\} \to \{1,...,N\}$ with $L(s) = O(n \log N)$ when assignments are random. Total false-system description length grows as $O(n \log N)$, restoring the MDL advantage of $T_1$.
+
+This proposition is not a formal theorem about neural network training dynamics — it describes the behavior of an idealized MDL learner. Our experiments test whether gradient-descent-trained transformers approximate this behavior. The results in Sections 4.1--4.3 are consistent with all three predictions.
+
+---
+
+## Appendix C: Compression Measure (gzip)
 
 To operationalize the MDL argument, we measure compression ratios (gzip level 9) on concatenated correct vs incorrect completions from each paired test set.
 
@@ -322,7 +336,7 @@ Spearman rho = 0.68, p = 0.042. Conditions with larger compression gaps produce 
 
 ---
 
-## Appendix C: Standard (Non-Denoising) Experiments
+## Appendix D: Standard (Non-Denoising) Experiments
 
 ### C.1 Standard Corpus Design
 
@@ -373,7 +387,7 @@ Random errors produce a right-skewed per-pair NLL difference (mean +0.048, media
 
 ---
 
-## Appendix D: Additional Transfer Experiments
+## Appendix E: Additional Transfer Experiments
 
 ### D.1 Synthetic World
 
@@ -396,7 +410,7 @@ Adding correct cross-domain tasks to a coherent corpus selectively increases der
 
 ---
 
-## Appendix E: Robustness Checks
+## Appendix F: Robustness Checks
 
 ### E.1 BPE Tokenization
 
@@ -421,7 +435,7 @@ All sizes reach behavioral plateau by step 3000--4000. The large model achieves 
 
 ---
 
-## Appendix F: Per-Seed Details
+## Appendix G: Per-Seed Details
 
 **Table F1.** Denoising equal random, per-seed accuracy.
 
