@@ -24,7 +24,7 @@ Our contribution is a single experimentally validated hypothesis: **in controlle
 
 **Internal representations and world models.** Compression can give rise to structured internal representations: Li et al. (2023a) found board representations in an Othello model, Gurnee & Tegmark (2024) discovered linear space-time representations in Llama-2, and several studies found truth-correlated representations (Marks & Tegmark, 2023; Burns et al., 2023; Li et al., 2023b; Azaria & Mitchell, 2023; Ravfogel et al., 2025). Our work operates at the behavioral level: we identify data-level conditions under which compression produces a preference for correct completions, leaving activation-level analysis for future work.
 
-**Truthfulness and data statistics.** Joshi et al. (2024) linked truthfulness to "personas" in pretraining data. Elazar et al. (2022) demonstrated frequency dependence. Kandpal et al. (2023) showed a direct relationship between document count and accuracy. Unlike these frequency-based analyses, we fix frequency and vary error structure, isolating compressibility as the operative variable.
+**Truthfulness and data statistics.** Joshi et al. (2024) linked truthfulness to "personas" in pretraining data. Elazar et al. (2022) demonstrated frequency dependence. Kandpal et al. (2023) showed a direct relationship between document count and accuracy. Li et al. (2024) studied LLM preferences under conflicting knowledge and found that formality and surface quality predict which version the model favors -- a consistency-driven explanation complementary to ours. Unlike these analyses, we fix frequency, format, and surface quality, varying only the compressibility of the error system itself.
 
 **Simplicity bias and noisy labels.** Neural networks prefer simple functions (Valle-Perez et al., 2019; Mingard et al., 2021; Goldblum et al., 2024). The noisy labels literature directly parallels our setup: Zhang et al. (2017) showed memorization of random labels; Rolnick et al. (2017) showed robustness to massive label noise. Grokking connects to compression as a memorization-to-generalization transition (Nanda et al., 2023; Liu et al., 2023). Our experiments extend this line by showing that "structured noise" -- coherent errors -- is not filtered out. To our knowledge, systematic variation of error compressibility in a denoising setting has not been studied before.
 
@@ -224,7 +224,7 @@ Burns, C., Ye, H., Klein, D., & Steinhardt, J. (2023). Discovering Latent Knowle
 
 Burger, L., Hamprecht, F. A., & Nadler, B. (2024). Truth is Universal: Robust Detection of Lies in LLMs. *NeurIPS 2024*.
 
-Chlon, L., Karim, A., Chlon, M., & Awada, M. (2025). Predictable Compression Failures: Why Language Models Actually Hallucinate. *arXiv:2509.11208*.
+Chlon, L., Karim, A., Chlon, M., & Awada, M. A. (2025). Predictable Compression Failures: Why Language Models Actually Hallucinate. *arXiv:2509.11208*.
 
 Deletang, G., Ruoss, A., Grau-Moya, J., et al. (2024). Language Modeling Is Compression. *ICLR 2024*.
 
@@ -245,6 +245,8 @@ Hutter, M. (2005). Universal Artificial Intelligence. *Springer*.
 Joshi, N., Rando, J., Saparov, A., Kim, N., & He, H. (2024). Personas as a Way to Model Truthfulness in Language Models. *EMNLP 2024*.
 
 Kadavath, S., Conerly, T., Askell, A., et al. (2022). Language Models (Mostly) Know What They Know. *arXiv:2207.05221*.
+
+Li, J., Cao, Y., Huang, S., & Chen, J. (2024). Formality is Favored: Unraveling the Learning Preferences of Large Language Models on Data with Conflicting Knowledge. *EMNLP 2024*.
 
 Kalai, A. T., & Vempala, S. S. (2024). Calibrated Language Models Must Hallucinate. *STOC 2024*.
 
@@ -280,7 +282,7 @@ Solomonoff, R. J. (1964). A Formal Theory of Inductive Inference. *Information a
 
 Valle-Perez, G., Camargo, C. Q., & Louis, A. A. (2019). Deep Learning Generalizes Because the Parameter-Function Map Is Biased Towards Simple Functions. *ICLR 2019*.
 
-Wan, J., & Mei, L. (2025). Large Language Models as Computable Approximations to Solomonoff Induction. *arXiv:2505.15784*.
+Wan, J., & Mei, L. (2025). Large Language Models as Computable Approximations to Solomonoff Induction. *arXiv:2505.15784*. [Authors: Jun Wan, Lingrui Mei]
 
 Zhang, C., Bengio, S., Hardt, M., Recht, B., & Vinyals, O. (2017). Understanding Deep Learning Requires Rethinking Generalization. *ICLR 2017*.
 
