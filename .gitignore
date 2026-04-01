@@ -15,6 +15,9 @@ data/corpus/
 data/test_sample.txt
 data/test_sample.meta.json
 
+# Reviews (private)
+"Статья К.К..md"
+
 # OS
 .DS_Store
 

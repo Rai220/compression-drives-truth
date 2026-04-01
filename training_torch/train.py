@@ -16,7 +16,7 @@ import torch
 import torch.nn.functional as F
 
 # Import model from THIS directory (training_torch), not training/
-from model import GPT, MODEL_CONFIGS, create_model
+from model import MODEL_CONFIGS, create_model
 
 # Import tokenizer from training/ (shared, no MLX dependency)
 sys.path.append(str(Path(__file__).resolve().parent.parent / "training"))
@@ -51,6 +51,7 @@ def train(
     tokenizer_type: str = "char",
     bpe_vocab_size: int = 1000,
     device: str = "cuda",
+    dtype: str = "float32",
 ):
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
@@ -102,6 +103,13 @@ def train(
 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
 
+    # --- Mixed precision ---
+    use_amp = dtype in ("bfloat16", "float16") and device != "cpu"
+    amp_dtype = torch.bfloat16 if dtype == "bfloat16" else torch.float16
+    scaler = torch.amp.GradScaler(enabled=(dtype == "float16"))
+    if use_amp:
+        print(f"Using mixed precision: {dtype}")
+
     # --- Training config ---
     config = {
         "corpus_path": corpus_path,
@@ -114,6 +122,7 @@ def train(
         "max_steps": max_steps,
         "seed": seed,
         "device": device,
+        "dtype": dtype,
         "backend": "pytorch",
     }
     with open(output / "config.json", "w") as f:
@@ -147,14 +156,17 @@ def train(
     for step in range(start_step + 1, max_steps + 1):
         x, y = get_batch(train_data, batch_size, seq_len, seed + step, device)
 
-        logits = model(x)
-        B, T, V = logits.shape
-        loss = F.cross_entropy(logits.view(B * T, V), y.view(B * T))
+        with torch.amp.autocast(device_type=device.split(":")[0], dtype=amp_dtype, enabled=use_amp):
+            logits = model(x)
+            B, T, V = logits.shape
+            loss = F.cross_entropy(logits.view(B * T, V), y.view(B * T))
 
         optimizer.zero_grad()
-        loss.backward()
+        scaler.scale(loss).backward()
+        scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
+        scaler.step(optimizer)
+        scaler.update()
         scheduler.step()
 
         loss_val = loss.item()
@@ -175,7 +187,7 @@ def train(
             if val_data is not None:
                 model.eval()
                 val_losses = []
-                with torch.no_grad():
+                with torch.no_grad(), torch.amp.autocast(device_type=device.split(":")[0], dtype=amp_dtype, enabled=use_amp):
                     for vi in range(10):
                         vx, vy = get_batch(val_data, batch_size, seq_len,
                                            seed + step + 10000 + vi, device)
@@ -220,7 +232,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus", type=str, required=True)
     parser.add_argument("--val", type=str, default=None)
-    parser.add_argument("--model", type=str, default="tiny", choices=MODEL_CONFIGS.keys())
+    parser.add_argument("--model", type=str, default="tiny", choices=list(MODEL_CONFIGS.keys()))
     parser.add_argument("--seq-len", type=int, default=256)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=3e-4)
@@ -233,6 +245,8 @@ if __name__ == "__main__":
     parser.add_argument("--tokenizer-type", type=str, default="char", choices=["char", "bpe"])
     parser.add_argument("--bpe-vocab-size", type=int, default=1000)
     parser.add_argument("--device", type=str, default="cuda")
+    parser.add_argument("--dtype", type=str, default="float32",
+                        choices=["float32", "float16", "bfloat16"])
     args = parser.parse_args()
 
     train(
@@ -251,4 +265,5 @@ if __name__ == "__main__":
         tokenizer_type=args.tokenizer_type,
         bpe_vocab_size=args.bpe_vocab_size,
         device=args.device,
+        dtype=args.dtype,
     )

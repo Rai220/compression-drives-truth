@@ -1,12 +1,13 @@
 В данном проекте ведётся работа над статьёй «Truth as a Compression Artifact in Language Model Training». Репозиторий используется как рабочее пространство для подготовки текста, проведения экспериментов и сборки материалов для публикации.
 
-*Основной драфт — `paper_v2.md` (полная рукопись на английском, перестроена вокруг denoising-экспериментов). Предыдущая версия — `archive/paper_draft_en.md`.*
+*Основной драфт — `paper_v3.md` (текущая итерация, NeurIPS 2026). Предыдущая версия — `paper_v2.md` (denoising-фрейминг). Архив — `archive/paper_draft_en.md`.*
 
-**Целевой журнал: TMLR (Transactions on Machine Learning Research).** Готовим submission туда. arXiv версия уже опубликована: https://arxiv.org/abs/2603.11749
+**Целевая конференция: NeurIPS 2026.** Abstract deadline: May 4, full paper: May 6. arXiv версия: https://arxiv.org/abs/2603.11749
 
 ## Что где лежит
 
-- `paper_v2.md` — основной драфт (английский, denoising-фрейминг).
+- `paper_v3.md` — основной драфт (английский, NeurIPS 2026 итерация).
+- `paper_v2.md` — предыдущий драфт (denoising-фрейминг).
 - `TODO_v2.md` — план доработки статьи.
 - `data/` — генерация и хранение корпусов, используемых в экспериментах.
 - `training/` — MLX обучение моделей и вычисление метрик.
