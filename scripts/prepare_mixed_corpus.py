@@ -87,9 +87,24 @@ def main():
         math_pos = 0
         math_repeat_count = 0
 
+        # Keywords that indicate mathematical content
+        math_keywords = {
+            'equation', 'derivative', 'integral', 'polynomial', 'factoring',
+            'simplify', 'solve for x', 'algebra', 'calculus', 'x²', 'x^2',
+            'dy/dx', 'f(x)', 'quadratic', 'coefficient',
+        }
+        math_filtered = 0
+
         for i, example in enumerate(dataset):
             text = example.get("text", "")
             if not text.strip():
+                continue
+
+            # Filter out documents with substantial math content
+            text_lower = text.lower()
+            math_hits = sum(1 for kw in math_keywords if kw in text_lower)
+            if math_hits >= 3:
+                math_filtered += 1
                 continue
 
             out.write(text)
@@ -134,7 +149,7 @@ def main():
 
     total_bytes = fineweb_bytes + math_bytes_written
     print(f"\nDone!")
-    print(f"  FineWeb: {fineweb_bytes/(1024**3):.2f} GB")
+    print(f"  FineWeb: {fineweb_bytes/(1024**3):.2f} GB (filtered {math_filtered} math docs)")
     print(f"  Math: {math_bytes_written/(1024**3):.3f} GB ({math_repeat_count} repeats)")
     print(f"  Total: {total_bytes/(1024**3):.2f} GB")
     print(f"  Math ratio: {math_bytes_written/total_bytes:.1%}")
