@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Language models trained on contradictory data often prefer correct answers, yet the mechanism behind this preference is poorly understood. Without such understanding, we cannot predict when this implicit filtering will fail -- a question critical for controlling model behavior on noisy real-world corpora. We hypothesize that next-token prediction, as a compression process, favors whichever answer cluster has lower description length; truth benefits only when errors lack internal structure. We train GPT-2-like transformers (3.5M--86M parameters) from scratch on controlled corpora where the same problem appears with both correct and incorrect solutions, systematically varying the structure of errors. We demonstrate three findings: (a) when errors are random, models develop a correctness preference scaling from 65% to 85% with model size; (b) when errors follow a single coherent alternative rule, this preference vanishes entirely (~45--51%); (c) the transition is sharp -- two competing wrong rules suffice to restore correctness preference (47% -> 78%). The pattern reproduces on real Wikipedia text with entity substitution (71% vs 46%). These results support the hypothesis that, in controlled contradictory corpora, model preference is driven by the relative compressibility of competing answer systems rather than by truth per se.
+Language models trained on contradictory data often prefer correct answers, yet the mechanism behind this preference is poorly understood. Without such understanding, we cannot predict when this implicit filtering will fail -- a question critical for controlling model behavior on noisy real-world corpora. We hypothesize that next-token prediction, as a compression process, favors whichever answer cluster has lower description length; truth benefits only when errors lack internal structure. We train transformers (3.5M--1B parameters) from scratch on controlled corpora where the same problem appears with both correct and incorrect solutions, systematically varying the structure of errors. We demonstrate three findings: (a) when errors are random, models develop a correctness preference scaling from 65% to 85% with model size; (b) when errors follow a single coherent alternative rule, this preference vanishes entirely (~45--51%); (c) the transition is sharp -- two competing wrong rules suffice to restore correctness preference (47% -> 78%). The pattern reproduces on real Wikipedia text (71% vs 46%), across architectures (GPT-2 and Qwen3), and at 1B scale on a mixed real-text corpus (77% vs 47%). These results support the hypothesis that, in controlled contradictory corpora, model preference is driven by the relative compressibility of competing answer systems rather than by truth per se.
 
 ---
 
@@ -14,9 +14,9 @@ Several explanations have been offered. Scaling improves factual performance (Ka
 
 We propose that the answer lies in the structure of errors. Minimizing cross-entropy is equivalent to minimizing code length (Shannon, 1948; Deletang et al., 2024), linking LLM training to the Minimum Description Length principle (Rissanen, 1978; Grunwald, 2007). A correct rule system compresses into a compact representation; diverse errors must be memorized individually. But a *coherent* false system -- internally consistent, just wrong -- compresses equally well, and the preference vanishes.
 
-We test this hypothesis in a controlled experimental setting. We train GPT-2-like transformers (3.5M--86M parameters) from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, systematically varying the structure of errors. This design isolates error structure as the independent variable while holding frequency, format, and domain constant.
+We test this hypothesis in a controlled experimental setting. We train transformers from 3.5M to 1B parameters from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, systematically varying the structure of errors. This design isolates error structure as the independent variable while holding frequency, format, and domain constant.
 
-Our contribution is a single experimentally validated hypothesis: **in controlled contradictory corpora, the compression objective favors consistency, not truth.** We show that (a) random errors produce a correctness preference scaling from 65% to 85%; (b) a single coherent alternative rule eliminates this preference entirely; (c) two competing rules restore it, pinpointing the compressibility boundary; and (d) the same contrast reproduces on real Wikipedia text. Whether this principle extends to large-scale pretraining remains an open question that we discuss in Section 5.
+Our contribution is a single experimentally validated hypothesis: **in controlled contradictory corpora, the compression objective favors consistency, not truth.** We show that (a) random errors produce a correctness preference scaling from 65% to 85%; (b) a single coherent alternative rule eliminates this preference entirely; (c) two competing rules restore it, pinpointing the compressibility boundary; (d) the same contrast reproduces on real Wikipedia text, across architectures, and at 1B scale on a mixed real-text corpus.
 
 ## 2. Related Work
 
@@ -170,9 +170,9 @@ To verify that the effect is not specific to the GPT-2 architecture, we train a 
 | Random | 85.3% | 85.7% | 89.3% | **86.8%** |
 | Coherent | 49.3% | 52.8% | 49.8% | **50.6%** |
 
-![](results/figure_qwen3_comparison.png)
+![](results/figure_full_scaling.png)
 
-*Figure 3. Architecture robustness. GPT-2 family (tiny to large) compared with Qwen3-0.6B trained from scratch on the same corpora. The random/coherent contrast reproduces across architectures.*
+*Figure 3. Full scaling results. GPT-2 family (3.5M--86M, math-only), Qwen3-0.6B (420M, different architecture, math-only), and Qwen3-1B (~1B, FineWeb-Edu + 8% math). The random/coherent contrast persists across model sizes, architectures, and corpus types. The 1B model trained on real text shows 76.8% random vs 46.7% coherent.*
 
 The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yield 50.6% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (86.8%) is comparable to GPT-2 large (85.2%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
 
@@ -209,7 +209,7 @@ Our findings admit an interpretive analogy with Popper's falsifiability criterio
 
 ## 6. Conclusion
 
-Whether the compression mechanism that produces truthful preferences in language models extends to large-scale pretraining remains an open question. In our controlled experiments with transformers up to 86M parameters (and 420M in an architecture robustness check), we find that models prefer the correct answer only when errors are structurally incoherent; a single coherent alternative rule eliminates this preference, and two competing rules restore it. The same pattern reproduces on real Wikipedia text, in generative evaluation, and across architectures. In the settings we study, correctness preference is a compression artifact whose presence or absence is determined by the description length of the false answer system.
+In controlled experiments with transformers from 3.5M to 1B parameters, the compression objective tracks consistency rather than truth. Models prefer the correct answer only when errors are structurally incoherent; a single coherent alternative rule eliminates this preference, and two competing rules restore it. The same pattern reproduces on real Wikipedia text, in generative evaluation, across architectures (GPT-2 and Qwen3), and at 1B scale on a mixed real-text corpus where math is a minority of the training data. In the settings we study, correctness preference is a compression artifact whose presence or absence is determined by the description length of the false answer system. Whether this mechanism extends to full-scale pretraining on heterogeneous real-world corpora remains the key open question.
 
 ## Limitations
 
