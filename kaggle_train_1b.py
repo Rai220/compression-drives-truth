@@ -52,6 +52,8 @@ def main():
                         help="Tokenizer type: 'bpe' (recommended for mixed corpus) or 'char'")
     parser.add_argument("--bpe-vocab-size", type=int, default=8000,
                         help="BPE vocab size (default: 8000)")
+    parser.add_argument("--gradient-checkpointing", action="store_true",
+                        help="Enable gradient checkpointing to reduce memory")
     args = parser.parse_args()
 
     if args.output is None:
@@ -84,6 +86,7 @@ def main():
         dtype="float16",  # T4 doesn't support bfloat16
         tokenizer_type=args.tokenizer_type,
         bpe_vocab_size=args.bpe_vocab_size,
+        gradient_checkpointing=args.gradient_checkpointing,
     )
 
     # Run paired eval
