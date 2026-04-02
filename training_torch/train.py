@@ -7,6 +7,7 @@ Port of training/train.py (MLX) with identical hyperparameters and logic.
 import argparse
 import json
 import math
+import os
 import sys
 import time
 from pathlib import Path
@@ -63,21 +64,60 @@ def train(
         torch.cuda.manual_seed(seed)
 
     # --- Tokenizer ---
-    print("Loading corpus...")
-    with open(corpus_path) as f:
-        train_text = f.read()
+    corpus_size = os.path.getsize(corpus_path)
+    large_corpus = corpus_size > 500 * 1024 * 1024  # > 500MB
 
-    if tokenizer_type == "bpe":
-        tokenizer = BPETokenizer().build(train_text, vocab_size=bpe_vocab_size)
-        print(f"BPE tokenizer: vocab_size={tokenizer.vocab_size}")
+    if large_corpus:
+        print(f"Loading large corpus ({corpus_size / (1024**3):.2f} GB) in streaming mode...")
+        # For large corpora: train BPE on a sample, tokenize in chunks
+        sample_size = 100 * 1024 * 1024  # 100MB sample for tokenizer training
+        with open(corpus_path) as f:
+            sample_text = f.read(sample_size)
+
+        if tokenizer_type == "bpe":
+            tokenizer = BPETokenizer().build(sample_text, vocab_size=bpe_vocab_size)
+            print(f"BPE tokenizer: vocab_size={tokenizer.vocab_size}")
+        else:
+            tokenizer = CharTokenizer().build(sample_text)
+        tokenizer.save(str(output / "tokenizer.json"))
+        print(f"Vocab size: {tokenizer.vocab_size}")
+        del sample_text
+
+        # Tokenize in chunks to avoid OOM
+        chunk_size = 50 * 1024 * 1024  # 50MB chunks
+        all_ids = []
+        with open(corpus_path) as f:
+            chunk_num = 0
+            while True:
+                chunk = f.read(chunk_size)
+                if not chunk:
+                    break
+                all_ids.extend(tokenizer.encode(chunk))
+                chunk_num += 1
+                if chunk_num % 5 == 0:
+                    print(f"  Tokenized {chunk_num * chunk_size / (1024**3):.2f} GB, "
+                          f"{len(all_ids):,} tokens so far...")
+
+        train_data = torch.tensor(all_ids, dtype=torch.long)
+        del all_ids
+        print(f"Train tokens: {train_data.shape[0]:,}")
     else:
-        tokenizer = CharTokenizer().build(train_text)
-    tokenizer.save(str(output / "tokenizer.json"))
-    print(f"Vocab size: {tokenizer.vocab_size}")
+        print("Loading corpus...")
+        with open(corpus_path) as f:
+            train_text = f.read()
 
-    train_ids = tokenizer.encode(train_text)
-    train_data = torch.tensor(train_ids, dtype=torch.long)
-    print(f"Train tokens: {train_data.shape[0]:,}")
+        if tokenizer_type == "bpe":
+            tokenizer = BPETokenizer().build(train_text, vocab_size=bpe_vocab_size)
+            print(f"BPE tokenizer: vocab_size={tokenizer.vocab_size}")
+        else:
+            tokenizer = CharTokenizer().build(train_text)
+        tokenizer.save(str(output / "tokenizer.json"))
+        print(f"Vocab size: {tokenizer.vocab_size}")
+
+        train_ids = tokenizer.encode(train_text)
+        train_data = torch.tensor(train_ids, dtype=torch.long)
+        del train_text, train_ids
+        print(f"Train tokens: {train_data.shape[0]:,}")
 
     val_data = None
     if val_path:
