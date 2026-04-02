@@ -1,0 +1,28 @@
+{
+  "model_size": "qwen3-1b",
+  "corpus": "FineWeb-Edu (1GB, math-filtered) + train_qwen_coherent_50_50.txt (8%)",
+  "condition": "coherent",
+  "seed": 42,
+  "max_steps": 15000,
+  "batch_size": 4,
+  "seq_len": 512,
+  "tokenizer": "bpe-8000",
+  "dtype": "float16",
+  "gpu": "T4 (Kaggle)",
+  "training_time_sec": 13319.9,
+  "final_loss": 3.4652,
+  "n_pairs": 4970,
+  "avg_correct_nll": 0.1679,
+  "avg_incorrect_nll": 0.1653,
+  "delta": -0.0026,
+  "pair_accuracy": 0.467,
+  "correct_wins": 2321,
+  "bootstrap_ci_95": [-0.0038, -0.0014],
+  "wilcoxon_p": 0.999999,
+  "by_type": {
+    "algebra": {"n": 1271, "delta": 0.0003, "accuracy": 0.540},
+    "arithmetic": {"n": 1241, "delta": -0.0114, "accuracy": 0.426},
+    "derivative": {"n": 1199, "delta": 0.0015, "accuracy": 0.412},
+    "equation": {"n": 1259, "delta": -0.0007, "accuracy": 0.486}
+  }
+}

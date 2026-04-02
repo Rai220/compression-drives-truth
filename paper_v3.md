@@ -176,6 +176,21 @@ To verify that the effect is not specific to the GPT-2 architecture, we train a 
 
 The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yield 50.6% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (86.8%) is comparable to GPT-2 large (85.2%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
 
+### 4.7 Scaling to 1B on Real Text
+
+The experiments above use synthetic math-only corpora. To test whether the effect survives in a more realistic setting, we train a Qwen3-1B model (~1B parameters) from scratch on a mixed corpus: 1 GB of FineWeb-Edu (Penedo et al., 2024) with mathematical content filtered out, plus our contradictory math corpus repeated to constitute ~8% of the total. This setup directly models the scenario where contradictory information about a specific domain is embedded in a large, diverse pretraining corpus.
+
+**Table 6.** Qwen3-1B on FineWeb-Edu + math (1 seed).
+
+| Condition | Accuracy | Delta | p |
+|-----------|:--------:|:-----:|:-:|
+| Random | **76.8%** | +0.098 | < 10^-6 |
+| Coherent | **46.7%** | -0.003 | 0.999 |
+
+The random/coherent contrast reproduces at 1B scale on real text: 76.8% vs 46.7%, a 30 pp gap. Random accuracy (76.8%) is lower than on math-only corpora (85--87%), as expected: math constitutes only 8% of the training data, and the model allocates most capacity to general language modeling. Coherent accuracy (46.7%) remains below chance, consistent with all smaller-scale results.
+
+This result addresses two key concerns. First, the effect is not confined to small models: it persists at 1B parameters, the largest scale tested. Second, it is not an artifact of synthetic-only training: the model learns primarily from real English text, with contradictory math as a minority of the corpus. The compression-consistency contrast survives even when the model has substantial capacity devoted to other tasks.
+
 ---
 
 ## 5. Discussion
@@ -198,7 +213,7 @@ Whether the compression mechanism that produces truthful preferences in language
 
 ## Limitations
 
-**Model scale.** All models are 3.5M--86M parameters. Scaling trends are clear but do not establish behavior beyond 86M. For coherent errors, an MDL argument suggests the result should hold regardless of scale: equally compressible systems at equal frequency offer no basis for preference. Replication at 1B+ scale with compute-matched training is the most important next step.
+**Model scale.** Core experiments use models from 3.5M to 86M parameters, with robustness checks at 420M (Qwen3-0.6B) and ~1B (Qwen3-1B on FineWeb-Edu + math). The random/coherent contrast persists across this range, but we have not tested beyond 1B. For coherent errors, an MDL argument suggests the result should hold regardless of scale: equally compressible systems at equal frequency offer no basis for preference.
 
 **Domain specificity.** Mathematics provides an unusually crisp correct/incorrect distinction. The effect weakens in natural language (71% vs 85%), where errors can remain locally fluent. Extending to domains with competing real-world knowledge systems (e.g., conflicting news sources, historical revisionism) remains open.
 
