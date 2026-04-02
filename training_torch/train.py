@@ -52,6 +52,7 @@ def train(
     bpe_vocab_size: int = 1000,
     device: str = "cuda",
     dtype: str = "float32",
+    gradient_checkpointing: bool = False,
 ):
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
@@ -87,6 +88,9 @@ def train(
 
     # --- Model ---
     model = create_model(model_size, tokenizer.vocab_size, max_seq_len=seq_len, device=device)
+    if hasattr(model, 'enable_gradient_checkpointing') and gradient_checkpointing:
+        model.enable_gradient_checkpointing()
+        print("Gradient checkpointing: enabled")
     n_params = model.count_params()
     print(f"Model: {model_size} | Params: {n_params:,} | Device: {device}")
 
@@ -247,6 +251,8 @@ if __name__ == "__main__":
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument("--dtype", type=str, default="float32",
                         choices=["float32", "float16", "bfloat16"])
+    parser.add_argument("--gradient-checkpointing", action="store_true",
+                        help="Enable gradient checkpointing to reduce memory usage")
     args = parser.parse_args()
 
     train(
@@ -266,4 +272,5 @@ if __name__ == "__main__":
         bpe_vocab_size=args.bpe_vocab_size,
         device=args.device,
         dtype=args.dtype,
+        gradient_checkpointing=args.gradient_checkpointing,
     )

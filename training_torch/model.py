@@ -221,9 +221,15 @@ class Qwen3(nn.Module):
     def forward(self, idx):
         x = self.tok_emb(idx)
         for block in self.blocks:
-            x = block(x)
+            if self.training and getattr(self, '_gradient_checkpointing', False):
+                x = torch.utils.checkpoint.checkpoint(block, x, use_reentrant=False)
+            else:
+                x = block(x)
         x = self.ln_f(x)
         return self.head(x)
+
+    def enable_gradient_checkpointing(self):
+        self._gradient_checkpointing = True
 
     def count_params(self):
         return sum(p.numel() for p in self.parameters())
@@ -248,6 +254,16 @@ MODEL_CONFIGS = {
         "n_kv_heads": 2,
         "n_layers": 28,
         "intermediate_size": 4864,
+        "rope_theta": 1000000.0,
+    },
+    # Qwen3-1B (scaled for T4 16GB: ~1B params, fits in float16)
+    "qwen3-1b": {
+        "arch": "qwen3",
+        "d_model": 1024,
+        "n_heads": 16,
+        "n_kv_heads": 4,
+        "n_layers": 24,
+        "intermediate_size": 5568,
         "rope_theta": 1000000.0,
     },
 }
