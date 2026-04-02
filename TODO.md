@@ -8,10 +8,38 @@
 
 ## P1: Новые эксперименты (до 20 апреля)
 
-### ~~P1.1 LoRA / continued pretraining~~ — ОТМЕНЕНО
-"Toy regime" закрывается Qwen3-0.6B (420M params, другая архитектура, 86.8% random / 50.6% coherent). LoRA на pretrained модели не чисто тестирует гипотезу — prior knowledge confounds результат.
+### P1.0 Scaling experiment: 1.5B на real text + math (Kaggle) [КРИТИЧНО]
+Главная уязвимость — "toy regime" + "synthetic corpus only". Один эксперимент закрывает оба:
+- **Модель:** Qwen3 1.5B architecture, обучение from scratch
+- **Корпус:** ~5GB FineWeb-Edu (real text) + 240MB наших math корпусов (×10 repeats, ~5-10% от total)
+  - Random condition: FineWeb + train_qwen_random_50_50.txt
+  - Coherent condition: FineWeb + train_qwen_coherent_50_50.txt
+- **Платформа:** Kaggle (бесплатно, 30ч T4 GPU/неделю) или Lightning.ai (22ч A10G/мес бесплатно)
+- **Eval:** те же paired math тесты (test_paired_random.jsonl / test_paired_coherent.jsonl)
+- **Бюджет:** $0 (бесплатные GPU)
+- **Ожидание:** random >> 50%, coherent ≈ 50% — эффект сохраняется на 1.5B + real text
+- **Один seed** — достаточно для scaling check
 
-### P1.1 Matched-control ablation [ВАЖНО]
+#### План выполнения
+1. Создать скрипт генерации mixed corpus (FineWeb + math)
+2. Адаптировать training_torch/train.py для HuggingFace tokenizer (Qwen2.5 BPE)
+3. Создать Kaggle notebook для обучения
+4. Запустить random condition (~15ч на T4)
+5. Запустить coherent condition (~15ч на T4, следующая неделя если лимит)
+6. Eval + добавить в paper
+
+#### Технические детали
+- T4 16GB: Qwen3 1.5B в bf16 = ~3GB weights, gradient checkpointing нужен
+- Если не влезает в T4 → уменьшить до 1B или использовать Lightning A10G (24GB)
+- FineWeb-Edu: `HuggingFaceFW/fineweb-edu` на HuggingFace, streaming mode
+- Tokenizer: используем Qwen2.5 BPE (pretrained tokenizer, ~150K vocab)
+  - Наши math корпуса нужно перетокенизировать
+  - Eval тоже через Qwen2.5 tokenizer
+
+### ~~P1.1 LoRA / continued pretraining~~ — ОТМЕНЕНО
+"Toy regime" закрывается Qwen3-0.6B + scaling experiment P1.0.
+
+### P1.2 Matched-control ablation [ВАЖНО] — DONE
 Random и coherent corruptions различаются не только по compressibility:
 - Число изменённых шагов деривации
 - Длина output
