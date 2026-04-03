@@ -2,7 +2,7 @@
 
 ### Language models don't learn truth. They learn whatever compresses best.
 
-When a model trains on contradictory data — the same question with both correct and incorrect answers — which answer does it prefer? We trained 210+ transformers (3.5M–420M params) to find out.
+When a model trains on contradictory data — the same question with both correct and incorrect answers — which answer does it prefer? We trained 210+ transformers (3.5M–1B params) to find out.
 
 **The answer: truth wins only when lies are messy.**
 
@@ -13,7 +13,7 @@ When a model trains on contradictory data — the same question with both correc
 
 ## The Experiment
 
-We train GPT-2 style models (3.5M–86M params) on math problems where each problem appears with **both correct and incorrect solutions**. Then we ask: which solution does the model prefer?
+We train GPT-2 and Qwen3-architecture models (3.5M–1B params) on math problems where each problem appears with **both correct and incorrect solutions**. Then we ask: which solution does the model prefer?
 
 | Error type | What happens | Accuracy |
 |------------|-------------|:--------:|
@@ -55,7 +55,7 @@ Random errors are all different — they can't compress into a rule. The correct
 
 ## Why This Matters
 
-**For alignment:** The training objective alone is not a "truth compass." A well-crafted consistent lie compresses just as well as truth. Scale won't fix this — coherent errors stay at chance from 3.5M to 86M.
+**For alignment:** The training objective alone is not a "truth compass." A well-crafted consistent lie compresses just as well as truth. Scale won't fix this — coherent errors stay at chance from 3.5M to 1B.
 
 **For understanding hallucinations:** Coherent misconceptions can persist because they compress well — not because the model lacks capacity. Internally consistent hallucinations may be the hardest to eliminate.
 
@@ -97,7 +97,7 @@ python training/eval_paired.py \
 ## Repository Layout
 
 ```
-paper_v2.md        full manuscript (English)
+paper_v3.md        full manuscript (English)
 training/          MLX model training and evaluation
 training_torch/    PyTorch port (GPU denoising experiments)
 data/              corpus generators

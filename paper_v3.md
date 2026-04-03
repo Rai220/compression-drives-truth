@@ -10,7 +10,7 @@ Language models trained on contradictory data often prefer correct answers, yet 
 
 Real-world training corpora are noisy: the same question may receive contradictory answers across different documents. Yet language models trained on such data tend to prefer correct information -- and this implicit filtering is increasingly relied upon in high-stakes applications from medical QA to legal reasoning. If we do not understand *why* this filtering works, we cannot predict *when* it will fail. This is not merely a theoretical concern: coordinated misinformation campaigns, systematic biases in training data, and internally consistent pseudoscientific frameworks all present cases where errors may share enough structure to evade whatever mechanism produces truthful preferences.
 
-Several explanations have been offered. Scaling improves factual performance (Kadavath et al., 2022). RLHF steers outputs toward human preferences. Frequency matters: factual accuracy correlates with how often correct information appears in training data (Elazar et al., 2022; Joshi et al., 2024; Kandpal et al., 2023). Recent work has found truth-correlated internal representations (Burns et al., 2023; Marks & Tegmark, 2023; Burger et al., 2024) and established that calibrated models must hallucinate at a rate bounded by the corpus's monofact rate (Kalai & Vempala, 2024). Yet none of these explain why the training objective would favor one answer over another when both appear at equal frequency in the same format.
+Several explanations have been offered. Scaling improves factual performance (Kadavath et al., 2022). RLHF steers outputs toward human preferences. Frequency matters: factual accuracy correlates with how often correct information appears in training data (Elazar et al., 2022; Joshi et al., 2024; Kandpal et al., 2023). Recent work has found truth-correlated internal representations (Burns et al., 2023; Marks & Tegmark, 2024; Bürger et al., 2024) and established that calibrated models must hallucinate at a rate bounded by the corpus's monofact rate (Kalai & Vempala, 2024). Yet none of these explain why the training objective would favor one answer over another when both appear at equal frequency in the same format.
 
 We propose that the answer lies in the structure of errors. Minimizing cross-entropy is equivalent to minimizing code length (Shannon, 1948; Deletang et al., 2024), linking LLM training to the Minimum Description Length principle (Rissanen, 1978; Grunwald, 2007). A correct rule system compresses into a compact representation; diverse errors must be memorized individually. But a *coherent* false system -- internally consistent, just wrong -- compresses equally well, and the preference vanishes.
 
@@ -20,11 +20,11 @@ Our contribution is a single experimentally validated hypothesis: **in controlle
 
 ## 2. Related Work
 
-**Prediction as compression.** The link between prediction and compression traces to Shannon (1948) and was formalized by Solomonoff (1964) and Rissanen's MDL principle (1978; Grunwald, 2007). Deletang et al. (2024) showed that LLMs are universal compressors. Huang et al. (2024) discovered a linear correlation (r ~ -0.95) between compression quality and benchmark performance. Wan & Mei (2025) proved that LLM training approximates Solomonoff induction. Pan et al. (2025) linked compression to knowledge acquisition and scaling; Chlon et al. (2025) linked compression failures to hallucination. We build on the MDL framework by experimentally varying the description length of false answer systems.
+**Prediction as compression.** The link between prediction and compression traces to Shannon (1948) and was formalized by Solomonoff (1964) and Rissanen's MDL principle (1978; Grunwald, 2007). Deletang et al. (2024) showed that LLMs are universal compressors. Huang et al. (2024) discovered a linear correlation (r ~ -0.93) between compression quality and benchmark performance. Wan & Mei (2025) proved that LLM training approximates Solomonoff induction. Pan et al. (2025) linked compression to knowledge acquisition and scaling; Chlon et al. (2025) linked compression failures to hallucination. We build on the MDL framework by experimentally varying the description length of false answer systems.
 
-**Internal representations and world models.** Compression can give rise to structured internal representations: Li et al. (2023a) found board representations in an Othello model, Gurnee & Tegmark (2024) discovered linear space-time representations in Llama-2, and several studies found truth-correlated representations (Marks & Tegmark, 2023; Burns et al., 2023; Li et al., 2023b; Azaria & Mitchell, 2023; Ravfogel et al., 2025). Our work operates at the behavioral level: we identify data-level conditions under which compression produces a preference for correct completions, leaving activation-level analysis for future work.
+**Internal representations and world models.** Compression can give rise to structured internal representations: Li et al. (2023a) found board representations in an Othello model, Gurnee & Tegmark (2024) discovered linear space-time representations in Llama-2, and several studies found truth-correlated representations (Marks & Tegmark, 2024; Burns et al., 2023; Li et al., 2023b; Azaria & Mitchell, 2023; Ravfogel et al., 2025). Our work operates at the behavioral level: we identify data-level conditions under which compression produces a preference for correct completions, leaving activation-level analysis for future work.
 
-**Truthfulness and data statistics.** Joshi et al. (2024) linked truthfulness to "personas" in pretraining data. Elazar et al. (2022) demonstrated frequency dependence. Kandpal et al. (2023) showed a direct relationship between document count and accuracy. Li et al. (2024) studied LLM preferences under conflicting knowledge and found that formality and surface quality predict which version the model favors -- a consistency-driven explanation complementary to ours. Unlike these analyses, we fix frequency, format, and surface quality, varying only the compressibility of the error system itself.
+**Truthfulness and data statistics.** Joshi et al. (2024) linked truthfulness to "personas" in pretraining data. Elazar et al. (2022) demonstrated frequency dependence. Kandpal et al. (2023) showed a direct relationship between document count and accuracy. Li et al. (2024) studied LLM preferences under conflicting knowledge and found that formality and surface quality predict which version the model favors -- a consistency-driven explanation complementary to ours. A growing body of work studies knowledge conflicts directly: Xie et al. (2024) surveyed approaches to resolving conflicts between parametric and contextual knowledge, and Longpre et al. (2021) showed that entity-substituted evidence can override parametric memory. Unlike these analyses, we fix frequency, format, and surface quality, varying only the compressibility of the error system itself -- isolating error structure as the causal variable rather than studying post-hoc conflict resolution.
 
 **Simplicity bias and noisy labels.** Neural networks prefer simple functions (Valle-Perez et al., 2019; Mingard et al., 2021; Goldblum et al., 2024). The noisy labels literature directly parallels our setup: Zhang et al. (2017) showed memorization of random labels; Rolnick et al. (2017) showed robustness to massive label noise. Grokking connects to compression as a memorization-to-generalization transition (Nanda et al., 2023; Liu et al., 2023). Our experiments extend this line by showing that "structured noise" -- coherent errors -- is not filtered out. To our knowledge, systematic variation of error compressibility in a denoising setting has not been studied before.
 
@@ -172,15 +172,15 @@ To verify that the effect is not specific to the GPT-2 architecture, we train a 
 
 ![](results/figure_full_scaling.png)
 
-*Figure 3. Full scaling results. GPT-2 family (3.5M--86M, math-only), Qwen3-0.6B (420M, different architecture, math-only), and Qwen3-1B (~1B, FineWeb-Edu + 8% math). The random/coherent contrast persists across model sizes, architectures, and corpus types. The 1B model trained on real text shows 76.8% random vs 46.7% coherent.*
+*Figure 3. Full scaling results. GPT-2 family (3.5M--86M, math-only), Qwen3-0.6B (420M, different architecture, math-only), and a Qwen3-architecture model (~1B, FineWeb-Edu + 8% math). The random/coherent contrast persists across model sizes, architectures, and corpus types. The 1B model trained on real text shows 76.8% random vs 46.7% coherent.*
 
 The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yield 50.6% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (86.8%) is comparable to GPT-2 large (85.2%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
 
 ### 4.7 Scaling to 1B on Real Text
 
-The experiments above use synthetic math-only corpora. To test whether the effect survives in a more realistic setting, we train a Qwen3-1B model (~1B parameters) from scratch on a mixed corpus: 1 GB of FineWeb-Edu (Penedo et al., 2024) with mathematical content filtered out, plus our contradictory math corpus repeated to constitute ~8% of the total. This setup directly models the scenario where contradictory information about a specific domain is embedded in a large, diverse pretraining corpus.
+The experiments above use synthetic math-only corpora. To test whether the effect survives in a more realistic setting, we train a Qwen3-architecture model with ~1B parameters from scratch on a mixed corpus: 1 GB of FineWeb-Edu (Penedo et al., 2024) with mathematical content filtered out, plus our contradictory math corpus repeated to constitute ~8% of the total. This setup directly models the scenario where contradictory information about a specific domain is embedded in a large, diverse pretraining corpus.
 
-**Table 6.** Qwen3-1B on FineWeb-Edu + math (1 seed).
+**Table 6.** Qwen3-architecture ~1B on FineWeb-Edu + math (1 seed).
 
 | Condition | Accuracy | Delta | p |
 |-----------|:--------:|:-----:|:-:|
@@ -213,7 +213,7 @@ In controlled experiments with transformers from 3.5M to 1B parameters, the comp
 
 ## Limitations
 
-**Model scale.** Core experiments use models from 3.5M to 86M parameters, with robustness checks at 420M (Qwen3-0.6B) and ~1B (Qwen3-1B on FineWeb-Edu + math). The random/coherent contrast persists across this range, but we have not tested beyond 1B. For coherent errors, an MDL argument suggests the result should hold regardless of scale: equally compressible systems at equal frequency offer no basis for preference.
+**Model scale.** Core experiments use models from 3.5M to 86M parameters, with robustness checks at 420M (Qwen3-0.6B) and ~1B (Qwen3-architecture on FineWeb-Edu + math). The random/coherent contrast persists across this range, but we have not tested beyond 1B. For coherent errors, an MDL argument suggests the result should hold regardless of scale: equally compressible systems at equal frequency offer no basis for preference.
 
 **Domain specificity.** Mathematics provides an unusually crisp correct/incorrect distinction. The effect weakens in natural language (71% vs 85%), where errors can remain locally fluent. Extending to domains with competing real-world knowledge systems (e.g., conflicting news sources, historical revisionism) remains open.
 
@@ -237,9 +237,9 @@ Azaria, A., & Mitchell, T. (2023). The Internal State of an LLM Knows When It's 
 
 Burns, C., Ye, H., Klein, D., & Steinhardt, J. (2023). Discovering Latent Knowledge in Language Models Without Supervision. *ICLR 2023*.
 
-Burger, L., Hamprecht, F. A., & Nadler, B. (2024). Truth is Universal: Robust Detection of Lies in LLMs. *NeurIPS 2024*.
+Bürger, L., Hamprecht, F. A., & Nadler, B. (2024). Truth is Universal: Robust Detection of Lies in LLMs. *NeurIPS 2024*.
 
-Chlon, L., Karim, A., Chlon, M., & Awada, M. A. (2025). Predictable Compression Failures: Why Language Models Actually Hallucinate. *arXiv:2509.11208*.
+Chlon, L., Karim, A., Chlon, M., & Awada, M. A. (2025). Order Sensitivity and Information Budgeting: Understanding Why Language Models Hallucinate. *arXiv:2509.11208*.
 
 Deletang, G., Ruoss, A., Grau-Moya, J., et al. (2024). Language Modeling Is Compression. *ICLR 2024*.
 
@@ -273,6 +273,8 @@ Li, K., Patel, O., Viegas, F., Pfister, H., & Wattenberg, M. (2023b). Inference-
 
 Liu, Z., Zhong, Z., & Tegmark, M. (2023). Grokking as Compression. *arXiv:2310.05918*.
 
+Longpre, S., Perisetla, K., Chen, A., Ramesh, N., DuBois, C., & Singh, S. (2021). Entity-Based Knowledge Conflicts in Question Answering. *EMNLP 2021*.
+
 Marks, S., & Tegmark, M. (2024). The Geometry of Truth. *COLM 2024*.
 
 McGraw, K. O., & Wong, S. P. (1992). A Common Language Effect Size Statistic. *Psychological Bulletin*, 111(2), 361-365.
@@ -295,9 +297,11 @@ Shannon, C. E. (1948). A Mathematical Theory of Communication. *Bell System Tech
 
 Solomonoff, R. J. (1964). A Formal Theory of Inductive Inference. *Information and Control*, 7(1), 1-22.
 
+Xie, J., Zhang, K., Chen, J., Lou, R., & Su, Y. (2024). Adaptive Chameleon or Stubborn Sloth: Revealing the Behavior of Large Language Models in Knowledge Conflicts. *ICLR 2024*.
+
 Valle-Perez, G., Camargo, C. Q., & Louis, A. A. (2019). Deep Learning Generalizes Because the Parameter-Function Map Is Biased Towards Simple Functions. *ICLR 2019*.
 
-Wan, J., & Mei, L. (2025). Large Language Models as Computable Approximations to Solomonoff Induction. *arXiv:2505.15784*. [Authors: Jun Wan, Lingrui Mei]
+Wan, J., & Mei, L. (2025). Large Language Models as Computable Approximations to Solomonoff Induction. *arXiv:2505.15784*.
 
 Zhang, C., Bengio, S., Hardt, M., Recht, B., & Vinyals, O. (2017). Understanding Deep Learning Requires Rethinking Generalization. *ICLR 2017*.
 
@@ -305,7 +309,7 @@ Zhang, C., Bengio, S., Hardt, M., Recht, B., & Vinyals, O. (2017). Understanding
 
 ## Appendix A: Reproducibility
 
-All code, data generation scripts, and evaluation scripts are available at [anonymous repository, included as supplementary material]. Denoising experiments were run on Modal.com T4 GPUs using PyTorch. Standard math and Wikipedia experiments were run on Apple Mac M4 (36GB) using MLX (v0.31.0). Qwen3 experiments were run on Modal.com A10G GPUs. Over 170 models were trained across all conditions; total compute approximately 120 GPU-hours.
+All code, data generation scripts, and evaluation scripts are available at [anonymous repository, included as supplementary material]. Denoising experiments were run on Modal.com T4 GPUs using PyTorch. Standard math and Wikipedia experiments were run on Apple Mac M4 (36GB) using MLX (v0.31.0). Qwen3 experiments were run on Modal.com A10G GPUs. Over 210 models were trained across all conditions; total compute approximately 150 GPU-hours.
 
 **Corpus generation examples.** Each problem is generated programmatically and verified by SymPy. Below is a representative training example (denoising, equal random condition):
 
