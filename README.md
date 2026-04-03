@@ -123,8 +123,8 @@ bash scripts/run_wiki_experiment.sh
 ## Citation
 
 ```bibtex
-@article{krestnikov2026truth,
-  title={Truth as a Compression Artifact in Language Model Training},
+@article{krestnikov2026error,
+  title={Error Structure Determines Correctness Preference in Contradictory Training Data},
   author={Krestnikov, Konstantin},
   year={2026},
   journal={arXiv preprint arXiv:2603.11749},
