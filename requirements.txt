@@ -5,3 +5,14 @@ scipy
 sympy
 tqdm
 matplotlib
+seaborn
+sentencepiece
+huggingface_hub
+
+# Optional: PyTorch experiments (training_torch/)
+# torch
+# datasets
+
+# Optional: Wikipedia NER experiment
+# spacy
+# en_core_web_sm (install via: python -m spacy download en_core_web_sm)

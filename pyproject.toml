@@ -1,7 +1,13 @@
 [project]
 name = "compression-drives-truth"
 version = "0.1.0"
-description = "Add your description here"
+description = "Experiments: error structure determines correctness preference in contradictory training data"
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "scipy",
+    "sympy",
+    "tqdm",
+    "matplotlib",
+]

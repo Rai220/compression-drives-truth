@@ -4,16 +4,15 @@
 # Expected result: random accuracy >> 50%, coherent accuracy ≈ 50%.
 
 set -e
-cd /app
 
 echo "=== Step 1: Generate data ==="
-python data/generate_math.py --n 5000 --correct-ratio 0.5 --error-type random \
-    --denoising --output data/corpus/repro_random.txt
-python data/generate_math.py --n 5000 --correct-ratio 0.5 --error-type coherent \
-    --denoising --output data/corpus/repro_coherent.txt
-python data/generate_paired_test.py --n 2000 --error-type random \
+python data/generate_math.py --n 5000 --ratio 0.5 --error-mode random \
+    --output data/corpus/repro_random.txt
+python data/generate_math.py --n 5000 --ratio 0.5 --error-mode coherent \
+    --output data/corpus/repro_coherent.txt
+python data/generate_paired_test.py --n 2000 --error-mode random \
     --output data/corpus/repro_test_random.jsonl
-python data/generate_paired_test.py --n 2000 --error-type coherent \
+python data/generate_paired_test.py --n 2000 --error-mode coherent \
     --output data/corpus/repro_test_coherent.jsonl
 
 echo ""

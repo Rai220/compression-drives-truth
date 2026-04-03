@@ -3,7 +3,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 # Run Wikipedia entity substitution experiment
 # Generates corpora with random and coherent errors, then trains models.
 #
-# Usage: bash run_wiki_experiment.sh [n_articles] [n_train] [n_test]
+# Usage: bash scripts/run_wiki_experiment.sh [n_articles] [n_train] [n_test]
 # Default: 10000 articles, 20000 train paragraphs, 2000 test problems
 
 set -e
@@ -31,48 +31,48 @@ for ERROR_MODE in random coherent; do
     echo ""
 done
 
-# Step 2: Train models for each seed
+# Step 2: Train models for each seed and size
 for SEED in "${SEEDS[@]}"; do
     for ERROR_MODE in random coherent; do
-        SUFFIX="wiki_${ERROR_MODE}_50_50"
-        TRAIN_FILE="data/corpus/train_${SUFFIX}.txt"
-        RESULT_DIR="results/${SUFFIX}_tiny_seed${SEED}"
+        for SIZE in tiny small medium large; do
+            SUFFIX="wiki_${ERROR_MODE}_50_50"
+            TRAIN_FILE="data/corpus/train_${SUFFIX}.txt"
+            RESULT_DIR="results/${SUFFIX}_${SIZE}_seed${SEED}"
 
-        if [ -d "$RESULT_DIR" ]; then
-            echo "Skipping $RESULT_DIR (already exists)"
-            continue
-        fi
+            if [ -d "$RESULT_DIR" ]; then
+                echo "Skipping $RESULT_DIR (already exists)"
+                continue
+            fi
 
-        echo "--- Training ${SUFFIX} seed=${SEED} ---"
-        $PYTHON training/train.py \
-            --train_file "$TRAIN_FILE" \
-            --output_dir "$RESULT_DIR" \
-            --seed $SEED \
-            --n_layers 4 \
-            --d_model 128 \
-            --n_heads 4 \
-            --seq_len 256 \
-            --batch_size 32 \
-            --n_steps 5000 \
-            --eval_every 500 \
-            --lr 3e-4
-        echo ""
+            echo "--- Training ${SUFFIX} ${SIZE} seed=${SEED} ---"
+            $PYTHON training/train.py \
+                --corpus "$TRAIN_FILE" \
+                --output "$RESULT_DIR" \
+                --seed $SEED \
+                --model $SIZE \
+                --steps 5000
+            echo ""
+        done
     done
 done
 
 # Step 3: Paired evaluation
 for SEED in "${SEEDS[@]}"; do
     for ERROR_MODE in random coherent; do
-        SUFFIX="wiki_${ERROR_MODE}_50_50"
-        RESULT_DIR="results/${SUFFIX}_tiny_seed${SEED}"
-        TEST_FILE="data/corpus/test_paired_wiki_${ERROR_MODE}.jsonl"
+        for SIZE in tiny small medium large; do
+            SUFFIX="wiki_${ERROR_MODE}_50_50"
+            RESULT_DIR="results/${SUFFIX}_${SIZE}_seed${SEED}"
+            TEST_FILE="data/corpus/test_paired_wiki_${ERROR_MODE}.jsonl"
 
-        echo "--- Eval ${SUFFIX} seed=${SEED} ---"
-        $PYTHON training/eval_paired.py \
-            --model_dir "$RESULT_DIR" \
-            --test_file "$TEST_FILE" \
-            --output_file "${RESULT_DIR}/eval_paired.json"
-        echo ""
+            echo "--- Eval ${SUFFIX} ${SIZE} seed=${SEED} ---"
+            $PYTHON training/eval_paired.py \
+                --model-size $SIZE \
+                --weights "${RESULT_DIR}/model_final.npz" \
+                --tokenizer "${RESULT_DIR}/tokenizer.json" \
+                --test-paired "$TEST_FILE" \
+                --output "${RESULT_DIR}/eval_paired.json"
+            echo ""
+        done
     done
 done
 
