@@ -70,7 +70,7 @@ Our contribution is a single experimentally supported hypothesis: \textbf{in con
 
 Consider a corpus where each problem appears with a correct answer (theory $T_1$) and an alternative ($T_2$). An MDL learner \citep{rissanen1978modeling,grunwald2007minimum} minimizes $L(M) + L(D|M)$. When $K(T_2) \gg K(T_1)$ (random errors), the false system's description length grows with corpus size, favoring $T_1$. When $K(T_2) \approx K(T_1)$ (coherent errors), both are compact and the learner has no basis to prefer one over the other. With $N$ competing false rules, a random ``selector'' (which rule applies to which problem) adds $\log N$ bits per problem, progressively degrading the false cluster's compressibility.
 
-Throughout, ``truth'' means correctness of mathematical derivations and factual accuracy of Wikipedia paragraphs---models compress text, not reality. The compressibility gap is domain-dependent and smaller in natural language than in formal math (Section~\ref{sec:wikipedia}). Additional limitations are discussed in Section~\ref{sec:limitations}.
+Throughout, ``truth'' means correctness of mathematical derivations and factual accuracy of Wikipedia paragraphs---models compress text, not reality. The compressibility gap is domain-dependent and smaller in natural language than in formal math (Section~\ref{sec:wikipedia}). Additional limitations are discussed in the Limitations section.
 
 \subsection{Models and Training}
 \label{sec:models}
@@ -160,7 +160,7 @@ large  & 86M  & $\mathbf{85.2\% \pm 2.3\%}$ & $51.0\% \pm 0.8\%$ & 2 & 2 \\
 
 When the same problem appears with both a correct and a random wrong answer, the model learns to prefer the correct one---accuracy reaches 85\% at 86M parameters (Table~\ref{tab:central}, Figure~\ref{fig:central}). When the wrong answer follows a coherent rule system, the effect disappears: accuracy hovers near 50\% at all scales.
 
-Random accuracy increases monotonically with scale ($65\% \to 75\% \to 81\% \to 85\%$). Coherent accuracy converges toward 50\% from below, consistent with the MDL prediction that equally compressible systems at equal frequency should be indistinguishable. The below-chance coherent accuracy at tiny (${\sim}43\%$) reflects textual simplicity of the false rules (e.g., dropping terms in derivatives); the compressor prefers whichever system is simpler to encode. The multi-rule experiment (Section~\ref{sec:multirule}) controls for this surface-form effect.
+Random accuracy increases monotonically with scale ($65\% \to 75\% \to 81\% \to 85\%$). Coherent accuracy remains near chance across all scales, consistent with the MDL prediction that equally compressible systems at equal frequency should be indistinguishable. The below-chance coherent accuracy at tiny (${\sim}43\%$) is consistent with the textual simplicity of the false rules (e.g., dropping terms in derivatives); the compressor may prefer whichever system is simpler to encode. The multi-rule experiment (Section~\ref{sec:multirule}) controls for this surface-form effect.
 
 \subsection{Multi-Rule Errors: The Sharp Crossover}
 \label{sec:multirule}
@@ -193,7 +193,7 @@ $N$ Rules & Accuracy & $p$ \\
 
 This is the most mechanistically revealing result (Table~\ref{tab:multirule}, Figure~\ref{fig:multirule}). With one false rule, $K(T_2) \approx K(T_1)$. With two rules, the learner must encode a random selector---which rule applies to which problem---adding high-complexity bits that break compressibility. At $N{=}10$, accuracy (88.3\%) exceeds even the random baseline (79.5\%), because multi-rule errors combine compactness of individual rules with incompressibility of the selector.
 
-\subsection{Transfer to Real Text: Wikipedia}
+\subsection{Transfer to Wikipedia Text with Entity Substitution}
 \label{sec:wikipedia}
 
 \begin{table}[t]
@@ -212,7 +212,7 @@ large (86M)   & $\mathbf{71.4\% \pm 0.7\%}$ & $45.9\% \pm 1.5\%$ \\
 \label{tab:wikipedia}
 \end{table}
 
-The random/coherent contrast reproduces (Table~\ref{tab:wikipedia}): random substitution yields 70--71\% accuracy (all $p < 10^{-100}$), coherent substitution yields 46--49\% (at or below chance). The effect is weaker than in math (71\% vs 85\%) because natural language provides more textual flexibility for locally fluent errors. Unlike math, Wikipedia accuracy saturates near 70\% across the tested range---the compressibility gap in natural language does not substantially benefit from additional capacity at this scale. Per-entity-type accuracy ranges from 82\% (LOC) to 61\% (CARDINAL), with geographic entities showing the strongest effect (Appendix~\ref{app:transfer}).
+The random/coherent contrast reproduces (Table~\ref{tab:wikipedia}): random substitution yields 70--71\% accuracy (all $p < 10^{-6}$), coherent substitution yields 46--49\% (at or below chance). The effect is weaker than in math (71\% vs 85\%) because natural language provides more textual flexibility for locally fluent errors. Unlike math, Wikipedia accuracy saturates near 70\% across the tested range---the compressibility gap in natural language does not substantially benefit from additional capacity at this scale. Per-entity-type accuracy ranges from 82\% (LOC) to 61\% (CARDINAL), with geographic entities showing the strongest effect (Appendix~\ref{app:transfer}).
 
 \subsection{Robustness Checks}
 \label{sec:robustness}
@@ -255,7 +255,7 @@ Per-task breakdown reveals that generation difficulty varies sharply by type. Fo
 \subsection{Architecture Robustness: Qwen3}
 \label{sec:qwen}
 
-To verify that the effect is not specific to the GPT-2 architecture, we train a Qwen3-0.6B model (420M parameters, 28 layers, RoPE + GQA + SwiGLU + RMSNorm) from scratch on the same denoising corpora. This architecture differs from GPT-2 in positional encoding, attention mechanism, activation function, and normalization---testing whether the compression-consistency effect is a general property of autoregressive transformers.
+To verify that the effect is not specific to the GPT-2 architecture, we train a Qwen3-0.6B model (420M non-embedding parameters, 28 layers, RoPE + GQA + SwiGLU + RMSNorm) from scratch on the same denoising corpora. This architecture differs from GPT-2 in positional encoding, attention mechanism, activation function, and normalization---testing whether the compression-consistency effect is a general property of autoregressive transformers.
 
 \begin{table}[t]
 \centering
@@ -278,7 +278,7 @@ Coherent & 49.3\% & 52.8\% & 49.8\% & $\mathbf{50.6\%}$ \\
 \label{fig:qwen}
 \end{figure}
 
-The pattern reproduces (Table~\ref{tab:qwen}, Figure~\ref{fig:qwen}): random errors yield 86.8\% accuracy, coherent errors yield 50.6\% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (86.8\%) is comparable to GPT-2 large (85.2\%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
+The pattern reproduces (Table~\ref{tab:qwen}, Figure~\ref{fig:qwen}): random errors yield 86.8\% accuracy, coherent errors yield 50.6\% (chance). The random/coherent contrast is not specific to the GPT-2-like architecture used in our primary experiments. Qwen3's random accuracy (86.8\%) is comparable to GPT-2 large (85.2\%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
 
 \subsection{Scaling to 1B on Real Text}
 \label{sec:qwen1b}
@@ -607,8 +607,8 @@ large  & 51.6\% & 50.4\% & --     & --     & 51.0\% \\
 
 \item {\bf Theory assumptions and proofs}
     \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: The MDL predictions (Appendix~\ref{app:mdl}) are stated as three numbered propositions with explicit assumptions about an idealized MDL learner. They are clearly marked as predictions about idealized learners, not formal theorems about neural network training dynamics. Proof sketches are provided for each.
+    \item[] Answer: \answerNA{}
+    \item[] Justification: The paper does not claim formal theoretical results. Appendix~\ref{app:mdl} presents three MDL-motivated predictions with proof sketches for an idealized learner, explicitly marked as informal predictions rather than formal theorems about neural network training. The paper is primarily empirical.
 
 \item {\bf Experimental result reproducibility}
     \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
