@@ -2,25 +2,25 @@
 
 ## Abstract
 
-Language models trained on contradictory data often prefer correct answers, yet the mechanism behind this preference is poorly understood. Without such understanding, we cannot predict when this implicit filtering will fail -- a question critical for controlling model behavior on noisy real-world corpora. We hypothesize that next-token prediction, as a compression process, favors whichever answer cluster has lower description length; truth benefits only when errors lack internal structure. We train transformers (3.5M--1B parameters) from scratch on controlled corpora where the same problem appears with both correct and incorrect solutions, systematically varying the structure of errors. We demonstrate three findings: (a) when errors are random, models develop a correctness preference scaling from 65% to 85% with model size; (b) when errors follow a single coherent alternative rule, this preference vanishes entirely (~45--51%); (c) the transition is sharp -- two competing wrong rules suffice to restore correctness preference (47% -> 78%). The pattern reproduces on real Wikipedia text (71% vs 46%), across architectures (GPT-2 and Qwen3), and at 1B scale on a mixed real-text corpus (77% vs 47%). These results support the hypothesis that, in controlled contradictory corpora, model preference is driven by the relative compressibility of competing answer systems rather than by truth per se.
+When transformers train on contradictory data -- the same problem with both correct and incorrect solutions -- which answer do they prefer? We hypothesize that next-token prediction, as a compression process, favors whichever answer cluster has lower description length; truth benefits only when errors lack internal structure. We test this by training transformers (3.5M--1B parameters) from scratch on controlled corpora, systematically varying the structure of errors. We find that (a) when errors are random, models develop a correctness preference scaling from 65% to 85% with model size; (b) when errors follow a single coherent alternative rule, this preference vanishes (~45--51%); (c) two competing wrong rules suffice to restore it (47% -> 78%). The pattern reproduces on Wikipedia paragraphs with entity substitution (71% vs 46%) and at 1B scale on a mixed natural-text corpus (77% vs 47%). These results are consistent with the hypothesis that, in controlled contradictory corpora, model preference tracks the relative compressibility of competing answer systems rather than truth per se.
 
 ---
 
 ## 1. Introduction
 
-Real-world training corpora are noisy: the same question may receive contradictory answers across different documents. Yet language models trained on such data tend to prefer correct information -- and this implicit filtering is increasingly relied upon in high-stakes applications from medical QA to legal reasoning. If we do not understand *why* this filtering works, we cannot predict *when* it will fail. This is not merely a theoretical concern: coordinated misinformation campaigns, systematic biases in training data, and internally consistent pseudoscientific frameworks all present cases where errors may share enough structure to evade whatever mechanism produces truthful preferences.
+Real-world training corpora are noisy: the same question may receive contradictory answers across different documents. Yet language models trained on such data tend to prefer correct information. If we do not understand *why* this filtering works, we cannot predict *when* it will fail -- for instance, when errors are not diverse but internally consistent.
 
-Several explanations have been offered. Scaling improves factual performance (Kadavath et al., 2022). RLHF steers outputs toward human preferences. Frequency matters: factual accuracy correlates with how often correct information appears in training data (Elazar et al., 2022; Joshi et al., 2024; Kandpal et al., 2023). Recent work has found truth-correlated internal representations (Burns et al., 2023; Marks & Tegmark, 2024; Bürger et al., 2024) and established that calibrated models must hallucinate at a rate bounded by the corpus's monofact rate (Kalai & Vempala, 2024). Yet none of these explain why the training objective would favor one answer over another when both appear at equal frequency in the same format.
+Several explanations have been offered: scaling improves factual performance (Kadavath et al., 2022); frequency matters, since factual accuracy correlates with how often correct information appears in training data (Elazar et al., 2022; Joshi et al., 2024; Kandpal et al., 2023); and truth-correlated internal representations have been found (Burns et al., 2023; Marks & Tegmark, 2024; Bürger et al., 2024). Kalai & Vempala (2024) established that calibrated models must hallucinate at a rate bounded by the corpus's monofact rate. Yet none of these explain why the *training objective alone* would favor one answer over another when both appear at equal frequency in the same format.
 
-We propose that the answer lies in the structure of errors. Minimizing cross-entropy is equivalent to minimizing code length (Shannon, 1948; Deletang et al., 2024), linking LLM training to the Minimum Description Length principle (Rissanen, 1978; Grunwald, 2007). A correct rule system compresses into a compact representation; diverse errors must be memorized individually. But a *coherent* false system -- internally consistent, just wrong -- compresses equally well, and the preference vanishes.
+We propose that the answer lies in the structure of errors. Minimizing cross-entropy is equivalent to minimizing code length (Shannon, 1948; Deletang et al., 2024), linking LLM training to the Minimum Description Length principle (Rissanen, 1978; Grunwald, 2007). In our task families, a correct rule system is compact; diverse random errors must be memorized individually. But a *coherent* false system -- internally consistent, just wrong -- can be equally compact, and the preference vanishes.
 
 We test this hypothesis in a controlled experimental setting. We train transformers from 3.5M to 1B parameters from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, systematically varying the structure of errors. This design isolates error structure as the independent variable while holding frequency, format, and domain constant.
 
-Our contribution is a single experimentally validated hypothesis: **in controlled contradictory corpora, the compression objective favors consistency, not truth.** We show that (a) random errors produce a correctness preference scaling from 65% to 85%; (b) a single coherent alternative rule eliminates this preference entirely; (c) two competing rules restore it, pinpointing the compressibility boundary; (d) the same contrast reproduces on real Wikipedia text, across architectures, and at 1B scale on a mixed real-text corpus.
+Our contribution is a single experimentally supported hypothesis: **in controlled contradictory corpora, the compression objective favors consistency, not truth.** We show that (a) random errors produce a correctness preference scaling from 65% to 85%; (b) a single coherent alternative rule eliminates this preference; (c) two competing rules restore it, pinpointing the compressibility boundary; (d) the same contrast reproduces on Wikipedia paragraphs with entity substitution; and (e) the effect persists at 1B parameters on a mixed natural-text corpus.
 
 ## 2. Related Work
 
-**Prediction as compression.** The link between prediction and compression traces to Shannon (1948) and was formalized by Solomonoff (1964) and Rissanen's MDL principle (1978; Grunwald, 2007). Deletang et al. (2024) showed that LLMs are universal compressors. Huang et al. (2024) discovered a linear correlation (r ~ -0.93) between compression quality and benchmark performance. Wan & Mei (2025) proved that LLM training approximates Solomonoff induction. Pan et al. (2025) linked compression to knowledge acquisition and scaling; Chlon et al. (2025) linked compression failures to hallucination. We build on the MDL framework by experimentally varying the description length of false answer systems.
+**Prediction as compression.** The link between prediction and compression traces to Shannon (1948) and was formalized by Solomonoff (1964) and Rissanen's MDL principle (1978; Grunwald, 2007). Deletang et al. (2024) showed that LLMs are universal compressors. Huang et al. (2024) discovered a linear correlation (r ~ -0.93) between compression quality and benchmark performance. Wan & Mei (2025) proved that LLM training approximates Solomonoff induction. Pan et al. (2025) linked compression to knowledge acquisition and scaling; Chlon et al. (2025) linked compression failures to hallucination. Contemporaneous work by Marty et al. (2026) formalizes simplicity bias through MDL, and Aksenov et al. (2026) connects compression to mathematical modeling. We build on the MDL framework by experimentally varying the description length of false answer systems.
 
 **Internal representations and world models.** Compression can give rise to structured internal representations: Li et al. (2023a) found board representations in an Othello model, Gurnee & Tegmark (2024) discovered linear space-time representations in Llama-2, and several studies found truth-correlated representations (Marks & Tegmark, 2024; Burns et al., 2023; Li et al., 2023b; Azaria & Mitchell, 2023; Ravfogel et al., 2025). Our work operates at the behavioral level: we identify data-level conditions under which compression produces a preference for correct completions, leaving activation-level analysis for future work.
 
@@ -93,7 +93,7 @@ Each denoising corpus contains 5,000 unique problems. Standard (non-denoising) e
 
 When the same problem appears with both a correct and a random wrong answer, the model learns to prefer the correct one -- accuracy reaches 85% at 86M parameters. When the wrong answer follows a coherent rule system, the effect disappears: accuracy hovers near 50% at all scales. This is the paper's central result.
 
-Random accuracy increases monotonically with scale (65% -> 75% -> 81% -> 85%). Coherent accuracy converges toward 50% from below, consistent with the MDL prediction that equally compressible systems at equal frequency should be indistinguishable. The below-chance coherent accuracy at tiny (~43%) reflects textual simplicity of the false rules (e.g., dropping terms in derivatives); the compressor prefers whichever system is simpler to encode. The multi-rule experiment (Section 4.2) controls for this surface-form effect.
+Random accuracy increases monotonically with scale (65% -> 75% -> 81% -> 85%). Coherent accuracy remains near chance across all scales, consistent with the MDL prediction that equally compressible systems at equal frequency should be indistinguishable. The below-chance coherent accuracy at tiny (~43%) is consistent with the textual simplicity of the false rules (e.g., dropping terms in derivatives); the compressor may prefer whichever system is simpler to encode. The multi-rule experiment (Section 4.2) controls for this surface-form effect.
 
 ### 4.2 Multi-Rule Errors: The Sharp Crossover
 
@@ -117,7 +117,7 @@ N=2 on small (12M) yields 86.3% +/- 0.8%, confirming that the effect strengthens
 
 This is the most mechanistically revealing result. With one false rule, $K(T_2) \approx K(T_1)$. With two rules, the learner must encode a random selector -- which rule applies to which problem -- adding high-complexity bits that break compressibility. At N=10, accuracy (88.3%) exceeds even the random baseline (79.5%), because multi-rule errors combine compactness of individual rules with incompressibility of the selector.
 
-### 4.3 Transfer to Real Text: Wikipedia
+### 4.3 Transfer to Wikipedia Text with Entity Substitution
 
 **Table 3.** Wikipedia entity substitution (50/50, 4 seeds per size).
 
@@ -128,7 +128,7 @@ This is the most mechanistically revealing result. With one false rule, $K(T_2) 
 | medium (26M) | **71.5% +/- 0.8%** | 46.4% +/- 0.8% |
 | large (86M) | **71.4% +/- 0.7%** | 45.9% +/- 1.5% |
 
-The random/coherent contrast reproduces: random substitution yields 70--71% accuracy (all p < 10^-100), coherent substitution yields 46--49% (at or below chance). The effect is weaker than in math (71% vs 85%) because natural language provides more textual flexibility for locally fluent errors. Unlike math, Wikipedia accuracy saturates near 70% across the tested range -- the compressibility gap in natural language does not substantially benefit from additional capacity at this scale. Per-entity-type accuracy ranges from 82% (LOC) to 61% (CARDINAL), with geographic entities showing the strongest effect (Appendix D).
+The random/coherent contrast reproduces: random substitution yields 70--71% accuracy (all p < 10^-6), coherent substitution yields 46--49% (at or below chance). The effect is weaker than in math (71% vs 85%) because natural language provides more textual flexibility for locally fluent errors. Unlike math, Wikipedia accuracy saturates near 70% across the tested range -- the compressibility gap in natural language does not substantially benefit from additional capacity at this scale. Per-entity-type accuracy ranges from 82% (LOC) to 61% (CARDINAL), with geographic entities showing the strongest effect (Appendix D).
 
 ### 4.4 Robustness Checks
 
@@ -136,7 +136,7 @@ The random/coherent contrast reproduces: random substitution yields 70--71% accu
 
 **Standard (non-denoising) setup.** In the standard setup, each problem appears once with either a correct or incorrect solution (no within-problem contradiction). Paired accuracy is higher (79.5--88.3% vs 65.3--85.2%), but the gap closes with scale (from 14 pp at tiny to 3 pp at large). Critically, the random/coherent contrast holds identically: standard coherent accuracy is 47--52%, at chance. Full comparison in Appendix C.
 
-**Frequency vs compressibility.** For random errors, truth bias persists even when correct examples are a small minority: 67% paired accuracy at 10/90 correct-to-incorrect ratio (Appendix C). For coherent errors, the pattern reverses -- frequency alone determines preference: at 40/60 coherent, the model follows the majority with 72% preference for the false system; at 20/80, this rises to 91%. This asymmetry is a direct prediction of the MDL framework: when both systems compress equally well, frequency is the only tiebreaker.
+**Frequency vs compressibility.** For random errors, truth bias persists even when correct examples are a small minority: 67% paired accuracy at 10/90 correct-to-incorrect ratio (Appendix C). For coherent errors, the pattern reverses -- frequency dominates preference far more strongly: at 40/60 coherent, the model follows the majority with 72% preference for the false system; at 20/80, this rises to 91%. This asymmetry is a direct prediction of the MDL framework: when both systems compress equally well, frequency is the only tiebreaker.
 
 **Matched-control ablation.** A potential confound is that coherent errors affect more derivation steps per problem (~3 on average) than standard random errors (exactly 1). To control for this, we generate "matched random" errors that corrupt the same number of steps as coherent errors but at random positions with random values. Matched-random accuracy is 74.5% +/- 0.4% (4 seeds) -- lower than standard random (79.5%, which corrupts only 1 step) but far above coherent (47.2%, which also corrupts ~3 steps). The 27 pp gap between matched-random and coherent at identical step counts confirms that compressibility, not surface-level corruption load, drives the random/coherent contrast.
 
@@ -161,7 +161,7 @@ Per-task breakdown reveals that generation difficulty varies sharply by type. Fo
 
 ### 4.6 Architecture Robustness: Qwen3
 
-To verify that the effect is not specific to the GPT-2 architecture, we train a Qwen3-0.6B model (420M parameters, 28 layers, RoPE + GQA + SwiGLU + RMSNorm) from scratch on the same denoising corpora. This architecture differs from GPT-2 in positional encoding, attention mechanism, activation function, and normalization -- testing whether the compression-consistency effect is a general property of autoregressive transformers.
+To verify that the effect is not specific to the GPT-2 architecture, we train a Qwen3-0.6B model (420M non-embedding parameters, 28 layers, RoPE + GQA + SwiGLU + RMSNorm) from scratch on the same denoising corpora. This architecture differs from GPT-2 in positional encoding, attention mechanism, activation function, and normalization -- testing whether the compression-consistency effect is a general property of autoregressive transformers.
 
 **Table 5.** Qwen3-0.6B paired evaluation (50/50, 3 seeds).
 
@@ -174,7 +174,7 @@ To verify that the effect is not specific to the GPT-2 architecture, we train a 
 
 *Figure 3. Full scaling results. GPT-2 family (3.5M--86M, math-only), Qwen3-0.6B (420M, different architecture, math-only), and a Qwen3-architecture model (~1B, FineWeb-Edu + 8% math). The random/coherent contrast persists across model sizes, architectures, and corpus types. The 1B model trained on real text shows 76.8% random vs 46.7% coherent.*
 
-The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yield 50.6% (chance). The random/coherent contrast is architecture-independent. Qwen3's random accuracy (86.8%) is comparable to GPT-2 large (85.2%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
+The pattern reproduces: random errors yield 86.8% accuracy, coherent errors yield 50.6% (chance). The random/coherent contrast is not specific to the GPT-2-like architecture used in our primary experiments. Qwen3's random accuracy (86.8%) is comparable to GPT-2 large (85.2%) despite training on the same corpus sized for smaller models, suggesting further gains with compute-matched training.
 
 ### 4.7 Scaling to 1B on Real Text
 
@@ -195,25 +195,25 @@ This result addresses two key concerns. First, the effect is not confined to sma
 
 ## 5. Discussion
 
-**Summary of findings.** The experiments support a unified hypothesis: **in our controlled settings, the compression objective tracks consistency rather than truth.** Any internally consistent rule system -- true or false -- compresses equally well. Truth bias emerges only when false alternatives are structurally incoherent. The evidence converges across setups (denoising, standard, Wikipedia), error types (random, coherent, multi-rule), and evaluation modes (discriminative and generative).
+**Summary of findings.** The experiments support a unified hypothesis: **in our controlled settings, the compression objective tracks consistency rather than truth.** In our task families, an internally consistent false rule system compresses comparably to the true one. Truth bias emerges only when false alternatives are structurally incoherent. The evidence converges across setups (denoising, standard, Wikipedia), error types (random, coherent, multi-rule), and evaluation modes (discriminative and generative).
 
-**The role of frequency.** Our results reveal an asymmetry between random and coherent error regimes. For random errors, compressibility overrides frequency: truth bias persists even at 10/90 correct-to-incorrect ratio (67% accuracy). For coherent errors, frequency is decisive: at 40/60 coherent mixing, the model follows the majority with 72% preference for the false system, rising to 91% at 20/80. This is a direct MDL prediction -- when competing systems compress equally well, the more frequent one wins. The practical implication is that coherent falsehood needs no frequency advantage to neutralize truth bias; equal frequency suffices.
+**The role of frequency.** Our results reveal an asymmetry between random and coherent error regimes. For random errors, compressibility overrides frequency: truth bias persists even at 10/90 correct-to-incorrect ratio (67% accuracy). For coherent errors, frequency dominates: at 40/60 coherent mixing, the model follows the majority with 72% preference for the false system, rising to 91% at 20/80. This is consistent with the MDL prediction that when competing systems compress equally well, the more frequent one wins. The practical implication is that coherent falsehood needs no frequency advantage to neutralize truth bias; equal frequency suffices.
 
-**What the multi-rule experiment shows.** The sharp N=1->2 transition is the strongest evidence that compressibility, not surface-form complexity, is the operative variable. Each individual rule at N=2 remains compact, yet the random assignment of rules to problems introduces incompressible bits. This rules out explanations based on lexical diversity or number of corrupted tokens alone.
+**What the multi-rule experiment shows.** The N=1->2 transition provides strong evidence that compressibility, not surface-form complexity, is the operative variable. Each individual rule at N=2 remains compact, yet the random assignment of rules to problems introduces incompressible bits. This is difficult to reconcile with explanations based solely on lexical diversity or number of corrupted tokens.
 
-**Implications and scope.** In our controlled settings, the training objective does not provide an inherent "truth compass." Internally coherent falsehood remains competitive. Embedding cross-domain verification can partially restore truth bias, but the effect exhibits inverse scaling: verification accuracy drops from 71% at 3.5M to 61% at 86M parameters (Appendix E), as larger models absorb coherent within-domain patterns more readily. This has potential relevance for alignment (systematic false beliefs may resist filtering and grow harder to verify at scale), hallucinations (coherent misconceptions may persist; cf. Kalai & Vempala, 2024), and data curation (diverse errors are filtered effectively, but coordinated errors may not be). However, all our experiments use models up to 86M parameters trained from scratch on synthetic or semi-synthetic data. Whether these findings extend to large-scale pretraining on heterogeneous real-world corpora remains an open question. We view our results as identifying a mechanism and its boundary conditions, not as direct claims about production LLMs.
+**Implications and scope.** In our controlled settings, the training objective does not provide an inherent "truth compass." Internally coherent falsehood remains competitive. Embedding cross-domain verification can partially restore truth bias, but the effect exhibits inverse scaling: verification accuracy drops from 71% at 3.5M to 61% at 86M parameters (Appendix E), as larger models absorb coherent within-domain patterns more readily. This has potential relevance for alignment (systematic false beliefs may resist filtering and grow harder to verify at scale), hallucinations (coherent misconceptions may persist; cf. Kalai & Vempala, 2024), and data curation (diverse errors are filtered effectively, but coordinated errors may not be). The 1B experiment on real web text (Section 4.7) provides initial evidence that the effect persists beyond toy scale and synthetic data, but all our experiments remain far below the scale of production LLMs. Whether these findings extend to large-scale pretraining on heterogeneous real-world corpora remains an open question. We view our results as identifying a mechanism and its boundary conditions, not as direct claims about production LLMs.
 
-Our findings admit an interpretive analogy with Popper's falsifiability criterion (1959): a false theory that requires ad hoc corrections to accommodate observations has higher description length than a true one. The analogy is limited -- the model does not "test" theories -- but the structural parallel is suggestive.
+The pattern admits an analogy with Popper's falsifiability criterion (1959): a false theory requiring ad hoc corrections to fit observations has higher description length than a parsimonious true one. The analogy is limited -- the model does not test theories against evidence -- but the structural parallel between MDL-driven preference and falsifiability-driven theory selection is suggestive.
 
 ---
 
 ## 6. Conclusion
 
-In controlled experiments with transformers from 3.5M to 1B parameters, the compression objective tracks consistency rather than truth. Models prefer the correct answer only when errors are structurally incoherent; a single coherent alternative rule eliminates this preference, and two competing rules restore it. The same pattern reproduces on real Wikipedia text, in generative evaluation, across architectures (GPT-2 and Qwen3), and at 1B scale on a mixed real-text corpus where math is a minority of the training data. In the settings we study, correctness preference is a compression artifact whose presence or absence is determined by the description length of the false answer system. Whether this mechanism extends to full-scale pretraining on heterogeneous real-world corpora remains the key open question.
+Whether the compression mechanism that produces correctness preferences in our experiments extends to large-scale pretraining remains an open question. In controlled experiments with transformers up to 86M parameters -- and up to ~1B parameters on a mixed natural-text corpus -- we find that models prefer the correct answer only when errors are structurally incoherent; a single coherent alternative rule eliminates this preference, and two competing rules restore it. The same pattern reproduces on Wikipedia paragraphs with entity substitution, in generative evaluation, and across architectures. In the settings we study, correctness preference is a compression artifact that tracks the description length of the false answer system.
 
 ## Limitations
 
-**Model scale.** Core experiments use models from 3.5M to 86M parameters, with robustness checks at 420M (Qwen3-0.6B) and ~1B (Qwen3-architecture on FineWeb-Edu + math). The random/coherent contrast persists across this range, but we have not tested beyond 1B. For coherent errors, an MDL argument suggests the result should hold regardless of scale: equally compressible systems at equal frequency offer no basis for preference.
+**Model scale.** The primary experiments use models of 3.5M--86M parameters. The ~1B experiment on a mixed natural-text corpus with a single seed per condition provides a scale-up sanity check but not a definitive large-scale confirmation. This remains far below production LLMs (7B--400B+). Replication at multi-billion scale with compute-matched training and multiple seeds remains an important next step.
 
 **Domain specificity.** Mathematics provides an unusually crisp correct/incorrect distinction. The effect weakens in natural language (71% vs 85%), where errors can remain locally fluent. Extending to domains with competing real-world knowledge systems (e.g., conflicting news sources, historical revisionism) remains open.
 
@@ -239,15 +239,13 @@ Burns, C., Ye, H., Klein, D., & Steinhardt, J. (2023). Discovering Latent Knowle
 
 Bürger, L., Hamprecht, F. A., & Nadler, B. (2024). Truth is Universal: Robust Detection of Lies in LLMs. *NeurIPS 2024*.
 
-Chlon, L., Karim, A., Chlon, M., & Awada, M. A. (2025). Order Sensitivity and Information Budgeting: Understanding Why Language Models Hallucinate. *arXiv:2509.11208*.
+Chlon, L., Karim, A., Chlon, M., & Awada, M. A. (2025). Predictable Compression Failures: Order Sensitivity and Information Budgeting for Evidence-Grounded Binary Adjudication. *arXiv:2509.11208*.
 
 Deletang, G., Ruoss, A., Grau-Moya, J., et al. (2024). Language Modeling Is Compression. *ICLR 2024*.
 
-DeMoss, B., Sapora, S., Foerster, J., Hawes, N., & Posner, I. (2024). The Complexity Dynamics of Grokking. *arXiv:2412.09810*.
+Elazar, Y., Kassner, N., Ravfogel, S., Feder, A., Ravichander, A., Mosbach, M., Belinkov, Y., Schütze, H., & Goldberg, Y. (2022). Measuring Causal Effects of Data Statistics on Language Model's Factual Predictions. *arXiv:2207.14251*.
 
-Elazar, Y., Kassner, N., Ravfogel, S., et al. (2022). Measuring Causal Effects of Data Statistics on Language Model's Factual Predictions. *arXiv:2207.14251*.
-
-Goldblum, M., Finzi, M., Rowan, K., & Wilson, A. G. (2024). The No Free Lunch Theorem, Kolmogorov Complexity, and the Role of Inductive Biases in Machine Learning. *ICML 2024*.
+Goldblum, M., Finzi, M., Rowan, K., & Wilson, A. G. (2024). Position: The No Free Lunch Theorem, Kolmogorov Complexity, and the Role of Inductive Biases in Machine Learning. *ICML 2024*.
 
 Grunwald, P. D. (2007). The Minimum Description Length Principle. *MIT Press*.
 
@@ -255,9 +253,7 @@ Gurnee, W., & Tegmark, M. (2024). Language Models Represent Space and Time. *ICL
 
 Huang, Y., Zhang, J., Shan, Z., & He, J. (2024). Compression Represents Intelligence Linearly. *COLM 2024*.
 
-Hutter, M. (2005). Universal Artificial Intelligence. *Springer*.
-
-Joshi, N., Rando, J., Saparov, A., Kim, N., & He, H. (2024). Personas as a Way to Model Truthfulness in Language Models. *EMNLP 2024*.
+Joshi, N. [Nitish], Rando, J., Saparov, A., Kim, N., & He, H. (2024). Personas as a Way to Model Truthfulness in Language Models. *EMNLP 2024*.
 
 Kadavath, S., Conerly, T., Askell, A., et al. (2022). Language Models (Mostly) Know What They Know. *arXiv:2207.05221*.
 
@@ -279,7 +275,7 @@ Marks, S., & Tegmark, M. (2024). The Geometry of Truth. *COLM 2024*.
 
 McGraw, K. O., & Wong, S. P. (1992). A Common Language Effect Size Statistic. *Psychological Bulletin*, 111(2), 361-365.
 
-Mingard, C., Valle-Perez, G., Sherrington, D., & Louis, A. A. (2021). Is SGD a Bayesian Sampler? Well, Almost. *JMLR 2021*.
+Mingard, C., Valle-Perez, G., Skalse, J., & Louis, A. A. (2021). Is SGD a Bayesian Sampler? Well, Almost. *JMLR 2021*.
 
 Nanda, N., Chan, L., Lieberum, T., Smith, J., & Steinhardt, J. (2023). Progress Measures for Grokking via Mechanistic Interpretability. *ICLR 2023*.
 
@@ -287,7 +283,7 @@ Pan, Z., Wang, S., & Li, J. (2025). Understanding LLM Behaviors via Compression.
 
 Popper, K. (1959). The Logic of Scientific Discovery. *Hutchinson*.
 
-Ravfogel, S., Yehudai, G., Linzen, T., Bietti, A., & Bruna, J. (2025). Emergence of Linear Truth Encodings in Language Models. *NeurIPS 2025*.
+Ravfogel, S., Yehudai, G. [Gilad], Linzen, T., Bruna, J., & Bietti, A. (2025). Emergence of Linear Truth Encodings in Language Models. *NeurIPS 2025*.
 
 Rissanen, J. (1978). Modeling by Shortest Data Description. *Automatica*, 14(5), 465-471.
 
@@ -302,6 +298,10 @@ Xie, J., Zhang, K., Chen, J., Lou, R., & Su, Y. (2024). Adaptive Chameleon or St
 Valle-Perez, G., Camargo, C. Q., & Louis, A. A. (2019). Deep Learning Generalizes Because the Parameter-Function Map Is Biased Towards Simple Functions. *ICLR 2019*.
 
 Wan, J., & Mei, L. (2025). Large Language Models as Computable Approximations to Solomonoff Induction. *arXiv:2505.15784*.
+
+Marty, T., Elmoznino, E., Gagnon, L., et al. (2026). A Compression Perspective on Simplicity Bias. *arXiv:2603.25839*.
+
+Aksenov, V., Bodnia, E., Freedman, M. H., & Mulligan, M. (2026). Compression is All You Need: Modeling Mathematics. *arXiv:2603.20396*.
 
 Zhang, C., Bengio, S., Hardt, M., Recht, B., & Vinyals, O. (2017). Understanding Deep Learning Requires Rethinking Generalization. *ICLR 2017*.
 
