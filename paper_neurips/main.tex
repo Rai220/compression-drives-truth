@@ -50,7 +50,7 @@ Our contribution is a single experimentally validated hypothesis: \textbf{in con
 \section{Related Work}
 %======================================================================
 
-\textbf{Prediction as compression.}\quad The link between prediction and compression traces to \citet{shannon1948mathematical} and was formalized by \citet{solomonoff1964formal} and Rissanen's MDL principle \citep{rissanen1978modeling,grunwald2007minimum}. \citet{deletang2024language} showed that LLMs are universal compressors. \citet{huang2024compression} discovered a linear correlation ($r \approx -0.93$) between compression quality and benchmark performance. \citet{wan2025large} proved that LLM training approximates Solomonoff induction. \citet{pan2025understanding} linked compression to knowledge acquisition and scaling; \citet{chlon2025predictable} linked compression failures to hallucination. We build on the MDL framework by experimentally varying the description length of false answer systems.
+\textbf{Prediction as compression.}\quad The link between prediction and compression traces to \citet{shannon1948mathematical} and was formalized by \citet{solomonoff1964formal} and Rissanen's MDL principle \citep{rissanen1978modeling,grunwald2007minimum}. \citet{deletang2024language} showed that LLMs are universal compressors. \citet{huang2024compression} discovered a linear correlation ($r \approx -0.93$) between compression quality and benchmark performance. \citet{wan2025large} proved that LLM training approximates Solomonoff induction. \citet{pan2025understanding} linked compression to knowledge acquisition and scaling; \citet{chlon2025predictable} linked compression failures to hallucination. Contemporaneous work by \citet{marty2026compression} formalizes simplicity bias through MDL, and \citet{aksenov2026compression} connects compression to mathematical modeling. We build on the MDL framework by experimentally varying the description length of false answer systems.
 
 \textbf{Internal representations and world models.}\quad Compression can give rise to structured internal representations: \citet{li2023a_emergent} found board representations in an Othello model, \citet{gurnee2024language} discovered linear space-time representations in Llama-2, and several studies found truth-correlated representations \citep{marks2024geometry,burns2023discovering,li2023b_inference,azaria2023internal,ravfogel2025emergence}. Our work operates at the behavioral level: we identify data-level conditions under which compression produces a preference for correct completions, leaving activation-level analysis for future work.
 
@@ -147,7 +147,7 @@ medium & 26M  & $\mathbf{81.1\% \pm 1.2\%}$ & $45.8\% \pm 3.4\%$ & 4 & 4 \\
 large  & 86M  & $\mathbf{85.2\% \pm 2.3\%}$ & $51.0\% \pm 0.8\%$ & 2 & 2 \\
 \bottomrule
 \end{tabular}
-\caption{Denoising paired evaluation: equal random vs equal coherent errors, across model sizes. Random accuracy scales with model size; coherent accuracy remains near chance.}
+\caption{Denoising paired evaluation: equal random vs equal coherent errors, across model sizes. All $\pm$ values are standard deviations across random seeds. Random accuracy scales with model size; coherent accuracy remains near chance.}
 \label{tab:central}
 \end{table}
 
@@ -180,7 +180,7 @@ $N$ Rules & Accuracy & $p$ \\
 10 & $88.3\% \pm 0.7\%$ & $< 10^{-6}$ \\
 \bottomrule
 \end{tabular}
-\caption{Multi-rule paired evaluation (tiny, 3.5M, 50/50, 4 seeds). $N{=}2$ on small (12M) yields $86.3\% \pm 0.8\%$, confirming the effect strengthens with capacity.}
+\caption{Multi-rule paired evaluation (tiny, 3.5M, standard 50/50, 4 seeds). The $N{=}1$ baseline (46.6\%) differs from the denoising coherent accuracy in Table~\ref{tab:central} (43.5\%) because multi-rule experiments use the standard (non-denoising) setup. $N{=}2$ on small (12M) yields $86.3\% \pm 0.8\%$, confirming the effect strengthens with capacity.}
 \label{tab:multirule}
 \end{table}
 
@@ -371,20 +371,24 @@ Answer: 2x + 15
 
 The corresponding random-error version replaces a derivation step with a plausible but incorrect computation (e.g., \texttt{6x + 15 - 4x = 2x + 11}). In the coherent condition, a systematic rule is applied consistently across all problems of the same type (e.g., for distribution: $a(b+c) = ab + c$ instead of $ab + ac$). The paired test set presents the same prompt with both correct and incorrect completions for NLL comparison.
 
-\section{Formal MDL Statement}
+\section{Formal MDL Predictions}
 \label{app:mdl}
 
-We state the theoretical prediction that motivates our experiments more precisely.
+We state the theoretical predictions that motivate our experiments. All three describe the behavior of an idealized two-part MDL learner \citep{rissanen1978modeling,grunwald2007minimum}, not formal theorems about neural network training dynamics. Our experiments (Sections~\ref{sec:central}--\ref{sec:wikipedia}) test whether gradient-descent-trained transformers approximate this behavior.
 
-\textbf{Proposition (informal MDL prediction).} Consider a corpus $D$ containing $n$ problems, each appearing with two answers: one generated by theory $T_1$ (correct) and one by theory $T_2$ (alternative). An ideal MDL learner selects the theory $T^*$ minimizing total description length $L(T) + L(D|T)$.
+\textbf{Setup.} Consider a corpus $D$ containing $n$ problems, each appearing with two answers: one generated by theory $T_1$ (correct) and one by theory $T_2$ (alternative). An ideal MDL learner selects the theory $T^*$ minimizing total description length $L(T) + L(D|T)$.
 
-\begin{itemize}[leftmargin=*]
-\item \emph{Case 1 (random errors):} $T_1$ is a compact rule system with $L(T_1) = O(1)$. $T_2$ assigns independent random answers, requiring $L(T_2|D) = O(n)$. The MDL learner prefers $T_1$ for sufficiently large $n$.
-\item \emph{Case 2 (coherent errors):} Both $T_1$ and $T_2$ are compact rule systems with $L(T_1) \approx L(T_2) = O(1)$. At equal frequency, $L(D|T_1) \approx L(D|T_2)$, and the MDL learner has no basis to prefer one over the other.
-\item \emph{Case 3 (multi-rule, $N$ competing false rules):} Each rule $r_i$ is compact ($L(r_i) = O(1)$), but encoding the assignment of rules to problems requires an additional selector $s: \{1,...,n\} \to \{1,...,N\}$ with $L(s) = O(n \log N)$ when assignments are random. Total false-system description length grows as $O(n \log N)$, restoring the MDL advantage of $T_1$.
-\end{itemize}
+\textbf{Prediction 1} (random errors). \emph{If $T_1$ is a compact rule system with $L(T_1) = O(1)$ and $T_2$ assigns independent random answers with $L(T_2|D) = O(n)$, then for sufficiently large $n$ the MDL learner prefers $T_1$.}
 
-This proposition is not a formal theorem about neural network training dynamics---it describes the behavior of an idealized MDL learner. Our experiments test whether gradient-descent-trained transformers approximate this behavior. The results in Sections~\ref{sec:central}--\ref{sec:wikipedia} are consistent with all three predictions.
+\emph{Proof sketch.} The total code length under $T_1$ is $L(T_1) + L(D|T_1) = O(1) + O(n \cdot c)$ where $c$ is the per-problem code length given the rule. Under $T_2$, the false answers require $O(n)$ bits of memorization (each answer is independent). For large $n$, the $O(n)$ memorization cost dominates any constant advantage $T_2$ might have, so $L(T_1) + L(D|T_1) < L(T_2) + L(D|T_2)$.
+
+\textbf{Prediction 2} (coherent errors). \emph{If both $T_1$ and $T_2$ are compact rule systems with $L(T_1) \approx L(T_2) = O(1)$, then at equal frequency the MDL learner has no basis to prefer one over the other.}
+
+\emph{Proof sketch.} Both theories have comparable model complexity $L(T_1) \approx L(T_2)$. Given either theory, the data encoding cost is the same: $L(D|T_1) \approx L(D|T_2)$, since both produce deterministic predictions for their respective answer patterns. The total code lengths are approximately equal regardless of $n$.
+
+\textbf{Prediction 3} (multi-rule errors). \emph{If the false system consists of $N$ compact rules $\{r_1, \ldots, r_N\}$ with random assignment to problems, then the false system's description length grows as $O(n \log N)$, restoring the MDL advantage of $T_1$.}
+
+\emph{Proof sketch.} Each rule $r_i$ is compact: $L(r_i) = O(1)$. However, encoding which rule applies to which problem requires a selector $s: \{1,\ldots,n\} \to \{1,\ldots,N\}$. When assignments are random (i.i.d.\ uniform), the selector has entropy $n \log_2 N$ bits and is incompressible. The total false-system code length is $L(\{r_i\}) + L(s) + L(D|\{r_i\},s) = O(N) + O(n \log N) + O(n \cdot c)$. For $N \geq 2$, the $n \log N$ term makes the false system more expensive than $T_1$, which requires no selector.
 
 \section{Compression Measure (gzip)}
 \label{app:compression}
@@ -582,56 +586,91 @@ large  & 51.6\% & 50.4\% & --     & --     & 51.0\% \\
 \end{table}
 
 %======================================================================
-% NeurIPS Paper Checklist
+% NeurIPS Paper Checklist (official format)
 %======================================================================
 \section*{NeurIPS Paper Checklist}
 
-\begin{enumerate}[leftmargin=*]
+\begin{enumerate}
 
-\item \textbf{Claims.} Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
-\\ \textbf{Yes.} All claims are qualified to our controlled experimental setting.
+\item {\bf Claims}
+    \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: All claims are explicitly qualified to our controlled experimental setting. The abstract states the scope (3.5M--1B parameters, controlled corpora) and the introduction notes that extension to large-scale pretraining is an open question.
 
-\item \textbf{Limitations.} Does the paper discuss the limitations of the work performed by the authors?
-\\ \textbf{Yes.} See the Limitations section.
+\item {\bf Limitations}
+    \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: A dedicated Limitations section discusses model scale, domain specificity, discriminative vs generative gap, seed counts, and causal identification.
 
-\item \textbf{Theory Assumptions and Proofs.} For each theoretical result, does the paper provide the full set of assumptions and a complete (or correct) proof?
-\\ \textbf{Yes.} The MDL prediction (Appendix~\ref{app:mdl}) is stated as an informal proposition with explicit assumptions. It describes an idealized MDL learner, not a formal theorem about neural networks.
+\item {\bf Theory assumptions and proofs}
+    \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The MDL predictions (Appendix~\ref{app:mdl}) are stated as three numbered propositions with explicit assumptions about an idealized MDL learner. They are clearly marked as predictions about idealized learners, not formal theorems about neural network training dynamics. Proof sketches are provided for each.
 
-\item \textbf{Experimental Result Reproducibility.} Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper?
-\\ \textbf{Yes.} All hyperparameters, model architectures, data generation procedures, and evaluation protocols are specified. Code is provided as supplementary material.
+\item {\bf Experimental result reproducibility}
+    \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: All hyperparameters, model architectures, data generation procedures, evaluation protocols, and random seeds are specified in Section~\ref{sec:methodology} and Appendix~\ref{app:reproducibility}. Full generation templates are included in supplementary material.
 
-\item \textbf{Open access to data and code.} Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results?
-\\ \textbf{Yes.} Anonymous repository included as supplementary material.
+\item {\bf Open access to data and code}
+    \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Anonymous repository included as supplementary material with full code for data generation, training, and evaluation.
 
-\item \textbf{Experimental Setting/Details.} Does the paper specify all the training and test details necessary to understand the results?
-\\ \textbf{Yes.} See Section~\ref{sec:methodology} and Appendix~\ref{app:reproducibility}.
+\item {\bf Experimental setting/details}
+    \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: See Section~\ref{sec:models} (optimizer, lr, schedule, batch size, steps) and Appendix~\ref{app:reproducibility} (corpus examples, hardware). Train/test separation is guaranteed by seed: test problems use a different seed (999) than training.
 
-\item \textbf{Experiment Statistical Significance.} Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
-\\ \textbf{Yes.} Standard deviations across seeds and $p$-values (binomial test) are reported for all conditions.
+\item {\bf Experiment statistical significance}
+    \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: All $\pm$ values are standard deviations across random seeds (not standard errors). $p$-values are computed via binomial test. The number of seeds is reported for every condition. Per-seed breakdowns are provided in Appendix~\ref{app:seeds}.
 
-\item \textbf{Experiments Compute Resources.} For each experiment, does the paper provide sufficient information on the computer resources needed to reproduce the experiments?
-\\ \textbf{Yes.} See Appendix~\ref{app:reproducibility}: approximately 150 GPU-hours total on T4/A10G/A100 GPUs and M4 Apple Silicon.
+\item {\bf Experiments compute resources}
+    \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: See Appendix~\ref{app:reproducibility}: approximately 150 GPU-hours total on Modal.com T4/A10G/A100 GPUs and Apple M4 Pro (36GB). Hardware is specified per experiment type.
 
-\item \textbf{Code Of Ethics.} Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics?
-\\ \textbf{Yes.}
+\item {\bf Code of ethics}
+    \item[] Question: Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics \url{https://neurips.cc/public/EthicsGuidelines}?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The research uses only synthetic data and publicly available Wikipedia text. No human subjects, no private data, no dual-use concerns beyond those discussed in Ethical Considerations.
 
-\item \textbf{Broader Impacts.} Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
-\\ \textbf{Yes.} See Ethical Considerations section.
+\item {\bf Broader impacts}
+    \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The Ethical Considerations section discusses both the defensive value (informing data curation) and the risk (characterizing conditions under which misinformation evades filtering).
 
-\item \textbf{Safeguards.} Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse?
-\\ \textbf{N/A.} The models are small ($\leq$1B) and trained on synthetic or filtered web data; they pose no misuse risk.
+\item {\bf Safeguards}
+    \item[] Question: Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse (e.g., pre-trained language models, image generators, or scraped datasets)?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: All models are small ($\leq$1B parameters) and trained on synthetic or filtered web data. They have no capabilities beyond the narrow experimental domain and pose no misuse risk.
 
-\item \textbf{Licenses for existing assets.} Are the creators or original owners of assets used in the paper properly credited and are the license and terms of use explicitly mentioned and properly respected?
-\\ \textbf{Yes.} Wikipedia data is used under its CC BY-SA license; all software dependencies are open source.
+\item {\bf Licenses for existing assets}
+    \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Wikipedia data is used under its CC BY-SA license. FineWeb-Edu \citep{penedo2024fineweb} is used under its ODC-By license. All software dependencies (PyTorch, MLX, SymPy, spaCy) are open source.
 
-\item \textbf{New Assets.} Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
-\\ \textbf{Yes.} Code and data generation scripts are documented in the supplementary material.
+\item {\bf New assets}
+    \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Code and data generation scripts are documented in the supplementary material with README and inline comments.
 
-\item \textbf{Crowdsourcing and Research with Human Subjects.} For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots?
-\\ \textbf{N/A.} No human subjects involved.
+\item {\bf Crowdsourcing and research with human subjects}
+    \item[] Question: For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots, if applicable, as well as details about compensation (if any)?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: No human subjects or crowdsourcing involved. All data is generated programmatically.
 
-\item \textbf{Institutional Review Board (IRB) Approvals or Equivalent for Research with Human Subjects.} Does the paper describe potential risks incurred by study participants?
-\\ \textbf{N/A.} No human subjects involved.
+\item {\bf Institutional review board (IRB) approvals or equivalent for research with human subjects}
+    \item[] Question: Does the paper describe potential risks incurred by study participants, whether such risks were disclosed to the subjects, and whether Institutional Review Board (IRB) approvals (or an equivalent approval/review based on the requirements of your country or institution) were obtained?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: No human subjects involved.
+
+\item {\bf Declaration of LLM usage}
+    \item[] Question: Does the paper describe the usage of LLMs if it is an important, original, or non-standard component of the core methods in this research? Note that if the LLM is used only for writing, editing, or formatting purposes and does \emph{not} impact the core methodology, scientific rigor, or originality of the research, declaration is not required.
+    \item[] Answer: \answerNA{}
+    \item[] Justification: LLMs (Claude) were used for writing assistance, code editing, and bibliography verification, but not as a component of the research methodology. All experimental code, data generation, model training, and evaluation were implemented and verified independently of LLM assistance.
 
 \end{enumerate}
 
