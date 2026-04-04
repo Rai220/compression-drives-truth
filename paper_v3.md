@@ -1,4 +1,4 @@
-# Error Structure Determines Correctness Preference in Contradictory Training Data
+# Truth as a Compression Artifact in Language Model Training
 
 ## Abstract
 
