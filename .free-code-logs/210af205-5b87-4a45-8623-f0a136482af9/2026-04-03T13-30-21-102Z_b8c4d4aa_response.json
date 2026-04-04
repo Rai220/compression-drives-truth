@@ -1,0 +1,190 @@
+{
+  "timestamp": "2026-04-03T13:30:30.910Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.76",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.69",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e686d6a2ee6e77f-WAW",
+    "connection": "keep-alive",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:30:23 GMT",
+    "request-id": "req_011CZgvGU6TUEwZYyMLLDYR3",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2728",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "x-envoy-upstream-service-time": "2726",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=ng43e4SUD3k2b6irtcXDllkFtzog4b3FTZMZUVPi3vY-1775223021.1478739-1.0.1.1-Mz4xOQZTeOY9BPhQyt8GZUSQpXotOhjvs7R1lTmikYU; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01Usfdrqx7ADgVfh2Nw87ndt",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_01F9f57wQ4Smy8Bc8RMG49Uj",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"Rissanen \\\"Modeling by Shortest Data Description\\\" Automatica 1978\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_01F9f57wQ4Smy8Bc8RMG49Uj",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "Paper: Modeling by shortest data description: Automatica (Journal of IFAC): Vol 14, No 5",
+            "url": "https://dl.acm.org/doi/10.1016/0005-1098%2878%2990005-5",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Rissanen, J. (1978) Modeling by Shortest Data Description. Automatica, 14, 465-471. - References - Scientific Research Publishing",
+            "url": "https://www.scirp.org/(S(lz5mqp453edsnp55rrgjct55))/reference/ReferencesPapers.aspx?ReferenceID=1362990",
+            "encrypted_content": "EuEBCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDPPmobmaj3LG4DNaxxoMuqq3eo7Nt5PyGIEuIjBs0HiDYsL5EqyDR0ASWUEBDWkbmbWwQ6f6o921j0IyPZs6aU/I8xIKSUgrZqWwCeEqZQpU9nnp7Rtt/B5K9AMT+V6al7xAMnVi9TZlM8RvY205fIEIdOXRTqXZQOMUfijBfgZXFHRweY8Glq+zALrILiXGZmhPYn5rGWntXyLQe9MCrVjGJqoe+QUJ6URmy8ItLjDOy5iAGAM=",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "J. Rissanen, “Modeling by Shortest Data Description,” Automatica, Vol. 14, No. 5, 1978, pp. 465-471. doi10.1016/0005-1098(78)90005-5 - References - Scientific Research Publishing",
+            "url": "https://scirp.org/reference/ReferencesPapers?ReferenceID=781224",
+            "encrypted_content": "EpgCCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDClcvY66/TfzZ0pubhoMnapmhM0x/P3BKYM4IjCnUaFFO5rlI4MtDTcEnMGLhSmEwrsyvTcLPgchtN9GCiqAV2f+D4wxCl8iAUzd6ZkqmwHFr99lnJuOdYK1aVpp5v7U96j9H8QWB0G0bhWaykjPKmYpZNUKhjlrw0uKWP2F+vUZWcD3Atan7OIj36+Qt0/UiOm1/jWSnRDSD9Mf1VIERf8WBXHA10e4GcsyAhiLE9Je3y2ePhHkqnhX5NWzI34JJYDWD6bH2ARdkO1SzvtptCbtSfptqeRSXn1Uw2ldoL9XwfWmGWJmhQajoRgD",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Modeling by shortest data description | BibSonomy",
+            "url": "https://www.bibsonomy.org/bibtex/e8ec3491fd0cc1acc029dfe5637ee6f4",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Modeling by shortest data description - ScienceDirect",
+            "url": "https://www.sciencedirect.com/science/article/abs/pii/0005109878900055",
+            "encrypted_content": "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",
+            "page_age": "February 10, 2003"
+          },
+          {
+            "type": "web_search_result",
+            "title": "[PDF] Modeling By Shortest Data Description* | Semantic Scholar",
+            "url": "https://www.semanticscholar.org/paper/Modeling-By-Shortest-Data-Description*-Rissanen/d382b9c11e5c6a8e173fbeb442545e3be8d3e3a5",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Modeling by shortest data description for Automatica - IBM Research",
+            "url": "https://research.ibm.com/publications/modeling-by-shortest-data-description",
+            "encrypted_content": "ErYICioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDH3e0b24Y2aBuGXSdxoMKxlDqlLesgiKzm/oIjBB6/zNcY+zlEH8vRPhbPrRxtvz5SDLlgO8sE+ELzHp127IaygNZzh4V2P+8oZdhCsquQexCiakNg1In0Orjrrlqa4l7lw4L/ArqDmB1Uzljpt3J9CQC0+GSsonM61l04tp83TrT3wpxZebDz2IBEw6yOYj22bW+QYtxpLG6nfP2UhBZxT3QMsdfVHgxeBforx4pfSK4x69fgZKoFluCIBpp0SkbcjddIELIyX5sIS0D9HxTD5sGyqjI0nd3JpNYZz9IrbGTIc80wpVERjZU6ZMWvd63yy1yDWvSGtpWIZXtnJt9ohSBVlRayg+y0+uLRL3wuE7T6c1q0cERxS9Za2/2Tp6Ofh+Vol0MJH0++kpu8NW76XcT0ApU1eqaMjPbCxwlrjciJV8C/F8OcRZzX3xrWKc5IPkzdl+YCxGPzklu0qmzUBnTH507aJ4WJM5yFmXF2YbCM85mgxJEqUr8oxMIzxePOAePY0KXkAU//0FMPfKbT/RuEUfdDNge97JKkdg1oM99eK/RztQ8+QzcdXBROPS2sbHZbbVbWgAGj+zfY2AzIbvhKnDLuuuAx4cov/LI8NWjJ204fgVzpEDP2wwf+WV9PvIFB6zmkupEC0Mz2P2qgvRAwNBmjAJ1hGWtxADslXAIL2QGc7v/lUkcISmFT0PuRVv48EMpK7c3BpEcK02xquwPxtcoM2oRhDShyONhOSHnY60kiu4GUYX2H89e7uhoXVop5Ie9J5Wzq+jagtXwvYH5mFR0rSGzgklR3GX1tYZdp0yOozbxGHT1Of3iYRLKbO8Gkjb1Hwyrv2o6+ei/3Qq90/u1lafGOphzU6PgJXRKiZBNWDXyA42yZBCdaBW9CCwhGNcyznZIRa9MB2cbHOpllIzLcafe/P86AuEOX73XtEZ98rgFju6HoaGKxG4320kU/wUP4mH4Gdrk8iBnaj4MSfL9dvu9ESOTJFU2FmLGo4yoAnWeUHWy3f46luCmaXeNIOZCKyJF47JqEKU7R8atZvSHUPHB9l/SMZ8Q1S63KRG5aNL9ETFC+yxqZLWdX14iTK3fRUnfSXjMieSfBh9EVmjl8lZEKqMnsyaafDJQfBflj3hfCJZoU7gbdYrIKhGHGLaYWqf/I++m4s6q/XXDYFRe7WY+hnASgkxbjT0Nv67pEye5Q7pyn/BWDmGgdnDJikzwUW3YqlT+4k3g/r3LY5jbv+8Zc/pgAnosb2ESasENHqF9shBpU1cgRDaXSdsw0nIrCgKycsK+9fNf/mwND9iQV0dcfOxgCV3PXyxObe6KWGxF1c4MbSS7D+/KRrd4PPBbdi9KbrJlUhCGFyqVoA7aIj67BgD",
+            "page_age": "January 1, 1978"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Minimum Description Length (MDL) - Model Selection",
+            "url": "https://modelselection.org/mdl/",
+            "encrypted_content": "EpwgCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDDMt491pFzKiuhO4PxoMYjIJszDbsPDgdS6KIjAMoEDnx7DWQJimvrWjAqUoaHW0F/xOpIs2ZXTrq8LWF90E/XchhNNSHRuGeYfnzQMqnx+i3Q+iJwjQOTP924j8GWUA0tZRU76BYDE0T5pOVgKK8/SoWGJngbDrIt/Q45I7GmwVGWEJ/owUDq76Hnb94vjQSIi2aa4ppk6n9UUCE6JZKPklPDMJ0DbI9352KiONhc2cuVuY+qq7PoIOxDrLIsVwFMuVVV2s/MFzsRYu3saYjc6F2+SPPXFgWFwFqPCiRAyQGkieikpkcGL0EgrVjGSp4sx69AXIOkF2I8bGvEvZd5xyaF1hUHKzHFCGis2Co/aqezswF3gh/dg0BD6bNzH+VKHPWHQ1PVAA2kbNyZF/dMBZwg182ClZhEmY1PDwHeybmIk6WJ9pJtYSnV4xeM+qgk721RorS/k46JBo5Gd6rhHfl998D+8iRuhH5p753uCa0uNNbk93KKZ4ALfFkgTTHjtXNtzdjXKiY+Xd4+2d6QELNbsS1PbBr1tietHHID2ogztRtokEZpfzdq1cDxRDKyxMazJHtlp43Ws/oOvCGItNIXw1/yI2XnSv4pxB9ia9rJTSM6z+wd9//wcTQfCvKTsLISQfG5aZzCSZbamuy72OtRP6nR/tgECoDx8OCODfghfoyBYGMCroi7JR6MqoG4MD7kn9+UZf+K0uqEkAco2BX3rfBCT+KKD0XpayZHN8M26Al9nwK+NL6Boj4CIEAo+NehDZBiDS9KVtcVrRRYIXnDpq/CNhzFqDSOJeH3MtmB/bvV0GuuUIxUJ2pmxHX3ZDGKLPSeuoVAlzAcplZZWkEYQSWLpMxlZiIc2kAd/VExu4pBEMHdX3KFoUooQMyzg6Sr3L5XhTE0QccZFeRjPTfuzouggcFOeCEPTCJeo/8ypTMEw1FNCWrjFz28XskAxWAAzfI8r8Ntn94FNGFxG5vBj7YHR6wIXu3AsVBoCPcOM/2gNNwZcqKnaXqUIH1fIYgnWXUgVyo0eWhkYkASoI9COSn3Bumt90UJ45jUHYXG8UdW2M3bw0scOI74PmGs+Lfwevy8RRLeXYnU4KkMI9eXBgwsdO3SWvWqDb1X/Jq9+EDjy3pc1WYesNoLXZaeiFeoqGrA7AFw4/iec40G2jmQxJD+SGDD52QLk3RinzAmr1od+kT2/o6pvSNVwPnPhUjoHif5bXMvZ4pK/QljgkcrFbhN1hFRx5yhVXnECRu7Or47OBClz+UZ+Xq1cuWQS31oLYbR5bNKzYellU+Rd44tSPOyg23HJUXP0LrFkj2lUyNyoXv53lD6WZ5Z7zrQ9C4oBeGIUuUVlAaI0+RJJByIproi/gnfpxYv0Cmu22ehcb9WiPRfN4sl8o3FPDPV0X+crmchn7ezxQCgKbCWhCxeaVV8O2/l1jOtHKaP2JGAoEJDSqcMABgQleY/Gq3vtgh41ia795DATjybr2FgB657OK+6pnNXN56+0KOHtTl7F5fGFYeG8q1dofn1Wp1DGzM0JkPrMoCpbch3f1gx8RU+iytseXr9M8YKFr4piQetFuTlYVa5BX6s5r3+j9d6+TNegHyy11UmfCxTL3GdbXGWmvS1Zr4W6TZH0eAGum4xDaQT4rDfRAsffO43WWjjX+/fHP/Sqj68g7Eq+7rHTfia5s5/5CaVW5GWuGPpHpcRiehoNu8fQS52/fIxifHw5AT695fWPIoUITP1iW9VsqijvNYcKSUoj903/vpNaTByc3vbEYomKPyS2yl7XnnQT7WEzyWx2iw5t4Zfrl1Q4u9TiFNE4XI11hAn6CSFD7OKle8EozyplqYTUb6QYICLdtUFdZ3vCW82+jvbqSsAMzuI9HtsE2xlsk9mGbnxbWU3CqmazCZ1nNLkH0+jSO8SxQfMkJQ1tdF6ajfHsXpLqFLvUlKTAy176A200YCKcnXQ1h2yDOLjqwN/Ui+rGde2UFIKDNILtrJ1u0cj0KTwvsMJYs0Yir2rwsEctiWtyoxSS3+wNxLYppD4iFKg8TX0+Wz3r8JUME6SVpgVOQ//nhDE8+jDpRpKYLwZdVhxpJkUvPQnQttH61v57BZmkfayA+aPmvZBK89gE1+CZCaRJJaPhDzajC5wcXz2For3OFGzlWFiCuACtIrw6nPlxAr7IRrF9xhnTlcfzgFacq0K201BuDVnrrtJzniXlgIh8aF2NEaghe+gAJx9XbxUMJHVXCLK8MorURp0oh7ElKkrJHn1gpa4k/hob417KA2myOE4+T2emeei6b8cIy7z7MLlkKaMQKN0Y/7co3y4k0xbyYc+f/4jHwbd8ZpDhWbAoejCq9KP5oOpUnpVYr2itwimqIkO/HjNzJyiUZMlOHio6rcCOmxYYY3f1UyYpmmFaw+G53mOFz71P55dChNedRIBEsxF/6u5VWrWaHNXSUeIqkNMSO6+O7KrqRPK8rtDUa1YLURHv82xcp3JJ6x7Up05lp0q7zA9AXlzEAhVORJeSO90m+v861MDB/UVcFIjLN/Z2KYdh1FYyK8u0rlyBYNyO+prU5AoIJwLuCNRVMAOYoUo4kUT5VxtxKlggPQltuogIuPGHU2V7JNFdsNYV8aqu8tHLY8xifLxH0HL8s9LziyTRE3hLViLLF2mvtlgi8YVz2Mtoowqa7p1uUUzwesTqYemH5iTBZ4nAa7D0vERYlm02yYzqhh0BBwVWOAL1NRiFujI9NeGdnjWpql5LHDaG2QETDcqG3GOgs69IpGp+mKIwu2BkHJTlkcuqeZiwg5GLMp2kYTnCz8fFYwDNz8UcpJk+/QXFSf7+oiNT3XgnU9gpNB5lomHWC6fCWbvjDwYSiCZTdjaApSU7mFB+3OpjNMSk6kiwajyz+OkQ2haT/PWC+cYcW15ZmYyIjQWi7OLwxhdkeGKKdp7arLaKkXpMb8QWn5MBRNJQdVFC56Zqc1F2mS54BnORt2leqi+6LqtMdbU4il5KPw+ph0x+V3Vnm/MfKv/CkUrozrJwZUVgmnXTFT91CxMvFCwn6Wl1gLhHEY8HZZaLSZ7h03UIrI1IGVwelu18RCCFvEna20h+cVdusoDyaibw2reCEo8TZdkA7igA9gHMzspitHZfPS4G337ft671UPyYb2ZCJZMmXbMqdeVG9bXIymHhQ+2dp6NDQIRpCi3YEWK33YAod3Tisw9d5uQIYTIjR3HD0hh5eI6p8m8XxFuPG2UG6N3KDIKY4xbcQ4dY/vuGh7stPJCg29FH202o3hYNVEFO43++zhiN63PnDZs3eS/u7cY+NKh4f8XvzC5GWZmtOGUSLH/nnJvJ6CuomiHSitAhSf0C5HXjOLapkljYqJKUKlFOe29Mg+6xlLxOBxIT4YZxk/9EJFqGJljAk4pPvdetJVt5ZhQSae8ZUbu7vlfoJYsU7uVPmPjfNMSPdH3NVuXVEFuDn28D8Nqxmji3AoVU59Y8ZnMKcv0ypLQxL5XuebmDBMoIDUZOEPkUMo+MkyvpAgpMf5/A+v5B4+a9CG8rOCtkhamXvjgwW/sZW3GRIYlfm3zha0UZK2SDS3wAIsZQQUlfVqFL3tfH4BVc+L35ObQTMf4uTvkAO1XCMj5GzfOii9TRC1uZ5f6iI7P9pGmdSs1T8ThcYtboaqU2+8VXegapt+lMkmtWmS0iZWo6hrahceXdhxC+4Ni+cJ4flEPjJ+zgQED5cg6sSqoNWHkM1BWpOc9FCIqnLGvII/eKJgUcCch4FKQc8lfMekjlTkOEnQfWP6dnt/K0mpJCt048umIahQckVI/c9Z3GavL/Ner4slVlq0hS3AxtLYtnmpWBpCGjGLF8j1Zo9pL3yTyxMIDtOsFgUuRoRP/6rIKtF90VzztxkV7HZm/dtZUYmM59/6b9guM3X4Z3MrOZHulMsJX8PSPAht0VzNpk3DnCgmpLc1MNzdT9FWqg9qv3PHKzERFyD3lcHrWBxnarBAiO8Q2o74WtnnfyhmVCf5ALQ1l78cBxl8nMa4Rdsdt/UuOZ2L8FB9jyaRxZ5FRVVAIrV8CN15z8n2giALbkgaYxJ1+VEnJkhacVZdYuW8Yh7TwJMxePiIJXBstqJGiZCkCR8MLMoBTZ/UXOcjz98c5FGFlPOBZHcoiD6ztsbIibr3+aE097s9UqSakQQvhO//uLXbeJAQDGfJfj2+i8ccnfB1PKmwI8mmtHhvljPEbcrpyv1N6kk9nfJSkOW0DlUz5tFUyNjej9jLEJjGifFkuHsJDxkKqDnvC27nJN0BJgUiIEh17/2Ao7Itb4ouVMRQGrJdO+zC5E5a0eyHuRw6VQ5DwsYRuiZUTOsqFMg0J0fWSSrPsDCBY71unmQr8xYiK7eEHjwWGHdigOvSTpe6W+x5v+O8LjYSC/QEqij76zrq+nH+PCZmv8bRY3hPhmc0wWmOG4PvUrrsLmVOWhI2VJwMmJxGLBOKt6tgEYnMp/K2QaexQ3ZhGbQ/DkTy0xDe43RV/J5fiuduSc12HWMndLYfl0hSOKOf+oLyb8VWk8mbfTTRlTgyDZ4nLDyO2Z1emMoeu7nIciqazCFLdDrALIbuLYyzSwJlYz0mDUMYrZ9ZccFuNCwfACrR29IFPzeKAcogIzAmYKMhJYD5BmV7kklrMuaBqTr7SyTzt8fOnvsbvragvoZV9J1hV9h7GiHvMYfC5CSHoji5c10HP+iBwqbSXIMzvYhkEC4+MtikWrJFvgWyHpyiEeqWuB1UZHspznTb5zwkLaCOlGVy92mtUo8+sjie8/AUWQpoDSqbTiwA5pa0NjFxnzmTTwrtNUH86XF6I6KVl7kcrc+8EpX6h/XWyj3dsg7llTmWC1Vg91eHLBqSYM0HZinBAT1mZItpc4K+2tQOwBxc2n+K6Y9Q4ZZpCFlo+iKWYeXfEVn7Ym/T1ZKYfdrhZH+037Iv4qb1d6eSVgmRsW6sCOE03SuaoO2+XVZZuPuFWb3azvpYDWCM8waHA5AxLF+CFJJPDTfYSnOnv7BQLfHIXv7ijQ9ly7i2ELFajjAFCypbGfUwHvg/aepvxgE5kVEI2N/c2m8LV1BkgnUwEq9FG2miwryM4w0NrwQcytix8sOcO2X1InOUQnA9G7BDLAjYXpIiXfcnuSpKD4ZTYeydSxLVi3ge5TXLgF3i3Iecg+OrRuMwVz0bi9xHKDEPMF7dtECvmTEwuD7feFrnZ/gj0LlOBjcmCRtbWkHTM/vCt4dE3uLYd4w4+O3BSYsbJj1RH8LP+dafrzkTBObdntI2ukU9PI3RyKtmrHrK2vYW0I/4/eVu6LDW1xoH617e0V2NrIBawoYlBY+4aK6uOJKMYjgqlm4Vey2C6z+Ze2SMghLxUlbRSsYL0LA4kX35VNIWA1k5mSioPJEdje/fbOGUKvZF20EK9ZeoPDeMCzUYRMHkcJHO5IXOxwYAw==",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "J. Rissanen, “Modeling by Shortest Data Description,” ...",
+            "url": "https://www.scirp.org/reference/referencespapers",
+            "encrypted_content": "EoYDCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDJOi+ix4chmDw+eQQhoMMsPzcz7uhw4PTTHnIjAkDW81FKdBQnUF10zO9Vute+shW0hp6oYjEVhIz7gzyn2zPdI6Y5zRvqm+7r8REIEqiQK+YfuoHZG0p/HoDlnEPB8r7Z1x+9TYb/jJN4vlH7BUxg23CDqRigDkTcDYAoN4WMFRYl4LzxViDoFXNzXX23wiUHfYB8v+gIH5WkP/AqjyAA5JK9itPAv6C91uebuoUgsLxLfGfzTi07ClffHSthGTF9yXlCrt+BoFAC2T2mBmCXQvvbU8NXbLA6Y68/VI6476U4tf47aKR8ZHB8Q+UQcpE8tilQPJvd2hYJFbIYR7rFXVgMfsOC8Zhtf2kpABKw8SYsLRGahYxs3U/vAgreC+UsHEZCKDYz42k56+P6JToWG0YecXgL4GDWN+hu4lXSXGB7tfoIxytg3FWkhxm2TlX+vxHLYIZs2gGAM=",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Risannen, J. (1978) Modeling by Shortest Data Description. Automatica, 14, 465-471. - References - Scientific Research Publishing",
+            "url": "https://www.scirp.org/reference/referencespapers?referenceid=2053766",
+            "encrypted_content": "EuEBCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDCtU9Y6X1T2becjoxBoMC5EzDBEl50Q1clYdIjAvT/W2zy7eSBoCCqhIg2HviqLFOrMJKr5Fx6G81Zzh843RPxLgB0fhXfPYFruNeOgqZWqMqjfWrQVNhZfjZ9E84wDJSD4ARRJaGlw7AoB4K47MgacD+TJQ/uUl63h323AcX5WBjAiXhQ/vArSt49OIVVsHsBWZpjFmY8RXXksGrHlrktgzGg1WeecJSIJW8Hv06HiZuZboGAM=",
+            "page_age": null
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here are the full bibliographic details for the paper:\n\n- **Author:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "J. Rissanen"
+      },
+      {
+        "type": "text",
+        "text": "\n- **Title:** \"Modeling by Shortest Data Description\"\n- **Journal:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Automatica (Journal of IFAC)"
+      },
+      {
+        "type": "text",
+        "text": "\n- **Year:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Published: 01 September 1978"
+      },
+      {
+        "type": "text",
+        "text": "\n- **Volume:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Automatica, Vol. 14, No. 5, 1978, pp. 465-471"
+      },
+      {
+        "type": "text",
+        "text": "\n- **DOI:** `10.1016/0005-1098(78)90005-5`\n\nSo the key details are: **Volume 14**, **Issue (Number) 5**, **Pages 465–471**."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2272,
+      "cache_creation_input_tokens": 10425,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 300,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

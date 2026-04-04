@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-04-03T09:01:48.875Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775214000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.34",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.59",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775214000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e66e3eec8fa5d5a-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 09:01:47 GMT",
+    "request-id": "req_011CZgZnQu7KYsaHUcBtmDYx",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2796",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2794",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=QYKTcWBVPzInQfsXZfYz5TfKgX.EdGjWB7L_LFyEi.M-1775206904.1238127-1.0.1.1-1jfZ2x5.TGPIliKy3FtzKbhwdwPRsADMl7ONLSOlln0; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01QfPfk7dv52rkChTKHw2uV4",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The URL returned a 404. Let me try alternative URLs for the NeurIPS 2026 style files."
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_018E5qBMJJbLCok1aapWwWWc",
+        "name": "ToolSearch",
+        "input": "[object Object]{\"query\": \"select:WebFetch\", \"max_results\": 1}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 96,
+      "cache_read_input_tokens": 14031,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 96,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 102,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

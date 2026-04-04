@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-04-03T17:50:26.371Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775253600",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.09",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.72",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775253600",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e69e9937e7b5c3b-AMS",
+    "connection": "keep-alive",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 17:50:22 GMT",
+    "request-id": "req_011CZhG6ADyLvj3R5uX8kfk3",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=4186",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "x-envoy-upstream-service-time": "4031",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=bErkMoG1RStYBxgCxKCxYXE3MHWHizPAoAu8zpHCPLg-1775238592.5540113-1.0.1.1-Rn_M9KqirdN8BCEjKNBZLp888BDGP2xYoNtD5RbzBnA; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01CYYjpigpSTHnb4qkDuJPv4",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_017LW6zjVFXiUzmr8MWcKGkU",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_v3.md\", \"old_string\": \"**Model scale.** Core experiments use models from 3.5M to 86M parameters, with robustness checks at 420M (Qwen3-0.6B) and ~1B (Qwen3-architecture on FineWeb-Edu + math). The random/coherent contrast persists across this range, but we have not tested beyond 1B. For coherent errors, an MDL argument suggests the result should hold regardless of scale: equally compressible systems at equal frequency offer no basis for preference.\", \"new_string\": \"**Model scale.** The primary experiments use models of 3.5M--86M parameters. The ~1B experiment on a mixed natural-text corpus with a single seed per condition provides a scale-up sanity check but not a definitive large-scale confirmation. This remains far below production LLMs (7B--400B+). Replication at multi-billion scale with compute-matched training and multiple seeds remains an important next step.\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 486,
+      "cache_read_input_tokens": 241570,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 486,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 338,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

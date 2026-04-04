@@ -1,0 +1,206 @@
+{
+  "timestamp": "2026-04-03T13:30:43.578Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.76",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.69",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e686db8bb7fe77f-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:30:36 GMT",
+    "request-id": "req_011CZgvHPjJDSWH7BQWZ6MqZ",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2306",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2305",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=r3nGJkG18pb4N3iFgXWp5Hl51wyYeZ7ucWaOVHqzzbo-1775223033.7151225-1.0.1.1-ZoVGYHe2tRy3crdiOpZEprv8Jz6EkmD0bnpzybmVGDo; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01XuyhewNyuS3H9SdaYRv3MB",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_01JQzTEgN4ke7AiDYNQ8gKYe",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"Shannon \\\"Mathematical Theory of Communication\\\" Bell System Technical Journal 1948 volume pages\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_01JQzTEgN4ke7AiDYNQ8gKYe",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "A Mathematical Theory of Communication - Shannon - 1948 - Bell System Technical Journal - Wiley Online Library",
+            "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/j.1538-7305.1948.tb01338.x",
+            "encrypted_content": "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",
+            "page_age": "July 29, 2013"
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Mathematical Theory of Communication. (Shannon, C.E.)",
+            "url": "https://ia803209.us.archive.org/27/items/bstj27-3-379/bstj27-3-379_text.pdf",
+            "encrypted_content": "EpUCCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDFK9eJQAEJQMks3g3hoMLEbfwc8na9HtlsDzIjAHcak04sQdZXIyGVB6Ua1YQJIfoV1voMCOT9HYtoXqGQSHK8cTT2j+eWZHCpKjQM4qmAGmL94lk/bFxeZ7EGqpuRhui7/0F+Zb4fDOy7WNHdx9TNcEUufeGi2l64B2g99f2pGOUEPYgHWrINanzsJoUpioUuktEn8MxMy02mZHYNcEPcULkIoONwwlSC+9wv1nmc+k6uiyFVnv+GSTZpQc+RwO4A3jSDFnNQg9Vrmc2rdo9pcK+GzofQ5HhWm/nBapzC0XSUgC627Q6hgD",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "‘A Mathematical Theory of Communication,’ pp. 379-423 in Bell System Technical Journal, Vol. 27, No. 3, July, 1948 and pp. 623-656 in ibid., No. 4, October, 1948 by Claude Elwood SHANNON on SOPHIA RARE BOOKS",
+            "url": "https://www.sophiararebooks.com/pages/books/6187/claude-elwood-shannon/a-mathematical-theory-of-communication-pp-379-423-in-bell-system-technical-journal-vol-27-no-3-july",
+            "encrypted_content": "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",
+            "page_age": "January 12, 2026"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Shannon, C.E. (1948) A Mathematical Theory of Communication. Bell System Technical Journal, 27, 379-423. - References - Scientific Research Publishing",
+            "url": "https://www.scirp.org/reference/referencespapers?referenceid=1460694",
+            "encrypted_content": "EvYBCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDB9jyz0LY/xJk2PW3hoMGmtDeXlvGYq6pgvtIjCjsF5TUbIUXWOxz0/3koZi0GBr6D0RWxPhHmdZXhamwh5OGYEGILSdhaRtQ1bF12IqejC6Jq8vndKU5F0v3LaJtGogCQkEj1Aym92MIYX9/IUQpBjiOdtVQ16o3trPtUalyTIYRsxN2GcRlA+1WDsXZXlWBbKPolZ9H5Rr7J7kPMSS/dFBTQygd6oGOs7vtSkopS4egIIP+HaDj/z4DKQFRfSCaoqwtwB4O1v6GAM=",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A mathematical theory of communication | ACM SIGMOBILE Mobile Computing and Communications Review",
+            "url": "https://dl.acm.org/doi/10.1145/584091.584093",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Mathematical Theory of Communication, pp. 379-423 in Bell System Technical Journal, Vol. 27, No. 3, July, 1948 and pp. 623-656 in ibid., No. 4, October, 1948 by SHANNON, Claude Elwood: (1948) First edition. | SOPHIA RARE BOOKS",
+            "url": "https://www.abebooks.com/first-edition/Mathematical-Theory-Communication-379-423-Bell-System/31749525408/bd",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A mathematical theory of communication | Nokia Bell Labs Journals & Magazine | IEEE Xplore",
+            "url": "https://ieeexplore.ieee.org/document/6773024",
+            "encrypted_content": "EqEHCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDHkRhw7enZeNupkFnRoMKldf0j50gbJc3HinIjCODOCdXF9UbJ0daeyNQ54flSY0vN5lP/O5DRwcFCE8Qt4CJR3M0355ioeuoWI0UKwqpAacFMn9SR8XQlGBwqfet6AWp5H1T8aCfw5VVqOUBViZ/w9HMUwERIOKA2eBCN5UZBRqosFw7ggYBGcivJTnEu69r+7AfoVmgtftiEVWnMSXMuNYf8tUyKANa/sHSGW008KLiOw8WRv9ddIuWUD/h2fHmwmKntHapAfuPL7Oh74PZVtyOQe89mF3oxDNVZQD5q9MaAd3czvF6LNiKHYKxs2Ubz5rcyNf7dYwS3Dy8YcyT+uqbvuxrMPgHVOg5CPJKqLN3ndjmMaZkGljM1wgR6S72RRBs0XLVGq9BFonlgWx1jhm6ud23kxB9w6Rpcvw+ol3WuY4Tmz0DDMnyUUMFmiZBQ8NVm1o2SXEO7iafnxjd5ClM0Wq1ZnYPxtnAt/Ly4ICDf7Edims+KgKa4EhWX/RficunzWmltk1EBPD0cGuo5vuzolzEizQaAQX8kz+UE6bphd/L2dMyofWA5xzzNeHUHdyEsNo0d4kPQXO7mUOXVgoTDXIBwqaAjQjjZ9ZTkhwffgFRlbSd0tgDXO69yq90/BUV5DbCaEXJc3byWnzeW58bF/6/y5hzln3mltU6b1IHg6oZLqkx53f0UNjTtZgZMwiLKrtKahBnexRsIcyI9wZsQuwaFddN4o9ifJgeMagDfaAWrCZUpwHTW487cQ931nUBpyJT5IeezTr4JapRn7XRrvsqJX6hQdQOhufu050Pj3jD05fxFUL5c2bKLVfcsSVHyLOutbPlJko0H6Ngj59CE7xi+JosQ9rREJI67UBeOZ56nl6TkETMQbzIBQuP7KtMSBNrQulOgLz3mp2fXofDMLUPQsAiveJYuVmCdCW2HCRPnWvzLUKaN2kk1G3Dpi0OpJ6Q6+rAIqOHEerBkYZIMMfA9WTFuNpG+iYFeMe8958HpN3Kv1oUNd1Soaf2MZaTK+KRZgiw9NTEEU4tcRxsR40BvGhkBRtSjZ82xYskMBRup4CRokjlO0FY2coCXBSLXr/Y0+EMIqmFYeDPT5adHkXf9DPzUz7wQIQIRWxEyurjKlqoZ9dI3myAqUvL1iaPJMHby2QJUi1+BiDGgdVlnwYAw==",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Mathematical Theory of Communication - Wikipedia",
+            "url": "https://en.wikipedia.org/wiki/A_Mathematical_Theory_of_Communication",
+            "encrypted_content": "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",
+            "page_age": "February 13, 2026"
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Mathematical Theory of Communication By C. E. SHANNON INTRODUCTION T",
+            "url": "https://monoskop.org/images/a/ae/Shannon_Claude_E_A_Mathematical_Theory_of_Communication_1957.pdf",
+            "encrypted_content": "EvcKCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDBRLdhVGjr1178KfARoMwLWE3mhUKd/Lc9CzIjDOGgfoWDaR1H7ttNPiRFGft+yBf8wrNS0lirSiGkBft037fNo103Ri221wyxr616kq+gkjApi5DZvQfUP8MANRxCu0HxwKp0sm6Frz6691zpelV+GM+BQCXC1EaHsprva3UcK4A4kDnbH7qU9wU7q6BuaIEBTJDE1p4HS83lcSdWvY2gLcHJ/6zgV65zaQDg+5NzkPg4R0QHpuJ6/xi9iK5XQ6/l6MRQFoi4NCodRCZ0Evg2VL6IPOYeet4L5gFHMNCQ6DxlwCS3EDfB0WN4VbTX8dRurzoSVDZmtsnR/WWLs9FFSgYSvMHroQ98EW3Dmhaks64hXPCCsrInshElfh9nVl7VnHDN52yPT0ONYwkuWzWySIexvORUnemK2H61DDUIqBvZNfjmSfnNbRHKHLO5X7ilXEBmr2l8XuHoJNp314Sw1qTe9iX0+4MWpVNJdFlzfs90r25l5em/HkHG8PfMETvz5wxVi8IZiH6vuHipALXw+ez/Itj5drcAZ/GdBlvcAQUpx8iiXUXToFoK+uxO12Ov5al3NFztwtsychsGiDYFg390jPjKn0kzSoZM0PoBrrGl6OKD23Xl8TEEr2QsXXBeaF/QRyrn+cnbJ5vFtY6IShiGfUU3KN5LnsDRFIzRNGzaynwOwqxUu6sft7Ha79ccyZI8mTk/gcwk+//n0dDYAFNPSZx+du6kgU5GJdsTcMOmB0YLXrJaL/uiQ8Q32IQAweOd0ak0qoVFqMQ6hCrr3e7EOg60Mn7ctEbEv6QNq65YHd0CywPUsKDOLpYxbCdXJMZRDtEYHa7uomjYNSL1CI5sWHCPEsue6AXykvSswM8cJd4IbI/vbscu9O0SdCxGy4q3oAKfLG63Cvvs8zGQbIEjKC7zY0oNuMaw3XfR2jljMIScomzVyP0Re3zbgUNrHgRJxu0UFe4UC8PbtTZQA1aiUEZwWny8QVvWsnq+LGeTUMDCXljIkZVeVTN+R4vWUzKy6bCzoGnTPNv2B613JFtJauHk//S2hD5AO8RUZTj45O9zMojJl5pnZKIelWP5ndH1P/tmbjqgbfmh05oCjC2nETxMSEX49AJiEuNWfXQaGHMYHyXa+WAqD8O7tFry4Vy/nxKIYve7EK8KlDnZvoQnw17bs3GVMb6ZeiXz5eNum7Ky9dKfN+TLDD4yU5LWlYqWzvyi8ICFhzTdynhw6ppzDc2BwcavDfjJSzBQh/9p23nfAxXkxlNNuilOq+45lbOcOn4deDFdCjsu+Vpp079mtzQPwXNsGNO/e/ODkigEcTc6WbbidgtFdQq8pTkLh75qH9Df5JkicLFiQSal9eIOmi8uttWGV4l75r4cLxA7rJe/oQpPMUOkTc5+AAyhjKoLU3LKlR0MBUObImbchEIQVM/kSBoozDxAaE83GH6AWoaAm4EBkc+RnO5jZ+64ux5HSOqeW6fxSACAx93Ual4Sbk2O7y99s3bWUPxwt1rHlU6aB08I7xp5AewGx9z2e0FciUG2lNy5GXK/y+5muj1i2G0T73CvDqm/zk4zcCbp9pkgX1SKG7OPjnGKFvMGCyCR8evB5KNrGRguLkmZ183mV+VP1UWig/UyVf3hdyyXDiuQ1khp0mrbW/9meeog5P3Y+iUDL+1gXz58fMKIXeBgci0GwZ6BpiV91WtZRm26wcuN/zTTxVYD3TBCTjedHDqjRv4vVkrl77ivdJu1Afhb9W3TCj4ZPV9Z1Aut2L/zCcfeVtrbTBx5d7btj7LRVOTMKzI6oX1xgD",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Mathematical Theory of Communication | BibSonomy",
+            "url": "https://www.bibsonomy.org/bibtex/754130207906fcec16a53d330eeff348",
+            "encrypted_content": "EscKCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDNGs1h6ID7VtME9GKBoMzCFyBcHBvU+wNOk6IjBsYzZhYZKxLaBnYYEtx2qNk6i9FuOCZC5ZuVw5n/1M9PjfA9DwYM77an3tbHGic5oqygn1VYBrdnYPPWUWRkhVUPMRB5W1+Aw0edLv3PxPVgwZx+25SZ6zGIfAIaoDJYk41/W5VVTWlLNnoznbuaDKqgDGY6wB2GZsO3lYNlIa+lElmJuKIIMcjmtnzTcZtGc6mL4PRv7kGefJVoy7flMs9LUqyqlpIzEc+i/vCy/VN9qUC8ImvOgYLlNQJzYhyv5cXXFNIFkPK08DNWY8dMOY2ws9Fub36IkW0lQy/Ifpbp1BLHNykNy/BT+sanGQwbLVN0f1oJeeE74J8HSakAYM2UqPL8qEkJi0a4khTRVxFRu+k+CxFEF6aHkMfIohWeqmxawrjk51iDxMHnGVz2j/FXl9JvNU2J1g7QXwb9reYa+5hN6fNLLAGPQy1fIKnVSwVBDZNHuprHOfbKvm1angnClrZAJaVHzdzuUBM7JorDllRqXYUfK5UXuInPV2rkjsg+brk0iaYRR12DOW70vA//MZVokB1OYWYdmzREp9YCD+sw1iS3VrTcSzOjadlnxdSiqRDGLFwjXfMwiljAWgI1ekk8cliJWpJhKknyQERxwJR0yaquSz1i9YUNUhlG8nGcli5S96kjzhmD/W7Ly/x7s0a4uJQqlep6nq7+TMJpdQzlCr05n0begfd8mfOE7kO1s3njMpWHI0uBIidrkk5+SRU2AsVscuMGMFwAfkMCLkO9NfNdf+N1Bm38mHNX3Yd7HqVaYyaIBGr6cCqrTJqrnMqIx7GWsOtsKI19DZORx5hQoWbNC8v+UqCfSIVQ8wrPU/Szap/n0EH7nRyDJQXOOBr5cr/r1VUc1KH1P9xlUhGevemwWJaMXXDNWt+Pm9HAqJnqfd7lP96i1hUteGp4iJIBrjco03pGjXJhi+L2rLyTUHZ6VZuthAnsI7Kd3QlXrBf8A4d/Ykt7mWXXqji77tQEfHUU1NUWaeAPAlZHiHplGvJKeHOly7iDmna9sFX81wmZ0SujSBRKs9ZDkp8Px3EWEXbi2rZ4n2LkW77r/7OlMxifqTARe+iL7vlKb048IVGbCTBCDDxSdRPvZDxafnkIi2sCyAvEmRTilwqh1yvsQzwwLSoqCBbmKChwWfZ+GlcyQU/mysMD8P/b6QPZpZdCGN2bkyl72iSTCwzSfDOT5xmEUEnLItRdq9vBNNfpMfMGwznVsZFcRlSA6F2hHiHVf4lR/aJKmXJJIA6X+9g85+2I9D3acs+dnJRyqcK1YgbZ7iQUrGHY/qrPzOvNLY5Md2i/tsNonxJ7hVG0/i4i2iz6905OwuZDQ8+vATAuj3XTGMS6Yv8cpMPLDgp6oOYzFE9+RlMHRaE6UFWcoMIPXebfGiIg08E2mC7Qg2E5qUvZdBtbWzOZnQr/nT4HMB+G20RbITwClxv3qovbT8F2nyoqIdR1vr+B4l+NxHirwe6FLHokDK/nhBjQS5z3GdONn7pWQcgo6GnFEhItpFcZA/B8NKYgMRLJe6zM6X8F8/8AWfMrCEyoDtq34ek0Z2oF4KtWzqT0yh1q8Hj9/LOe2zVj4cIsOkPglUo/XNXcW5GWjeK+B9M+6F9yGLHezbkWfLykSCUYJ0WxOJeS1WP5jR8v8ILE4I/Jp09ZfcifLdED5b58HnwfTgGaE8rVC0oWUuTH0tqQkCSxgD",
+            "page_age": null
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here are the full bibliographic details for Shannon's landmark paper:\n\n**Citation:**\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Shannon, C.E. (1948), \"A Mathematical Theory of Communication,\" *Bell System Technical Journal*, Volume 27, Issue 3, July 1948, Pages 379–423."
+      },
+      {
+        "type": "text",
+        "text": "\n\nThe paper was actually published across two issues of the journal: "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "pp. 379–423 in *Bell System Technical Journal*, Vol. 27, No. 3, July 1948, and pp. 623–656 in No. 4, October 1948."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Additional details:**\n\n- **DOI:** https://doi.org/10.1002/j.1538-7305.1948.tb01338.x\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "It is an article by mathematician Claude Shannon published in the *Bell System Technical Journal* in 1948."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "It has tens of thousands of citations, being one of the most influential and cited scientific papers of all time, as it gave rise to the field of information theory."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "It was renamed *The Mathematical Theory of Communication* in the 1949 book of the same name, a small but significant title change after realizing the generality of this work."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "On the first page of the paper is the first appearance of the term \"bit\" for \"binary digit.\""
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2267,
+      "cache_creation_input_tokens": 10362,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 480,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

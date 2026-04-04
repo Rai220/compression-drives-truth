@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-04-03T11:37:21.374Z",
+  "source": "quota_check",
+  "url": "https://api.anthropic.com/v1/messages?beta=true",
+  "method": "POST",
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "max_tokens": 1,
+    "messages": [
+      {
+        "role": "user",
+        "content": "quota"
+      }
+    ],
+    "metadata": {
+      "user_id": "{\"device_id\":\"7740ce72fa9abda994ab564ddf04796a523294d03ee624c1bb094ce513ef983e\",\"account_uuid\":\"b36675d3-53d0-4df9-8760-a7969187f1f8\",\"session_id\":\"69c03a25-d105-4b1d-8745-4d60a024cebc\"}"
+    }
+  }
+}

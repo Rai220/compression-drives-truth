@@ -1,0 +1,186 @@
+{
+  "timestamp": "2026-04-03T13:26:29.459Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.67",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.68",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e6867710db16d4f-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:26:19 GMT",
+    "request-id": "req_011CZguxRxiK9ceHAWJnPQCZ",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2826",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2824",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=3RI0Iq_nBip98yLxcOgLKRhKVEVeSRaot3_jjU8rl6g-1775222776.483387-1.0.1.1-1Kexnl.ptnDKwWC1lfdSfa2KURCe9rtJZoPTHL2e8Sk; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01X29h4PnwzXF1tYUvKkUFCu",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_01EBQbzJZb9hSkoHmDDyuhAS",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"arXiv 2603.20396 \\\"Compression is All You Need\\\" Aksenov Bodnia Freedman mathematics 2026\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_01EBQbzJZb9hSkoHmDDyuhAS",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "[2603.20396] Compression is all you need: Modeling Mathematics",
+            "url": "https://arxiv.org/abs/2603.20396",
+            "encrypted_content": "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",
+            "page_age": "2 weeks ago"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Compression is all you need: Modeling Mathematics",
+            "url": "https://arxiv.org/html/2603.20396",
+            "encrypted_content": "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",
+            "page_age": "2 weeks ago"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Compression is All You Need: Modeling Math",
+            "url": "https://www.emergentmind.com/papers/2603.20396",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "AI Papers arXiv trên X: \"Compression is all you need: Modeling Mathematics Vitaly Aksenov, Eve Bodnia, Michael H. Freedman, Michael Mulligan https://t.co/NIA2KYSUtC [𝚌𝚜.𝙰𝙸 𝚖𝚊𝚝𝚑.𝙻𝙾] https://t.co/1TGXl1vrec\" / X",
+            "url": "https://x.com/SciFi/status/2036625305477996952",
+            "encrypted_content": "EvMDCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDKeyIjSVtetXNFP6vRoMv3ujqhvu1H893oZ/IjBUJlF9FNH02+TtsDRIPyHf+FSG5fBfaY1pjCmkUKTBZIwRCmhCd5DuPAMTYYwkzgYq9gJCl6Ikh5KsTdhWnbRLDA/F2/r0Cs+nuH497Jt8b7B65RQUd7qJU8pYwTTI5AtJsJcROVyGaifzdDW42Ji9EZu+qUATkSVrz02XS3KVXlanB7GEIK3S4BUpR3gdj/eS8pD5FaX1dpdYZl+DwltAmSsVDV752NThJum3qTY8k6o/P8DAr938Q8hepqbEYcOTJC0+5Q3Hl53A7QEOXb1sngs7BKxVmY18WzHlrY5mT5XC5gBLVWWpNTLxbjbyLmghINP1YXDIOsySr+BDe6fEZ39LxvFK5nqm0dZXuyAd3sqyZbS1hIoKso0AncniMAbYP3HYIW/tqwnaMzgyv0l+WtL1Bm4gw8AeAEMudr8cT1l3//N59ymg92dv+g0IE9+QFOtVjCgZRqPlfYqQ5PIxmr/JxYJBR1udOsMaTtv895Thj2gxyawIP2f8WXDXv1ENOvd8OowR595D6NwKZbq9fU8One14UIaVpPif+p14vPAFbBvqS4bLChgD",
+            "page_age": null
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here are the results for the paper **arXiv 2603.20396**:\n\n**\"Compression is all you need: Modeling Mathematics\"**\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The paper (arXiv:2603.20396v1 [cs.AI], submitted 20 Mar 2026) is authored by **Vitaly Aksenov** (Logical Intelligence), **Eve Bodnia** (Logical Intelligence), **Michael H. Freedman** (Logical Intelligence; Center of Mathematical Sciences and Applications, Harvard University), and **Michael Mulligan** (Logical Intelligence; Department of Physics and Astronomy, University of California, Riverside)."
+      },
+      {
+        "type": "text",
+        "text": "\n\n### Summary of the Paper\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The paper examines how human mathematics (HM) — the mathematics humans discover and value — is a vanishingly small subset of formal mathematics (FM), the totality of all valid deductions."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The authors argue that HM is distinguished by its compressibility through hierarchically nested definitions, lemmas, and theorems."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Key contributions:**\n\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "They model this with monoids, where a mathematical deduction is a string of primitive symbols and a definition or theorem is a named substring or macro whose use compresses the string."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "In the free abelian monoid $A_n$, a logarithmically sparse macro set achieves exponential expansion of expressivity."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "In the free non-abelian monoid $F_n$, even a polynomially-dense macro set only yields linear expansion; superlinear expansion requires near-maximal density."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "They test these models against MathLib, a large Lean 4 library of mathematics that they take as a proxy for HM."
+      },
+      {
+        "type": "text",
+        "text": "\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The paper is published in the cs.AI and math.LO categories on arXiv."
+      },
+      {
+        "type": "text",
+        "text": "\n\nYou can read the full paper at: [https://arxiv.org/abs/2603.20396](https://arxiv.org/abs/2603.20396)"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2282,
+      "cache_creation_input_tokens": 6376,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 646,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

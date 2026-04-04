@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-04-03T08:57:27.110Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775214000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.31",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.59",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775214000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e66dd8baa303469-TLL",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 08:57:24 GMT",
+    "request-id": "req_011CZgZT8Z5KX9boQv1opY2m",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=1721",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "1714",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=msFv_XAhRGw7RasS88DSabEeXJnRPL9vDqhrVddLH7Q-1775206642.5042596-1.0.1.1-qI24YW.V0r9yOaHlmQVrKxVCX7qustjudesMXAgG568; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01Tb3QEUQC3ZUAQxyJfAF8GY",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "The abstract doesn't say \"Qwen3-1B\" — it just says \"Qwen3\" and \"1B scale\", which is fine. Now update the model count in Appendix A and add knowledge conflicts references:"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01156h3w4BZWRVxxBq7hDD11",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_v3.md\", \"old_string\": \"Over 170 models were trained across all conditions; total compute approximately 120 GPU-hours.\", \"new_string\": \"Over 210 models were trained across all conditions; total compute approximately 150 GPU-hours.\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 436,
+      "cache_read_input_tokens": 55196,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 436,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 220,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

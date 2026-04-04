@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-04-03T12:50:22.382Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.36",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.65",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e6832a13f61f377-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 12:50:18 GMT",
+    "request-id": "req_011CZgsCycGDKCqA164xDDEU",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=5108",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "5104",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=_CG9E1KoE3jhQnsBohg.7t_Rl2b2Dexo7mDIpuRVYSE-1775220613.3125653-1.0.1.1-J31btuBBt5BwtugFWXGL5RudNicb0yVuazt6jgV2R8A; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_012kCqvdioeNKzVRAVJh4SZx",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01EXmEKsdLSLHEUagEFPbu2D",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"p.value|binomial|wilcoxon|bootstrap|binom_test|scipy.stats\", \"output_mode\": \"content\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/scripts/collect_results.py\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01WxuMmbfDVtwaLkVEJCHG2p",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"p.value|binomial|wilcoxon|bootstrap|binom_test|scipy.stats\", \"output_mode\": \"content\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/modal_run.py\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01HXNxweoyA2Ss97ADEHJsTm",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"p.value|binomial|wilcoxon|bootstrap|binom_test|scipy.stats\", \"output_mode\": \"content\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/kaggle_train_1b.py\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_016mBgxb4RJ8LNirHMTLSzfg",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"p.value|binomial|wilcoxon|bootstrap|binom_test|scipy.stats\", \"output_mode\": \"content\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/modal_run_qwen.py\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_018B9My9kSKfj3nnDTzb1LXd",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"p.value|binomial|wilcoxon|bootstrap|binom_test|scipy.stats\", \"output_mode\": \"content\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/modal_run_lora.py\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 284,
+      "cache_read_input_tokens": 31784,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 284,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 589,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

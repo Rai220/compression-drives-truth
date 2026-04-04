@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-04-03T11:45:15.513Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.12",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.63",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e67d34dde8e97a2-WAW",
+    "connection": "keep-alive",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 11:45:12 GMT",
+    "request-id": "req_011CZgnFBZa9vsnLrh5EDTYH",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=3436",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "x-envoy-upstream-service-time": "2986",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=JuaSL28FwAVmmwB.TOzwM9N1ip0ua21dqnGHhXJcGEk-1775216708.780402-1.0.1.1-ylu6XL2KyXgFvNq51cSpGzkDdDX26foMxUwsM7.duIk; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_0165hdpBNTDUtbKRFhVpwzHE",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Now add `\\answerYes`, `\\answerNo`, `\\answerNA` macros (they come from neurips_2026.sty but let me check):"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01AkKJ1fzSXaEnDboHdRGoK8",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"answerYes|answerNA|answerTODO|justificationTODO\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_neurips/neurips_2026.sty\", \"output_mode\": \"content\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 3186,
+      "cache_read_input_tokens": 133463,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 3186,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 178,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

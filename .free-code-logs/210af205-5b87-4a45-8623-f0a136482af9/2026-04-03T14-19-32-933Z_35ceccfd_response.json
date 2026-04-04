@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-04-03T14:19:35.123Z",
+  "status": 429,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "rejected",
+    "anthropic-ratelimit-unified-5h-surpassed-threshold": "1.0",
+    "anthropic-ratelimit-unified-5h-utilization": "1.0",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.71",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "rejected",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e68b57c4bacd17b-WAW",
+    "connection": "keep-alive",
+    "content-length": "185",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "application/json",
+    "date": "Fri, 03 Apr 2026 14:19:35 GMT",
+    "request-id": "req_011CZgz2Ax9Tm2ubBu1YJkuU",
+    "retry-after": "6025",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=437",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "x-envoy-upstream-service-time": "141",
+    "x-robots-tag": "none",
+    "x-should-retry": "true",
+    "set-cookie": "_cfuvid=tnas3xdvQWylqIBYs0AvwL15d1PGYw0IQ5xjxhfxmz4-1775225973.1640182-1.0.1.1-FA7JYUculUex3h9czW9NXJRdwnHX6XgNi7Xd3i2zh8E; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "type": "error",
+    "error": {
+      "type": "rate_limit_error",
+      "message": "This request would exceed your account's rate limit. Please try again later."
+    },
+    "request_id": "req_011CZgz2Ax9Tm2ubBu1YJkuU"
+  }
+}

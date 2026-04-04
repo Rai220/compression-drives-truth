@@ -1,0 +1,242 @@
+{
+  "timestamp": "2026-04-03T13:31:13.617Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.76",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.69",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e686e5eed5be77f-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:31:02 GMT",
+    "request-id": "req_011CZgvKMVuieXhmCDu7bsfb",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2062",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2060",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=y_UNLWjVKW_opOMOkFdA5KKeJpFogRCaXsoQX8qju5o-1775223062494-0.0.1.1-604800000; path=/; domain=.api.anthropic.com; HttpOnly; Secure; SameSite=None"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01SSjTso2JT3Ehkh1xxUk1Fv",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_01JHfKSrsRQbReqN3JRgXefX",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"Valle-Perez Camargo Louis \\\"Deep Learning Generalizes\\\" \\\"parameter-function map\\\" simple functions ICLR 2019\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_01JHfKSrsRQbReqN3JRgXefX",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "[1805.08522] Deep learning generalizes because the parameter-function map is biased towards simple functions",
+            "url": "https://arxiv.org/abs/1805.08522",
+            "encrypted_content": "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",
+            "page_age": "April 21, 2019"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Poster: Deep learning generalizes because the parameter-function map is biased towards simple functions by Guillermo Valle-Perez et al. (ICLR 2019)",
+            "url": "https://postersession.ai/poster/deep-learning-generalizes-because-the-pa/",
+            "encrypted_content": "EoADCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDMERuepuGD6qL4gwyRoMUdARZr9dJKf0GZQEIjB4C9NX2wQcHKYHqtEXWRx0CRCUZAKqnZqVzYbw5yn1pMCowJAOOXsnlht9rerNYw4qgwJjRzI/WBrTaoK7EcHcELEWflMM1cwGgDscZUWlPFxsng6VFCIYDa1JNltx+C5fn79B5TE7Ol94j5Exgk13IuLwJ+q7u6J0GnO9CUM1zYrvD0+ZxAVDAW9khrPqO9V0OCSSBNscI10iRXNzxerETDqhnrfxCK1Hr0+m/oXXk81fX9F4Scefk0LeoRz+5ywcjiruwDk1NAo+rfFDggevsdGkr478TGG+SG+se73HZb3c6SY72vckVtRzOJnVvEAQnseEWVqoTm4TVUD+zLjX/IPRAaNEg9I8w8Tb1cKgiw/03sR0H5X0D+3pFFFsmcM0JhJUyDJYwiOe8IPIxYf7B75VFzyHGAM=",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Deep learning generalizes because the parameter-function map is biased towards simple functions - ADS",
+            "url": "https://ui.adsabs.harvard.edu/abs/2018arXiv180508522V/abstract",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Deep learning generalizes because the parameter-function map is biased towards simple functions · Issue #1214 · arXivTimes/arXivTimes",
+            "url": "https://github.com/arXivTimes/arXivTimes/issues/1214",
+            "encrypted_content": "EoAKCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDC5tK6rt0usQjBhQ5BoMMN/V1ogpvmUStW53IjAb2eGe5iWPYieP1qUcVY9sa1VgBLPUViAqbhHBk8nA8ZNF0WAWzAG82rkW1AGWMYYqgwmE9QxbeEMm+pR6mco/86OKgeSsaCQg1Rmwi1G4zhgP9mzDMMgd59rtj5uuD7l4Lqt7/pwZYamxNgBQZALRjD8en3SqYC9Y8cm5p4MZ/bGQNbmJg2k46R48fyOT1/ci8pm4WyWFPa9QnOkCDFeOdBUc1INdQrGNAVaEb3G4fhuHpq4ZLMfzed80QWHSyCCHGEV9WOn1TG3M9biuoJ4YcaclR169yK/hfZSsrWl+OpBhvDlDkgIGQXp+OcXLy90hkutC62ZCIeH3t8gu3PkQjgR8/hCf7MQo2lTewiCyxr7m9ijfdqAEQE1hbL76PE0cSzeutxKBFpD6nn5AM3fohP0wf1yPCU7C/66aSUZcAUdi4WKk517WjQI6cUCwxrAerC5BRMQQUFnQRewQheIlhWKd2X4tOmdioYa2+gWOpV8zQf3N/uhjUP01qndKc8s1ikgjItE+A4xE1lBJ019beI0rB00d02hclVq08oLyDGeFZaDoy/BMJ/Sec1SPagvjraNf9jtWGRrOzX9Biv1I/4xeZ/rFPSkNkILet3be4IUrCj7w9IrZ1ee3J/fpIX5+MOnz7B659+J+8M/maXwOdxZdMjGdHoFhwiDWyNADq6DJ21wU9PBegCwRCc6BkQxh4tH/rVD6JB0nGzkVZRD5VPIZrnOYwn+QK6ehZSD8dLJ8oOalU5srdq4qj0ShcbnQ5fe3n9bp44syRYKAp6OdKomSKSab24sB2I/L8077mplokdaJq1/WyrQaHkpxLBGCvojbz/yAwjTZ7fReB1A7pwpcdSSN2CdCfioxd4rcg4MEdYTYDBk7hPGcKI4EDvkvbWi/SDNsj47Hx5dAw6daSHCJ07wndcLx1rVUiJYSH/wvPk5M3l3VF7wXXBN2OrpsRBW4L6IxsJnCoRf1FVjTjEgBAqOrRcQtDKZlSfE48uD6//T/X+dVGxr4ohoBVreNE/mod2rrHlQW15LanqQEjtjiQzc765gHToXXVXAVkC09yLw1dMG7oDIxAqZYomA1SJdUa40s9MHZDezbtFTE3ZV2oGVI1XdXTjMpSlZQcreb5nMmSK8GUrtvIsJCe64fbxEP8XFuBKbxcZaDogtBVVSeqUE/AaU1fOfDA/B03EhLqzvEs6QXi+EnCRdkEwD6Ov7ERIac1pTjothDfPyhTKNuYgRI/UsMaA5UIq+8GROQ+/HcuCpo9DkFrvLtyGPu3dOSOFt0wBiLGyz91hLim9U/PyA+UhyP+rSXt/agP2D+H7p2JwDkw8BHrITmjnfFnrovKKIKO0ICfzJF1rOofbThOSiQue48srYuiDF42GvXLliOWXtc+iulW72IKIQkpRuc3kuBIAgNGjmz58okIHWAzjyGepShuxwAeLP08A4XQcJg0OJUjN4AoyTJXIpMLOC778AUhOJP3JKEddY54pl+LoB1J+DcZZiB8TGlvdGfJevad+LUM71f7r3AB+h9I1lOzIfOPCLTtmcRtQSc7QZ7o85MK2fIICG5oXiJYqhANK2YUV8hHrlm9gkxrbEl01JOguUYAw==",
+            "page_age": "May 12, 2019"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Deep learning generalizes because the parameter-function map is biased towards simple functions | OpenReview",
+            "url": "https://openreview.net/forum?id=rye4g3AqFm",
+            "encrypted_content": "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",
+            "page_age": "September 27, 2018"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Item - Deep learning generalizes because the parameter-function map is biased towards simple functions - University of Exeter - Figshare",
+            "url": "https://ore.exeter.ac.uk/articles/conference_contribution/Deep_learning_generalizes_because_the_parameter-function_map_is_biased_towards_simple_functions/29776028",
+            "encrypted_content": "ErELCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDPGVZEyprVX2kfQY1RoMkfGTJaDml/wX6z8HIjA9JnoYB8eDbw6yGu4D3/YiFvUNSxmzWs7fYT667IF7v0iCwseXySa5tZ5RjKfXvBgqtArt70GlEwuDgEKPrOq2OtF1NlwMfiy4gucwYQWqcL4mxRfX0uu3erXiUo0w8rNvNoNBFPHNePKZvPrrIYHjwIjqJvEPiQ6h1/HcGhAqK0sevh8PDvtENM8nTHKw65zmXxASRswwQQ9QAvV0bLeGvHLNiq0lkU0qjEJ+cQWO62lI2qC8y5ismzcxc1w3BWiedwxdoTw0GjfFQ+kxHjPyJFM1X0q/qiU8kXp8+FKcFlhIApdJQ4eeahwK0dBiP/1fySVa0u8AXMno/eQczZEmi8qxkE0leDeVs+kAP76mAW1Ii8kAte1LxcFd+W3FoAne3uweoP/Nvi+a/EBOpOQe/rIOs780OzRwBsf5oyUuTfEgG9kZAUiWJxlahlMfhKpMKSqNHZesH38pKYXL/1Vp1RwM4Bw4Z7yToIv/VUayCBZ7G2qAmhMceG/qoCSY+2NBZva4Xuz8pQQX5WEp//Dybqy8sJBppEX6VbGONlEJjpOnoP7wToa24XNQn3B+6Pgfqc6w6Q2HbqZN6K/zQSCJNFsWJyo3B6Gjs0avmzgMRhfSMu5JScl3nUCA3UB6f8dUiiCtEgxB2AtyUlhEVG/yL+VemiA2vqgjW6IlvJ1BXRt03tYL/26wJ/JiIgFNzmlyxT+E0tL7xJNtf0jRFw3Us63KWQyaLPCdP9hXNNwQaakWTGvahBpyUcDLXKcgOI3DF5zRDhg2DCchXJoBkmIavlTTNjUvLM9G044dLXv6fkGdUxVHfvHzUdbw0U/ZGGV+GD1NeUG4ZuKSXpFMSHes7l9L8nnVCjJKxOTov3e4p+8yJcQeh0vGkBeIcQS2A/4ZhSnnUerWrnotjHHnYjznMqp9j+HGaHdG/EFPVzmwxTRe05W9UWHhZ0mdOhRMKcDMie0BqzXMwluHPFFTJM1sQVgx3nIT3IhPYv6gerZNXEXR7mn0gTVU2KvbmwtC7BL1Bcoqivzz+Pe6y2QsH0yIJoxfek7p51Akieje4slT7rhEWZ+kc81hebjFL13gZvDcnzw4rnIR5/kS7d/AcrJhrC2IpOwDazcH5J/5nYijgBvg+hfvQn0VH5C5GmIGKimYWMlwKbxWv+Hc2hrEgOw/Ig+bdCDqTOV+t9nblzoLYAAO7NJ9hpjG0PL4aknU3iRHXhKz2DldPM9RcxmJ+wfwlieFNU3XIXrj5KhUYl54zb/BUDvLP4hkKdSDbIu84lF1azlWS4IABUVd5UtO3F2LzF5BdP67/gXSLgZctyquZGICyBPFo4my/aDZpvlXi5a8oeDEBGGLczE5f9xDzqtjmxOz9mZMWwe2uDvjfFfSebXZGkVTHWoJJ+SIcAIUCdxOiMPKi1wreCKKZmldP9awKbab3/3nSoogXx4tgm5T9ZFOdvuwRXfyZPsr/gJkDnGRAIcAUZKS6tOgpumwcYdC/aFM84FDDXV/bDuMrMFqJWZ/TxVF6Z3WMxKiGBUk1S+ATYfXyMBX67xfYYMjRLX1pZauXFbmShgnQeg0yRSqJsJY390iiyEpd8V2hVyDOkWFLqt6bHk4NawOU4zkm8YadoDqbKOhb3iUpzEoFcmatFpL6b0PazChxsu9gHhcO0C5a1LPrGUSmNptWTrVcu9oOhQAUZr29FDsQXEs00w8ChLEGk08W6u9pPz1eG66T2HH98CxTY4c5POHqxU6BUVAv58g4cVnZN1TYHt8h7c5hS2QMsyBvSfa+LnDF+EbQJax9ZeVJS1alQxvNZAcGqBA1foAN9xqxk7bZV9JK6FFkLL3gttaYRYYAw==",
+            "page_age": "August 1, 2025"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Deep learning generalizes because the parameter-function ...",
+            "url": "http://postersession.ai.s3.amazonaws.com/10764c72-b8c1-4def-8d19-a52d4c3acbb6.pdf",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Deep learning generalizes because the parameter-function map is biased towards simple functions",
+            "url": "https://www.catalyzex.com/paper/deep-learning-generalizes-because-the",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Deep learning generalizes because the parameter-function map is biased towards simple functions",
+            "url": "https://ore.exeter.ac.uk/repository/handle/10871/124307",
+            "encrypted_content": "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",
+            "page_age": "May 9, 2019"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Deep learning generalizes because the parameter-function map is biased towards simple functions | ORKG Ask",
+            "url": "https://ask.orkg.org/item/372986098/Deep-learning-generalizes-because-the-parameter-function-map-is-biased-towards-simple-functions",
+            "encrypted_content": "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",
+            "page_age": null
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here are the results for the paper by Valle-Pérez, Camargo, and Louis:\n\n## \"Deep Learning Generalizes Because the Parameter-Function Map is Biased Towards Simple Functions\"\n\n**Authors:** Guillermo Valle-Pérez, Chico Q. Camargo, Ard A. Louis\n\n**Venue:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "ICLR 2019"
+      },
+      {
+        "type": "text",
+        "text": " — "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "presented at the Seventh International Conference on Learning Representations, 6–9 May 2019, New Orleans, Louisiana, US."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**ArXiv:** [1805.08522](https://arxiv.org/abs/1805.08522) | **OpenReview:** [rye4g3AqFm](https://openreview.net/forum?id=rye4g3AqFm)\n\n### Summary\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Deep neural networks (DNNs) generalize remarkably well without explicit regularization even in the strongly over-parametrized regime where classical learning theory would instead predict that they would severely overfit."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "While many proposals for some kind of implicit regularization have been made to rationalise this success, there is no consensus for the fundamental reason why DNNs do not strongly overfit."
+      },
+      {
+        "type": "text",
+        "text": "\n\nThe paper's core argument: "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "By applying a very general probability-complexity bound recently derived from algorithmic information theory (AIT), the authors argue that the parameter-function map of many DNNs should be exponentially biased towards simple functions."
+      },
+      {
+        "type": "text",
+        "text": "\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "They provide clear evidence for this strong simplicity bias in a model DNN for Boolean functions, as well as in much larger fully connected and convolutional networks trained on CIFAR10 and MNIST."
+      },
+      {
+        "type": "text",
+        "text": "\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "As the target functions in many real problems are expected to be highly structured, this intrinsic simplicity bias helps explain why deep networks generalize well on real world problems."
+      },
+      {
+        "type": "text",
+        "text": "\n\n### PAC-Bayes Bounds\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "This picture also facilitates a novel PAC-Bayes approach where the prior is taken over the DNN input-output function space, rather than the more conventional prior over parameter space."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "If we assume that the training algorithm samples parameters close to uniformly within the zero-error region, then the PAC-Bayes theorem can be used to guarantee good expected generalization. By exploiting connections between DNNs and Gaussian processes to estimate the marginal likelihood, they produce relatively tight generalization PAC-Bayes error bounds which correlate well with the true error on realistic datasets such as MNIST and CIFAR10."
+      },
+      {
+        "type": "text",
+        "text": "\n\n### Keywords\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Generalization, deep learning theory, PAC-Bayes, Gaussian processes, parameter-function map, simplicity bias."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2281,
+      "cache_creation_input_tokens": 10982,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 826,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

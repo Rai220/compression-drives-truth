@@ -1,0 +1,215 @@
+{
+  "timestamp": "2026-04-03T13:30:56.799Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.76",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.69",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e686e0a5ee0e77f-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:30:49 GMT",
+    "request-id": "req_011CZgvJMd5ZrbLvKWoyov2m",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2525",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2523",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=6tU3IGhQsFTUhDKAY7eelLFS5mnBN0enz42vOoDoE84-1775223046.7749171-1.0.1.1-Rh0Ycd8bzKGELCkTrlJwXLxCI8aZtGc7l2YYtkWy1eM; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01TxX1ch6uTvp2QXJnvP1ySW",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_01WSqPV1TedYPQi51p1cFhRD",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"Solomonoff \\\"Formal Theory of Inductive Inference\\\" Information and Control 1964\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_01WSqPV1TedYPQi51p1cFhRD",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "A formal theory of inductive inference. Part I - ScienceDirect",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0019995864902232",
+            "encrypted_content": "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",
+            "page_age": "November 29, 2004"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Solomonoff, R.J. (1964) A Formal Theory of Inductive Inference. Part I and Part II, Information and Control, 7, 1-22; 224-254. - References - Scientific Research Publishing",
+            "url": "https://www.scirp.org/reference/referencespapers?referenceid=2137931",
+            "encrypted_content": "Eo0CCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDDbuwOdqvxf61LwhQhoMfwqluWxlyYrxawVJIjCyVcBlFUrLWBA/iWGiXLbE46D/+2Khjff+vzLKAYhMcUypXFcn680RhL6259mreOcqkAFkLVzTySRepXVjpVDqYNIU5MSJuPgYtC8dT3KlE0bVM/zSUN/XgNj4mOsfqH7yLEGfcrqTWDzEr0OeLE5crFLAScGTEmE+xW7Tys8/UHRLMdIZ2GvXvjB9mI16lvFe3gBk1HcVMimVRwvlkiy/R7RYqXlYFRJj+uxJtRhbOMRPGVtoyiQkn+k0pI2PYKn3v6cYAw==",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A formal theory of inductive inference. Part I II . In Brillouin et al., eds., Information and Control by R. J Solomonoff on Jeremy Norman & Co., Inc",
+            "url": "https://www.jnorman.com/pages/books/51683/r-j-solomonoff/a-formal-theory-of-inductive-inference-part-i-ii-in-brillouin-et-al-eds-information-and-control",
+            "encrypted_content": "EqoWCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDKetB2GdnhbCRFkxKhoMKXBs7WhKPgCO98xTIjCvL0b3Z7XdG2m+zTPMhtd24PnzC2JzXlHhAo6FQFFctIgZzT3R7hqTTU2R7SbNVDAqrRUgqaO74wfBdGBaYTlqB9Jgs2yihYvkzAYCdjXWPea/+GifmeQIzha+slUXdb80YTATdSfNGlRRg8O5nICPwvDX1Vtw0z/gIkGfApdbaI0/5TlORjTkvXmBNFwsgTGroZjyhLhiUVF9kv7fN29WMu978LS+KSJ+G0yC8meD6BwKBlcxNJpytcSY/wHfKk+xpxgaszMLtMR+KIOuODcMS982dQU9dBus8svW0RwPMtqwHTNFT15GU0rNTLHrm7Z24zPxIJ/EvXYTh8wKYzbdX+3Gcgk5Ey/A/38R3hTrapMejUiZ9yfB0PF88h2rqNWI2o0JI+E5CcI2PugJ3OPes7mL9nGlICm67+I8WeYg2xWsb9B+wGtrAOcAuGDJmjM1Maex3yLlXZzKphCIkBn2c+oMSHHu8szGk2CeIQEWY6ey1zAu0OxJl2jKXU1Id4t0B5XPJq3b3V6JTzNxvaJ1kXYMuFMMBskYhhLxBAdB3XCaugFeMpdwzkMV5PK6u7AY4ws1FxaiqTalyv/sKinLgaXx9BEk1YSs5zsGoS3IxC6qQKAFZXlOFoXTCLodeEVxFSi+aYqWDguaEWKPstZyhGtOItcuuxlURamKEmkYtYfcL+FgMsYlzv7svlwnSGeJqurhiXzhiuENtnmh9FAbWU45sDWpda4HwkY1YmW5ZrAaA3Pd2i+3Gvoz35Vl50Van0amz7mY/O1o/3Sfgfr8HmZre+jWSSkeYONQL5me0fhIbft/7k1UODn/iQRaxwLWIi9FXaY8ee/RdtfWfFVUeVlHWop5m4NY4qB5q8/7SS7MNXEu2iduAsCkX97vk5HhC7MUnKGMZJX6kuNUyFzLq9BGXLQ3C4kF3tn0m9CcSwU+M0Fp98zDImDJFg+sjsiuYPp0eHoTOcHiuifkhC9OcWX3cMdWFrMIO581YWKAZjTOfbPtxNdGc6D2ppaXRaRGFxZHSjvWOylr+WR1FbllybyXpql5rNMnO9215HDE1IC+KyQ2mF6Fzq141Xlcrk2j0jXrMuS6dRQufOVCc2CfEbc9eNwiCwpmZqmABM8WMSod4pSQLBpuu/a5uAqtI56e4UXq/lKCo+rhokwFLAz7MsEmR6I+u1bs5XHck208SATKS+nb38OW317vegfS5dRE5z9zqZEC2qxQSZ0jN7FUacMs4zccE7SqcMNQVyoZd7yAUe90OjhIbkY+RzZxFOhyBP1NmpWuDWGWbkRQqLakRQbjxQow+eE7oO5H+Hkk0KgHG+ArkO+96hkPy0rjuNthLAYazSEynpPpwt8dQWCv8y4rYzwjd5SwPZefkg6zgPqO4pE2Hh/UqW3kMi/C+6EYCU741dH7mE9+QDpC9ffqNA1cMkGurYcm4VbCRTQ6r1o5PCxcCQqXBJHx/rufQWQQ0Tw1k46UVZLrHrrRVvzTas7gpEX6N3S2T1c7FFrJ4KLI8PgWjWhIoCbw8ZcLv7BeTKfoThH/NwGn7tkdbu5hAh++Ap21X5i5Ug4Lhj915cBrMj0mK1PASTGsZUOQS7Sc4fqbMSwExGXGaU5m0MNJPjW6gQrfRbOUaKIl+HfF/ZWlWHvYx6Qz1vP/kbM5JhEy/OSKMlVCsq1cuBEcADmj8HNg6bpqoXEMgPCzGR77rrFGDstmEen9Z4JPS5LNFvZvU0GSXmzjmR0Kk/S0UGm29Sxc0G/JWnal2o/erV1IoTbjyQCZb7ipwmetN7Iaj9vRAUUrlObym00nM6RtTUDNr4exoLIfsF4Ed5sIN8ZGCc17kVloBJC7PTYBNofdu7JVGYdEc9s1OEEjoTnW5Xa3Rdnew2avC1oRNy4hXdGCH6/uN7c0RUEHop5h/gkIanEv21GtN05inOdy8B+fyN2ji4IOX0xF2Xj9VQs5vWZgNHeDvabxl+/7IGUqMnQ3KeQaYKMq3YPVsvFVZGu8myL2zOtGlXAqAeCL2Uue97ruojg0Ou41ujRUFtGV8v/ux1vtHx5sDngmFV9/s2AL2x6p/CLPdBpqKvdNdyI70XAfXQvfIzL0+rcFLwR3kNmehteg8O992uIR3wwrtTGmB+F3Rv5ePtTyjIv0iIoAGwnEwl67sdFOQfQhqpwRlxcQJgSrJtMymSasMP4E1x6KKIwdPBH065+LMfKU5k5S41Pz1gtH1lvwjCU1L56LVTLevoaad45lq+RiAkN8gUAQIaorKM3KwTq/2CRSPdOeMfpE9RV2kBC/L1DAbRP5Y/WoWy5sFCyfEOTOuv+U0lxq/xAHF/G26awUfxWM3ZF6Nh0GVbtr5VQV8o2GOkXIDXHisSVTgjddfUtoNrVSkhbhk0bMAjBCizaveBDzZK4VHAzF/05MBpau8gsJoPfjch46pP4dwT0buyaaf9la6uZj592BZJjJqwEQjTO6FaoPXNPsZsuO9GA/Y8wf5B3YjrznJWYhcbNNB7NP3ye9EWJqyYe4qdpTFdHGNxD3u0UiAio0Xsvob5o1FB1VDu06i7pOyQ0GRcAZB1z6yRlc3alSmDL3MhVE/uZcAGYHzcepBsy/Bh+8Ol3Tl8uVPaY2jNa6eJZOC02h0Y9cTbzTH5+mCsFhDJC5jgfHN+fldXCasHZK8kYqSe+SbDFQVNy64n9y4V3NLmJVwhrGWXVe9Mf0gg0OD/O9i+RH4B6oRQUWlGQKiP+P5WZ1jgiD+VYbvpVytWLJhtnECm481MvbDbJlPqVJE6lwjehNPTtJQYqCb6weL03CVQcRG60tztpxp1yndQbxrnEQNG7PHT32ezxWll0/bh59n96kVtzUxFtr2dnJrPbebXnoxzYsUYPaq1elNZprBlXWpi6OLWyHJbnH3O9vt3o1aKokk9ELfCq1gZfgomoD7BnDKrpiNtjOHc2esREV1mXnk7/9YNX3Zqxbo8N2icUCkZ7L6Nmb/kQKmguPJS5cH8euTJKhcpIjWeKd4c/dwyQl+4D17OlgUyPyvVaMelYuQUZFOSJDQd0XXH9UTdQkyHPtTp4EefkgmAJLEBUtLnPNmViq9IymT7i+LjX53cKrJagTZaXmL2VL84/SC7jdtsSre+9Syx37FHYIn/MB3Qh3nEN+IJLxowmL50q99VMwTEARnzfwifb8ZPwClPbbEsWsxphxU+MPVjoUX6zEvecS3xRnyIqbiZ9jyGzeXyGJ2i2NO4cmLu5Bx0WySVozQRj+6RuZ7leVMKjFw5uq+B92mnNn+Ity46LrG13h+SyYAeprvzkImMIfxWMQiIZdW/knwjsZdO8zpwjqOzOsbAVQ5E69AjpBuLRa5bZCQ++SHgboPLk4SLEDpsFm+xzsynp6fQMzI+CYdFPRylfP7167CC2zXVkZrIWA5pFRKseRuFq0iALWETZ3IQ5KDdiIAoR6LUiS6UJDq12GMeLIf8tkIRgAtLX7BLbkN3/llyU7KczyF3Mf2NblbRY9sMFaF49QB5EzvUP9tbljdA43UkiVq8h3Mf1a1sTwh8UEUBAJidicQXeqOVkPYG8fzK4KRjYoi6jfE8GoP61cGBCF7j4jX5ILCb0u0O85C3KCrXrMapcQsDFiFYyzAMQCLoeueWa1ug5H5Kdc86C6bmvQopdHe0553ZVF6jr9dFvb2Wvgzy/73qaP9xypr/xXoX8wCGSXHulo6V39i1OXyk0YAw==",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A General System for Machine Learning — SFI Press",
+            "url": "https://www.sfipress.org/25-solomonoff-1964",
+            "encrypted_content": "EsYNCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDJ5hKTy73IbuPZNpORoMMsCP9WA/YF8TajUtIjAjsyRqwL4dBIArI8JWeTC3bTlXM96pYNF4A94vK34C1HRkv90ENd0ndh/Ay1hw+DgqyQy5M5KFYC4BjPkH+um7Eggz1MkWDhTQ8vHX2k+HiM9ai8pxvnrjQ9SF9jrckD7p5YBndvtD9K7j9VIr+ghLTYP5BxAXMOaATBqk7CC9y3iakt3/f5om/0NhP5og+7owaq3pU3GJOmhh2Wh2D6gclM/Csj8Ok+IaD8eLvZ9yjTMatDVgIipYyRelpCcZRNZ84b5VJ+JTP0rkXy9jK0QjaYzpzKwM8Wf1c2l/ra5WfIFmyDjrUcJKWiXrjMo40bgiIf6Yhp63yGC0nKh4ZLGgdWvwELe+hnZfrLcq1xN/TBiw9ZEkusyspSmx0O2LgPDSbbD0Jpe+4pb4k1SmIi/2v8t2gB9PY5MGHPv7DuDjRD0uCIli51+ANdZTVLCGbbeLVIrG0y6X75dcUv/PuNJsPVDyUd69q1hrblUDqRCOX8Nl3Z7DmahESe8OkoNr0N6MujCoK7RRtJOL1g8yXXf+YdEMC4/mkoCz4UTRmb2scct+lQv1insZnUmgzGMIoyrLFuGwWjRj4DXaUYU/B9j36pQ2rUKVucEE+YmBBxihk1aGCaya2w8Qe9Ls2lEyZSOIs9lo0SV+DstXW0juEkrAUnPYViK6ndB2Qgw89dVkmOsHA1I89Qjw6ZAZ1CmUXJwdFbwvdlsgH1dzoTWbbWx302vXQtzW7q0Uns2a7GSU0r7MtOi2Ndh/Ag6wZrkHCSEz2cEUNt1D4op2d/RxIRdWwVd3USTQXozAsyQcxweFjPOrg2tpYcftdV6b5AhSQjbXyfi0QprZsezDn//uxZiDqgzrnlDvj6I3ESohmKQ6tf1+4/PGPyBLPuXheLSWrDvTdWKtSlSnqvGQd9afxbNr6h/EXiLMehJnjhdHtRkK0IL+bc4mDfHk1wfI04cnYf9/Xdp5DcnhVei/ezEcUA63LtRyu/FoggXb9RLF/xhCbLzhR5k7ZsX7JO8GjmpNnWnhEq31jM7OO1TZitHFuiYtjrFJKG/lc4FiYaUoShWCiWivUIi4EvARrYZ4GW9/WQK/dEn5roPrN7oAx10aqm+V1bPglDeb7fkqePxcaCnhK63YjZ6hiF3IBdOxRY5IpMGyLPFTgixdVtePdfiYTk3OuXR0zwyvSR1NJhwulKVkzcAZc6CADHFDcSGaWBBFnJWYLLWOFYY4euqJ8IfuV4VGOndD4lXijEvZRT8AGX5Q3fNEllXaK+DP/3HASx0Qc6Rc1t10TYss4jUXFH2pWvtrwX87ZyKa+RM+RTQNaCFQQdY+pcXbiGR+QokQ5KypmFzxDpxu+NoX1KpL7FPi7SeBa7Ja0s9RQ+hBBfG1W2XdivxKvwIMp8aayBrNu04TvaVMfvqmO69O5sLTaHAePrW4Nqo3nYUIleMtDZx1WUn/CoO9UXvPe6ITr+6UWdnbFe18t+sID99dUIA5q736gMLNun/+Kl2xfoLXM9qkKFPpDQ8FDmXAExmtUuuUzvTUvoroUKdYGqXOG620Itilhmn1VhkInA0m/2p+/S38/nCPjDrfM5xvY8/yHdW8VoaKTkOpSHAvY8iaAorJ7QWCPYSPBaGpmyqGL46KjuWHxByQ/KTCzZgjCIXd3Xof/L9AsAIaKQTMi8LaNnQNvZ8C4EwzMaeUA3i15jzkTtcxWUQnD8Gx/1IRjlomi1JW/fdMjK5fQV6Ma++e+NX5ceE55WbDouy9hKO9xqcVc06Ad7mhxKINGz6tRVl/PU4/kzHeEq0SYbW2N8AsZJfB/1usohOzBUxrmksXL3dRoBAUE5klao9hJprUq+DK2s/6HMexro5ta4mUdlQfwGpcpKREdIU2rVLFkjVuAvwM25phODquPlcMleSsy2foBB41aCg3CbioHro2/TErurQc/ZRfvucNv/+AoxnGrXHWG+jJ2sDenGDRbmW1t8jd0GiD7aTlt7tcyx9TI7Mt0u2rC4xGyW7L1TxhUKtObSz5TIy/Q6tGr658kKKjXLq9JYQhz/36pviHoYuTlFaO2t1ic8YipTIUKo/MqMPTDLgRFzYQE62IuAXIUZ5Uvfo/3OIinVnppb+RjSvXkUmQuVGmReOPpOSfRT6xsemAtQTI+tI0IihEWTdzPAuAo7AhYe8ZoEvIgr/wRI5xzJ/xw8aozcdBrdRKf4h1P0GUiyj9wJHTGAM=",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Formal Theory of Inductive Inference. Part II - Ray Solomonoff",
+            "url": "https://raysolomonoff.com/publications/1964pt2.pdf",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Formal Theory of Inductive Inference",
+            "url": "https://www.researchgate.net/publication/2330933_A_Formal_Theory_of_Inductive_Inference",
+            "encrypted_content": "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",
+            "page_age": "August 6, 2025"
+          },
+          {
+            "type": "web_search_result",
+            "title": "A formal theory of inductive inference",
+            "url": "https://bibbase.org/network/publication/solomonoff-aformaltheoryofinductiveinference-1964",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Solomonoff Begins Algorithmic Information Theory : History of Information",
+            "url": "https://historyofinformation.com/detail.php?id=1813",
+            "encrypted_content": "EtgDCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDMiNLGfTyo/WHjSMaBoMlJcuWWJVjE6LX8/EIjB+fNnKfvz7dfWEGplCKG1rwVAjTqyD9WIs6xeVVsuQ8m4TsZRz6iDXf/uVLh95znkq2wIwBhZY6/IyFePybm7FiY8fCKqpMuyHe1uKC1TDFblR1mz+N/8WvwWQlyNdj78g0OJ1GpQ4QLuzvQtanRqZalpGW6kS6b1tvP6MrOgqhfUBmV/Xev5TWhaa0o1QEjx65VmHZZgI9l3CjSYrCw0l5rZC77lLNeG/6CN3fmH9m42OhD8RrVYfLW8ItgWBACF49xxJmjNEqGHqqGZQ4AHzgAR7TZSk0FLT4DCVrz5WtN6sgFeI5+hs+C+1GipK0g867iZj8oreCx8Y45wtHGy8NdqSKctc0Allr9HHCX5YxFCwFgSETGvMf3pGrvIcB1N/1SxE2B4QZELs0RYHAsWjQxPEZeKQ60q9hbzRcQO0xn+/EDdsBU58ewbaHzpsx+v3yGLx9vsUoYqQL4IGn0JwcLois/3OfLuUNz9gBTgf82o9NmLuI4LQjAftDn9bNmp4f58IgLIiHQh3S0aSUxgD",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Formal Theory of Inductive Inference. Part I!*~",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0019995864901317/pdf?md5=f396ec2797eca2e96e0ae7b00391f23d&pid=1-s2.0-S0019995864901317-main.pdf",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A formal theory of inductive inference. Part I (II). In Brillouin et al., eds., Information and Control by Solomonoff, R J.: (1964) | Jeremy Norman's historyofscience",
+            "url": "https://www.abebooks.com/first-edition/formal-theory-inductive-inference-Part-Brillouin/31752741405/bd",
+            "encrypted_content": "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",
+            "page_age": null
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here are the full bibliographic details for Solomonoff's \"A Formal Theory of Inductive Inference\":\n\n**Author:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Solomonoff, R.J."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Title & Publication:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Solomonoff, R.J. (1964) \"A Formal Theory of Inductive Inference.\" Part I and Part II, *Information and Control*, **7**, 1–22; 224–254."
+      },
+      {
+        "type": "text",
+        "text": "\n\nSpecifically:\n\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "**Part I** (1964): Published in *Information and Control*, Volume 7, No. 1, pages 1–22."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "**Part II**: Published in *Information and Control*, Volume 7, No. 2, June 1964, pages 224–254."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Publisher:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "New York: Academic Press, 1964."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Significance:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Solomonoff was a founder of the branch of AI based on machine learning, prediction and probability. He invented algorithmic probability, a mathematical method of assigning a prior probability to a given observation."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "He introduced this concept in a preliminary report published in 1960 and gave it a much fuller treatment in the present two-part paper, which is considered the beginning of algorithmic information theory."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2275,
+      "cache_creation_input_tokens": 12938,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 476,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

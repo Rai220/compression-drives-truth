@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-04-03T12:55:32.849Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.41",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.66",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e683a11eeb9098e-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 12:55:24 GMT",
+    "request-id": "req_011CZgsbWZDasptaUrb7XgPv",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=5544",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "5389",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=ZK9cOT1CvAJL2uq5RFTdUzu2cHrhuzSfinhtRvYh6nA-1775220918.0656042-1.0.1.1-QoIHRsDHT4yGyFIABqTtnozMZwqJVpqKbLnFMDgWjSQ; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01NSgxzVmESiQWGNxfJ4dPPE",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "**9. Fix limitations — remove hidden claim:**"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_019NUacEM9MCPaP7BVAi9em4",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_neurips/main.tex\", \"old_string\": \"\\\\textbf{Model scale.}\\\\quad The primary experiments use models of 3.5M--86M parameters. Section~\\\\ref{sec:qwen1b} extends to a Qwen3-architecture model (${\\\\sim}$1B parameters) trained on real text, confirming the random/coherent contrast at larger scale. However, this remains far below the scale of production LLMs (7B--400B+), and the 1B result uses only a single seed per condition. For coherent errors, an MDL argument suggests the result should hold regardless of scale: equally compressible systems at equal frequency offer no basis for preference. Replication at multi-billion scale with compute-matched training remains an important next step.\", \"new_string\": \"\\\\textbf{Model scale.}\\\\quad The primary experiments use models of 3.5M--86M parameters. Section~\\\\ref{sec:qwen1b} extends to ${\\\\sim}$1B parameters on a mixed natural-text corpus with a single seed per condition, providing a scale-up sanity check but not a definitive large-scale confirmation. This remains far below production LLMs (7B--400B+). Replication at multi-billion scale with compute-matched training and multiple seeds remains an important next step.\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 512,
+      "cache_read_input_tokens": 184177,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 512,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 418,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

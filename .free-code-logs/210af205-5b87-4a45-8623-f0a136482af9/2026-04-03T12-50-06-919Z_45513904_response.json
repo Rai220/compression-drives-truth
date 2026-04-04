@@ -1,0 +1,75 @@
+{
+  "timestamp": "2026-04-03T12:50:10.574Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.36",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.65",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e683279aeb6098e-WAW",
+    "connection": "keep-alive",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 12:50:09 GMT",
+    "request-id": "req_011CZgsCWeYB6JhSWYkgpE7f",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2413",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "x-envoy-upstream-service-time": "2411",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=YfIByTiuzWYun0jtkNTCjkb5UBxCt9lvImVn9si7fx8-1775220606.9863477-1.0.1.1-e5_r2gaHZw1YSfCcyBd_IMoIu1vrRd3W237JLXaR8hY; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01L3ZzZJ8Z4Npqd7yMo28pxR",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01HFxVt7bRw9Gh1mbn5ZN4RN",
+        "name": "Read",
+        "input": "[object Object]{\"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/scripts/reproduce_minimal.sh\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01S831Y3h6Q41boZtLM1jPx2",
+        "name": "Read",
+        "input": "[object Object]{\"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/scripts/run_wiki_experiment.sh\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 128,
+      "cache_creation_input_tokens": 772,
+      "cache_read_input_tokens": 13623,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 772,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 135,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

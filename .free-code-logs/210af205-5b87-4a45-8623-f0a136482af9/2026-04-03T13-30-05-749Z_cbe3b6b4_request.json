@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-04-03T13:30:05.749Z",
+  "source": "web_search_tool",
+  "url": "https://api.anthropic.com/v1/messages?beta=true",
+  "method": "POST",
+  "body": {
+    "model": "claude-opus-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Perform a web search for the query: Popper \"Logic of Scientific Discovery\" Hutchinson 1959 publisher",
+            "cache_control": {
+              "type": "ephemeral"
+            }
+          }
+        ]
+      }
+    ],
+    "system": [
+      {
+        "type": "text",
+        "text": "x-anthropic-billing-header: cc_version=2.1.87.aed; cc_entrypoint=cli; cch=bab11;"
+      },
+      {
+        "type": "text",
+        "text": "You are Claude Code, Anthropic's official CLI for Claude.",
+        "cache_control": {
+          "type": "ephemeral"
+        }
+      },
+      {
+        "type": "text",
+        "text": "You are an assistant for performing a web search tool use",
+        "cache_control": {
+          "type": "ephemeral"
+        }
+      }
+    ],
+    "tools": [
+      {
+        "type": "web_search_20250305",
+        "name": "web_search",
+        "max_uses": 8
+      }
+    ],
+    "metadata": {
+      "user_id": "{\"device_id\":\"7740ce72fa9abda994ab564ddf04796a523294d03ee624c1bb094ce513ef983e\",\"account_uuid\":\"b36675d3-53d0-4df9-8760-a7969187f1f8\",\"session_id\":\"210af205-5b87-4a45-8623-f0a136482af9\"}"
+    },
+    "max_tokens": 64000,
+    "temperature": 1,
+    "output_config": {
+      "effort": "medium"
+    },
+    "stream": true
+  }
+}

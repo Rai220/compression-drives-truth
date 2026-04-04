@@ -1,0 +1,219 @@
+{
+  "timestamp": "2026-04-03T13:27:15.794Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.7",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.68",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e6868728cad6d4f-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:27:00 GMT",
+    "request-id": "req_011CZgv1U82DaRmZ35yHdvfQ",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2764",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2762",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=bRNbAZi0pdfSDubvH540YnLzm95_G9T2CTyC2jNlX_M-1775222817.6859367-1.0.1.1-Kb2bKummGBGGMX1SqxQaS9KBYQ3y72iFWmVmEg.JDeU; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01HxvdtNSkUFZ957EfnCE2MA",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_01WGTpFKp8XLVi162tUHBSH3",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"McGraw Wong \\\"Common Language Effect Size Statistic\\\" Psychological Bulletin 1992\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_01WGTpFKp8XLVi162tUHBSH3",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "A common language effect size statistic.",
+            "url": "https://psycnet.apa.org/record/1992-18415-001",
+            "encrypted_content": "EpUBCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDMT4FQM+y8K0KI+ThBoMEQqSXAOVYo3ULu9aIjBP28Nte5tXgf5WeFz25q9Ki0qIXuCn6BHQCZtT5MOCdvpIItcIHrmu7bzjZ+GG9hMqGdiX6qsB0iYUJedRvVhyXsnNvjB99mKCmKcYAw==",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A program to compute McGraw and wong’s common language effect size indicator | Behavior Research Methods | Springer Nature Link",
+            "url": "https://link.springer.com/article/10.3758/BF03200750",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A common language effect size statistic. | Semantic Scholar",
+            "url": "https://www.semanticscholar.org/paper/A-common-language-effect-size-statistic.-McGraw-Wong/816d070fe2f62eac3e0ae4e8bc08eaa3f16cb800",
+            "encrypted_content": "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",
+            "page_age": "January 3, 1992"
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Critique and Improvement of the CL Common Language Effect Size Statistics of McGraw and Wong - András Vargha, Harold D. Delaney, 2000",
+            "url": "https://journals.sagepub.com/doi/10.3102/10769986025002101",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "McGraw, K. O., & Wong, S. P. (1992). A Common Language Effect Size Statistic. Psychological Bulletin, 111, 361-365. - References - Scientific Research Publishing",
+            "url": "https://www.scirp.org/(S(351jmbntvnsjt1aadkposzje))/reference/ReferencesPapers.aspx?ReferenceID=1343262",
+            "encrypted_content": "EoYCCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDHnEJf4TLfxJP3Z8LRoMsuCqvIdnlz90qthRIjBD0yXcCo8OSvyrqqGKfOuTRramvz4hr4D4BwS1hGFzyJ9nQWPJh1OgyP21qI6uOXAqiQH3w9VYSQZIUiI52D0r301KFzo795N3PR+DTxVvqENB+Oxf1IvpEQ48x2i+HHZM93+Q6uHiC/Z5hJKQ/FP/wvYgZUB7tABExMGXEGdQCIbGWIfwXdnC900nu00Ga5PNs1fCwJOEFL7aCJmBw82oQU2n4Jp03wSfd/5qCOq6BC3YRvlu+a5zWkqX9hgD",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "R: Common language effect size",
+            "url": "https://search.r-project.org/CRAN/refmans/canprot/html/CLES.html",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "CL The Common Language Effect Size Statistic - CL: The Common Language Effect Size McGraw and Wong - Studocu",
+            "url": "https://www.studocu.com/en-us/document/east-carolina-university/psychological-statistics/cl-the-common-language-effect-size-statistic/1066064",
+            "encrypted_content": "EsASCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDKVJdljIBGVaRyqFHBoMde2mL1OiGcPyG4SjIjCaZU5rToHek/H0W/owzZvSWcrs21YuYmcT7+juGrjbEpZBqx49qXjnHmlLX9DAIMoqwxEscEXmQpkfUz0gTKUa21QV45iLPQdwWcPIid4olfG94vc43oPMF0y9NKsJda4ddeGIAHuukMg4DMZgfWgOcdR3TSNQpIdMKRGEQqiFZ04mpHUL2EsD1x/bd6VobP8r8dVIzCoEiydMnWZBJNmhWzUBabGGarD4CoTNjVf8e5MDrndK5NHnwdo6JB1GWn8QdnAWRHq7CKh+dGW8/AfDf0CPvtaxMCa4FcjsBfS5ArwaEeUYiNjcpd5/1UQgzcM4SlfI6wzuOYbIIMHOHM8V7HA6o3vSwNbQHMA0w1AkH/y2uFUNxr30IEcfkEKZILTnVT9TrC44IEJwzrgm0jicK0m5BBS5UdYLcIXOLCXwla4YbQAPs6M5wMctiK6dRJK9uyu8VvQfnvhVWkCBxbzcJpQ2MK63G93Tuk6rZRcxS+AskSKP5zgH/d16XR76B090vryi1OEEkiFPJ4QgXMFsS4GMugEfrvxJzr8TEOht1Q3QvRbD0DIwhDLrO3t74SiOWqsiKj8AlZElEfZcfEcwvZb6iCyxb1quUC0UbZDbFCGkyvqHA4fxzRSlcpz0bqC0h2oFW4os6NDzbkTot3GaGZia0B73M265Y+yiBD5CYOjvPyNK0dLiUNeP5UpY2iTK7eY49qspyNUCbcf0oQsMoBPSla1x8qLpX27F3iUfqKgpXS6OljSX0ZRd2A+yOKB7WVyQ4xgr7Tbv1EvwT+69tbmEUkXlYVHwqJ1maSyeG/j47BrCbvf+/95TyqcqRIU7V6YuuCKhrLzQs3BUIsHfjCKq6OSrxJRJ58LdGK4HKY9+OokJvTl8ruSFvG82EoXWXIDK6I+ya5w1qOqW7Rt4uF4fU7c0KKfHxnI6wRTgbYmiknwmo7UDDuvd9874LGqRETqRuUUZKzGhwYYNl6dtTuV/PsgfGTRvHDqBemMKWziHqiVPnJufTs3ZWZ20UwCkgXbdm6nGTL11iiBDZXtj0BmtSw9YZrRWgvpyPcaViI6qrvcWGa2a34NvMqzb1mOPyoyTfhT77XRlOnHkmfQbc0/aP8h69tUgYiRn4ZIYJ2OLeg3cPltdy/osfIobqDvLec0s4+l4a9vUm4qEFTRCGMymXzo3n1WgqjF+UKxGRLLEFNmCA1bC/i5/imMHgOap37fQYxgurtcz2QofBmuzR/bEXDq5KnJmV3kwSG7np28m9CC3xraFZr9a5TNQ7c1Z1qRiEqfISOyiad2BUj5KV8Mf+EVK0UrGPM5J21seAP7BL+Ktj9byGt6psr7O2br44MoG7OOtwMYAhdMuHu9sOxtDMuqqIpZ2OorA4IPFjmqhGXqPin7GAEg8DgglfeRcnibzvsSvuoDduFqYpIGfvH9bL5EhCQlNFQFSFCoovf4Ef9rveECbhQYQ2iJ/fsyt5OdeNYQwBeW7vg2Ic8xtxM+axDI6izGOxTCWzqnQ9TlRt/MsUeEpK0Fkg4ZVk/lYhfRGxxpc1h5J0AgmzovJ8+CIXxcMmvi8OX0xHiKdOqEjfbVdmWaS1D/MRzsJc8NPMlwF9bV5yQPUzJJXAQnTfdIBhuQKkV5szRGGAE4bZAszndh4namrKzm5RZ7tLiJmn6MrTbAyhrGIzMCSzT31lAS6ktB7MVDIfifJ2Gol9kmvHo5y9xoYIQ6Rz2nnIIDmieplIyj4dxzYd6rO9mnIw8J+CdWIJhSWsYqA1EDgDgLwF6yIauTQp/c/QtdA3YdQiNTeZ/MKOP1HrSPrM70uW78rHSNXBWTaiCG/73/Ofo4/GC74HM+6OkIf/Snb3ln3ahpbLbT5WSsIIXkJvMMaU3fWSKGA7B0ml1wi15eoyZf0Q51ksJz2nWqKMOPlDTyX4TPiV0U42JU8Eu45BK2JX7OTnJSQaXE5pRXeWv5gUlphi4F/rHXJG4ivjju373/kgE7TtD/NcayqVaHx+MGpljgFmRRaiCWd6mjaWkXvsvJjSjHCoufpuqTUBE+ZTP2zyyBTbRWM/XhLCTSj14lw3LeS5VN3C2fZLprX+9QGmignwKeEpEkVhWCWA9A0mPO95sv84e5fYgrWwx2jsmOTvbLDj+ZwgnSqWbDPHbl4qPMmPexQ6r+3YSuwM+nJBt05g/jjRSvJPEKQcOFJCDgdjDmFkKTCLMvoG0zJxd8E/g21Yyzm69LbL2flUuHGnvogNl9s1mFZv+b6etsikSg6w5UiqyVydksHHWnuPLzYchmTErewSLl3dAbdOMxadxNnGR/7eEwg08h6kgL+82QjIy5IW7huLtTBvduIN2mo5ZOkA1keclf7oYNDZScmi7eY216UegI2aDPNpc0MJtVKXnOBOO2nr0EShS+1EOTSUxQe92ybuHTU6lD1wuHOJE2WozDRDL0mnecKAZbDeSuhM8G94WXWm8q506sQcsOtT+S0a1X5QFuf+PmX6ErED0j7Q1+/8Vj7YRo/gUuFUH4n6f1x2kObsKl3np1Xn4L7jTc8I0RSpE52pLiHwLURzrWWc/63BB2k3ZtnZDd7MVz4bJ5duz5pm3rNdN0uLr10YayRSLfCNqotttn/zJQGdyTkvgpoqAEg/og/tGWo/mH2XwcVxVHqmdumH1mtARemyBwzVG0F+lbYPA8AMv9bwKJrvYsaHWK57MgiJmsQYDlrLG/xDbWzU319jYMXeXfvr4WWhE1cwaBNxhP3ms0u3crknxnbua6br9qG3Yxd5eNgXIWwi4u6OYK6Sl5n0aI5eWeHkzr5cpkye7XUSZRFyLxP+HPuMZRRdCeGvCsg6kFteV+SytmIKxS+5VkqzOdbTZiHUvDkE1eCCsCKYcbG2ptUeJXdg3sBXRJDGFG9ORvYjJnp9rTkaNj/7Oi8FxltcA08nkmaMtTvpd0i39NlLtQ6PoD5MReG6lXYEXlHjc3SA8bvGo+ZPl8HZVoRlTIT6qbYnddaw1Zc8wDR0ch9Hji8dM0U0PZMhtvRBGKZoZCd0Jw4uoa91ttOhwU7eLVPeD7sWzot4hgD",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Common language effect size statistic - Oxford Reference",
+            "url": "https://www.oxfordreference.com/display/10.1093/oi/authority.20110810104638649",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Common Language Effect Size Statistic | Request PDF",
+            "url": "https://www.researchgate.net/publication/232493691_A_Common_Language_Effect_Size_Statistic",
+            "encrypted_content": "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",
+            "page_age": "October 9, 2025"
+          },
+          {
+            "type": "web_search_result",
+            "title": "A Common Language Effect Size (with Examples)",
+            "url": "https://www.linkedin.com/pulse/common-language-effect-size-examples-gregory-gilbert",
+            "encrypted_content": "EqcYCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDN3oxo8yJNCA/HaZbRoMHCAbewVtXUtFYb4nIjAR4uamyst+8ZxFafuaIf+rchr3FMj1mV78urQkIk2jKjyZsmWX3FGhxJs60cLNvOYqqhdGDdHCo32+8bwybKw7uooR21AGG+8eWzCcsqg3QNBQMvtWgbz8ws5UfCugMVCJONpJG/n4tHLUAvOcsBHhWtsfYR87WosRyXCRm5lahXzQ8zLEK3OJxtvAVMZQf8qtwD0Ui/iLXWpG0DsYDvvLZvBtAhkUEo5ecZMmWE68rI3qp80LEim+H21ikHJJt00FX91aC0uyOsiC5IG27OgSxVf4fuNCapAmTr1NOd25endzaXAmSMsel1MQgK+PLj9gdCBDbiGD38S5djYEVvY7Hy20+WU9LhSS1SNW1F/koTZ2tf3iXQp9qZddjHW6uxJgD0XtRLYeUqlmz54RxoGvcNbWl2hbC7QTOSRBZMLUZDxJlOtU9VBaJPXUX5p+ickh+LRDhkaShv2+jZQUhnj/0mjb8pd+gt7BgIMbE88p/2z5JsMZEFtZ9mHiL/lQ+LX8gktopSNG0jUF9INi5WipeuYaQOSkKuoCpZNbIUCaBR75cDQayQvh/og+VVSci0S9JO4FwtnpKCB59ipPa9JjrEM/8++GumbnuTUUVyToi1iO5NhKaYi8mYfSK5Ec0wLvMyncNarm3Mngd9x7qaa1bBZqkZM3X8s1qnzAw9RLoit2KwcLWABBxQBhvu4mateOlmok8Bj/nIJqs4A75gSI6s59WjB3QUH2ZAj2INXt6KxXHfg93ZYBK7X3E1VPDWuxYmN0KsQH5MGZcBW8bVaCvWczBAucpll1tex7Ogcw+6an7vHbE9pvQfXTAyf7tR461uynMZOO5q5rQId2ocUibOuUIfFdt/XRqUUGk0YsbcbdQXmqdsYu8updmbFHFN5Hup7KanwxWrK3hx/SFriw/l8zDNoAD/9YPkdwCz7e7HcmN5mLk0vct0FLQW2nM5udRRDkXFyZuqfdZBSnWsh7weT7TV8D+3/9zjjXbGXxAKxft4P8GPbJNrV4h+40jJFHB3penxmKkgiffRTvIEBbvECYiAUvh9xstrNauETcQIC2ED0PS5F3xCScBEZXyaHAO1XT1YxwnLpNbwkeRwVcl6OZ7AFKDI7kS7aTDnobVdM6CkeZI4bSROO9hBPdAd/aY/4/pgWov6gOQ8C4GIsM0qHmy4Oft/dvAsMRj+6L4wz8ychdQNYypNaFsNcnJDtqNuRAKfWhextYgCoX44w1nGS11VdOFH0N2y8w78KzKzwj08PMo97dTaRmiHe9syNIeK2bbTumZ1EDEyW3ULfIN6Lwjpt3VGFOFbCYekkfPg/XdmAHUgzfDNLsUlcKOB16uSL44+zDqNrdwGUd0BW+x4u5D2CftjYsKVS4SXXqVGS0zM11fZoUYSgCKIN6inSuR3HyfwUXK2f4DaB+HrOG6V2f0vA/buts3ZORKQ3km1SzRCw58FTXqePoOweoAPTsyWtVfGxb0Eb2cb5XiFOj7bZKczVWfjF4Ag/goMGUo/5OqO9n0cioe7CZ2VZjDSssNaf3w5pjpsdXBgVjwSd60r/FN+XAmKaXT6ARLffeoq8NmMPmsppm0JY+eM0yA6MyvACUsLfnzOpq3UZ7skXgCBYDq5udpVYEXPYeIMBtOlvsLSlVEfNyKLZPLT2VuU4ZrN1JZhjhz2nnWCTH0S69E3MNq7ar+ELAn/Ib2ls/4xcNCf9oN57QA2jFEvCi/Rg8axNJas8RU7tqBFLl68m5SSant3mOauAb3yFcqcZYEGWx1Kdmo1AJZzsmEtqZEN1Jrld3871tf0Nu/RR2Ve1fozC30F+EgK1W2lZ4ubF/DqmjtrZB47qDVTf/1zp2agi+1wRv2fARhes1KwDWFKAq5lTZyRX0gJlJZldReuG0AGwS5/K1PnrWXfUhD0EMu5v0Kr1WDnXTmRU/4cc35RP14IBKdqqLs1rLl8sSg+wcxyrWO2nGS6x+I6Zx7g4usahIUeqPcx7RBbD/HkwlMw8ZwrBOHoaNOaI5Pf9rXdRQPASRcdu+d1T6f6HkZ4H9NG3QlWr5APazrsB1przOelmw5vWMZmFSyPcpC5Xya4szZ1i8kGOD1WA+4qeoIXsSG69KHCMEA/H6bCJFpr9kFC1aGqlJcYOy7b33bwaO1lWfzl0jKFFwIrguSq904fMt+5YniXPv3HDUCYn7NF6KKai/51M6isqQ5v4CsjiTvg2YLLH/AxBccVQ2EM6TM1wRZl3nDvfVPClZ/f8umJ9o50rA1hvitLJCwCVyV7LFBAelogxLT7I33dtZtBfUoi4NJQkwcBhFohub789g5a28HbVR5ia3kohJ9NbCwunkwBadXx5ah5ita7xqvhXUojLAGlbVvtB28n+bcuVyehZbX/LfrJ+snm/PGhcDYdy6u7+flt5Z9NvjpyXxlYU23inynFhWX2szcGubLtWvbKym/zI7vxLTxXdToY30aBO+ngo6dku6sm9IocU74IaYxq+STKZZBoKqbaqVMgWELiL2xKGMYUcf1AlRO39mGD0VWqqOnj+JsfH+egjYBtd5wKrLVL0gC8u+LHADTH8NBbOEKfGzDVbMtbDRCG40rNQppfnSDkNhRImouh+trnaEl2JCYP2Byc75zfH0QNATpK8iRufX5Os2Px8Q20BovQP26GqmCFHpRFhOaBTQEWdIONShet2gdUD0de616c1gIwViOiLm2iixXGr1uY8p4EmRYP4shhmPID+Ivqc2Ty54YMe3obwoSBXc3GS2xLZI5ORn+ZPGpwfWO+F0KFi9rFby5QyoB5JZCtaoTQlFjp6X/ge5fudbcBbinz5J9VSlIIdJvbrFifdihzpKdqJMlNlzHrAaOThUnQ5kiGw4SPVfhDPUpUr2yOYs+Nnyjhf3+Jt7LlzS+E2NcHHnDCYgfSn1PMNhh7oMgWpS8MUK0KlVOZPR2edK40w1CryGoiIqCBQR/LeNdJ6d57R9bSmogx0IQS3c2JN9bAz07hAyLPdFrRnGFcQrow8tTUaE2xi4VruXpQe+JM13o6yh8OxyAVVqmaQGpnuYZ1BeKo54Muui+rI/SHAq4ujaqjhZO17V8Ltuit+7PjKqJ49ZoW2Yc1L492SfCSqDf74gXH2GmmSasBAnw/K9h+lj533/9nqtMHCoDQrHxYOFUVI3BQx0UMVR0+IF1qDMvp2NeVpv8sEXtd0bMcKshhctVZ4LmldAgyNEDgDOxY2hVLFqVX1YEGHphQ2p+4m+xKHGmNPgB40RpwbTGQERgW25jNmBqjwbBfru6sAV8x87e55htRVOpsje0e6/prNXuAdEMdyB3cEKMHekNZSvcbeGswP2XhTHELiTf4SbllKafQS04MQbE3jaK5PpJg1pwBczl7nL+qH63x6tNpyto2R7VfWX+obUGuovMGmvWC3LshVnIK0qbQCN6KdH2Eosh94sx04gHo+7nf+tG1IGVoVSz7waHkSlcxe5qKV3MlN3IlwsKyRRedRGR5QkA+TIH8PFVjS6HAUqHk1vavFge5ZZ9iopQZ6KQqpE23vpzQYW7G17UTgj19oupcu3zInoE/V3TiaucWJY7yaQ66MWLajEBol0q77l3W8IqBULf1Sm9nP2fMk/S+o1IMep0Mp/f3tlmG7M02zZIpIs0DLxM5o8XyAhx2qtd54fUKRD4j/lXKP4J9Jq3VBNHIoBbZsPtkSOyLizCFY7BLlJnPvaKy48ciRPpTqf9NogQLlIce5QZkeSLPACRPD622iPHsKQFZPDgOs/M08Accl6D/ucY2Tk3uiZsx9m6lhSfM0CEOD4a1vhee5KOa0mTA6He53dTQQ9v7YE7tBzQCkP98p169nxl/NyFhoQqmrok4/+sI/c997e5xAn7c6Uu4K65dzll+cU1qtVMUx4jlHjR3H9CXeYUxOjFq5DMIYXk2e13UQA1x1gxy43MeSqkpTDMtYtUR8fdw6PaEvxGW35vx5zlWJRsxqfS5wcLATosnMgX21MmZuyHATtGAW1TgSN+1WCezo4YckYLyBYArDuLEFhx4G9uOZX7zSNkGRyGAM=",
+            "page_age": "August 16, 2019"
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here are the results for the article by McGraw and Wong on the Common Language Effect Size Statistic:\n\n## McGraw, K. O., & Wong, S. P. (1992). \"A Common Language Effect Size Statistic.\" *Psychological Bulletin*, 111(2), 361–365.\n\n**Citation details:**\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Authors: Kenneth O. McGraw and S. P. Wong, published March 1992 in *Psychological Bulletin*, Volume 111, pages 361–365."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "DOI: 10.1037/0033-2909.111.2.361"
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Key concept:**\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Some of the shortcomings in interpretability and generalizability of the effect size statistics currently available to researchers can be overcome by a statistic that expresses how often a score sampled from one distribution will be greater than a score sampled from another distribution."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The statistic, the common language effect size indicator, is easily calculated from sample means and variances (or from proportions in the case of nominal-level data)."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Illustrative example:**\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The example they gave was based on data from the US National Center for Health Statistics, showing the mean height of men to be 69.7 inches (standard deviation 2.8 inches) and of women 64.3 inches (standard deviation 2.6 inches)."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "If both height distributions are assumed to be normal, then the probability that a randomly selected man will be taller than a randomly selected woman turns out to be .92 or 92 per cent."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Extensions in the paper:**\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "McGraw and Wong introduced this \"common language effect size statistic\" for normal distributions and then proposed an approximate estimation for any continuous distribution. In addition, they generalized CL to the n-group case, the correlated samples case, and the discrete values case."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Available at:**\n- APA PsycNet: https://psycnet.apa.org/record/1992-18415-001\n- Semantic Scholar: https://www.semanticscholar.org/paper/816d070fe2f62eac3e0ae4e8bc08eaa3f16cb800\n- ResearchGate: https://www.researchgate.net/publication/232493691"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2269,
+      "cache_creation_input_tokens": 11769,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 693,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

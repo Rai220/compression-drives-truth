@@ -1,0 +1,208 @@
+{
+  "timestamp": "2026-04-03T13:26:08.411Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.64",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.68",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e6866fc9a71c3c7-WAW",
+    "connection": "keep-alive",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:26:00 GMT",
+    "request-id": "req_011CZguw4NQz5PGowRj7pUfo",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2340",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "x-envoy-upstream-service-time": "2338",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=63ec6.UxzTQGwgXsMJ8yrLc46JlcgqpOwRIof3RvguE-1775222757.8552148-1.0.1.1-MpqLJ3hirP9iP0Rl3Rfu6VuEfCp0gG14mKoiEeUOLj8; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01LKrfT8CuFc2CH4b4bwGr3L",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_012k2BwJkXZ3GSJa2WWQMTiT",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"Kassner Ravfogel \\\"Measuring Causal Effects of Data Statistics\\\" arXiv 2207.14251\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_012k2BwJkXZ3GSJa2WWQMTiT",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "[2207.14251] Measuring Causal Effects of Data Statistics on Language Model's `Factual' Predictions",
+            "url": "https://arxiv.org/abs/2207.14251",
+            "encrypted_content": "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",
+            "page_age": "March 24, 2023"
+          },
+          {
+            "type": "web_search_result",
+            "title": "[2207.14251] Measuring Causal Effects of Data Statistics on Language Model's `Factual' Predictions",
+            "url": "https://arxiv-export1.library.cornell.edu/abs/2207.14251",
+            "encrypted_content": "EpgLCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDJgfH5XX+UmJr7RB2hoMfToSdQW2/ALja91hIjCTvS/4Q45zDsFdynG+KdHGK1LD4lkmN+ht5cOFbJYjJg7juiIwNbBEFO/jXqrg3vsqmwo2hIJze7aQE/ikweG5YYGrS/94toKwGQLk44rtbjqxd3QqUJk+X0hdcSBeTyhJTUTlZhUqfmy4T7fBByywP3tBgBp8YvHrdE33Zm/S9rVSZDf2XvHZ1Cxi7OpYyWKkX44TgW/dJH3X3qxd4MKx1SvDytqlS2ysVKBFZBmvpfuQJfzts7tvmVXgMpI9PmtMPXfzuuYQzZiGcsFfhdXMK9UgyQH92JZfNL7otN65425zV5olO626kCz2ZrdvNzfOfCwT+SghbIdJE1HlfjSO0hzAYRHtujGU208S82flOJ4q59La3lwRpTZS+oDenZWSSoNK3S02eTii/XaF4uj2BJ1pCd0DLkuC8HDF1XvsLurOyUiD3xlZb0VrBicKh4ts74jE8j8iMix8/szWR+h/sygM8Z6cC7les3rftw5cawG8uxLsdOYttw26aq+yF7dFGXBmJVt18jegzoCq5XDP64ikuuhs16HkMfMAWsRVXVjhBSoVAYOOn3WG3S+1u/A+amuMf3Mk7mcfW5GpeHd2ksDL8GD9DXTX8EZ70wK2yfwhTh3c0O5Z9INVAJBWnrtjvDOjTnHSchA/LcpsobfakuGq8co7VeitJUztJL+wIFiaplgDOcjbD1oHMozMXM+rMVKJhQXIE8/g30fDRyp117JAEqqy3jxJGkvNlkDPP+K4lAFbEkx5nc4Wy361MjbG7cpGBMVy5jrMRFRWwYmT7CdMfpT9lpn1klROb7z+E0cNlx4bjdnHxGs5P8BsrtuV2jsvJEI4MojRBUE6zubnod+yBrU5reobHA2BjAUc7fz5xKcxmn5o/tBNauMFwqbrnCYMhm3eGHuTlSexGtEgLPzWSW6zfqpM7yd5fH1feMmFZSTYomMfCiRE+2PSaVf83Lv0Gd8nLDCxC5P15P7udOAqa2SxKLOUwjzSrF6ff/uMVnPC8ulC2vf6zD9oakmanCvTgUGRKG5Uz8L3Fl6iaKdgXL0R5wd/PKGNsF8ZhsafZKAu4ZpKPXLb4Cwet51AC9N8YWEorjPQo02HkeyH7VcqoemKrUckBEJerLIOFctfB32+XSTE7pzu/YCpdag+rLrnP6eQfsAE5+iFxigwO/hp8KPk0kk/810J0JLJ3txpGgx49cir+rbvT+RW0uxGIOeApNc7kH8t1RgkFwEmMyHfPAHj9k6PCOaZpCTaWE1cv9OqHJ6ufxJTfENtPu1xvFc1kEHrU45vAaKJd36BvrZwXXpNNKl6PK1b29vUSKBXID62vWg6FzDRIp/H7SAjkAIGn6kRCoydikmRUoXzmqaupGnmvdLPts7jnrA4dQ6zoiHj+1Mms7jCSd6cAXEZsU1SwLCxafLp099D1e8KPHGtEegsHDYLcmxTGDx4WVI5V9SaHdWe01KvTyW2jyWBo/tIp04//+B8s1NwyXvQ9E7uusUAzNqqDTWs7cNPRZ+g9smzLkD2Mc3okunwsUQOXPnEMjxtGiOU13ClwBp/FH6AKlu5w46OFy6KLmu1fRKN9GmHFWK8NdwpaicUE8F2NzqfjJIBcDQJ530ZuIE4ZzVxAks1dxzB+f77bTHZQE/qxZaS54qCEtny26ajERASdWP+1W/oCFgYBzznifX7Jbf4bLmjJA0HxAvyoeF8EPOC/VL7yE1qkylzczcoP72gMazo09kYo8b16BDarR2NgVdHJsQuW713oYWkcaGa93cOBPPBXhrEF1lERXYDhnvjVU0cJi5dWl4rb3y+UBgD",
+            "page_age": "July 28, 2022"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Paper page - Measuring Causal Effects of Data Statistics on Language Model's `Factual' Predictions",
+            "url": "https://huggingface.co/papers/2207.14251",
+            "encrypted_content": "EsALCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDOHNdo4I9e8L7ARENxoM7Bg2cjPlcY8BFkSKIjA8NDVbQEpzFcxWPoKNH+GOHGftCJsbPHKPkhU0JoxRFTVEa3oX6escPP4/HVSU5/Uqwwo4V9XTb7CGT5L7KZjWewZiJCiCY3W/3EYr5jvEVYoIihIWwa6zt1/pmn72OcPcVF9zegvg26KDzmSC0lAuzrcz2UW50LbizsGUwQrAVt6Npw1KnPhLcqIbFH50CoUuXtQHRKzQQZwUdTA9cAm12n2JRY3cWVb1b8ZzP4Ra9kvcYxkc8qwBaHaSqEoOyYk/Y4lpWL0H9GAcolR5ZHxHBfEBvqRrWnggue124izMsBA4KM34z2HajS1ZoV57gmCjHeICi2G4an7eOF24AVz8pXJAgZ515gnqSkYMk6uKwrI9xQNmiEUCWpyZpq/2q1IC0uPH4fyT69hyiQ+5na50Mka4/jssiK3Fnzjrh55Mdmlyn2d2Yuqju85QhFuCq43ZbZbTZhzQzxxpWDX6QnL4V6NltiPZmbNb78wJJ4+u6wNJs83YuJ6DWYBJvPXmaYT972iGUk8Lf8iaA1mIFwXRLzJ2iWQ7ykH+14m9lLs9GGqSR5JZrJKMk4cJznHM6Q86pQrZnGWw2EljHvl/J6q2bPXeQCfY+O/v901Rc32xdukD/Z1E+IobHufInXHi+p5HSxBk/fd379zRrmmpIY/4TJnQhZmzyODx48K5904gkW06lYO57/U61/vGx5wSKTIeegEU5389EVWxERbWOukCd+u+8KyxScHWKvwOYdZKOF9z4DQ/kIN4JMeaSuKa/MhoVqVIUz97vfnsPIomiNhj/qQiCJDNVo9ZdWJP7w/f0GQuW0Dl4a29IBHtuOUHWg1auH4Co8WcQfLzhRMsrJWHkMdTJQTW14Mn2PeIyRoofP3pwF2hvBp33kP88rD1TyYEe8tktg7x4aLa2aN3F9I86dkxlbsADQRF0zXRvxFhI5sbkq6PoNsaxVrbaMOtYbAJnOMVMAamY8Rpo5MkzN1wRi28Mttkog6yLdHqHm4bSXHfutI6u+/JbFG0/rh71ATV578j2i2padB5bporpM+ECcdMIvEnDX1H54w3GjqeYpiYmJbzUdD1FBQWrXRHpHvO5jZEshPCdlIz46MU1BqbGdJ1xIk9iXAXKoOpDblGt+iZx7PSARfwknNrYaWGz5gMrdUY3Y91afnGPdWbXd/w+Xkl49hjZHiilqwpp+E8lt6ttMw+8xV/a1sXwyx4ZBkg9Y0wHZg97xfBN6OS72h6BZuEwfHU6xzc3fnZzzre5XNeLu+9sYva7u7l24CBwP7xSB3DByXBMAduDqLLvJNi17gGE53t/i0YU80AbryylSNR4dmwQangBHu1cyU09qdVsv5zrh/oWBb+uEL28dOTosMPqqhGohudxMFvI/T1e9a8IbGVcNwcTm+Ope1mGtihv6SmxVRTFmt4y03ZBAAAtTfwdOphu6gENL43Hg7jbIJXhKq3ui2E6+xpIXh/jdHy1EYv4rQSid9R0hXDESV4ZrV28C8A669k1ZaaB2G/F9Nnc7+yuyTItTJ8ZoqjWUDXZ/zMCiHq8oJGVqccoSUy+5dtD2awgre17Lt5/OtwzMKBRPuwiWO1VI7xfxpqfpI00u2XthgtMTc9TqSrfHZ+agiLV9qcrYOKtiGbBpZtdOBjylMEp8NJS5bqE5htAzOxum2sSt2E7jhAvJYX3slaKffdO7sPyOpO8QJniX5S1lkqjzmDK+KCcweL5LKdgvX3Z/sbCKOGmkGmfuskvAuC8FAyzOjgILJ+IXDajioilLF1PZtwAwD/fWHIzpjOTbhKAIVsCyPirKhQEtK6UZnKTqay2C0PUmwpyM47ezyB68JNSbF+RssZjXnWveFN90MBnkVKBG0YAw==",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Measuring Causal Effects of Data Statistics on Language Model’s",
+            "url": "https://arxiv.org/pdf/2207.14251",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "[2207.14251v1] Measuring Causal Effects of Data Statistics on Language Model's `Factual' Predictions",
+            "url": "https://arxiv.org/abs/2207.14251v1",
+            "encrypted_content": "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",
+            "page_age": "July 28, 2022"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Measuring Causal Effects of Data Statistics on Language Model's `Factual' Predictions",
+            "url": "https://www.catalyzex.com/paper/arxiv:2207.14251",
+            "encrypted_content": "Eo4KCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDHnoYn/ZkLe0r9vAIBoMGj9RRFlFyJQR3WkBIjBI0FumySMMXtk5f+fhX/xpuDeqkwHsmVZx+RtRJtxLvPyKuKeE8BfL9xTHlSvQ1W8qkQnvBbI/SeXyxv+dQh5rBqoew8wrizB6Z5eoruH0d9OZl3EzvfryNnlz4UX3ZlxM1sZOjfmUZiXd0oClNEYqxZqqWNYIw10yXrHBCKvB9+a865ZazYvKkQNwX6rVsT8hxd+/qJgSDkkzrrNV/bKzRK29BuVx046DqoXgHee/ApI0qPQwfTqsAITiuglM0tAbHClyrHkngntDPTkzW0h63D343U32KlTwbXDcRzhbsfyb1pwqxjacvhSQ6e/aS3Xzva9B7qq0n2uZNXa/bG8zRA7R3qGsc/fEJlBpJ1zPCZhXywb+mX9QGdojXlxGBXct8BNX4NPVy8aiLaCHRUswpPtdUIkKzbd9fo//y+dw8bYB/WZ5GedE2+9wU8KziL/UeP8bJTOnv+NS0ZyGy4820khd5p8LKVj5Qi94MpexkV2kIKSce+naOoPOXmdwJwcAb5dsWHohQnKO4EXDAqVd7MNx+rtUZHrNOBMYjzfhmO2jfb5QbJTtuqVglV729kB4M0jUMckeCgJ/7guFgp6EGyon3rcfSkAUI93MaBo6WfOLL3Akn7zEGzMydkYevBejqkvvOKczIXGnoHGlgqn80G0FmH75ga5UklNvdgyavnUI9eDQ7YmJ8T5TPR3+9SxI82tDhYV8SO/5f4AT6Mrc2sjvDHCIrRBCOASE49TnRG5u8Am/WFLi47hFx0FaGeftvPCLUrhe097syoxgCAXYnsEikMBOAoBYh7DNhQ43eN8ugu23EVCaGSSy5QJkwLRwRAVbLpbPM9C6a7Gc9A2/deQaUn1lYDiQtBe03uZcwLZ2qCDvmpOFSMXrwC4vypPRa2fUrGp5ilD+XvBCG5WE1BIWaITG0MPHiVszL/9jFaIFL87unUFpsiQzx67KdQ8KnqGI1lVXmzrBWUl0UVPXbsLNM8I/ZLXIB24wpSAVO+g1vLRm+HYRk5cYsdPvcZItbsBqzC8eghVWkiT4ISsTpXXeX3DLjPMu68E1OgcsvrUXc64fgDyhXndl7xXx56fwuF2MCWqAcJ02kmxMg4iMODj/3zqyg8L8iFtz1cPL7hfWnQcyP6nPDn5aFUnRywUAK/obWGN+jlbl6R7IcO+CcVehi3/P12OmF+Vw6FlUqnYcrMW/vEkyAYpt6J8rhw9Qw8T9pMkV+MInYDBj229rO1vO5uus2BMeI4rQzjOJNCD2nL+LPE1e9XBhRtTHIvim84Jka2jpx5b82qJz6SJYC1/OEbISl88bf1wU59TsqjOyEWYHlTIy5wpKX0uZ11vK6eX6JeqijA/YuKHG+F8zfoDZ6CWw9/My6p0Yhf3VBIJWyyytDbTTgdBzLeJOino6MvbwePn7ewJjl7eK5gDYyt9/piECeu9EYLXPnUCfuMs6nSrNK09CIgkuW4cs4xxOny2Z/TYNiUjHXtnMdTFWYd3MTaiRpNWhup6gkMvGZZ2+HH1q1bmdpNzj+DydgIQVdJ3rMSKb4xsOB1SD2xsesMpZqz7wiPUW/67E1xYrI4zlB9IlatF5Y8I0ckN8AFyNUzl8/k0bJjoCab2ni16/ypKfRhgD",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "[PDF] Measuring Causal Effects of Data Statistics on Language Model's 'Factual' Predictions | Semantic Scholar",
+            "url": "https://www.semanticscholar.org/paper/Measuring-Causal-Effects-of-Data-Statistics-on-Elazar-Kassner/f92d5dcc04b2f7713befce4e84e3084bfd4abd50",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Table 2 from Measuring Causal Effects of Data Statistics on Language Model's 'Factual' Predictions | Semantic Scholar",
+            "url": "https://www.semanticscholar.org/paper/Measuring-Causal-Effects-of-Data-Statistics-on-Elazar-Kassner/f92d5dcc04b2f7713befce4e84e3084bfd4abd50/figure/3",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Figure 2 from Measuring Causal Effects of Data Statistics on Language Model's 'Factual' Predictions | Semantic Scholar",
+            "url": "https://www.semanticscholar.org/paper/Measuring-Causal-Effects-of-Data-Statistics-on-Elazar-Kassner/f92d5dcc04b2f7713befce4e84e3084bfd4abd50/figure/2",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Table 3 from Measuring Causal Effects of Data Statistics on Language Model's 'Factual' Predictions | Semantic Scholar",
+            "url": "https://www.semanticscholar.org/paper/Measuring-Causal-Effects-of-Data-Statistics-on-Elazar-Kassner/f92d5dcc04b2f7713befce4e84e3084bfd4abd50/figure/4",
+            "encrypted_content": "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",
+            "page_age": null
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here are the results for the paper **\"Measuring Causal Effects of Data Statistics on Language Model's 'Factual' Predictions\"** (arXiv: 2207.14251):\n\n**Authors:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Yanai Elazar, Nora Kassner, Shauli Ravfogel, Amir Feder, Abhilasha Ravichander, Marius Mosbach, Yonatan Belinkov, Hinrich Schütze, and Yoav Goldberg."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Published:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Published on July 28, 2022 on arXiv (arxiv:2207.14251)."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Summary:**\n\nThe paper asks a key question: "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "\"what exactly in the training data causes a model to make a certain prediction?\""
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The authors seek to answer this by providing a language for describing how training data influences predictions, through a causal framework."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Importantly, the framework bypasses the need to retrain expensive models and allows estimating causal effects based on observational data alone."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "Addressing the problem of extracting factual knowledge from pretrained language models (PLMs), they focus on simple data statistics such as co-occurrence counts and show that these statistics do influence the predictions of PLMs, suggesting that such models rely on shallow heuristics."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Key links:**\n- **arXiv page:** https://arxiv.org/abs/2207.14251\n- **PDF:** https://arxiv.org/pdf/2207.14251\n- **Semantic Scholar:** https://www.semanticscholar.org/paper/Measuring-Causal-Effects-of-Data-Statistics-on-Elazar-Kassner/f92d5dcc04b2f7713befce4e84e3084bfd4abd50"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2290,
+      "cache_creation_input_tokens": 11347,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 581,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

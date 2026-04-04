@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-04-03T17:45:08.957Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775253600",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.08",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.72",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775253600",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e69e1e1bd655c3b-AMS",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 17:45:06 GMT",
+    "request-id": "req_011CZhFgwUcoRW7i9WqcoaPp",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=4009",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "3818",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=rPVu6Ro3u8xrGFK..qz05p2gYwSZCc7YahdqwEVzqKA-1775238277.3915956-1.0.1.1-GSrhrYsPEU7M_9p6MQAYhBU9WbGElj0drGEaqnXeciQ; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_016aoxWCgKVE9FZbhj4x63oY",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_018JJ2fNzML6zYRyTMafkwJV",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_v3.md\", \"old_string\": \"Coherent accuracy converges toward 50% from below, consistent with the MDL prediction that equally compressible systems at equal frequency should be indistinguishable. The below-chance coherent accuracy at tiny (~43%) reflects textual simplicity of the false rules (e.g., dropping terms in derivatives); the compressor prefers whichever system is simpler to encode.\", \"new_string\": \"Coherent accuracy remains near chance across all scales, consistent with the MDL prediction that equally compressible systems at equal frequency should be indistinguishable. The below-chance coherent accuracy at tiny (~43%) is consistent with the textual simplicity of the false rules (e.g., dropping terms in derivatives); the compressor may prefer whichever system is simpler to encode.\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 432,
+      "cache_read_input_tokens": 236890,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 432,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 292,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

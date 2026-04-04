@@ -1,0 +1,215 @@
+{
+  "timestamp": "2026-04-03T13:26:11.227Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.64",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.68",
+    "anthropic-ratelimit-unified-fallback": "available",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e6866fc9da2c61b-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 13:26:00 GMT",
+    "request-id": "req_011CZguw4KBwaavWWVAiF5ow",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2160",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2158",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=rzJF.p8OG61wBLi6eDt9v4UwpOn1y48_q6fXY_Jbypc-1775222757.8543677-1.0.1.1-RCQynetnI2Zgy5Ttu.pGYXUQrEftlVpEuLAUBT61GQY; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01A7kXZaauCKUWWEfDfpGT9v",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "server_tool_use",
+        "id": "srvtoolu_01TdESquzBEM5URmjnczyaA8",
+        "name": "web_search",
+        "input": "[object Object]{\"query\": \"Deletang Ruoss Grau-Moya \\\"Language Modeling Is Compression\\\" ICLR 2024\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "web_search_tool_result",
+        "tool_use_id": "srvtoolu_01TdESquzBEM5URmjnczyaA8",
+        "content": [
+          {
+            "type": "web_search_result",
+            "title": "Language Modeling Is Compression",
+            "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/3cbf627fa24fb6cb576e04e689b9428b-Abstract-Conference.html",
+            "encrypted_content": "EqcLCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDDRlWA5fU3ijOSYVeBoMkB1wyTDTBus1dKncIjCc29jsGNfQEDWCqjfMg7F1bC/odMBJPzm4dTcGsgqijHEJ8jH+qlCqGy3tLlzxW3AqqgrVWvP+3PgdBUJXRdTIOw4KVPcDKunugRxQCzCLSoR4iJhUuFozPZNSL0qHH5jAWcB0O4xLtn4vsY7rgRMOy1NSAa4d6xs2HiTTWMn1Nv34OujpNFjy5ZVfOpjry9NXJSLefaKEFXdjAZCr4s2A6azOimsqgH6J2s11zKWKw+kUf+87BxHjji0gXAUECrOezZiRxmKXUpogtVb6o1k+lGfyV8RRNVMLjM7P+E9FiJaSNaOstZvMXj3m4x/EYPq97ONUT2bH+hk+jZaiHsIlhh3dWV2pcY0m1+s5RZ8arhwnhK+8uqd5dLiDvowFXJtBzjWhOelkLt+U0uNcI9FskdNw+tkzCOahOgWk9xaUxdfab47H7LvDLXCoMevpxVTHAnLouMv9XKLB8jkrTGYV3ae6eI+5p+DeEl0BtNSiEhAX8GREngcZqbAx36EBkW2jjLy0HilPoLTbbdnmrnxBWnd9JjPbAuN76S7fX9T3k44TPvHJ1qnjih20sa2TugA1rsnvUDFs5EO8G+DBlzYapQCcei/rwrlBOcZ5+pRpCCq0ixR1huhjJfy5jvS4njjlbwXyUEBYwFkeqAlhuPhTrQgEO0NT/T5yw6HsNzWUjLPfL+3KUmoTdKTqFGOzGG5Fsx1KGuhfmD9l2HDv8fDGGpkdrYWVt4rqqjXhcXySTwNryy7mFx+LByGcSlDTabaQVhQb++8NvFGd81erkRxMCa03GTOIw/+K5yRlVlLS/ND4k7eJVWcgU078rbhGHNG4J+Z0YpXp3K/Aadgj7sJW9ZLF8N3SQBFW6qlMtaQuptZi740gHyyQTnC33T68qiHe91slLta+G0oaiMDMbrw0b6ovlyTlJ2JlJe4LYsQij7fhq4HX5+rZ5AFuAte9jsRe+09DSXnikLt5MmWEx5yYOE/DDqHlafyiMqR9bptQnydEC/vFetYJUbJSjzgGQbGcEN8l9SY4eZnIAfYaLYofIX2frO8GtBxWEguWw0K5t2jHK+Z5L9wBmZIpIdlQdWPx77vm/g7bREDg199DB25sPnTWvAh87mN8RuYZ+JZuMIkgIplDBu5ciJatR3PHdS3OGaUrYHYmMYx5+EKJy7a34qCcdIwTTZ7ZEd3ukfXl8xNeL9b/5IZJsy//5Gqa4bUDU40QRFr/c4PgrwEdU26r36CmUbFwzxv/UKeP28KbSCpVBM+DAmtUCR5fw46nxa9gieUwaUTtI/8aAHiGAb8GBOusxeeIvGYciHeml4JNk7iZIGKV+C8ruN8Ug/NlFefnfJrPwghw1Gst/F68jv47+zz3mzemVDiNc5+8B8N1MDom8SmI43yfSEyaS0SP1mgkj2B4xwPQr4CHqan7+gY92ep4k3IfN4neu+R9y1D8CeBCJ3IZHaGh/UvtbIxP44qBmz3vHtUKKMJsj1cpcmL3BvWqOsGcpR+HnReU3dQyBIr4XP6j8woEK4kBRseLHgzbTHrkeOkajCIOrHFMX2avVEwDR33uZmn5Ou8RZnhHeeYnluuDJ+qPgikBo58fdMu/SPNCRHBedj2kCFes9BZ7aZr5tHGHczx3+VVvKCvd0FPq680FR+Nn8vaDUHcdwdoWo02V1gBt89M0lUMmwsQx6yklFgB+cLu0F+PsTV0aFOdkGmsO0Rv998gAc7Eyg5YZyMtC5AIM8xMnLTUK3UgyISwc1S++4z9NwfEo4EbsbqVuXIEm/lkpoFDbJi0vecFqOPiwBZ5/ktCokLl46eHIanW7nHqs6lKaxYylPBgD",
+            "page_age": "May 31, 2024"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Published as a conference paper at ICLR 2024 LANGUAGE MODELING IS COMPRESSION",
+            "url": "https://proceedings.iclr.cc/paper_files/paper/2024/file/3cbf627fa24fb6cb576e04e689b9428b-Paper-Conference.pdf",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "[2309.10668] Language Modeling Is Compression",
+            "url": "https://arxiv.org/abs/2309.10668",
+            "encrypted_content": "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",
+            "page_age": "March 18, 2024"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Language Modeling Is Compression — Google DeepMind",
+            "url": "https://deepmind.google/research/publications/39768/",
+            "encrypted_content": "Ev0KCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDNsy2qBgkFWsfxG8hxoM6skrRRHQDYX/QMiPIjBbJT7q4XKE0vi6NwGAsVQFk+FKOV19N3FAZ8motcn+svfcSio+xEYzRYgQNDcdStAqgAqwwG0oyMmBcjTXBp2aTQagzLUWe3dMoikMm89kMDiiQzvC7xdmwsxa1mt7/Ov7H7cE8Ldze2Bo5O8ipUsQ6y5awN+nwkKg9rpX6gE+yhkeykK71o6ylt8WDz1cmG1NaviC6UoVofLR4bqudGEY3XpFcfFowCfJnmPzDqd5VW672k+GBmZutjpG8AtXJnu/PPBi4Nux4RTG6gBi3FBUboEqtSMcdZcjHar/jIwn3/am/YH+3wJCrA4BleEOnwILR5oYYAdNlk9piM7E0dENko2JFzwepc33UjWHYjt74jVS+gJo42TnG06ghtk4kvgPScllXZnLvnFR/GdqjR1cGacVyfPTuwnmBiqlC1tbEIiNQOZbDh180r/kbRXNsYOaif3yFnBHT4EXn9dYEvKWS15+XNpjwzLhWN/LMTiHfYrNRUgngaJ+1Kr07z9YaEQkGPnE4ixoJbBjUuQu9XXu0561juMZpJB64Ikipf1+KfQLYoGYsVEnAivnHom7Bfav+TZqab0J4MZUoVW5I6rVst/3cHcfmtAEpKV4bhcyZTT6HhOV6UyMJBxu7FjlxPukTTGS9+JQciEthofsf7B0BwQ811xveRgACQZouaK2d5D1+D8abZXK4hCwmiSRulMcyTo4GBo0dLalAKc2qfbjz5h8Vzk7FnRrjWXAS+/hMY02oBtWoHXgIWAfgcUnlcRx1NL3Cr/co1D7LsAEbkZcuj2fL2s21eFkLUBsSnQByBaq5+qSZHAaBEV6WBa2683ogb/l6scEKalo6/d8oR0hEVUk8pkca9E1D3MYmZW4mw5/9qOBLBIvLK5xdKtDL4jhbxuwo0tT/sueeJS7xvs+8J6Gqf3NelRbpfniLQXotRoLmNCJkHShuzQ83StaHG28gvf9+IVlKZ9OeiSPXvYIArkrgiB9btdnHf/0R4e91s9Fl/CwVYytShxRle4eZoDGgSC42cKnCoWt5NlV3yvUbBq20tIb2T1DO9Y7JuVyDKxyhdVDkpyLK904djDQ02g4FQxDWo7ul6j/UIgmxnngKIiFaUOi8Qt9I8kYTSeRNf28T6yLp+X8miuwOFPafD4tLLWFL77zDtlTKDLkfGfhRS2Jp000+uD4pyNIQBCLQ+xLVy2JdLpY2+mdI5y9CRVb9wgXAiWCH1d9e1FTO8nQiVOB/WFBNlbvrNr99XdUIRCrGgzWKCtaAVy6CHKRKNfu0ZUqPlgdwOoBi6wlIMejMBdT+kzFGQm9fedYpYPxL1rWLCNJwOb1DhCKrndK84fhfbKAWYsDENKhWPiHi0Du9icblqs+cDJGLZF9QFp0+g6Kigqqr+7Fkr0rSvlDb1igFRmAPpzm6/HaV3ywzAyq+urwDtrtnZcEnSm7RlVQ0YtXd79MJvNJv/Vx91Nx9KCFPH70uv550Kx/KG8ZvOhpl8lDxa3SYJywkNunTWKPO8LZuHLGQJTlIZ1QHIUp5gXumRcvqvwMh8aCjtM9layO9JWSRxDokAEfpHrZjxy5sUa0EF7otAjqOXAeLZiYSCtTxFUJNId2qI8zmsSuJ91HMpeKIPV03MEbnwLlNbn36RmAd5KA/eqlJUL61v/ZMPjVADOjiIeKQihIMHp09MHISTjuQjN+RqBw+S0L9pX5ehmTEdbog0tTX+dOOJeSDXuja7Y9aDpxiyFZboynz3kW4ONGbrN4IReeDNKCq35YNSwrUBgD",
+            "page_age": "December 10, 2025"
+          },
+          {
+            "type": "web_search_result",
+            "title": "GitHub - google-deepmind/language_modeling_is_compression · GitHub",
+            "url": "https://github.com/google-deepmind/language_modeling_is_compression",
+            "encrypted_content": "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",
+            "page_age": null
+          },
+          {
+            "type": "web_search_result",
+            "title": "Language Modeling Is Compression | OpenReview",
+            "url": "https://openreview.net/forum?id=jznbgiynus",
+            "encrypted_content": "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",
+            "page_age": "October 13, 2023"
+          },
+          {
+            "type": "web_search_result",
+            "title": "[2309.10668v2] Language Modeling Is Compression",
+            "url": "https://arxiv.org/abs/2309.10668v2",
+            "encrypted_content": "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",
+            "page_age": "March 18, 2024"
+          },
+          {
+            "type": "web_search_result",
+            "title": "Paper page - Language Modeling Is Compression",
+            "url": "https://huggingface.co/papers/2309.10668",
+            "encrypted_content": "EocLCioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDJCwK6dzTJnsLU5WsBoM1y4ZMwgAxAckStM6IjB5qWi+HxquksaNtqt4bj2S9ksggLl0KhoH9u52F27xQqoMP0Q19rnSNlLUtfOvUaIqigrZ9c6p8FW9obnNokVp46tUSBuzIFKyejHLrctVWKHBplsOwKWV8KpOCGFNGJEMrzhksc0oVC3LlLHgmM8jChDFmtvNA32oO1XUMoFruaBEU/Fs19ka4PJpwV25UUD3iPbODmP2psR2vPjS87rVzZGDlLzgvP8T5Het8ztQ3AxZAWeBd8RdevJZT+ib4g4Iwc6E4Sp9uIhgDLZFe0+FmDfNbYuAYUEqnRkVnIl1eDIl1m/5I8JP2V4FqMvMTFhyV+6ykIPsHOkL2Z5DXWfcr1tu2oE2Mie5RUySrEnCOu7fQ7vh9bvaWsvV9//WbWch+pxu/+Nq8rvA8jydg2OYaSfyY7on3+pBCn30FIG36IBkFqFMLjrgtbNEXuOKQLdkyLKal5VJ8LTX/i53NAN2CEYcBwhMFgn2KGHjWsfXJp3fLPFD7++BmYPnK6Y+2N0+w+vrMlLPGflyztXVwBW1zBYtfe9NyuKl6yifJmDUGIegf2pcIF+LR7VGUN2xbmAz8jGfWAPCbISV+R0v5kCOEBgSrU9DhLeRL3Iw4VqIKjdHtxI38MmlJh48q2OZSwaHS1nQwShLrxJUvWATDvUdoyyUBSz/4PHjGUDBhiNIwf2tmCPKzz71SqLLrCbLt7eLV/q1BnyKFgJVgnGFo+Kbg0Kywp9WRVV6Us269FMnVHr/LjbqbJvq02aqBAPv723Lx9aPH4iNEKdO7KIk9soAWwGUCVrzh9MZj65TQ5bIxYpMiTiIu7tg59WT7ZG0ssRqRTQuVD4ZRwP/j29zIC5ro7kUlI1cztQfmNeqXgGk4sIK8ma3P6zQUi/RzTKE6l6b4ufUJ55EK7KV/bIZG59wHqt9xnOWHJi/Yvn4pRL4TNfOA8occV/M+Fb6iXrK2ZdFwuCZZO9p+7lkvQhhFguyaf/vbKpHX4exeTZTF45Lco+x3tClFWZeUMuqzP1dIILIqRUxXzemUa4ndCEzrSnQIDJ1oc46vSHnYZ4nTGNnT3GccWJW1R6jC2iTNY1RszO7gN+iLfrruMCv4qj5o3iF1ZlvGQ/kLB7rUOYvXxkycR7HXeBKAZtlhSN5hNSh5XvUNG6Vl3BtXA77x/d89p2vzNSjHRhVHx1OBBYaXIxTAuPxV3Far33mGVhZa5o5nlTiQsaih75RrsYSNqsm5aJ/honCqnQVeUtbUFSy9Xa3ja4sIPGoN633RDqIkS4qla9Ol3yqCFNd/LTetsNjdVYf6VfWkdjmhT4GJBr0OfH6wmPNANhNxbv8anV6The4tQM2XECeAlErPZiGE4d1GXC1SOBYW0N8disZJaEhBC3HFmS2Y9ybVuzm9aOthlMyecljpEM/Lhz7+xcbSBJF4wkq05znUVkfCA+asfbd59gib2/8yhQpdBav9J7Y2w79KTmNoVdeKvMa4StmnP+f0hJhPI1hGAl8A248emyWwW9fM7ut1byQl/zSskY1l9R9HeiFsY1PlZofQqp18Im+Ktkckc0+Nj4F6swpTyladHusKJibrB1J0+jTMQrHLbbtXFP9pnYMAxGxFKFyJjDTCzOxNNtkfgP5ptdUnovB4z7g9HoMvzdyl/U943Tt58EtXu9/jXZm3HmxSyMlLGvSofN4NgpuZXOXbeppP7glTLMpNVyMAXtKLThFP3uT5X+pl3XiE1tm7l4B5037xvnPnOZQfT7psC90IE9mELBF5f+bimw3S5C1CZhInmBMqaMYAw==",
+            "page_age": "September 20, 2023"
+          },
+          {
+            "type": "web_search_result",
+            "title": "[2309.10668v1] Language Modeling Is Compression",
+            "url": "https://arxiv.org/abs/2309.10668v1",
+            "encrypted_content": "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",
+            "page_age": "September 19, 2023"
+          },
+          {
+            "type": "web_search_result",
+            "title": "[2309.10668] Language Modeling Is Compression",
+            "url": "http://export.arxiv.org/abs/2309.10668",
+            "encrypted_content": "EtwECioIDhgCIiQ2MWI1MTM0NC04NGUxLTRjY2EtOWE5YS05ZmU5ZDBkZjM4ZmMSDPP5l7oQFC5SPjvviRoM5rDY63wcJ4pv974/IjABIoVeFTXDRLXO7bMw/oYAhfcIb724U91sHYUwx5oswtzgWVGibyzbrxtRo9aDScUq3wPf5R2CINuXVlS2ShwaIT3iWAa5rRNa5K6h2LLYkmBdQcyYe1PKE7XvoHE7zbVje+9wFFrQ1HaLJkVc5m/9rKWGYFuL9nXeNGltDE/mjQ9A3K6ZI1AFFGE0KXiHhjY5u/IlOac3jyUWC6n9gGTbHvggD6x84PHCgTi4zbjmbpvNrnXk5lFneNpraeptF04QRB6GunMUGKGxfKEl4uuD8DPdLSAeccpoXEVuPqqnOUVNcJE/0y7a/6XAO3oJnvAgBwR7SFOluaE7V6Xjpti9X1mAhKQRRXuGkAAXlE1Pr3MTw/6v6oDhKWDkXfjsNQdjZkGR9nmBz8A2jYkNPqQzFCVqB9Q5DNO6650JxaQzdtYnhnHhi4fGBrX9+GOqCWuEFgzpa/5KY0ShUXvUOG2cVcj7Fa4R4V6wegl6PNlvzOShdt8m4evmncm4pY7kYm/GAOtt6CCYWCNFREQm2ia6SE0xfTtxhIK9hLLCG4Bp6HwvrlUtXdidtM/yYlEnmlOALXb9RaWIJ/9i+JBh0I/+XGSCsJRJAcNJoEFNoA0NPNLKdbTw9eWdXbzwKhVq+E8dvvB5UEsG/Er/8BsuzEb9v4xF3r3/Bhgn+zCCSi6Rwt6NQfgc1+ZuFwkT81yx9lv3iBgD",
+            "page_age": "March 18, 2024"
+          }
+        ],
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "text",
+        "text": "Here's what I found about the paper **\"Language Modeling Is Compression\"**:\n\n## Paper Overview\n\n"
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The paper is authored by Grégoire Delétang, Anian Ruoss, Paul-Ambroise Duquenne, Elliot Catt, Tim Genewein, Christopher Mattern, Jordi Grau-Moya, Li Kevin Wenliang, Matthew Aitchison, Laurent Orseau, Marcus Hutter, and Joel Veness."
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "It was published at ICLR 2024."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Key Idea:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "It has long been established that predictive models can be transformed into lossless compressors and vice versa. In recent years, the machine learning community has focused on training increasingly large and powerful self-supervised (language) models. Since these large language models exhibit impressive predictive capabilities, they are well-positioned to be strong compressors. The authors advocate for viewing the prediction problem through the lens of compression and evaluate the compression capabilities of large (foundation) models."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Main Findings:**\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "The authors show that large language models are powerful general-purpose predictors and that the compression viewpoint provides novel insights into scaling laws, tokenization, and in-context learning."
+      },
+      {
+        "type": "text",
+        "text": "\n- "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "For example, Chinchilla 70B, while trained primarily on text, compresses ImageNet patches to 43.4% and LibriSpeech samples to 16.4% of their raw size, beating domain-specific compressors like PNG (58.5%) or FLAC (30.3%), respectively."
+      },
+      {
+        "type": "text",
+        "text": "\n\n**Resources:**\n- **ArXiv:** https://arxiv.org/abs/2309.10668 ("
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "first submitted September 19, 2023, with a revision on March 18, 2024"
+      },
+      {
+        "type": "text",
+        "text": ")\n- **ICLR Proceedings:** https://proceedings.iclr.cc/paper_files/paper/2024/hash/3cbf627fa24fb6cb576e04e689b9428b-Abstract-Conference.html\n- **OpenReview:** https://openreview.net/forum?id=jznbgiynus\n- **Code:** "
+      },
+      {
+        "citations": [],
+        "type": "text",
+        "text": "An implementation is available on GitHub at google-deepmind/language_modeling_is_compression."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 2278,
+      "cache_creation_input_tokens": 11143,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 710,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "server_tool_use": {
+        "web_search_requests": 1,
+        "web_fetch_requests": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-04-03T17:46:05.977Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775253600",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.09",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.72",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775253600",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e69e35f49965c3b-AMS",
+    "connection": "keep-alive",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 17:46:03 GMT",
+    "request-id": "req_011CZhFm8vomBS78QnukqPUt",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=3956",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "x-envoy-upstream-service-time": "3712",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=0MCCGAjtWI1Xfj.PiqKXrJo1C7F_PqW6DXPx0DPGBmI-1775238338.4462376-1.0.1.1-7kBGnuKWrevDHNX3YWRxp0_omjbFLy7DfmdlcVTCDPs; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01BiitHmQRcrQdkk5GtHDTTU",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01J3BPHbUDZiHRfi1Rt8VreQ",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_v3.md\", \"old_string\": \"The random/coherent contrast reproduces: random substitution yields 70--71% accuracy (all p < 10^-100), coherent substitution yields 46--49% (at or below chance).\", \"new_string\": \"The random/coherent contrast reproduces: random substitution yields 70--71% accuracy (all p < 10^-6), coherent substitution yields 46--49% (at or below chance).\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 210,
+      "cache_read_input_tokens": 237654,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 210,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 219,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

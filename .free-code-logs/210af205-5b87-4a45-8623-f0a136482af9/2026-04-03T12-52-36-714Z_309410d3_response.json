@@ -1,0 +1,99 @@
+{
+  "timestamp": "2026-04-03T12:52:45.767Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.39",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.65",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e683621cee3098e-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 12:52:41 GMT",
+    "request-id": "req_011CZgsPcLtjNVTA3WHYRbcK",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=3394",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "3048",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=cy4A_5NB.SgflbSbUnkaZgjIRTDaXCE58zTHIlDb7QI-1775220756.7636914-1.0.1.1-MNU5AfiNjcqqsmo0JK6JJnKVkqIOWYiUWulJzYlDriw; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01R3rt9fCq9PEisg2giM29eh",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Now let me check the actual CLI of `training/train.py` and `training/eval_paired.py` to fix the wiki script correctly:"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_014iP3k5PsNzFDUiANJmBphu",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"add_argument|argparse\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/training/train.py\", \"output_mode\": \"content\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01UNTTV8RHVRnQuP2B5AwaPU",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"add_argument|argparse\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/training/eval_paired.py\", \"output_mode\": \"content\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01GrCcLkbd79z6sdGkBWJfYh",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"add_argument\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/data/generate_math.py\", \"output_mode\": \"content\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01LNBE3vycTFurJ4ZqyYmGaM",
+        "name": "Grep",
+        "input": "[object Object]{\"pattern\": \"add_argument\", \"path\": \"/Users/krestnikov/giga/compression-drives-truth/data/generate_paired_test.py\", \"output_mode\": \"content\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 161,
+      "cache_creation_input_tokens": 7577,
+      "cache_read_input_tokens": 164546,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 7577,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 436,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

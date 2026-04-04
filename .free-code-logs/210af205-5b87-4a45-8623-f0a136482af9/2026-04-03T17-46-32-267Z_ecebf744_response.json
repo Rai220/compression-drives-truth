@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-04-03T17:46:59.834Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775253600",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.09",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.72",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775253600",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e69e4b039a05c3b-AMS",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 17:46:58 GMT",
+    "request-id": "req_011CZhFq8BGbEb2KZPgnVZK8",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=4302",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "4110",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=7k1bIUb9Atj7FiUH2spcKNXxYxl6D7wdWty11J5p8WA-1775238392.357128-1.0.1.1-E9pTZ8zYTL3PXIiLbD2wju1nBuh6pthQr8mJzxwLwvY; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_018qoz39VFNru1QC7YVJZTst",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_017kSbjAcfQbr8ZbHX3gUw8j",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_v3.md\", \"old_string\": \"we train a Qwen3-0.6B model (420M parameters, 28 layers\", \"new_string\": \"we train a Qwen3-0.6B model (420M non-embedding parameters, 28 layers\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 330,
+      "cache_read_input_tokens": 238123,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 330,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 176,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

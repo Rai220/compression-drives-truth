@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-04-03T08:57:54.017Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775214000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.31",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.59",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775214000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e66de318fe63469-TLL",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 08:57:51 GMT",
+    "request-id": "req_011CZgZV5nw7f7vqkgZUwwF3",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=2007",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "2000",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=STGgLPL0wGpB7oEyrGHEgICUudMhoKzAeiKi6KGaGxQ-1775206669.0409324-1.0.1.1-lX8nhORU8SAL47q72wp3lIhvlvQ0pZJ.GjHXpiSfaYo; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01QTdxhSJo8BPvgRR6KcShHc",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Now update README to sync metadata:"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01M2Bd8spWfQPSdZ6YmGTdxc",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/README.md\", \"old_string\": \"When a model trains on contradictory data — the same question with both correct and incorrect answers — which answer does it prefer? We trained 210+ transformers (3.5M–420M params) to find out.\", \"new_string\": \"When a model trains on contradictory data — the same question with both correct and incorrect answers — which answer does it prefer? We trained 210+ transformers (3.5M–1B params) to find out.\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 288,
+      "cache_read_input_tokens": 56875,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 288,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 226,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-04-03T12:55:53.692Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775232000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.42",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.66",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775232000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e683ac83c6a098e-WAW",
+    "connection": "keep-alive",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 12:55:51 GMT",
+    "request-id": "req_011CZgsdezXfd15u4dK7wU3S",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=3169",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "x-envoy-upstream-service-time": "3026",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=y_pc7h0ZL6z0oR8GIg43vZ1HR3NY7CK2OTr598nKrCE-1775220947.2397926-1.0.1.1-zuvTS1Qjs.un.LwDhpDYfKeU5Nc8x7t.tCZUuboZxng; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01QgoXQ5ZZzLSUAxW2e3jwaU",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Good — Popper is no longer cited. Remove from bib:"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_0176fxtxTH964HDpzD89MfW9",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_neurips/references.bib\", \"old_string\": \"@book{popper1959logic,\\n  title={The Logic of Scientific Discovery},\\n  author={Popper, Karl},\\n  year={1959},\\n  publisher={Hutchinson}\\n}\\n\\n\", \"new_string\": \"\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 147,
+      "cache_read_input_tokens": 185559,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 147,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 194,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

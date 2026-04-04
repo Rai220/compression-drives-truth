@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-04-03T09:00:00.756Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775214000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.33",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.59",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775214000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e66e147e86a5d5a-WAW",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 08:59:57 GMT",
+    "request-id": "req_011CZgZeQdkyVtMRaEuj4wJH",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=1821",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "1723",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=fy9ua_0H00R6kB2ebQxlKrwdhZLfCULd9XUyPMTgPUo-1775206795.5028784-1.0.1.1-onuSvNpSQTzCQ7t8lQbvQ1jrwsCzlmmHTsWzdL2Hs_8; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_012rFBPN9k7KQn1sRNzKs36G",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Now add the two new references to .bib:"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01VS9Zypn6Yha8aDSB43uDfr",
+        "name": "Edit",
+        "input": "[object Object]{\"replace_all\": false, \"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_neurips/references.bib\", \"old_string\": \"@inproceedings{li2024formality,\", \"new_string\": \"@inproceedings{longpre2021entity,\\n  title={Entity-Based Knowledge Conflicts in Question Answering},\\n  author={Longpre, Shayne and Perisetla, Kartik and Chen, Anthony and Ramesh, Nikhil and DuBois, Chris and Singh, Sameer},\\n  booktitle={EMNLP},\\n  year={2021}\\n}\\n\\n@inproceedings{li2024formality,\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 361,
+      "cache_read_input_tokens": 81049,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 361,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 267,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

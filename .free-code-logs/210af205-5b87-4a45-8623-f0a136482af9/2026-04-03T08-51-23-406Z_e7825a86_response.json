@@ -1,0 +1,86 @@
+{
+  "timestamp": "2026-04-03T08:51:27.729Z",
+  "status": 200,
+  "headers": {
+    "anthropic-organization-id": "61b51344-84e1-4cca-9a9a-9fe9d0df38fc",
+    "anthropic-ratelimit-unified-5h-reset": "1775214000",
+    "anthropic-ratelimit-unified-5h-status": "allowed",
+    "anthropic-ratelimit-unified-5h-utilization": "0.29",
+    "anthropic-ratelimit-unified-7d-reset": "1775322000",
+    "anthropic-ratelimit-unified-7d-status": "allowed",
+    "anthropic-ratelimit-unified-7d-utilization": "0.59",
+    "anthropic-ratelimit-unified-fallback-percentage": "0.5",
+    "anthropic-ratelimit-unified-overage-disabled-reason": "org_level_disabled",
+    "anthropic-ratelimit-unified-overage-status": "rejected",
+    "anthropic-ratelimit-unified-representative-claim": "five_hour",
+    "anthropic-ratelimit-unified-reset": "1775214000",
+    "anthropic-ratelimit-unified-status": "allowed",
+    "cache-control": "no-cache",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9e66d4c7ab5b3469-TLL",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+    "content-type": "text/event-stream; charset=utf-8",
+    "date": "Fri, 03 Apr 2026 08:51:25 GMT",
+    "request-id": "req_011CZgYzfURbdSvszeaxvKni",
+    "server": "cloudflare",
+    "server-timing": "x-originResponse;dur=1739",
+    "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+    "transfer-encoding": "chunked",
+    "vary": "Accept-Encoding",
+    "x-envoy-upstream-service-time": "1737",
+    "x-robots-tag": "none",
+    "set-cookie": "_cfuvid=JCVJNrQcDMtYSbDIHDfFg3ayClJ89S0k9yWWZxoG3ho-1775206283.4652405-1.0.1.1-RJCeIlLsVH_DroNPMu7ZAI7lRwkERt2kX1Mdsldp0D4; HttpOnly; SameSite=None; Secure; Path=/; Domain=api.anthropic.com"
+  },
+  "body": {
+    "model": "claude-opus-4-6",
+    "id": "msg_01SDt9c35P4CMwDe8YHd3ttt",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Let me read the main paper files. It seems there are multiple versions - paper_v3.md (latest), paper_v2.md, and LaTeX versions for NeurIPS and TMLR.",
+        "signature": "EtACClkIDBgCKkDQkHVbh38teSoyhpUHTHITfW7IqE+7FfWpHgXoGLH0OqGOnAqeO9Dm5oVNMjXy2kTBJWbravmcYCR5le6EY1ZwMg9jbGF1ZGUtb3B1cy00LTY4ABIMjHlzV44p1eypfsXxGgywy3EnXpa1gfWlwlUiMAlPupfSS+kitaPB+e6NkGlJXenvwsP41IqazEczDYQub86GaEICe+Luaj9qEn+iUSqkAcwoOmVfRFeBt9twneFV9DErhNdx5uVnsOMY6HyMKrO6c1Dc2N+q6lxBRABDfSQ5ocsysiYkcPHR+/zAVZxtmKrAIwzgLMI6YAr+mrBpL5e/asZavMML+rid4ocZsJj63xPC/A6z25wzSJrFQZpYGs32g5/LMqvt2q/PBVTlndVEk0kJXj64DWvEK1YsBktGq8auLq9eiUTxMCtS2GNSeLdRTOmFGAE="
+      },
+      {
+        "type": "text",
+        "text": "Let me read the latest versions of the paper."
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_013BgymzGSafYR86JinKaXpS",
+        "name": "Read",
+        "input": "[object Object]{\"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/paper_v3.md\"}",
+        "caller": {
+          "type": "direct"
+        }
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01R1JjUzMYsKHBP9CMA8K7s4",
+        "name": "Read",
+        "input": "[object Object]{\"file_path\": \"/Users/krestnikov/giga/compression-drives-truth/Статья К.К..md\"}",
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 1,
+      "cache_creation_input_tokens": 1982,
+      "cache_read_input_tokens": 21100,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 1982,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 205,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  }
+}

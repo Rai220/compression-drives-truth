@@ -1,0 +1,329 @@
+{
+  "timestamp": "2026-04-03T09:01:34.029Z",
+  "source": "agent:builtin:general-purpose",
+  "url": "https://api.anthropic.com/v1/messages?beta=true",
+  "method": "POST",
+  "body": {
+    "model": "claude-opus-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "<available-deferred-tools>\nEnterWorktree\nExitWorktree\nNotebookEdit\nTaskCreate\nTaskGet\nTaskList\nTaskUpdate\nWebFetch\nWebSearch\n</available-deferred-tools>"
+      },
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "<system-reminder>\nAs you answer the user's questions, you can use the following context:\n# claudeMd\nCodebase and user instructions are shown below. Be sure to adhere to these instructions. IMPORTANT: These instructions OVERRIDE any default behavior and you MUST follow them exactly as written.\n\nContents of /Users/krestnikov/.claude/projects/-Users-krestnikov-giga-compression-drives-truth/memory/MEMORY.md (user's auto-memory, persists across conversations):\n\n# Compression Truth Bias — Project Memory\n\n## Publication\n- [project_neurips_submission.md](project_neurips_submission.md) — NeurIPS 2026, Sydney, Dec 6-12. Abstract May 4, paper May 6, notification Sep 24\n- [reference_fenogenova_review.md](reference_fenogenova_review.md) — Alena Fenogenova's review of v2, basis for v3 revisions\n\n## Project Status\n- Experiment 1 (math, tiny models): COMPLETE. 35 models trained.\n- Experiment 2 (observations): COMPLETE. 20 models. Weak effect confirmed.\n- Experiment 3 (conditions C/D/E): COMPLETE. 12 models trained.\n- Experiment 4 (scaling): COMPLETE. Small (11M) 4 seeds, medium (26M) 4 seeds, large (86M) 4 random + 1 coherent.\n- Experiment F (multi-rule): COMPLETE. 16 models (N=2,3,5,10 × 4 seeds).\n- Experiment G (synthetic world, natural language): COMPLETE. 8 models (random + coherent × 4 seeds).\n- Experiment: World multi-alt (N=2,4,8,16): COMPLETE. 16 models. Gradual rise 40%→60%, no phase transition.\n- Experiment: World contradictory: COMPLETE. 4 models. acc≈47.5%, no truth bias.\n- Paper draft: `paper_draft_ru.md` (Russian), `paper_draft_en.md` (English)\n- Experiment I (chained tasks): COMPLETE. 4 tiny + 4 small + 2 large = 10 models.\n  - Tiny: 70.9%±1.2%, Small: 64.2%±1.5%, Large: 60.6%±1.2%\n  - INVERSE SCALING: accuracy DROPS with model size (opposite of random errors)\n  - KEY RESULT: compressor power is double-edged sword\n- **STATUS: PUBLISHED on arXiv — https://arxiv.org/abs/2603.11749. 160+ models. All experiments complete.**\n- Experiment K (Wikipedia entity substitution): COMPLETE. 32 models (4 sizes × 2 modes × 4 seeds). MLX on M4 Pro.\n  - Random: tiny 69.6%±0.1%, small 70.7%±0.4%, medium 71.5%±0.8%, large 71.4%±0.7%\n  - Coherent: tiny 48.7%±0.5%, small 46.6%±0.4%, medium 46.4%±0.8%, large 45.9%±1.5%\n  - KEY: truth bias confirmed on REAL Wikipedia text with NER entity substitution\n  - Weaker than math (71% vs 89%) but highly significant across all 16 random seeds\n  - Coherent errors: model slightly PREFERS them (<50%), consistent with math results\n  - Per-type: GPE/LOC/NORP best (77-82%), ORG/PERSON moderate (65-70%), CARDINAL weakest (61%)\n- Experiment J (denoising): COMPLETE. 48 models (14 tiny + 14 small + 14 medium + 10 large). PyTorch on Modal.com T4 GPU.\n  - J1 (1:1 random): tiny 65.3% → small 74.6% → medium 81.1% → large 85.2%\n  - J2 (1:1 coherent): tiny 43.5% → small 44.5% → medium 45.8% → large 51.0% (at chance)\n  - J3 (1:2 random): tiny 59.0% → small 68.6% → medium 73.6% → large 75.2%\n  - J4 (1:4 random): tiny 56.6% → small 64.9% → medium 66.6% → large 65.8% (plateau)\n  - J5 (no correct): tiny 53.8% → small 59.9% → medium 58.1% → large 56.1%\n  - KEY: signal extraction scales with model size; coherent errors remain at chance; J4 plateaus\n  - Standard vs denoising J1: 83→65% (tiny), 88→75% (small), 81% (medium), 89→85% (large) — gap closes with scale\n\n## Key Results\n- Random errors 50/50: ΔLoss = +0.0115 (4/4 seeds)\n- Coherent errors 50/50: ΔLoss = −0.0004 (0/4 seeds) — NO truth bias\n- Contradictory errors 50/50: ΔLoss = +0.0005 (4/4 seeds) — weak bias\n- Breakpoint at ~15% correct data (10/90 inverts)\n- **Phase 2 (observations):** ΔLoss = +0.0002 to +0.0008 (0-50% obs). WARNING confirmed: discrepancies are regular/compressible. 100% obs breaks training (loss ~0.32).\n- **Paired eval (random 50/50):** ΔLoss = +0.048, accuracy = 83%, p<1e-6. Effect 4× stronger than corpus-level.\n- **Paired eval (random proportions):** 40/60→79%, 30/70→75%, 20/80→69%, all p<1e-6\n- **Paired eval (coherent 50/50):** ΔLoss = −0.002, accuracy = 47%, p≈1.0. No truth bias.\n- **Paired eval (contradictory 50/50):** ΔLoss ≈ 0, accuracy = 49%. At noise level.\n- **Paired eval (C/D/E):** accuracy ≈ 49% — NO truth bias. Corpus-level ΔLoss was artifact of text statistics.\n- KEY INSIGHT: Corpus-level eval for C/D/E was confounded. Only random errors produce real truth bias.\n- Per-type accuracy (random paired): algebra 99.9% > arithmetic 94% > derivative 72% > equation 65%\n- **Paired eval 10/90:** ΔLoss = +0.017, accuracy = 67%, p<1e-88. Truth bias PERSISTS even at 10/90 in paired eval (corpus-level inverts).\n- **Scaling (tiny→small→medium):** Paired accuracy 83.6%→88.4%→88.5%, ΔLoss +0.048→+0.063→+0.067. Truth bias INCREASES with model size but accuracy plateaus at medium.\n- **Scaling coherent (small):** accuracy=49.6%, no truth bias — same as tiny. Coherent errors remain indistinguishable at any size.\n- **Scaling large (86M):** 4 seeds: 88.3%, 89.4%, 88.7%, 90.0%. Mean=89.1%±0.6%, ΔLoss=+0.070. Coherent large: acc=51.8%, no bias.\n- **Scaling trend:** tiny 83.1% → small 88.4% → medium 88.4% → large 89.1%. Truth bias increases with size.\n- **Multi-rule (Exp F):** N=2→87.4%, N=3→89.4%, N=5→89.9%, N=10→91.5%, all p<1e-6.\n  - Accuracy HIGHER than random (83.6%) for all N≥2 — multi-rule errors less compressible than purely random.\n  - Monotonically increases with N. Phase transition at N=1→2 (49%→87%).\n- **Synthetic world (Exp G, natural language):**\n  - Random errors 50/50: acc=57.7%±1.7%, ΔLoss=+0.034 (all 4 seeds p<0.001). Effect WEAKER than math (83→58%) but significant.\n  - Coherent errors 50/50: acc=46.6%±1.7% (below chance). No truth bias — same pattern as math.\n  - Per-type: minerals best (65-71%), plants (56-68%), animals near chance, potions near chance.\n  - Key: truth bias TRANSFERS to natural language but is weaker. Coherent errors still undetectable.\n- **Coherent proportions paired eval:**\n  - 50/50→47.2%, 40/60→27.8%, 30/70→14.7%, 20/80→9.6%\n  - Model actively prefers coherent errors when they're majority (91% at 20/80!)\n  - vs random: 50/50→83%, 40/60→79%, 30/70→75%, 20/80→69%\n  - Key: truth has NO privilege when errors are equally compressible — pure frequency wins\n- **Cross-domain falsification (Exp H):** COMPLETE. 16 models.\n  - Derivative accuracy: 0%→35.2%, 10%→39.4%, 25%→56.0%, 50%→45.4%\n  - Other types unchanged (~48-51%). Cross-domain tasks ADDRESS only derivative coherence.\n  - Effect non-monotonic: peak at 25%, drops at 50% (corpus dilution)\n  - Key: first evidence that cross-domain data can break coherent errors SELECTIVELY\n  - Files: `data/generate_math_crossdomain.py`, `run_crossdomain.sh`\n\n## Experiment Design (5 conditions for false theory)\n- A: No observations (baseline, done) → ΔLoss = +0.0005 (4/4 seeds, weak positive)\n- B: Bare discrepancies (done, Exp 2) → ΔLoss weak (+0.0005-0.0008) ✓\n  - Discrepancies ARE regular/compressible as warned\n- C: Ad hoc escape hatches → ΔLoss = +0.0025 (4/4) ✓\n- D: Systematic correction → ΔLoss = +0.0026 (4/4) — SURPRISE: D ≈ C, not D ≈ 0\n- E: Vague predictions → ΔLoss = +0.0015 (4/4) ✓\n- Actual order: D ≈ C > E > B > A (expected C > B > E > D ≈ A)\n- Key insight: correction step itself is the information cost, not just ad-hoc-ness\n- Corpora for C/D/E already generated at `data/corpus/train_cond{C,D,E}_50_50.txt`\n- Test sets: `test_correct_dual.txt`, `test_incorrect_dual.txt`\n\n## Exp F Results (multi-rule / conspiratorial errors) — COMPLETE\n- N rules per task type, randomly assigned per problem\n- Results: N=2→87.4%, N=3→89.4%, N=5→89.9%, N=10→91.5%\n- Surprise: all N≥2 ABOVE random (83.6%), not between coherent and random\n- Phase transition N=1→2 is the key finding: one rule = compressible, two = not\n- Files: `data/generate_math_multirule.py`, `run_multirule.sh`\n\n## Theoretical Framework\nCompression pressure = computational analogue of Popper's falsifiability.\n- Type 1: Falsifiable true → predictions match → max compression\n- Type 2: Falsifiable false → discrepancies memorized → poor compression\n- Type 3a: Unfalsifiable (vague) → can't predict → intermediate\n- Type 3b: Unfalsifiable (ad hoc escape hatches) → system grows → anti-compression\n\n## NeurIPS Revision (2026-03-14)\n- **П.1 (compression measure): DONE** — gzip/bz2 on completion-only segments, 9 conditions\n  - Spearman ρ=0.68, p=0.042 between compression delta and paired accuracy\n  - Files: `analysis/compression_measure.py`, `analysis/plot_compression_vs_accuracy.py`\n  - Results: `results/compression_ratios.json`, `results/figure_compression_vs_accuracy.png`\n  - Added to paper: Section 3.5 (Table C1, Figure C2)\n- **П.2 (learning curves): DONE** — paired accuracy at intermediate checkpoints\n  - All sizes reach behavioral plateau by step 3000-4000\n  - Large model NOT undertrained: 88.8% at step 3000, stable through 5000\n  - Files: `analysis/plot_learning_curves.py`, `results/learning_curves.json`, `results/figure_learning_curves.png`\n  - Added to paper: Section 7.2 (Table LC1, Figure LC)\n- **П.5 (convergence-matched): NOT NEEDED** — learning curves show plateau\n- **П.6 (generation sanity check): DONE** — greedy decode + SymPy, 500 tasks × 8 models\n  - Random-trained: 30.5%±1.7%, Coherent-trained: 20.8%±3.6%, paired t-test p=0.013\n  - Arithmetic = 0% for both (too hard for tiny model generation)\n  - Files: `training/eval_generation.py`, `run_generation_check.sh`, `run_generation_check_full.sh`\n  - Added to paper: Section 8.4 (Table G1)\n- **П.7 (NLL histogram): DONE** — per-pair NLL(inc)-NLL(cor) distribution\n  - Random: right-skewed, mean=0.048 >> median=0.025, heavy tail\n  - Coherent: symmetric around 0\n  - Explains metric divergence (mean DLoss vs accuracy)\n  - Files: `analysis/plot_nll_histogram.py`, `results/nll_pair_deltas.json`, `results/figure_nll_histogram.png`\n  - Added to paper: Section 8.1 (Figure H1)\n- **П.3 (BPE tokenization): DONE** — sentencepiece BPE vocab=1000, 8 models on MLX (no GPU needed!)\n  - Random BPE: 85.6%±0.2% (vs char 83.1%±2.0%) — effect SURVIVES and STRENGTHENS\n  - Coherent BPE: 45.9%±1.4% (vs char 47.2%±2.7%) — still no truth bias\n  - Files: `training/tokenizer.py` (BPETokenizer class), `run_bpe_experiment.sh`, `results/bpe_*`\n  - Added to paper: Section 8.4 (Table BPE1)\n- **П.4 (text restructuring): DONE** — abstract 180 words, Discussion 3 themes, Conclusion 1 paragraph\n- **ALL THREE VULNERABILITIES CLOSED. All mandatory experiments complete.**\n- **Remaining:** П.8-9 (polish), П.11 (LaTeX)\n\n## Current Phase: REWRITE around denoising framing (2026-03-15)\n- **Decision:** rebuild paper with denoising as primary setup, arXiv will be updated\n- NeurIPS NOT yet submitted, no constraints on restructuring\n- Denoising framing: \"model sees contradictory answers to same problem — what does it prefer?\"\n- Need to rerun: scaling (medium/large), multi-rule, BPE, synthetic world — all in denoising setup\n- Original experiments → Supporting Evidence / Appendix\n- Previously: PUBLISHED on arXiv (https://arxiv.org/abs/2603.11749)\n- P0: Results integrity — **DONE**\n  - `scripts/collect_results.py` → `results_master.csv` + `scripts/tables.md`\n  - ΔLoss convention fixed (Tabl 3 sign error, Cond A was −0.0003→+0.0005)\n  - Binomial test (16/16 seeds, p=3.05e-5) + bootstrap CI in all tables\n  - `docs/refs_audit.md` — fixed DeMoss (fabricated), Pan (wrong authors), Ravfogel (wrong co-authors)\n  - Contradictory eval run (4 seeds had no eval files)\n- P1: Reframe thesis — **DONE**\n  - New title: \"Когда сжатие предпочитает истину?\"\n  - Abstract/intro rewritten with 3 caveats (text not world, frequency, description length)\n  - Popper → Discussion only (section 7.2, interpretive analogy with limits)\n  - Neutral condition names in experiments (no гомеопатия/астрология)\n  - Contribution statement in Related Work\n  - Missing refs added (Shannon, Solomonoff, Hutter)\n- P2: Paired evaluation — **DONE** (28 models evaluated, 2026-03-06)\n  - All paired evals complete: random (4 proportions), coherent, contradictory, C/D/E\n  - C/D/E corpus-level ΔLoss was artifact — paired eval shows no truth bias\n  - [ ] Length control, full-dataset eval, factor analysis\n- P3: New experiments — scaling DONE, multi-rule DONE, synthetic world DONE\n  - Figures 6+7 created: `analysis/plot_scaling_multirule.py` → `results/figure6_scaling.png`, `results/figure7_multirule.png`\n  - Paper updated with large scaling + multi-rule sections\n- P4: Novelty positioning, English translation, submission\n- Key decision: title changed to \"Compression Favors Consistency, Not Truth\" / \"Сжатие предпочитает согласованность, а не истину\"\n- Named principle: **Compression–Consistency Principle** — gradient descent favors the most compressible hypothesis, not truth. Truth bias is a side effect of error incoherence.\n- Conceptual figure added to Section 3.5: `results/figure_conceptual.png`, script `analysis/plot_conceptual.py`\n- Intro rewritten: problem → existing explanations → our hypothesis → what we show\n\n## User Preferences\n- User wants historical examples alongside modern pseudoscience (phlogiston, miasma, geocentrism)\n- Paper in Russian\n- Don't add intermediate proportions (45/55, 65/35, etc.) — too much\n\n## Infrastructure\n- PyTorch port: `training_torch/` (model.py, train.py, eval_paired.py)\n- MLX original: `training/` (unchanged)\n- Modal deployment: `modal_run.py`\n- Results stored in Modal volume \"compression-truth-results\" and locally in `results/experiment_j_denoising.json`\n\n## File Locations\n- Paper: `paper_draft_ru.md`\n- Experiment log: `steps.md`\n- Plan: `plan.md`, TODO: `TODO.md`\n- Data generators: `data/generate_math.py`, `data/generate_math_observed.py`, `data/generate_math_conditions.py`\n- Training: `training/train.py`, `training/model.py`, `training/eval_perplexity.py`, `training/eval_paired.py`\n- Paired test gen: `data/generate_paired_test.py`\n- Paired test data: `data/corpus/test_paired_random.jsonl`, `test_paired_coherent.jsonl`\n- Analysis: `analysis/plot_results.py`, `analysis/plot_phase2.py`\n- Run scripts: `run_phase2.sh`, `run_phase3.sh`, `run_scaling.sh`, `run_synthetic_world.sh`\n- Synthetic world: `data/generate_synthetic_world.py`, `data/generate_paired_test_world.py`\n- Scaling/multirule plots: `analysis/plot_scaling_multirule.py`\n- Compression measure: `analysis/compression_measure.py`, `analysis/plot_compression_vs_accuracy.py`\n- Learning curves: `analysis/plot_learning_curves.py`\n- NLL histogram: `analysis/plot_nll_histogram.py`\n- Generation eval: `training/eval_generation.py`\n- Wikipedia experiment: `data/generate_wiki_corpus.py`, `run_wiki_experiment.sh`\n- Wikipedia data: `data/corpus/train_wiki_{random,coherent}_50_50.txt`, `test_paired_wiki_{random,coherent}.jsonl`\n- Wikipedia results: `results/experiment_wiki.json`, `results/wiki_{random,coherent}_50_50_{tiny,small,medium,large}_seed{42-45}/`\n- Wiki venv (Python 3.13 + spaCy + MLX): `.venv-wiki/`\n# currentDate\nToday's date is 2026-04-03.\n\n      IMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task.\n</system-reminder>\n\n"
+          },
+          {
+            "type": "text",
+            "text": "Download the NeurIPS 2026 LaTeX style files into /Users/krestnikov/giga/compression-drives-truth/paper_neurips/\n\nThe template is available at https://media.neurips.cc/Conferences/NeurIPS2026/Styles.zip\n\nSteps:\n1. Download the zip from that URL using curl\n2. Unzip it into the paper_neurips directory\n3. Make sure neurips_2026.sty and neurips_2026.bst end up in the paper_neurips directory (they may be in a subdirectory of the zip)\n4. List the extracted files so I can verify",
+            "cache_control": {
+              "type": "ephemeral"
+            }
+          }
+        ]
+      }
+    ],
+    "system": [
+      {
+        "type": "text",
+        "text": "x-anthropic-billing-header: cc_version=2.1.87.c02; cc_entrypoint=cli; cch=9876a;"
+      },
+      {
+        "type": "text",
+        "text": "You are Claude Code, Anthropic's official CLI for Claude.",
+        "cache_control": {
+          "type": "ephemeral"
+        }
+      },
+      {
+        "type": "text",
+        "text": "You are an agent for Claude Code, Anthropic's official CLI for Claude. Given the user's message, you should use the tools available to complete the task. Complete the task fully—don't gold-plate, but don't leave it half-done. When you complete the task, respond with a concise report covering what was done and any key findings — the caller will relay this to the user, so it only needs the essentials.\n\nYour strengths:\n- Searching for code, configurations, and patterns across large codebases\n- Analyzing multiple files to understand system architecture\n- Investigating complex questions that require exploring many files\n- Performing multi-step research tasks\n\nGuidelines:\n- For file searches: search broadly when you don't know where something lives. Use Read when you know the specific file path.\n- For analysis: Start broad and narrow down. Use multiple search strategies if the first doesn't yield results.\n- Be thorough: Check multiple locations, consider different naming conventions, look for related files.\n- NEVER create files unless they're absolutely necessary for achieving your goal. ALWAYS prefer editing an existing file to creating a new one.\n- NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested.\n\nNotes:\n- Agent threads always have their cwd reset between bash calls, as a result please only use absolute file paths.\n- In your final response, share file paths (always absolute, never relative) that are relevant to the task. Include code snippets only when the exact text is load-bearing (e.g., a bug you found, a function signature the caller asked for) — do not recap code you merely read.\n- For clear communication with the user the assistant MUST avoid using emojis.\n- Do not use a colon before tool calls. Text like \"Let me read the file:\" followed by a read tool call should just be \"Let me read the file.\" with a period.\n\nHere is useful information about the environment you are running in:\n<env>\nWorking directory: /Users/krestnikov/giga/compression-drives-truth/paper_neurips\nIs directory a git repo: Yes\nPlatform: darwin\nShell: zsh\nOS Version: Darwin 25.3.0\n</env>\nYou are powered by the model named Opus 4.6 (with 1M context). The exact model ID is claude-opus-4-6[1m].\n\nAssistant knowledge cutoff is May 2025.\n\ngitStatus: This is the git status at the start of the conversation. Note that this status is a snapshot in time, and will not update during the conversation.\n\nCurrent branch: master\n\nMain branch (you will usually use this for PRs): master\n\nGit user: Krestnikov (rai220)\n\nStatus:\n?? results/matched_random_tiny_seed42/config.json\n?? results/matched_random_tiny_seed42/tokenizer.json\n?? results/matched_random_tiny_seed42/training_log.json\n?? results/matched_random_tiny_seed43/config.json\n?? results/matched_random_tiny_seed43/tokenizer.json\n?? results/matched_random_tiny_seed43/training_log.json\n?? results/matched_random_tiny_seed44/config.json\n?? results/matched_random_tiny_seed44/tokenizer.json\n?? results/matched_random_tiny_seed44/training_log.json\n?? results/matched_random_tiny_seed45/config.json\n?? results/matched_random_tiny_seed45/tokenizer.json\n?? results/matched_random_tiny_seed45/training_log.json\n?? \"\\320\\241\\321\\202\\320\\260\\321\\202\\321\\214\\321\\217 \\320\\232.\\320\\232..md\"\n\nRecent commits:\n55c9892 Fix multi-rule figure: remove misleading random point from curve\n2af1edb Final version: 1B on real text results across all documents\n91315b5 Add Qwen3-1B coherent result + Section 4.7 (1B on real text)\n0e7285a Add Qwen3-1B FineWeb results + Kaggle reproduction notebooks\n3cefaf7 Fix OOM: streaming tokenization for large corpora (>500MB)",
+        "cache_control": {
+          "type": "ephemeral"
+        }
+      }
+    ],
+    "tools": [
+      {
+        "name": "Bash",
+        "description": "Executes a given bash command and returns its output.\n\nThe working directory persists between commands, but shell state does not. The shell environment is initialized from the user's profile (bash or zsh).\n\nIMPORTANT: Avoid using this tool to run `find`, `grep`, `cat`, `head`, `tail`, `sed`, `awk`, or `echo` commands, unless explicitly instructed or after you have verified that a dedicated tool cannot accomplish your task. Instead, use the appropriate dedicated tool as this will provide a much better experience for the user:\n\n - File search: Use Glob (NOT find or ls)\n - Content search: Use Grep (NOT grep or rg)\n - Read files: Use Read (NOT cat/head/tail)\n - Edit files: Use Edit (NOT sed/awk)\n - Write files: Use Write (NOT echo >/cat <<EOF)\n - Communication: Output text directly (NOT echo/printf)\nWhile the Bash tool can do similar things, it’s better to use the built-in tools as they provide a better user experience and make it easier to review tool calls and give permission.\n\n# Instructions\n - If your command will create new directories or files, first use this tool to run `ls` to verify the parent directory exists and is the correct location.\n - Always quote file paths that contain spaces with double quotes in your command (e.g., cd \"path with spaces/file.txt\")\n - Try to maintain your current working directory throughout the session by using absolute paths and avoiding usage of `cd`. You may use `cd` if the User explicitly requests it.\n - You may specify an optional timeout in milliseconds (up to 600000ms / 10 minutes). By default, your command will timeout after 120000ms (2 minutes).\n - You can use the `run_in_background` parameter to run the command in the background. Only use this if you don't need the result immediately and are OK being notified when the command completes later. You do not need to check the output right away - you'll be notified when it finishes. You do not need to use '&' at the end of the command when using this parameter.\n - When issuing multiple commands:\n  - If the commands are independent and can run in parallel, make multiple Bash tool calls in a single message. Example: if you need to run \"git status\" and \"git diff\", send a single message with two Bash tool calls in parallel.\n  - If the commands depend on each other and must run sequentially, use a single Bash call with '&&' to chain them together.\n  - Use ';' only when you need to run commands sequentially but don't care if earlier commands fail.\n  - DO NOT use newlines to separate commands (newlines are ok in quoted strings).\n - For git commands:\n  - Prefer to create a new commit rather than amending an existing commit.\n  - Before running destructive operations (e.g., git reset --hard, git push --force, git checkout --), consider whether there is a safer alternative that achieves the same goal. Only use destructive operations when they are truly the best approach.\n  - Never skip hooks (--no-verify) or bypass signing (--no-gpg-sign, -c commit.gpgsign=false) unless the user has explicitly asked for it. If a hook fails, investigate and fix the underlying issue.\n - Avoid unnecessary `sleep` commands:\n  - Do not sleep between commands that can run immediately — just run them.\n  - If your command is long running and you would like to be notified when it finishes — use `run_in_background`. No sleep needed.\n  - Do not retry failing commands in a sleep loop — diagnose the root cause.\n  - If waiting for a background task you started with `run_in_background`, you will be notified when it completes — do not poll.\n  - If you must poll an external process, use a check command (e.g. `gh run view`) rather than sleeping first.\n  - If you must sleep, keep the duration short (1-5 seconds) to avoid blocking the user.\n\n\n# Committing changes with git\n\nOnly create commits when requested by the user. If unclear, ask first. When the user asks you to create a new git commit, follow these steps carefully:\n\nYou can call multiple tools in a single response. When multiple independent pieces of information are requested and all commands are likely to succeed, run multiple tool calls in parallel for optimal performance. The numbered steps below indicate which commands should be batched in parallel.\n\nGit Safety Protocol:\n- NEVER update the git config\n- NEVER run destructive git commands (push --force, reset --hard, checkout ., restore ., clean -f, branch -D) unless the user explicitly requests these actions. Taking unauthorized destructive actions is unhelpful and can result in lost work, so it's best to ONLY run these commands when given direct instructions \n- NEVER skip hooks (--no-verify, --no-gpg-sign, etc) unless the user explicitly requests it\n- NEVER run force push to main/master, warn the user if they request it\n- CRITICAL: Always create NEW commits rather than amending, unless the user explicitly requests a git amend. When a pre-commit hook fails, the commit did NOT happen — so --amend would modify the PREVIOUS commit, which may result in destroying work or losing previous changes. Instead, after hook failure, fix the issue, re-stage, and create a NEW commit\n- When staging files, prefer adding specific files by name rather than using \"git add -A\" or \"git add .\", which can accidentally include sensitive files (.env, credentials) or large binaries\n- NEVER commit changes unless the user explicitly asks you to. It is VERY IMPORTANT to only commit when explicitly asked, otherwise the user will feel that you are being too proactive\n\n1. Run the following bash commands in parallel, each using the Bash tool:\n  - Run a git status command to see all untracked files. IMPORTANT: Never use the -uall flag as it can cause memory issues on large repos.\n  - Run a git diff command to see both staged and unstaged changes that will be committed.\n  - Run a git log command to see recent commit messages, so that you can follow this repository's commit message style.\n2. Analyze all staged changes (both previously staged and newly added) and draft a commit message:\n  - Summarize the nature of the changes (eg. new feature, enhancement to an existing feature, bug fix, refactoring, test, docs, etc.). Ensure the message accurately reflects the changes and their purpose (i.e. \"add\" means a wholly new feature, \"update\" means an enhancement to an existing feature, \"fix\" means a bug fix, etc.).\n  - Do not commit files that likely contain secrets (.env, credentials.json, etc). Warn the user if they specifically request to commit those files\n  - Draft a concise (1-2 sentences) commit message that focuses on the \"why\" rather than the \"what\"\n  - Ensure it accurately reflects the changes and their purpose\n3. Run the following commands in parallel:\n   - Add relevant untracked files to the staging area.\n   - Create the commit with a message ending with:\n   Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>\n   - Run git status after the commit completes to verify success.\n   Note: git status depends on the commit completing, so run it sequentially after the commit.\n4. If the commit fails due to pre-commit hook: fix the issue and create a NEW commit\n\nImportant notes:\n- NEVER run additional commands to read or explore code, besides git bash commands\n- NEVER use the TodoWrite or Agent tools\n- DO NOT push to the remote repository unless the user explicitly asks you to do so\n- IMPORTANT: Never use git commands with the -i flag (like git rebase -i or git add -i) since they require interactive input which is not supported.\n- IMPORTANT: Do not use --no-edit with git rebase commands, as the --no-edit flag is not a valid option for git rebase.\n- If there are no changes to commit (i.e., no untracked files and no modifications), do not create an empty commit\n- In order to ensure good formatting, ALWAYS pass the commit message via a HEREDOC, a la this example:\n<example>\ngit commit -m \"$(cat <<'EOF'\n   Commit message here.\n\n   Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>\n   EOF\n   )\"\n</example>\n\n# Creating pull requests\nUse the gh command via the Bash tool for ALL GitHub-related tasks including working with issues, pull requests, checks, and releases. If given a Github URL use the gh command to get the information needed.\n\nIMPORTANT: When the user asks you to create a pull request, follow these steps carefully:\n\n1. Run the following bash commands in parallel using the Bash tool, in order to understand the current state of the branch since it diverged from the main branch:\n   - Run a git status command to see all untracked files (never use -uall flag)\n   - Run a git diff command to see both staged and unstaged changes that will be committed\n   - Check if the current branch tracks a remote branch and is up to date with the remote, so you know if you need to push to the remote\n   - Run a git log command and `git diff [base-branch]...HEAD` to understand the full commit history for the current branch (from the time it diverged from the base branch)\n2. Analyze all changes that will be included in the pull request, making sure to look at all relevant commits (NOT just the latest commit, but ALL commits that will be included in the pull request!!!), and draft a pull request title and summary:\n   - Keep the PR title short (under 70 characters)\n   - Use the description/body for details, not the title\n3. Run the following commands in parallel:\n   - Create new branch if needed\n   - Push to remote with -u flag if needed\n   - Create PR using gh pr create with the format below. Use a HEREDOC to pass the body to ensure correct formatting.\n<example>\ngh pr create --title \"the pr title\" --body \"$(cat <<'EOF'\n## Summary\n<1-3 bullet points>\n\n## Test plan\n[Bulleted markdown checklist of TODOs for testing the pull request...]\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\nEOF\n)\"\n</example>\n\nImportant:\n- DO NOT use the TodoWrite or Agent tools\n- Return the PR URL when you're done, so the user can see it\n\n# Other common operations\n- View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "command": {
+              "type": "string",
+              "description": "The command to execute"
+            },
+            "timeout": {
+              "description": "Optional timeout in milliseconds (max 600000)",
+              "type": "number"
+            },
+            "description": {
+              "description": "Clear, concise description of what this command does in active voice. Never use words like \"complex\" or \"risk\" in the description - just describe what it does.\n\nFor simple commands (git, npm, standard CLI tools), keep it brief (5-10 words):\n- ls → \"List files in current directory\"\n- git status → \"Show working tree status\"\n- npm install → \"Install package dependencies\"\n\nFor commands that are harder to parse at a glance (piped commands, obscure flags, etc.), add enough context to clarify what it does:\n- find . -name \"*.tmp\" -exec rm {} \\; → \"Find and delete all .tmp files recursively\"\n- git reset --hard origin/main → \"Discard all local changes and match remote main\"\n- curl -s url | jq '.data[]' → \"Fetch JSON from URL and extract data array elements\"",
+              "type": "string"
+            },
+            "run_in_background": {
+              "description": "Set to true to run this command in the background. Use Read to read the output later.",
+              "type": "boolean"
+            },
+            "dangerouslyDisableSandbox": {
+              "description": "Set this to true to dangerously override sandbox mode and run commands without sandboxing.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "command"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "Edit",
+        "description": "Performs exact string replacements in files.\n\nUsage:\n- You must use your `Read` tool at least once in the conversation before editing. This tool will error if you attempt an edit without reading the file. \n- When editing text from Read tool output, ensure you preserve the exact indentation (tabs/spaces) as it appears AFTER the line number prefix. The line number prefix format is: line number + tab. Everything after that is the actual file content to match. Never include any part of the line number prefix in the old_string or new_string.\n- ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.\n- Only use emojis if the user explicitly requests it. Avoid adding emojis to files unless asked.\n- The edit will FAIL if `old_string` is not unique in the file. Either provide a larger string with more surrounding context to make it unique or use `replace_all` to change every instance of `old_string`.\n- Use `replace_all` for replacing and renaming strings across the file. This parameter is useful if you want to rename a variable for instance.",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "file_path": {
+              "type": "string",
+              "description": "The absolute path to the file to modify"
+            },
+            "old_string": {
+              "type": "string",
+              "description": "The text to replace"
+            },
+            "new_string": {
+              "type": "string",
+              "description": "The text to replace it with (must be different from old_string)"
+            },
+            "replace_all": {
+              "description": "Replace all occurrences of old_string (default false)",
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "file_path",
+            "old_string",
+            "new_string"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "Glob",
+        "description": "- Fast file pattern matching tool that works with any codebase size\n- Supports glob patterns like \"**/*.js\" or \"src/**/*.ts\"\n- Returns matching file paths sorted by modification time\n- Use this tool when you need to find files by name patterns\n- When you are doing an open ended search that may require multiple rounds of globbing and grepping, use the Agent tool instead",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "description": "The glob pattern to match files against"
+            },
+            "path": {
+              "description": "The directory to search in. If not specified, the current working directory will be used. IMPORTANT: Omit this field to use the default directory. DO NOT enter \"undefined\" or \"null\" - simply omit it for the default behavior. Must be a valid directory path if provided.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "pattern"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "Grep",
+        "description": "A powerful search tool built on ripgrep\n\n  Usage:\n  - ALWAYS use Grep for search tasks. NEVER invoke `grep` or `rg` as a Bash command. The Grep tool has been optimized for correct permissions and access.\n  - Supports full regex syntax (e.g., \"log.*Error\", \"function\\s+\\w+\")\n  - Filter files with glob parameter (e.g., \"*.js\", \"**/*.tsx\") or type parameter (e.g., \"js\", \"py\", \"rust\")\n  - Output modes: \"content\" shows matching lines, \"files_with_matches\" shows only file paths (default), \"count\" shows match counts\n  - Use Agent tool for open-ended searches requiring multiple rounds\n  - Pattern syntax: Uses ripgrep (not grep) - literal braces need escaping (use `interface\\{\\}` to find `interface{}` in Go code)\n  - Multiline matching: By default patterns match within single lines only. For cross-line patterns like `struct \\{[\\s\\S]*?field`, use `multiline: true`\n",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "description": "The regular expression pattern to search for in file contents"
+            },
+            "path": {
+              "description": "File or directory to search in (rg PATH). Defaults to current working directory.",
+              "type": "string"
+            },
+            "glob": {
+              "description": "Glob pattern to filter files (e.g. \"*.js\", \"*.{ts,tsx}\") - maps to rg --glob",
+              "type": "string"
+            },
+            "output_mode": {
+              "description": "Output mode: \"content\" shows matching lines (supports -A/-B/-C context, -n line numbers, head_limit), \"files_with_matches\" shows file paths (supports head_limit), \"count\" shows match counts (supports head_limit). Defaults to \"files_with_matches\".",
+              "type": "string",
+              "enum": [
+                "content",
+                "files_with_matches",
+                "count"
+              ]
+            },
+            "-B": {
+              "description": "Number of lines to show before each match (rg -B). Requires output_mode: \"content\", ignored otherwise.",
+              "type": "number"
+            },
+            "-A": {
+              "description": "Number of lines to show after each match (rg -A). Requires output_mode: \"content\", ignored otherwise.",
+              "type": "number"
+            },
+            "-C": {
+              "description": "Alias for context.",
+              "type": "number"
+            },
+            "context": {
+              "description": "Number of lines to show before and after each match (rg -C). Requires output_mode: \"content\", ignored otherwise.",
+              "type": "number"
+            },
+            "-n": {
+              "description": "Show line numbers in output (rg -n). Requires output_mode: \"content\", ignored otherwise. Defaults to true.",
+              "type": "boolean"
+            },
+            "-i": {
+              "description": "Case insensitive search (rg -i)",
+              "type": "boolean"
+            },
+            "type": {
+              "description": "File type to search (rg --type). Common types: js, py, rust, go, java, etc. More efficient than include for standard file types.",
+              "type": "string"
+            },
+            "head_limit": {
+              "description": "Limit output to first N lines/entries, equivalent to \"| head -N\". Works across all output modes: content (limits output lines), files_with_matches (limits file paths), count (limits count entries). Defaults to 250 when unspecified. Pass 0 for unlimited (use sparingly — large result sets waste context).",
+              "type": "number"
+            },
+            "offset": {
+              "description": "Skip first N lines/entries before applying head_limit, equivalent to \"| tail -n +N | head -N\". Works across all output modes. Defaults to 0.",
+              "type": "number"
+            },
+            "multiline": {
+              "description": "Enable multiline mode where . matches newlines and patterns can span lines (rg -U --multiline-dotall). Default: false.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "pattern"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "Read",
+        "description": "Reads a file from the local filesystem. You can access any file directly by using this tool.\nAssume this tool is able to read all files on the machine. If the User provides a path to a file assume that path is valid. It is okay to read a file that does not exist; an error will be returned.\n\nUsage:\n- The file_path parameter must be an absolute path, not a relative path\n- By default, it reads up to 2000 lines starting from the beginning of the file\n- You can optionally specify a line offset and limit (especially handy for long files), but it's recommended to read the whole file by not providing these parameters\n- Results are returned using cat -n format, with line numbers starting at 1\n- This tool allows Claude Code to read images (eg PNG, JPG, etc). When reading an image file the contents are presented visually as Claude Code is a multimodal LLM.\n- This tool can read PDF files (.pdf). For large PDFs (more than 10 pages), you MUST provide the pages parameter to read specific page ranges (e.g., pages: \"1-5\"). Reading a large PDF without the pages parameter will fail. Maximum 20 pages per request.\n- This tool can read Jupyter notebooks (.ipynb files) and returns all cells with their outputs, combining code, text, and visualizations.\n- This tool can only read files, not directories. To read a directory, use an ls command via the Bash tool.\n- You will regularly be asked to read screenshots. If the user provides a path to a screenshot, ALWAYS use this tool to view the file at the path. This tool will work with all temporary file paths.\n- If you read a file that exists but has empty contents you will receive a system reminder warning in place of file contents.",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "file_path": {
+              "type": "string",
+              "description": "The absolute path to the file to read"
+            },
+            "offset": {
+              "description": "The line number to start reading from. Only provide if the file is too large to read at once",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "limit": {
+              "description": "The number of lines to read. Only provide if the file is too large to read at once.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "pages": {
+              "description": "Page range for PDF files (e.g., \"1-5\", \"3\", \"10-20\"). Only applicable to PDF files. Maximum 20 pages per request.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "file_path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "Skill",
+        "description": "Execute a skill within the main conversation\n\nWhen users ask you to perform tasks, check if any of the available skills match. Skills provide specialized capabilities and domain knowledge.\n\nWhen users reference a \"slash command\" or \"/<something>\" (e.g., \"/commit\", \"/review-pr\"), they are referring to a skill. Use this tool to invoke it.\n\nHow to invoke:\n- Use this tool with the skill name and optional arguments\n- Examples:\n  - `skill: \"pdf\"` - invoke the pdf skill\n  - `skill: \"commit\", args: \"-m 'Fix bug'\"` - invoke with arguments\n  - `skill: \"review-pr\", args: \"123\"` - invoke with arguments\n  - `skill: \"ms-office-suite:pdf\"` - invoke using fully qualified name\n\nImportant:\n- Available skills are listed in system-reminder messages in the conversation\n- When a skill matches the user's request, this is a BLOCKING REQUIREMENT: invoke the relevant Skill tool BEFORE generating any other response about the task\n- NEVER mention a skill without actually calling this tool\n- Do not invoke a skill that is already running\n- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)\n- If you see a <command-name> tag in the current conversation turn, the skill has ALREADY been loaded - follow the instructions directly instead of calling this tool again\n",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "skill": {
+              "type": "string",
+              "description": "The skill name. E.g., \"commit\", \"review-pr\", or \"pdf\""
+            },
+            "args": {
+              "description": "Optional arguments for the skill",
+              "type": "string"
+            }
+          },
+          "required": [
+            "skill"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "ToolSearch",
+        "description": "Fetches full schema definitions for deferred tools so they can be called.\n\nDeferred tools appear by name in <available-deferred-tools> messages. Until fetched, only the name is known — there is no parameter schema, so the tool cannot be invoked. This tool takes a query, matches it against the deferred tool list, and returns the matched tools' complete JSONSchema definitions inside a <functions> block. Once a tool's schema appears in that result, it is callable exactly like any tool defined at the top of the prompt.\n\nResult format: each matched tool appears as one <function>{\"description\": \"...\", \"name\": \"...\", \"parameters\": {...}}</function> line inside the <functions> block — the same encoding as the tool list at the top of this prompt.\n\nQuery forms:\n- \"select:Read,Edit,Grep\" — fetch these exact tools by name\n- \"notebook jupyter\" — keyword search, up to max_results best matches\n- \"+slack send\" — require \"slack\" in the name, rank by remaining terms",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Query to find deferred tools. Use \"select:<tool_name>\" for direct selection, or keywords to search."
+            },
+            "max_results": {
+              "default": 5,
+              "description": "Maximum number of results to return (default: 5)",
+              "type": "number"
+            }
+          },
+          "required": [
+            "query",
+            "max_results"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "Write",
+        "description": "Writes a file to the local filesystem.\n\nUsage:\n- This tool will overwrite the existing file if there is one at the provided path.\n- If this is an existing file, you MUST use the Read tool first to read the file's contents. This tool will fail if you did not read the file first.\n- Prefer the Edit tool for modifying existing files — it only sends the diff. Only use this tool to create new files or for complete rewrites.\n- NEVER create documentation files (*.md) or README files unless explicitly requested by the User.\n- Only use emojis if the user explicitly requests it. Avoid writing emojis to files unless asked.",
+        "input_schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "file_path": {
+              "type": "string",
+              "description": "The absolute path to the file to write (must be absolute, not relative)"
+            },
+            "content": {
+              "type": "string",
+              "description": "The content to write to the file"
+            }
+          },
+          "required": [
+            "file_path",
+            "content"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ],
+    "metadata": {
+      "user_id": "{\"device_id\":\"7740ce72fa9abda994ab564ddf04796a523294d03ee624c1bb094ce513ef983e\",\"account_uuid\":\"b36675d3-53d0-4df9-8760-a7969187f1f8\",\"session_id\":\"210af205-5b87-4a45-8623-f0a136482af9\"}"
+    },
+    "max_tokens": 64000,
+    "temperature": 1,
+    "output_config": {
+      "effort": "medium"
+    },
+    "stream": true
+  }
+}
