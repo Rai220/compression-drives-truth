@@ -265,7 +265,7 @@ Kandpal, N., Deng, H., Roberts, A., Wallace, E., & Raffel, C. (2023). Large Lang
 
 Li, K., Hopkins, A. K., Bau, D., et al. (2023a). Emergent World Representations: Exploring a Sequence Model Trained on a Synthetic Task. *ICLR 2023*.
 
-Li, K., Patel, O., Viegas, F., Pfister, H., & Wattenberg, M. (2023b). Inference-Time Intervention: Eliciting Truthful Answers from a Language Model. *NeurIPS 2023*.
+Li, K., Patel, O., Viégas, F., Pfister, H., & Wattenberg, M. (2023b). Inference-Time Intervention: Eliciting Truthful Answers from a Language Model. *NeurIPS 2023*.
 
 Liu, Z., Zhong, Z., & Tegmark, M. (2023). Grokking as Compression. *arXiv:2310.05918*.
 
