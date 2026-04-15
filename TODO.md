@@ -39,7 +39,23 @@
 ### ~~P1.1 LoRA / continued pretraining~~ — ОТМЕНЕНО
 "Toy regime" закрывается Qwen3-0.6B + scaling experiment P1.0.
 
-### P1.2 Matched-control ablation [ВАЖНО] — DONE
+### P1.2 Logsumexp ablation для multi-rule [ВАЖНО]
+Рецензия 1: multi-rule result может объясняться probability mass splitting (correct=0.5 vs specific_wrong=0.5/N).
+- **Что делать:** для каждой test pair с N>1 rules, сравнить NLL(correct) vs logsumexp(NLL(wrong_rule_1), ..., NLL(wrong_rule_N))
+- **Если correct выигрывает vs суммарная false-mass** → claim о compressibility непробиваем
+- **Если нет** → переформулировать как "selector entropy + probability mass splitting"
+- **Compute:** только eval на уже обученных моделях, no retraining. ~2-3 часа.
+- **Нужно:** сгенерировать test pairs со всеми N вариантами wrong completions для каждого problem
+- **Модели:** results/multirule_N{2,3,5,10}_seed{42-45}/ (16 моделей)
+
+### P1.3 N-gram baseline [ПОЛЕЗНО]
+Рецензия 2: "нет сравнения с простыми baselines — что покажет n-gram модель?"
+- **Что делать:** обучить 3-gram / 5-gram модель на тех же корпусах, прогнать paired eval
+- **Ожидание:** accuracy ≈ 50% (n-gram не имеет capacity для rule extraction)
+- **Зачем:** показать, что effect requires learned representations, а не trivial corpus statistics
+- **Compute:** минуты, no GPU needed
+
+### P1.4 Matched-control ablation [ВАЖНО] — DONE
 Random и coherent corruptions различаются не только по compressibility:
 - Число изменённых шагов деривации
 - Длина output

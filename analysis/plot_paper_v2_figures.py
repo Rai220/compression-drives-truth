@@ -196,8 +196,8 @@ ax.errorbar(size_params, j2_delta_means, yerr=j2_delta_stds,
 ax.axhline(y=0, color='#ef4444', linestyle='--', alpha=0.8, linewidth=2)
 
 ax.set_xlabel('Model size (millions of parameters)', fontsize=12)
-ax.set_ylabel('Avg DLoss (paired)', fontsize=12)
-ax.set_title('Paired DLoss by Model Size', fontsize=13, fontweight='bold')
+ax.set_ylabel('Avg ΔNLL (incorrect − correct)', fontsize=12)
+ax.set_title('Paired ΔNLL by Model Size', fontsize=13, fontweight='bold')
 ax.set_xscale('log')
 ax.set_xticks(size_params)
 ax.set_xticklabels(['3.5M', '12M', '26M', '86M'])

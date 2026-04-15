@@ -45,13 +45,13 @@ We propose that the answer lies in the structure of errors. Minimizing cross-ent
 
 We test this hypothesis in a controlled experimental setting. We train transformers (3.5M--1B parameters) from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, systematically varying the structure of errors. This design isolates error structure as the independent variable while holding frequency, format, and domain constant.
 
-Our contribution is a single experimentally supported hypothesis: \textbf{in controlled contradictory corpora, the compression objective favors consistency, not truth.} We show that (a)~random errors produce a correctness preference scaling from 65\% to 85\%; (b)~a single coherent alternative rule eliminates this preference; (c)~two competing rules restore it, pinpointing the compressibility boundary; (d)~the same contrast reproduces on Wikipedia paragraphs with entity substitution; and (e)~the effect persists at 1B parameters on a mixed natural-text corpus (Section~\ref{sec:qwen1b}). Whether this extends to large-scale pretraining remains open (Section~\ref{sec:discussion}).
+Our contribution is a single experimentally supported hypothesis: \textbf{in controlled contradictory corpora, the compression objective favors consistency, not truth.} While the directional prediction (compressible $>$ incompressible) follows from MDL, several quantitative findings do not: the sharpness of the $N{=}1 \to 2$ transition (47\% $\to$ 78\%), below-chance accuracy for coherent errors (${\sim}45\%$, not 50\%), and inverse scaling of cross-domain verification (accuracy \emph{drops} with model size). We show that (a)~random errors produce a correctness preference scaling from 65\% to 85\%; (b)~a single coherent alternative rule eliminates this preference; (c)~two competing rules restore it, pinpointing the compressibility boundary; (d)~the same contrast reproduces on Wikipedia paragraphs with entity substitution; and (e)~the effect persists at 1B parameters on a mixed natural-text corpus (Section~\ref{sec:qwen1b}). Whether this extends to large-scale pretraining remains open (Section~\ref{sec:discussion}).
 
 %======================================================================
 \section{Related Work}
 %======================================================================
 
-\textbf{Prediction as compression.}\quad The link between prediction and compression traces to \citet{shannon1948mathematical} and was formalized by \citet{solomonoff1964formal} and Rissanen's MDL principle \citep{rissanen1978modeling,grunwald2007minimum}. \citet{deletang2024language} showed that LLMs are universal compressors. \citet{huang2024compression} discovered a linear correlation ($r \approx -0.93$) between compression quality and benchmark performance. \citet{wan2025large} proved that LLM training approximates Solomonoff induction. \citet{pan2025understanding} linked compression to knowledge acquisition and scaling; \citet{chlon2025predictable} linked compression failures to hallucination. Contemporaneous work by \citet{marty2026compression} formalizes simplicity bias through MDL, and \citet{aksenov2026compression} connects compression to mathematical modeling. We build on the MDL framework by experimentally varying the description length of false answer systems.
+\textbf{Prediction as compression.}\quad The link between prediction and compression traces to \citet{shannon1948mathematical} and was formalized by \citet{solomonoff1964formal} and Rissanen's MDL principle \citep{rissanen1978modeling,grunwald2007minimum}. \citet{deletang2024language} showed that language models function as strong general-purpose compressors. \citet{huang2024compression} discovered a linear correlation ($r \approx -0.93$) between compression quality and benchmark performance. \citet{wan2025large} formalize an argument that LLM training approximates Solomonoff induction. \citet{pan2025understanding} linked compression to knowledge acquisition and scaling; \citet{chlon2025predictable} linked compression failures to hallucination. Contemporaneous arXiv preprints by \citet{marty2026compression} formalize simplicity bias through MDL, and \citet{aksenov2026compression} connect compression to mathematical modeling. We build on the MDL framework by experimentally varying the description length of false answer systems.
 
 \textbf{Internal representations and world models.}\quad Compression can give rise to structured internal representations: \citet{li2023a_emergent} found board representations in an Othello model, \citet{gurnee2024language} discovered linear space-time representations in Llama-2, and several studies found truth-correlated representations \citep{marks2024geometry,burns2023discovering,li2023b_inference,azaria2023internal,ravfogel2025emergence}. Our work operates at the behavioral level: we identify data-level conditions under which compression produces a preference for correct completions, leaving activation-level analysis for future work.
 
@@ -69,7 +69,7 @@ Our contribution is a single experimentally supported hypothesis: \textbf{in con
 \subsection{Hypothesis and MDL Framing}
 \label{sec:mdl}
 
-Consider a corpus where each problem appears with a correct answer (theory $T_1$) and an alternative ($T_2$). An MDL learner \citep{rissanen1978modeling,grunwald2007minimum} minimizes $L(M) + L(D|M)$. When $K(T_2) \gg K(T_1)$ (random errors), the false system's description length grows with corpus size, favoring $T_1$. When $K(T_2) \approx K(T_1)$ (coherent errors), both are compact and the learner has no basis to prefer one over the other. With $N$ competing false rules, a random ``selector'' (which rule applies to which problem) adds $\log N$ bits per problem, progressively degrading the false cluster's compressibility.
+Consider a corpus where each problem appears with a correct answer (theory $T_1$) and an alternative ($T_2$). An MDL learner \citep{rissanen1978modeling,grunwald2007minimum} minimizes $L(M) + L(D|M)$. The model must encode \emph{both} answer clusters as a latent-source mixture ($T_1$ and $T_2$ with per-problem source assignments). When $K(T_2) \gg K(T_1)$ (random errors), encoding the false cluster requires memorizing individual answers, so the model allocates more capacity to the compressible correct cluster---yielding lower NLL on correct completions. When $K(T_2) \approx K(T_1)$ (coherent errors), both clusters are equally compressible and the model has no basis to prefer one over the other. With $N$ competing false rules, a random ``selector'' (which rule applies to which problem) adds $\log N$ bits per problem, progressively degrading the false cluster's compressibility (formal details in Appendix~\ref{app:mdl}).
 
 Throughout, ``truth'' means correctness of mathematical derivations and factual accuracy of Wikipedia paragraphs---models compress text, not reality. The compressibility gap is domain-dependent and smaller in natural language than in formal math (Section~\ref{sec:wikipedia}). Additional limitations are discussed in the Limitations section.
 
@@ -155,7 +155,7 @@ large  & 86M  & $\mathbf{85.2\% \pm 2.3\%}$ & $51.0\% \pm 0.8\%$ & 2 & 2 \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.7\textwidth]{figure_denoising_j1_j2.png}
-\caption{The central contrast. Random errors: accuracy scales from 65\% to 85\%. Coherent errors: accuracy stays near chance across all sizes.}
+\caption{The central contrast. Random errors: accuracy scales from 65\% to 85\%. Coherent errors: accuracy stays near chance across all sizes. Accuracy = fraction of pairs where the model assigns lower NLL to the correct completion.}
 \label{fig:central}
 \end{figure}
 
@@ -174,7 +174,7 @@ The denoising experiments establish two poles: one coherent rule yields chance, 
 \toprule
 $N$ Rules & Accuracy & $p$ \\
 \midrule
-1 (coherent) & $46.6\% \pm 2.4\%$ & ${\sim}1.0$ \\
+1 (coherent) & $46.6\% \pm 2.4\%$ & n.s. \\
 2 & $77.6\% \pm 1.3\%$ & $< 10^{-6}$ \\
 3 & $82.8\% \pm 0.1\%$ & $< 10^{-6}$ \\
 5 & $84.8\% \pm 0.5\%$ & $< 10^{-6}$ \\
@@ -188,7 +188,7 @@ $N$ Rules & Accuracy & $p$ \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.7\textwidth]{figure7_multirule.png}
-\caption{Multi-rule crossover. Accuracy jumps from 47\% ($N{=}1$) to 78\% ($N{=}2$), then grows gradually through $N{=}10$.}
+\caption{Multi-rule crossover. Accuracy jumps from 47\% ($N{=}1$) to 78\% ($N{=}2$), then grows gradually through $N{=}10$. X-axis is categorical (not log-scale); point spacing does not represent proportional distances.}
 \label{fig:multirule}
 \end{figure}
 
@@ -213,7 +213,7 @@ large (86M)   & $\mathbf{71.4\% \pm 0.7\%}$ & $45.9\% \pm 1.5\%$ \\
 \label{tab:wikipedia}
 \end{table}
 
-The random/coherent contrast reproduces (Table~\ref{tab:wikipedia}): random substitution yields 70--71\% accuracy (all $p < 10^{-6}$), coherent substitution yields 46--49\% (at or below chance). The effect is weaker than in math (71\% vs 85\%) because natural language provides more textual flexibility for locally fluent errors. Unlike math, Wikipedia accuracy saturates near 70\% across the tested range---the compressibility gap in natural language does not substantially benefit from additional capacity at this scale. Per-entity-type accuracy ranges from 82\% (LOC) to 61\% (CARDINAL), with geographic entities showing the strongest effect (Appendix~\ref{app:transfer}).
+The random/coherent contrast reproduces (Table~\ref{tab:wikipedia}): random substitution yields 70--71\% accuracy (all $p < 10^{-6}$), coherent substitution yields 46--49\% (at or below chance). Note that entity substitution tests co-occurrence compressibility (e.g., ``Kumamoto'' in a French-history context breaks local patterns), not world-knowledge truth in the philosophical sense. The effect is weaker than in math (71\% vs 85\%) because natural language provides more textual flexibility for locally fluent errors. Unlike math, Wikipedia accuracy saturates near 70\% across the tested range---the compressibility gap in natural language does not substantially benefit from additional capacity at this scale. Per-entity-type accuracy ranges from 82\% (LOC) to 61\% (CARDINAL), with geographic entities showing the strongest effect (Appendix~\ref{app:transfer}).
 
 \subsection{Robustness Checks}
 \label{sec:robustness}
@@ -275,7 +275,7 @@ Coherent & 49.3\% & 52.8\% & 49.8\% & $\mathbf{50.6\%}$ \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.7\textwidth]{figure_full_scaling.png}
-\caption{Full scaling results. GPT-2 family (3.5M--86M, math-only), Qwen3-0.6B (420M, different architecture, math-only), and a Qwen3-architecture model (${\sim}$1B, FineWeb-Edu + 8\% math).}
+\caption{Cross-setup scaling summary. GPT-2 family (3.5M--86M, math-only, 2--4 seeds), Qwen3-0.6B (420M, math-only, 3 seeds), and Qwen3-architecture ${\sim}$1B (FineWeb-Edu + 8\% math, single seed). Note: setups differ in architecture, corpus, and seed count; this figure summarizes the directional trend, not a single scaling law.}
 \label{fig:qwen}
 \end{figure}
 
@@ -290,17 +290,17 @@ The preceding experiments use synthetic math corpora and models up to 86M parame
 \centering
 \begin{tabular}{lcccc}
 \toprule
-Condition & Accuracy & $\Delta\text{Loss}$ & $p$ & Seeds \\
+Condition & Accuracy & $\Delta\text{Loss}$ & $p^*$ & Seeds \\
 \midrule
 Random   & $\mathbf{76.8\%}$ & $+0.098$ & $< 10^{-6}$ & 1 \\
-Coherent & $46.7\%$ & $-0.003$ & ${\sim}1.0$ & 1 \\
+Coherent & $46.7\%$ & $-0.003$ & n.s. & 1 \\
 \bottomrule
 \end{tabular}
-\caption{Qwen3-architecture ${\sim}$1B trained on FineWeb-Edu + 8\% contradictory math (denoising, 50/50). The random/coherent contrast reproduces at 1B scale on real text.}
+\caption{Qwen3-architecture ${\sim}$1B trained on FineWeb-Edu + 8\% contradictory math (denoising, 50/50). Single-seed sanity check: the random/coherent contrast reproduces at 1B scale on real text. $^*$Per-example Wilcoxon test (single training run); descriptive only---no across-seed uncertainty is available.}
 \label{tab:qwen1b}
 \end{table}
 
-The result (Table~\ref{tab:qwen1b}) confirms that the random/coherent contrast holds: random errors yield 76.8\% paired accuracy ($\Delta\text{Loss} = +0.098$, $p < 10^{-6}$), while coherent errors yield 46.7\% (chance). The random accuracy is lower than the math-only GPT-2 large (85.2\%) and Qwen3-0.6B (86.8\%), likely because the contradictory math signal constitutes only 8\% of the training corpus, diluted by general text. The key finding is that even in this diluted, naturalistic setting, the compression objective still distinguishes random from coherent errors---and the $\Delta\text{Loss}$ magnitude ($+0.098$) is the largest we observe, suggesting that the 1B model develops a stronger per-pair preference despite lower aggregate accuracy.
+The result (Table~\ref{tab:qwen1b}) confirms that the random/coherent contrast holds: random errors yield 76.8\% paired accuracy ($\Delta\text{Loss} = +0.098$), while coherent errors yield 46.7\% (chance). As a single-seed experiment, these results are descriptive; the $p$-value reflects per-example significance within one training run and should not be interpreted as across-run reliability. The random accuracy is lower than the math-only GPT-2 large (85.2\%) and Qwen3-0.6B (86.8\%), likely because the contradictory math signal constitutes only 8\% of the training corpus, diluted by general text. The key finding is that even in this diluted, naturalistic setting, the compression objective still distinguishes random from coherent errors---and the $\Delta\text{Loss}$ magnitude ($+0.098$) is the largest we observe, suggesting that the 1B model develops a stronger per-pair preference despite lower aggregate accuracy.
 
 %======================================================================
 \section{Discussion}
@@ -311,7 +311,7 @@ The result (Table~\ref{tab:qwen1b}) confirms that the random/coherent contrast h
 
 \textbf{The role of frequency.}\quad Our results reveal an asymmetry between random and coherent error regimes. For random errors, compressibility overrides frequency: truth bias persists even at 10/90 correct-to-incorrect ratio (67\% accuracy). For coherent errors, frequency dominates: at 40/60 coherent mixing, the model follows the majority with 72\% preference for the false system, rising to 91\% at 20/80. This is consistent with the MDL prediction that when competing systems compress equally well, the more frequent one wins. The practical implication is that coherent falsehood needs no frequency advantage to neutralize truth bias; equal frequency suffices.
 
-\textbf{What the multi-rule experiment shows.}\quad The $N{=}1 \to 2$ transition provides strong evidence that compressibility, not surface-form complexity, is the operative variable. Each individual rule at $N{=}2$ remains compact, yet the random assignment of rules to problems introduces incompressible bits. This is difficult to reconcile with explanations based solely on lexical diversity or number of corrupted tokens.
+\textbf{What the multi-rule experiment shows.}\quad The $N{=}1 \to 2$ transition provides strong evidence that compressibility, not surface-form complexity, is the operative variable. Each individual rule at $N{=}2$ remains compact, yet the random assignment of rules to problems introduces incompressible bits. This is difficult to reconcile with explanations based solely on lexical diversity or number of corrupted tokens. An alternative explanation for the $N \geq 2$ advantage is probability mass splitting: if the model learns the data distribution faithfully, the correct completion receives ${\sim}50\%$ mass while each specific wrong completion receives ${\sim}50\%/N$, mechanically favoring the correct one in pairwise comparison. Under pure mass splitting, $N{=}2$ accuracy would approach 100\%; the observed 78\% suggests partial but not complete rule separation, consistent with a compressibility-driven account where the model preferentially allocates capacity to the more compressible cluster.
 
 \textbf{Implications and scope.}\quad In our controlled settings, the training objective does not provide an inherent ``truth compass.'' Internally coherent falsehood remains competitive. Embedding cross-domain verification can partially restore truth bias, but the effect exhibits inverse scaling: verification accuracy drops from 71\% at 3.5M to 61\% at 86M parameters (Appendix~\ref{app:robustness}), as larger models absorb coherent within-domain patterns more readily. This inverse scaling is verified across 10 models (4 tiny + 4 small + 2 large) with consistent results. This has potential relevance for alignment (systematic false beliefs may resist filtering and grow harder to verify at scale), hallucinations (coherent misconceptions may persist; cf.\ \citealp{kalai2024calibrated}), and data curation (diverse errors are filtered effectively, but coordinated errors may not be). The 1B experiment on real web text (Section~\ref{sec:qwen1b}) provides initial evidence that the effect persists beyond toy scale and synthetic data, but all our experiments remain far below the scale of production LLMs. Whether these findings extend to large-scale pretraining on heterogeneous real-world corpora remains an open question. We view our results as identifying a mechanism and its boundary conditions, not as direct claims about production LLMs.
 
@@ -377,19 +377,25 @@ The corresponding random-error version replaces a derivation step with a plausib
 
 We state the theoretical predictions that motivate our experiments. All three describe the behavior of an idealized two-part MDL learner \citep{rissanen1978modeling,grunwald2007minimum}, not formal theorems about neural network training dynamics. Our experiments (Sections~\ref{sec:central}--\ref{sec:wikipedia}) test whether gradient-descent-trained transformers approximate this behavior.
 
-\textbf{Setup.} Consider a corpus $D$ containing $n$ problems, each appearing with two answers: one generated by theory $T_1$ (correct) and one by theory $T_2$ (alternative). An ideal MDL learner selects the theory $T^*$ minimizing total description length $L(T) + L(D|T)$.
+\textbf{Setup.} Consider a corpus $D$ containing $n$ problems. In the denoising setup, each problem $i$ appears with two answers: one generated by a correct rule system $T_1$ and one by an alternative system $T_2$. The model must encode \emph{both} answers---it cannot simply ``select'' one theory and discard the other. We model this as a latent-source mixture: for each problem, a latent variable $z_i \in \{1,2\}$ indicates which source generated the answer. The model encodes: (1)~the mixture structure (source theories + mixing weights), and (2)~the data given the mixture, including the per-problem source assignments.
 
-\textbf{Prediction 1} (random errors). \emph{If $T_1$ is a compact rule system with $L(T_1) = O(1)$ and $T_2$ assigns independent random answers with $L(T_2|D) = O(n)$, then for sufficiently large $n$ the MDL learner prefers $T_1$.}
+The total description length is:
+\[
+L(M) + L(D|M) = \underbrace{L(T_1) + L(T_2)}_{\text{theories}} + \underbrace{L(\{z_i\})}_{\text{source assignments}} + \underbrace{\sum_i L(a_i | T_{z_i})}_{\text{answers given sources}}
+\]
+The key quantity is the cost of encoding the alternative system $T_2$ plus the residuals that $T_2$ cannot predict. A model that internalizes the more compressible theory can encode answers from that theory cheaply and must pay a higher per-token cost for answers from the less compressible theory---which is exactly what paired evaluation measures (lower NLL on the more compressible cluster).
 
-\emph{Proof sketch.} The total code length under $T_1$ is $L(T_1) + L(D|T_1) = O(1) + O(n \cdot c)$ where $c$ is the per-problem code length given the rule. Under $T_2$, the false answers require $O(n)$ bits of memorization (each answer is independent). For large $n$, the $O(n)$ memorization cost dominates any constant advantage $T_2$ might have, so $L(T_1) + L(D|T_1) < L(T_2) + L(D|T_2)$.
+\textbf{Prediction 1} (random errors). \emph{If $T_1$ is a compact rule system with $L(T_1) = O(1)$ and $T_2$ consists of independent random answers, then correct-answer completions receive lower NLL than incorrect ones.}
 
-\textbf{Prediction 2} (coherent errors). \emph{If both $T_1$ and $T_2$ are compact rule systems with $L(T_1) \approx L(T_2) = O(1)$, then at equal frequency the MDL learner has no basis to prefer one over the other.}
+\emph{Proof sketch.} The correct answers are generated by a compact $T_1$: once internalized ($O(1)$ bits), each correct answer costs $O(c)$ bits to encode. The random false answers have no shared structure: encoding each requires memorizing an independent value, contributing $O(n)$ total bits to $L(T_2)$. The model's optimal strategy allocates more probability mass to the predictable (correct) cluster, resulting in lower NLL for correct completions.
 
-\emph{Proof sketch.} Both theories have comparable model complexity $L(T_1) \approx L(T_2)$. Given either theory, the data encoding cost is the same: $L(D|T_1) \approx L(D|T_2)$, since both produce deterministic predictions for their respective answer patterns. The total code lengths are approximately equal regardless of $n$.
+\textbf{Prediction 2} (coherent errors). \emph{If both $T_1$ and $T_2$ are compact rule systems with $L(T_1) \approx L(T_2) = O(1)$, then at equal frequency the model assigns comparable NLL to both clusters.}
 
-\textbf{Prediction 3} (multi-rule errors). \emph{If the false system consists of $N$ compact rules $\{r_1, \ldots, r_N\}$ with random assignment to problems, then the false system's description length grows as $O(n \log N)$, restoring the MDL advantage of $T_1$.}
+\emph{Proof sketch.} Both theories have comparable model complexity: $L(T_1) \approx L(T_2)$. Given either theory, the per-answer encoding cost is the same: $L(a_i|T_1) \approx L(a_i|T_2)$ for their respective answers. Since both clusters are equally compressible and equally frequent, the optimal mixture assigns equal probability mass to each, yielding comparable NLL.
 
-\emph{Proof sketch.} Each rule $r_i$ is compact: $L(r_i) = O(1)$. However, encoding which rule applies to which problem requires a selector $s: \{1,\ldots,n\} \to \{1,\ldots,N\}$. When assignments are random (i.i.d.\ uniform), the selector has entropy $n \log_2 N$ bits and is incompressible. The total false-system code length is $L(\{r_i\}) + L(s) + L(D|\{r_i\},s) = O(N) + O(n \log N) + O(n \cdot c)$. For $N \geq 2$, the $n \log N$ term makes the false system more expensive than $T_1$, which requires no selector.
+\textbf{Prediction 3} (multi-rule errors). \emph{If the false system consists of $N$ compact rules $\{r_1, \ldots, r_N\}$ with random assignment to problems, then encoding the false cluster requires an additional $O(n \log N)$ bits for source selection, restoring the NLL advantage of the correct cluster.}
+
+\emph{Proof sketch.} Each rule $r_i$ is compact: $L(r_i) = O(1)$. However, encoding which rule applies to which problem requires a selector $s: \{1,\ldots,n\} \to \{1,\ldots,N\}$. When assignments are random (i.i.d.\ uniform), the selector has entropy $n \log_2 N$ bits and is incompressible. The total false-cluster code length is $L(\{r_i\}) + L(s) + \sum_i L(a_i|r_{s(i)}) = O(N) + O(n \log N) + O(n \cdot c)$. For $N \geq 2$, the $n \log N$ term makes the false cluster more expensive to encode than the correct cluster, which requires no selector. Note that this prediction concerns the \emph{total} encoding cost of the false cluster, not only the per-completion probability mass split across $N$ rules (see Section~\ref{sec:discussion} for discussion of this alternative explanation).
 
 \section{Compression Measure (gzip)}
 \label{app:compression}
@@ -453,18 +459,18 @@ The denoising setup is harder (within-problem contradiction vs across-corpus mix
 \begin{table}[h]
 \centering
 \small
-\begin{tabular}{ccc}
+\begin{tabular}{cccc}
 \toprule
-Proportion & Random & Coherent \\
+Proportion & Random & Coherent & False pref. \\
 \midrule
-50/50 & 80\% & 47.2\% \\
-40/60 & 79\% & 27.8\% \\
-30/70 & 75\% & 14.7\% \\
-20/80 & 69\% & 9.6\% \\
-10/90 & 67\% & -- \\
+50/50 & 80\% & 47.2\% & 52.8\% \\
+40/60 & 79\% & 27.8\% & 72.2\% \\
+30/70 & 75\% & 14.7\% & 85.3\% \\
+20/80 & 69\% & 9.6\%  & 90.4\% \\
+10/90 & 67\% & --     & -- \\
 \bottomrule
 \end{tabular}
-\caption{Random vs coherent accuracy across proportions (standard, tiny). Random: truth bias persists at 10/90. Coherent: the model follows pure frequency.}
+\caption{Random vs coherent accuracy across proportions (standard, tiny). Random: truth bias persists at 10/90. Coherent: the model follows pure frequency. ``False pref.'' = $1 - \text{coherent accuracy}$, i.e., the fraction of pairs where the model prefers the coherent false completion.}
 \label{tab:frequency}
 \end{table}
 
@@ -555,6 +561,8 @@ All sizes reach behavioral plateau by step 3000--4000. The large model achieves 
 \section{Per-Seed Details}
 \label{app:seeds}
 
+Tables~\ref{tab:seeds_random}--\ref{tab:seeds_coherent} report per-seed accuracy for the core denoising conditions. Per-seed breakdowns for multi-rule, Wikipedia, and Qwen3 experiments are available in the supplementary code repository (evaluation logs per model).
+
 \begin{table}[h]
 \centering
 \small
@@ -600,81 +608,219 @@ large  & 51.6\% & 50.4\% & --     & --     & 51.0\% \\
     \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
     \item[] Answer: \answerYes{}
     \item[] Justification: All claims are explicitly qualified to our controlled experimental setting. The abstract states the scope (3.5M--1B parameters, controlled corpora) and the introduction notes that extension to large-scale pretraining is an open question.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the abstract and introduction do not include the claims made in the paper.
+        \item The abstract and/or introduction should clearly state the claims made, including the contributions made in the paper and important assumptions and limitations. A \answerNo{} or \answerNA{} answer to this question will not be perceived well by the reviewers.
+        \item The claims made should match theoretical and experimental results, and reflect how much the results can be expected to generalize to other settings.
+        \item It is fine to include aspirational goals as motivation as long as it is clear that these goals are not attained by the paper.
+    \end{itemize}
 
 \item {\bf Limitations}
     \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
     \item[] Answer: \answerYes{}
     \item[] Justification: A dedicated Limitations section discusses model scale, domain specificity, discriminative vs generative gap, seed counts, and causal identification.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper has no limitation while the answer \answerNo{} means that the paper has limitations, but those are not discussed in the paper.
+        \item The authors are encouraged to create a separate ``Limitations'' section in their paper.
+        \item The paper should point out any strong assumptions and how robust the results are to violations of these assumptions (e.g., independence assumptions, noiseless settings, model well-specification, asymptotic approximations only holding locally). The authors should reflect on how these assumptions might be violated in practice and what the implications would be.
+        \item The authors should reflect on the scope of the claims made, e.g., if the approach was only tested on a few datasets or with a few runs. In general, empirical results often depend on implicit assumptions, which should be articulated.
+        \item The authors should reflect on the factors that influence the performance of the approach. For example, a facial recognition algorithm may perform poorly when image resolution is low or images are taken in low lighting. Or a speech-to-text system might not be used reliably to provide closed captions for online lectures because it fails to handle technical jargon.
+        \item The authors should discuss the computational efficiency of the proposed algorithms and how they scale with dataset size.
+        \item If applicable, the authors should discuss possible limitations of their approach to address problems of privacy and fairness.
+        \item While the authors might fear that complete honesty about limitations might be used by reviewers as grounds for rejection, a worse outcome might be that reviewers discover limitations that aren't acknowledged in the paper. The authors should use their best judgment and recognize that individual actions in favor of transparency play an important role in developing norms that preserve the integrity of the community. Reviewers will be specifically instructed to not penalize honesty concerning limitations.
+    \end{itemize}
 
 \item {\bf Theory assumptions and proofs}
     \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
     \item[] Answer: \answerNA{}
     \item[] Justification: The paper does not claim formal theoretical results. Appendix~\ref{app:mdl} presents three MDL-motivated predictions with proof sketches for an idealized learner, explicitly marked as informal predictions rather than formal theorems about neural network training. The paper is primarily empirical.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include theoretical results.
+        \item All the theorems, formulas, and proofs in the paper should be numbered and cross-referenced.
+        \item All assumptions should be clearly stated or referenced in the statement of any theorems.
+        \item The proofs can either appear in the main paper or the supplemental material, but if they appear in the supplemental material, the authors are encouraged to provide a short proof sketch to provide intuition.
+        \item Inversely, any informal proof provided in the core of the paper should be complemented by formal proofs provided in appendix or supplemental material.
+        \item Theorems and Lemmas that the proof relies upon should be properly referenced.
+    \end{itemize}
 
-\item {\bf Experimental result reproducibility}
+    \item {\bf Experimental result reproducibility}
     \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
     \item[] Answer: \answerYes{}
     \item[] Justification: All hyperparameters, model architectures, data generation procedures, evaluation protocols, and random seeds are specified in Section~\ref{sec:methodology} and Appendix~\ref{app:reproducibility}. Full generation templates are included in supplementary material.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item If the paper includes experiments, a \answerNo{} answer to this question will not be perceived well by the reviewers: Making the paper reproducible is important, regardless of whether the code and data are provided or not.
+        \item If the contribution is a dataset and\slash or model, the authors should describe the steps taken to make their results reproducible or verifiable.
+        \item Depending on the contribution, reproducibility can be accomplished in various ways. For example, if the contribution is a novel architecture, describing the architecture fully might suffice, or if the contribution is a specific model and empirical evaluation, it may be necessary to either make it possible for others to replicate the model with the same dataset, or provide access to the model. In general. releasing code and data is often one good way to accomplish this, but reproducibility can also be provided via detailed instructions for how to replicate the results, access to a hosted model (e.g., in the case of a large language model), releasing of a model checkpoint, or other means that are appropriate to the research performed.
+        \item While NeurIPS does not require releasing code, the conference does require all submissions to provide some reasonable avenue for reproducibility, which may depend on the nature of the contribution. For example
+        \begin{enumerate}
+            \item If the contribution is primarily a new algorithm, the paper should make it clear how to reproduce that algorithm.
+            \item If the contribution is primarily a new model architecture, the paper should describe the architecture clearly and fully.
+            \item If the contribution is a new model (e.g., a large language model), then there should either be a way to access this model for reproducing the results or a way to reproduce the model (e.g., with an open-source dataset or instructions for how to construct the dataset).
+            \item We recognize that reproducibility may be tricky in some cases, in which case authors are welcome to describe the particular way they provide for reproducibility. In the case of closed-source models, it may be that access to the model is limited in some way (e.g., to registered users), but it should be possible for other researchers to have some path to reproducing or verifying the results.
+        \end{enumerate}
+    \end{itemize}
+
 
 \item {\bf Open access to data and code}
     \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
     \item[] Answer: \answerYes{}
     \item[] Justification: Full code is available at \url{https://github.com/Rai220/compression-drives-truth}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that paper does not include experiments requiring code.
+        \item Please see the NeurIPS code and data submission guidelines (\url{https://neurips.cc/public/guides/CodeSubmissionPolicy}) for more details.
+        \item While we encourage the release of code and data, we understand that this might not be possible, so \answerNo{} is an acceptable answer. Papers cannot be rejected simply for not including code, unless this is central to the contribution (e.g., for a new open-source benchmark).
+        \item The instructions should contain the exact command and environment needed to run to reproduce the results. See the NeurIPS code and data submission guidelines (\url{https://neurips.cc/public/guides/CodeSubmissionPolicy}) for more details.
+        \item The authors should provide instructions on data access and preparation, including how to access the raw data, preprocessed data, intermediate data, and generated data, etc.
+        \item The authors should provide scripts to reproduce all experimental results for the new proposed method and baselines. If only a subset of experiments are reproducible, they should state which ones are omitted from the script and why.
+        \item At submission time, to preserve anonymity, the authors should release anonymized versions (if applicable).
+        \item Providing as much information as possible in supplemental material (appended to the paper) is recommended, but including URLs to data and code is permitted.
+    \end{itemize}
+
 
 \item {\bf Experimental setting/details}
     \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
     \item[] Answer: \answerYes{}
     \item[] Justification: See Section~\ref{sec:models} (optimizer, lr, schedule, batch size, steps) and Appendix~\ref{app:reproducibility} (corpus examples, hardware). Train/test separation is guaranteed by seed: test problems use a different seed (999) than training.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item The experimental setting should be presented in the core of the paper to a level of detail that is necessary to appreciate the results and make sense of them.
+        \item The full details can be provided either with the code, in appendix, or as supplemental material.
+    \end{itemize}
 
 \item {\bf Experiment statistical significance}
     \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
     \item[] Answer: \answerYes{}
-    \item[] Justification: All $\pm$ values are standard deviations across random seeds (not standard errors). $p$-values are computed via Wilcoxon signed-rank test (one-sided) on per-pair NLL differences; bootstrap 95\% CIs (10{,}000 resamples) are used for confidence intervals. The number of seeds is reported for every condition. Per-seed breakdowns are provided in Appendix~\ref{app:seeds}.
+    \item[] Justification: All $\pm$ values are standard deviations across random seeds (not standard errors). $p$-values are computed via Wilcoxon signed-rank test (one-sided) on per-pair NLL differences; bootstrap 95\% CIs (10{,}000 resamples) are used for confidence intervals. The number of seeds is reported for every condition. Per-seed breakdowns for the core denoising conditions are provided in Appendix~\ref{app:seeds}. For the 1B experiment (single seed), the $p$-value reflects per-example significance and is marked as descriptive.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item The authors should answer \answerYes{} if the results are accompanied by error bars, confidence intervals, or statistical significance tests, at least for the experiments that support the main claims of the paper.
+        \item The factors of variability that the error bars are capturing should be clearly stated (for example, train/test split, initialization, random drawing of some parameter, or overall run with given experimental conditions).
+        \item The method for calculating the error bars should be explained (closed form formula, call to a library function, bootstrap, etc.)
+        \item The assumptions made should be given (e.g., Normally distributed errors).
+        \item It should be clear whether the error bar is the standard deviation or the standard error of the mean.
+        \item It is OK to report 1-sigma error bars, but one should state it. The authors should preferably report a 2-sigma error bar than state that they have a 96\% CI, if the hypothesis of Normality of errors is not verified.
+        \item For asymmetric distributions, the authors should be careful not to show in tables or figures symmetric error bars that would yield results that are out of range (e.g., negative error rates).
+        \item If error bars are reported in tables or plots, the authors should explain in the text how they were calculated and reference the corresponding figures or tables in the text.
+    \end{itemize}
 
 \item {\bf Experiments compute resources}
     \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
     \item[] Answer: \answerYes{}
     \item[] Justification: See Appendix~\ref{app:reproducibility}: approximately 150 GPU-hours total on Modal.com T4/A10G/A100 GPUs and Apple M4 Pro (36GB). Hardware is specified per experiment type.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item The paper should indicate the type of compute workers CPU or GPU, internal cluster, or cloud provider, including relevant memory and storage.
+        \item The paper should provide the amount of compute required for each of the individual experimental runs as well as estimate the total compute.
+        \item The paper should disclose whether the full research project required more compute than the experiments reported in the paper (e.g., preliminary or failed experiments that didn't make it into the paper).
+    \end{itemize}
 
 \item {\bf Code of ethics}
     \item[] Question: Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics \url{https://neurips.cc/public/EthicsGuidelines}?
     \item[] Answer: \answerYes{}
     \item[] Justification: The research uses only synthetic data and publicly available Wikipedia text. No human subjects, no private data, no dual-use concerns beyond those discussed in Ethical Considerations.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the authors have not reviewed the NeurIPS Code of Ethics.
+        \item If the authors answer \answerNo, they should explain the special circumstances that require a deviation from the Code of Ethics.
+        \item The authors should make sure to preserve anonymity (e.g., if there is a special consideration due to laws or regulations in their jurisdiction).
+    \end{itemize}
+
 
 \item {\bf Broader impacts}
     \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
     \item[] Answer: \answerYes{}
     \item[] Justification: The Ethical Considerations section discusses both the defensive value (informing data curation) and the risk (characterizing conditions under which misinformation evades filtering).
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that there is no societal impact of the work performed.
+        \item If the authors answer \answerNA{} or \answerNo, they should explain why their work has no societal impact or why the paper does not address societal impact.
+        \item Examples of negative societal impacts include potential malicious or unintended uses (e.g., disinformation, generating fake profiles, surveillance), fairness considerations (e.g., deployment of technologies that could make decisions that unfairly impact specific groups), privacy considerations, and security considerations.
+        \item The conference expects that many papers will be foundational research and not tied to particular applications, let alone deployments. However, if there is a direct path to any negative applications, the authors should point it out. For example, it is legitimate to point out that an improvement in the quality of generative models could be used to generate Deepfakes for disinformation. On the other hand, it is not needed to point out that a generic algorithm for optimizing neural networks could enable people to train models that generate Deepfakes faster.
+        \item The authors should consider possible harms that could arise when the technology is being used as intended and functioning correctly, harms that could arise when the technology is being used as intended but gives incorrect results, and harms following from (intentional or unintentional) misuse of the technology.
+        \item If there are negative societal impacts, the authors could also discuss possible mitigation strategies (e.g., gated release of models, providing defenses in addition to attacks, mechanisms for monitoring misuse, mechanisms to monitor how a system learns from feedback over time, improving the efficiency and accessibility of ML).
+    \end{itemize}
 
 \item {\bf Safeguards}
     \item[] Question: Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse (e.g., pre-trained language models, image generators, or scraped datasets)?
     \item[] Answer: \answerNA{}
     \item[] Justification: All models are small ($\leq$1B parameters) and trained on synthetic or filtered web data. They have no capabilities beyond the narrow experimental domain and pose no misuse risk.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper poses no such risks.
+        \item Released models that have a high risk for misuse or dual-use should be released with necessary safeguards to allow for controlled use of the model, for example by requiring that users adhere to usage guidelines or restrictions to access the model or implementing safety filters.
+        \item Datasets that have been scraped from the Internet could pose safety risks. The authors should describe how they avoided releasing unsafe images.
+        \item We recognize that providing effective safeguards is challenging, and many papers do not require this, but we encourage authors to take this into account and make a best faith effort.
+    \end{itemize}
 
 \item {\bf Licenses for existing assets}
     \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
     \item[] Answer: \answerYes{}
     \item[] Justification: Wikipedia data is used under its CC BY-SA license. FineWeb-Edu \citep{penedo2024fineweb} is used under its ODC-By license. All software dependencies (PyTorch, MLX, SymPy, spaCy) are open source.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not use existing assets.
+        \item The authors should cite the original paper that produced the code package or dataset.
+        \item The authors should state which version of the asset is used and, if possible, include a URL.
+        \item The name of the license (e.g., CC-BY 4.0) should be included for each asset.
+        \item For scraped data from a particular source (e.g., website), the copyright and terms of service of that source should be provided.
+        \item If assets are released, the license, copyright information, and terms of use in the package should be provided. For popular datasets, \url{paperswithcode.com/datasets} has curated licenses for some datasets. Their licensing guide can help determine the license of a dataset.
+        \item For existing datasets that are re-packaged, both the original license and the license of the derived asset (if it has changed) should be provided.
+        \item If this information is not available online, the authors are encouraged to reach out to the asset's creators.
+    \end{itemize}
 
 \item {\bf New assets}
     \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
     \item[] Answer: \answerYes{}
     \item[] Justification: Code and data generation scripts are documented in the supplementary material with README and inline comments.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not release new assets.
+        \item Researchers should communicate the details of the dataset\slash code\slash model as part of their submissions via structured templates. This includes details about training, license, limitations, etc.
+        \item The paper should discuss whether and how consent was obtained from people whose asset is used.
+        \item At submission time, remember to anonymize your assets (if applicable). You can either create an anonymized URL or include an anonymized zip file.
+    \end{itemize}
 
 \item {\bf Crowdsourcing and research with human subjects}
     \item[] Question: For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots, if applicable, as well as details about compensation (if any)?
     \item[] Answer: \answerNA{}
     \item[] Justification: No human subjects or crowdsourcing involved. All data is generated programmatically.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not involve crowdsourcing nor research with human subjects.
+        \item Including this information in the supplemental material is fine, but if the main contribution of the paper involves human subjects, then as much detail as possible should be included in the main paper.
+        \item According to the NeurIPS Code of Ethics, workers involved in data collection, curation, or other labor should be paid at least the minimum wage in the country of the data collector.
+    \end{itemize}
 
 \item {\bf Institutional review board (IRB) approvals or equivalent for research with human subjects}
     \item[] Question: Does the paper describe potential risks incurred by study participants, whether such risks were disclosed to the subjects, and whether Institutional Review Board (IRB) approvals (or an equivalent approval/review based on the requirements of your country or institution) were obtained?
     \item[] Answer: \answerNA{}
     \item[] Justification: No human subjects involved.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not involve crowdsourcing nor research with human subjects.
+        \item Depending on the country in which research is conducted, IRB approval (or equivalent) may be required for any human subjects research. If you obtained IRB approval, you should clearly state this in the paper.
+        \item We recognize that the procedures for this may vary significantly between institutions and locations, and we expect authors to adhere to the NeurIPS Code of Ethics and the guidelines for their institution.
+        \item For initial submissions, do not include any information that would break anonymity (if applicable), such as the institution conducting the review.
+    \end{itemize}
 
 \item {\bf Declaration of LLM usage}
     \item[] Question: Does the paper describe the usage of LLMs if it is an important, original, or non-standard component of the core methods in this research? Note that if the LLM is used only for writing, editing, or formatting purposes and does \emph{not} impact the core methodology, scientific rigor, or originality of the research, declaration is not required.
     \item[] Answer: \answerNA{}
     \item[] Justification: LLMs (Claude) were used for writing assistance, code editing, and bibliography verification, but not as a component of the research methodology. All experimental code, data generation, model training, and evaluation were implemented and verified independently of LLM assistance.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the core method development in this research does not involve LLMs as any important, original, or non-standard components.
+        \item Please refer to our LLM policy in the NeurIPS handbook for what should or should not be described.
+    \end{itemize}
 
 \end{enumerate}
 
