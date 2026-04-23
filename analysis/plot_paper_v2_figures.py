@@ -159,12 +159,12 @@ bars_j2 = ax.bar(x + width/2, j2_means, width, yerr=j2_stds, capsize=5,
 
 ax.axhline(y=50, color='#ef4444', linestyle='--', alpha=0.8, linewidth=2, label='Chance level')
 
-for bar, m in zip(bars_j1, j1_means):
-    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1.5,
+for bar, m, s in zip(bars_j1, j1_means, j1_stds):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + s + 1.5,
             f'{m:.1f}%', ha='center', va='bottom', fontsize=9, fontweight='bold', color='#3b82f6')
 
-for bar, m in zip(bars_j2, j2_means):
-    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1.5,
+for bar, m, s in zip(bars_j2, j2_means, j2_stds):
+    ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + s + 1.5,
             f'{m:.1f}%', ha='center', va='bottom', fontsize=9, fontweight='bold', color='#8b5cf6')
 
 size_labels = ['3.5M\n(tiny)', '12M\n(small)', '26M\n(medium)', '86M\n(large)']

@@ -110,10 +110,12 @@ ax.set_xticks([3.5, 12, 26, 86, 420, 1000])
 ax.set_xticklabels(['3.5M', '12M', '26M', '86M', '420M', '~1B'])
 ax.set_ylim(35, 100)
 ax.set_xlim(2, 1500)
-ax.legend(fontsize=8.5, loc='center left', framealpha=0.9)
+ax.legend(fontsize=8.5, loc='upper center', bbox_to_anchor=(0.5, -0.11),
+          ncol=3, framealpha=0.9)
 ax.grid(True, alpha=0.3, axis='y')
 
 plt.tight_layout()
+plt.subplots_adjust(bottom=0.20)
 plt.savefig(os.path.join(RESULTS, 'figure_full_scaling.png'), dpi=200, bbox_inches='tight')
 plt.savefig(os.path.join(RESULTS, 'figure_full_scaling.pdf'), bbox_inches='tight')
 print("Saved figure_full_scaling")
