@@ -274,7 +274,7 @@ Coherent & 49.3\% & 52.8\% & 49.8\% & $\mathbf{50.6\%}$ \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.7\textwidth]{figure_full_scaling.png}
-\caption{Cross-setup scaling summary. GPT-2 family (3.5M--86M, math-only, 2--4 seeds), Qwen3-0.6B (420M, math-only, 3 seeds), and Qwen3-architecture ${\sim}$1B (FineWeb-Edu + 8\% math, single seed). Note: setups differ in architecture, corpus, and seed count; this figure summarizes the directional trend, not a single scaling law.}
+\caption{Cross-setup robustness summary. GPT-2 family (3.5M--86M, math-only, 2--4 seeds), Qwen3-0.6B (420M, math-only, 3 seeds), and Qwen3-architecture ${\sim}$1B (FineWeb-Edu + 8\% math, single seed). Note: setups differ in architecture, corpus, and seed count; this figure summarizes directional robustness, not a single scaling law.}
 \label{fig:qwen}
 \end{figure}
 
@@ -310,7 +310,7 @@ The result (Table~\ref{tab:qwen1b}) confirms that the random/coherent contrast h
 
 \textbf{The role of frequency.}\quad For random errors, compressibility overrides frequency: truth bias persists even at 10/90 correct-to-incorrect ratio (67\% accuracy). For coherent errors, frequency dominates: at 40/60 coherent mixing the model prefers the false system at 72\%, rising to 91\% at 20/80, consistent with the MDL prediction that when systems compress equally, the more frequent one wins. Coherent falsehood therefore needs no frequency advantage to neutralize truth bias.
 
-\textbf{What the multi-rule experiment shows.}\quad The $N{=}1 \to 2$ transition provides strong evidence that compressibility, not surface-form complexity, is the operative variable: each rule at $N{=}2$ remains compact, yet the random rule-to-problem assignment introduces incompressible bits. A probability-mass-splitting alternative (correct gets ${\sim}50\%$, each wrong gets ${\sim}50\%/N$) would predict $N{=}2$ accuracy approaching 100\%; the observed 78\% suggests partial, not complete, rule separation, consistent with a compressibility-driven account where the model preferentially allocates capacity to the more compressible cluster.
+\textbf{What the multi-rule experiment shows.}\quad The $N{=}1 \to 2$ transition provides evidence that compressibility, not surface-form complexity, is the operative variable: each rule at $N{=}2$ remains compact, yet the random rule-to-problem assignment introduces incompressible bits. The result is inconsistent with a naive complete probability-mass-splitting account, which would predict $N{=}2$ accuracy approaching 100\%, but it does not rule out partial mixture-separation explanations. A predictable-selector control would distinguish these accounts more cleanly.
 
 \textbf{Implications and scope.}\quad In our controlled settings, the training objective does not provide an inherent ``truth compass''---internally coherent falsehood remains competitive. Cross-domain verification can partially restore truth bias but exhibits inverse scaling: verification accuracy drops from 71\% at 3.5M to 61\% at 86M parameters (Appendix~\ref{app:robustness}; 10 models), as larger models absorb coherent within-domain patterns more readily. This is potentially relevant for alignment (systematic false beliefs may resist filtering at scale), hallucinations (coherent misconceptions may persist; cf.\ \citealp{kalai2024calibrated}), and data curation (coordinated errors may evade diversity-based filtering). The 1B experiment on real web text (Section~\ref{sec:qwen1b}) extends the effect beyond toy scale and synthetic data, but all our experiments remain far below production LLMs. Whether these findings transfer to large-scale pretraining remains open; we identify a mechanism and its boundary conditions, not direct claims about production models.
 
@@ -331,7 +331,7 @@ In controlled experiments with transformers from 3.5M to ${\sim}$1B parameters, 
 
 \textbf{Discriminative vs generative gap.}\quad Paired accuracy (85\%) substantially exceeds generative accuracy (53\%) at large scale: generation requires autoregressive decoding (errors compound), while paired evaluation only ranks likelihoods. The gap narrows with scale (49~pp at tiny, 32~pp at large), and both metrics agree on the random/coherent contrast at all tested scales. Paired accuracy should therefore be read as a controlled diagnostic of model preference, not as a direct measure of output truthfulness.
 
-\textbf{Causal identification.}\quad Random and coherent corruptions may differ along axes beyond compressibility (affected steps, surface simplicity). The multi-rule experiment holds individual rule complexity constant but leaves open a probability-mass-splitting account (discussed in Section~\ref{sec:discussion}); a predictable-selector variant (deterministic rule-to-problem mapping) and a fully matched control (corruption load, lexical diversity, length) would further strengthen the causal claim.
+\textbf{Causal identification.}\quad Random and coherent corruptions may differ along axes beyond compressibility (affected steps, surface simplicity). The multi-rule experiment holds individual rule complexity constant but leaves open partial mixture-separation accounts (discussed in Section~\ref{sec:discussion}); a predictable-selector variant (deterministic rule-to-problem mapping) and a fully matched control (corruption load, lexical diversity, length) would further strengthen the causal claim.
 
 \textbf{Future directions.}\quad Linear probing for ``truth'' vs ``coherence'' directions in models trained under our conditions could link behavior to internal representations; interactions with RLHF and in-context learning are natural extensions.
 
@@ -496,6 +496,8 @@ A synthetic world with 50 entities, 4 types, 15 deterministic rules. Random 50/5
 
 \subsection{Wikipedia Per-Entity-Type}
 
+Entity-level breakdowns suggest that the effect is strongest when substitutions disrupt geographically constrained co-occurrence patterns. Numeric entities are weaker, consistent with their lower semantic coupling to surrounding context.
+
 \begin{table}[h]
 \centering
 \small
@@ -564,7 +566,7 @@ large (86M)  & $60.6\% \pm 1.2\%$ & 2 & $51.0\%$ \\
 
 \subsection{Learning Curves}
 
-All sizes reach behavioral plateau by step 3000--4000. The large model achieves 88.8\% at step 3000, stable through 5000.
+All sizes reach behavioral plateau by step 3000--4000. The large model achieves 88.8\% at step 3000, stable through 5000. This check rules out an early-stopping artifact; the underlying logs and plotting script are included in the supplementary material.
 
 \section{Per-Seed Details}
 \label{app:seeds}
@@ -604,6 +606,8 @@ large  & 51.6\% & 50.4\% & --     & --     & 51.0\% \\
 \caption{Denoising equal coherent, per-seed accuracy.}
 \label{tab:seeds_coherent}
 \end{table}
+
+\clearpage
 
 %======================================================================
 % NeurIPS Paper Checklist (official format)
