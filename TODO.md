@@ -106,3 +106,17 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       multi-rule table caption and the NeurIPS checklist — all fixed in the
       LaTeX version; they survive only in the dead `paper_v3.md`.
 - [x] Submission, review, rebuttal window.
+
+## Numbers that could not be verified from this repository (2026-08-03)
+
+Found while rechecking `main_v2.tex` against the raw JSON. Neither blocks the
+camera-ready, but both should be resolved before the release package ships.
+
+- **`tab:generative`, tiny random-trained (30.5% ± 1.7%).** No
+  `eval_generation_500.json` under `results/mixed_50_50_tiny_seed4*/`; every
+  other cell of that table has one. The value survives only in the first
+  version of the paper. Either rerun the four seeds or drop the row.
+- **`tab:qwen` (Qwen3-0.6B, 3 seeds: 85.3/85.7/89.3 and 49.3/52.8/49.8).**
+  Nothing in the repository reproduces these. The Modal runs behind them were
+  never pulled, and the Qwen3-0.6B directories under `results_cluster/` belong
+  to the held-out scaling grid and evaluate a different support.
