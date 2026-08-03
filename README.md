@@ -1,123 +1,168 @@
-# Error Structure Determines Correctness Preference in Contradictory Training Data
+# Correctness Preference in Contradictory Training Data
 
-### Language models don't learn truth. They learn whatever compresses best.
+### When a model sees the same question answered right and wrong, which answer does it keep?
 
-When a model trains on contradictory data — the same question with both correct and incorrect answers — which answer does it prefer? We trained 210+ transformers (3.5M–1B params) to find out.
-
-**The answer: truth wins only when lies are messy.**
+We train transformers (3.5M–1B params) from scratch on corpora where every math
+problem appears with both a correct and an incorrect solution, and measure which
+one the model puts its probability on.
 
 [![arXiv](https://img.shields.io/badge/arXiv-2603.11749-b31b1b.svg)](https://arxiv.org/abs/2603.11749)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+> **This README describes the corrected version of the work (August 2026).** The
+> arXiv preprint and the first NeurIPS submission make stronger claims that did
+> not survive their own controls; see [What changed](#what-changed-august-2026).
+
 ---
 
-## The Experiment
+## Measure the whole false side, not one sample
 
-We train GPT-2 and Qwen3-architecture models (3.5M–1B params) on math problems where each problem appears with **both correct and incorrect solutions**. Then we ask: which solution does the model prefer?
+The natural measure is pairwise: does the model give lower loss to the correct
+completion than to an incorrect one? That measure is not neutral. If the error
+can take `N` forms for a problem, a model that reproduces training frequencies —
+preferring nothing — puts 0.5 on the correct string and 0.5/N on each false one,
+and wins the pairwise comparison for every `N ≥ 2`. Any experiment that raises
+`N` raises pair accuracy for free.
 
-| Error type | What happens | Accuracy |
-|------------|-------------|:--------:|
-| **Random errors** (each wrong answer is unique) | Model finds the truth | 65% → 85% with scale |
-| **Coherent errors** (one systematic wrong rule) | Model can't tell the difference | ~50% (chance) |
-| **Two competing wrong rules** | Truth bias snaps back | 78% |
+So we sum over the whole false support instead:
 
-One coherent lie kills truth bias. Two competing lies restore it. This is an **abrupt crossover**, not a gradual effect.
+```
+share = P(correct) / (P(correct) + Σ P(false_i))
+```
 
-## The Principle
+over every string the error generator could produce for that problem. Each
+problem occurs exactly twice in the corpus — once correct, once corrupted — and
+every other member of the family occurs zero times, so **a frequency-matching
+model scores exactly 0.500, whatever `N` is**. Adding strings to the sum can
+only lower the value, so anything above 0.5 is a lower bound.
 
-We call this the **Compression–Consistency Principle**:
+## Key results
 
-> Gradient descent favors the most compressible answer cluster, not truth per se.
+| | measured against | 3.5M | 12M | 26M | 86M |
+|---|---|---|---|---|---|
+| Random errors | full false support | 18.6 | 31.6 | 44.1 | **59.0 ± 0.8** |
+| Random errors | one sampled error | 65.5 | 76.0 | 80.3 | 77.6 |
+| Random errors | pair accuracy | 71.7 | 84.1 | 89.2 | 87.4 |
+| Coherent error | its single false string | 43.5 | 45.8 | 46.4 | 48.8 |
 
-Random errors are all different — they can't compress into a rule. The correct answer is the only pattern, so the model learns it. But a coherent false system (e.g., "always subtract 1 before multiplying") is just as compact as the true rules. The compressor sees no difference.
+Denoising corpus, 4 seeds, measured on training problems where the null is
+exactly 0.500. Read as: at 86M the correct completion holds about ten points
+more mass than indifference; below 86M the controlled measure shows nothing,
+while pair accuracy already reads 72–89%. The 86M value replicates at 59.4 on an
+independent corpus. A coherent false rule is never filtered — and that half needs
+no control, because one rule produces one string and there is nothing to split.
 
-**Why does adding a second wrong rule break this?** Because now the model needs a *selector* — which rule applies to which problem. This selector is a random function with high Kolmogorov complexity. Even though each individual rule is compact, the selector can't compress, and that's what restores truth bias.
+**Two of our own identification experiments are negative controls.**
 
-**Truth bias is not a feature of intelligence. It's a compression artifact.**
+- Multi-rule: pair accuracy 47 → 79 → 90 as `N` goes 1 → 2 → 10, while mass goes
+  47.9 → 47.8 → 38.7. The famous 1→2 jump is mass splitting.
+- Description-length ladder (a false rule storing L = 1, 4, 16, 64 constants,
+  one realized false string at every rung): realized measure rises 55.6 → 71.8
+  at 86M, family measure stays flat at 55.6 / 51.9 / 52.6 / 51.3. No grading in
+  description length.
 
-## Key Results
+**Calibration.** Trained on a corpus with the same problems and no false rule at
+all, the same 18-mode family measure reads 99.7 at 86M and 64.1 at 3.5M. The
+measure is near-unbiased where we report an effect and conservative where we
+report none.
 
-**Denoising (core experiment):**
-- Random errors: accuracy scales 65% → 75% → 81% → 85% (3.5M → 86M)
-- Coherent errors: stuck at ~45–51% across all sizes
-- More noise degrades gracefully: 1:2 ratio → 75%, 1:4 ratio → 66%
+Full tables, nulls and reproduction commands: [`docs/mass_control.md`](docs/mass_control.md).
 
-**Multi-rule phase transition:**
-- 1 wrong rule → 47% (chance). 2 wrong rules → 78% (tiny) / 86% (small). 10 rules → 88%
-- The jump from 1→2 rules is the critical moment where lies stop compressing
+## What this supports
 
-**Real text (Wikipedia):**
-- Replace entities randomly ("Paris" → "Kumamoto"): model detects it, 71% accuracy
-- Replace consistently ("France"→"Japan", "Paris"→"Tokyo"): model can't tell, 46%
+**For alignment and data curation.** The training objective is not a truth
+compass: a consistent false rule is not filtered at any size, architecture or
+corpus we tested, including 1B on real web text. Coordinated error that keeps
+internal consistency would not wash out the way diverse organic error does.
 
-**Compression gap correlates with accuracy:**
-- gzip compression ratio gap between correct/incorrect completions correlates with model behavior across 9 conditions (Spearman ρ = 0.68, p = 0.042)
+**For evaluation methodology.** Pair accuracy overstates the excess above chance
+roughly threefold where we can compute both, and reverses the sign of the
+conclusion below 86M. Any design that varies the number of forms an error can
+take — competing rules, noise ratios, entity substitution, corruption load —
+varies the metric along with the treatment.
 
-## Why This Matters
+**What this does not support.** We do not claim compression as a measured
+mechanism, we do not claim the preference is graded in the description length of
+the false system, and we do not claim an effect at every scale.
 
-**For alignment:** The training objective alone is not a "truth compass." A well-crafted consistent lie compresses just as well as truth. Scale won't fix this — coherent errors stay at chance from 3.5M to 1B.
+## What changed (August 2026)
 
-**For understanding hallucinations:** Coherent misconceptions can persist because they compress well — not because the model lacks capacity. Internally consistent hallucinations may be the hardest to eliminate.
+Reviewer rFTw and the NeurIPS area chair raised the mass-splitting objection.
+It was correct. Measuring it produced:
 
-**For disinformation:** Coordinated campaigns that maintain internal consistency — always the same false narrative, always the same fabricated sources — function as a compressible alternative rule system. Our results predict that such coherent falsehood is indistinguishable from truth for the compressor, unlike diverse organic errors that fragment into incompressible noise.
+| claim in the preprint | status |
+|---|---|
+| Random errors: preference 65% → 85% with scale | narrowed — 59.0% at 86M, nothing below, on the controlled measure |
+| Coherent errors eliminate the preference | **holds**, at every size, architecture and corpus |
+| Two competing rules restore it (47% → 78%) | **withdrawn** — mass splitting |
+| Preference tracks description length | **withdrawn** — the ladder is flat |
+| Coherent errors fall *below* chance (~45%) | **withdrawn** — completion length (−0.58 tokens) |
 
-**For data curation:** At 4:1 noise ratio, models still extract truth at 65% accuracy — as long as errors are structurally incoherent. Diverse mistakes are self-correcting; systematic ones are not.
+The reply sent to the area chair is in
+[`docs/official_comment_rFTw.md`](docs/official_comment_rFTw.md). The revised
+paper is `paper_conf/main_v2.tex`; `paper_conf/main.tex` is the frozen submitted
+version.
 
-## Quick Start
+## Quick start
 
 ```bash
-# Setup
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# Generate corpus: same problems with correct + random wrong answers
+# corpus: same problems with correct + random wrong answers
 python data/generate_math.py \
   --n 200000 --ratio 0.5 --seed 42 --error-mode random \
   --output data/corpus/train_mixed_50_50.txt
 
-# Train a model
+# train
 python training/train.py \
   --corpus data/corpus/train_mixed_50_50.txt \
   --model tiny --steps 5000 --seed 42 \
   --output results/mixed_50_50_tiny_seed42
 
-# Evaluate: does it prefer the correct answer?
-python data/generate_paired_test.py \
-  --n 5000 --seed 999 --error-mode random \
-  --output data/corpus/test_paired_random.jsonl
+# enumerate the generator's full false support, then measure the share
+python analysis/gen_random_support.py --n 1200 --seed 999 \
+  --output data/corpus/support_random.jsonl
 
-python training/eval_paired.py \
+python analysis/eval_aggregate_mass.py \
   --model-size tiny \
   --weights results/mixed_50_50_tiny_seed42/model_final.npz \
   --tokenizer results/mixed_50_50_tiny_seed42/tokenizer.json \
-  --test-paired data/corpus/test_paired_random.jsonl \
-  --output results/mixed_50_50_tiny_seed42/eval_paired.json
+  --support data/corpus/support_random.jsonl \
+  --output results/mixed_50_50_tiny_seed42/aggregate_mass_random.json
 ```
 
-## Repository Layout
+## Repository layout
 
 ```
-paper_v3.md        full manuscript (English)
-training/          MLX model training and evaluation
-training_torch/    PyTorch port (GPU denoising experiments)
-data/              corpus generators
-analysis/          figure and analysis scripts
-results/           experiment outputs and figures
-scripts/           experiment runners
+paper_conf/main.tex        submitted version (frozen)
+paper_conf/main_v2.tex     revision after the controls
+docs/mass_control.md       the measurement, its null, and both control grids
+docs/official_comment_*    what was sent to the area chair
+training/                  MLX model training and evaluation
+training_torch/            PyTorch port (GPU and cluster runs)
+data/                      corpus generators
+analysis/                  support enumeration, mass evaluation, figures
+results/                   local experiment outputs
+results_cluster/           per-run outputs from the 8xH100 grids
+scripts/                   experiment runners
 ```
 
-## Reproducing Experiments
+## Reproducing
 
 ```bash
-# Core denoising (J1–J4): requires GPU, runs on Modal.com
+# core denoising (GPU, Modal.com)
 python modal_run.py
 
-# Standard experiments (MLX, Apple Silicon)
+# standard experiments (MLX, Apple Silicon)
 bash scripts/run_scaling.sh
 bash scripts/run_multirule.sh
 
 # Wikipedia entity substitution
 bash scripts/run_wiki_experiment.sh
+
+# description-length ladder + the clean-corpus control
+bash scripts/run_keyed_ladder.sh
 ```
 
 ## Citation
@@ -138,7 +183,6 @@ bash scripts/run_wiki_experiment.sh
 
 [![Telegram](https://img.shields.io/badge/Telegram-Robofuture-2CA5E0?logo=telegram)](https://t.me/robofuture)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Konstantin_Krestnikov-0A66C2?logo=linkedin)](https://www.linkedin.com/in/krestnikov/)
-[![arXiv](https://img.shields.io/badge/arXiv-2603.11749-b31b1b.svg)](https://arxiv.org/abs/2603.11749)
 
 ## License
 

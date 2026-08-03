@@ -4,9 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Research project: "Error Structure Determines Correctness Preference in Contradictory Training Data" (arXiv:2603.11749). Trains GPT-2-style transformers on contradictory math data (same problem, correct + incorrect answers) to study when models prefer truth. Core finding: truth bias is a compression artifact — random errors are incompressible so truth wins, but coherent errors compress equally well and truth bias vanishes.
+Research project on correctness preference in contradictory training data. Trains GPT-2-style transformers on contradictory math data (same problem, correct + incorrect answers) to study when models prefer the correct answer.
 
-Paper: `paper_v3.md` (English, NeurIPS 2026 submission). Previous version: `paper_v2.md`.
+Current finding, after the August 2026 controls: **a coherent false rule is never filtered, at any size, architecture or corpus; an unpredictable error loses about ten points of probability mass to the correct answer at 86M and nothing below.** Compression is the framing that motivated the design, not a quantity this work measures — two experiments built to identify it (multi-rule, description-length ladder) turned out to measure probability-mass splitting and are reported as negative controls. Read `docs/mass_control.md` before making any claim about this project's results.
+
+**Sources of truth, in order:**
+- `paper_conf/main.tex` — the version submitted to NeurIPS 2026. **Frozen; do not edit.**
+- `paper_conf/main_v2.tex` — the revision. Edit this one.
+- `docs/mass_control.md` — the measurement, its null, and the two control grids.
+- `docs/official_comment_rFTw.md` — what was conceded to the area chair (posted 2026-08-03, frozen).
+- `TODO.md` — current state and what is blocking camera-ready.
+
+`paper_v3.md` and `paper_v2.md` are dead markdown drafts kept for history; they still contain the withdrawn claims and several bugs fixed only in LaTeX.
 
 ## Environment Setup
 
@@ -28,7 +37,16 @@ python data/generate_math.py --n 200000 --ratio 0.5 --seed 42 --error-mode rando
 python training/train.py --corpus data/corpus/train_mixed_50_50.txt \
   --model tiny --steps 5000 --seed 42 --output results/mixed_50_50_tiny_seed42
 
-# Paired evaluation (primary metric: does model prefer correct answer?)
+# Aggregate share (PRIMARY metric): correct vs the generator's whole false support
+python analysis/gen_random_support.py --n 1200 --seed 999 \
+  --output data/corpus/support_random.jsonl
+python analysis/eval_aggregate_mass.py --model-size tiny \
+  --weights results/.../model_final.npz --tokenizer results/.../tokenizer.json \
+  --support data/corpus/support_random.jsonl \
+  --output results/.../aggregate_mass_random.json
+# GPU twin: analysis/eval_aggregate_mass_torch.py (same flags)
+
+# Paired evaluation (SECONDARY: kept for comparability, inflated by mass splitting)
 python training/eval_paired.py --model-size tiny \
   --weights results/.../model_final.npz --tokenizer results/.../tokenizer.json \
   --test-paired data/corpus/test_paired_random.jsonl \
@@ -56,7 +74,9 @@ bash scripts/run_wiki_experiment.sh
 
 **Analysis:** `analysis/` contains plotting scripts. Each generates figures in `results/`. Key: `plot_scaling_multirule.py`, `compression_measure.py`, `plot_learning_curves.py`.
 
-**Model sizes:** tiny (3.5M), small (11M), medium (26M), large (86M). Defined in `training/model.py` `MODEL_CONFIGS` dict.
+**Model sizes:** tiny (3.5M), small (12M), medium (26M), large (86M). Defined in `training/model.py` `MODEL_CONFIGS` dict. Larger sizes used on the cluster: xlarge (200M), plus Qwen3 0.6B and 1B.
+
+**Cluster work.** `results_cluster/` holds the per-run outputs of the 8×H100 grids (240 run dirs): the description-length ladder (`ladder2_*`, plus `ladder2_clean_*` calibration), the denoising rerun (`denoise2_*`), and the held-out scaling grid (`scale_*`, `scale2_keyed_*`). Pull with `scripts/pull_cluster.sh` (set `CDT_HOST` and `CDT_KEY`). Training weights are deleted after evaluation; only metric JSON is kept.
 
 ## Paper Writing Style
 
@@ -64,7 +84,9 @@ The paper must follow academic style. Banned phrases (AI text markers): "важ�
 
 ## Key Conventions
 
-- Experiments use 4 seeds (42–45) by default. Results report mean±std.
-- Paired accuracy is the primary metric; corpus-level ΔLoss can be confounded.
+- Experiments use 4 seeds (42–45) by default. Results report mean±std (population std).
+- **Aggregate share is the primary metric**; pair accuracy is secondary and inflated whenever the false side has more than one form. Corpus-level ΔLoss is confounded and not used.
+- Every new condition must report `length_delta_mean` and the equal-length subset. Two published effects turned out to be completion length, not error structure.
+- A null of 0.5 holds only where the corpus frequencies are known (each problem written exactly twice). Off the training set the null differs per measure — see `results_cluster/SCALING_LAW.md` §1.
 - Model weights: `model_final.npz` (MLX) or `model_final.pt` (PyTorch). Tokenizer: `tokenizer.json`.
 - Results master table: `results_master.csv`, human-readable: `scripts/tables.md`.

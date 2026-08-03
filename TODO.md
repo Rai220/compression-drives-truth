@@ -1,101 +1,108 @@
-# TODO: NeurIPS 2026 Submission
+# TODO — after the NeurIPS 2026 rebuttal
 
-**Deadlines:** Abstract — 4 мая AoE, Full paper — 6 мая AoE
-**Today:** 2026-04-18 (~2.5 недели до abstract)
-**Track:** Main (General) vs Evaluations & Datasets — НЕ РЕШЕНО
-**Current draft:** `paper_v3.md` → `paper_conf/main.tex` (собран в `main.pdf`, 826 строк)
+**State on 2026-08-03.** Submission 473 reviewed (4, 4, 3, 2). The meta-review
+named one condition for changing the decision: show that the effect is not
+probability-mass splitting. It was measured; part of the paper survived and part
+did not. The Official Comment answering reviewer rFTw was posted 2026-08-03
+(`docs/official_comment_rFTw.md`) and is frozen. Notification 18 September,
+camera-ready 23 October AoE.
 
-Наука закрыта: 160+ моделей, все условия покрыты. Остаток — решения пользователя + submission.
-
----
-
-## 🔴 БЕЗОПАСНОСТЬ (срочно)
-
-- [ ] **HF token в `.env` был виден в shell output** (значение не вписываю в этот файл умышленно — GitHub push protection блокирует). Файл в `.gitignore` и не в git, но токен всё равно мог утечь. **Рекомендация:** отозвать и перегенерировать на https://huggingface.co/settings/tokens
-- [x] `.env` исключён из анонимного ZIP
+`paper_conf/main.tex` is the **submitted** version and is frozen too — do not
+edit it. The revision lives in `paper_conf/main_v2.tex`.
 
 ---
 
-## ❓ Вопросы к пользователю (ждут решения)
+## What the controls established
 
-1. **Track:** Main (General) vs Evaluations & Datasets?
-   - Main = больше prestige, novelty-бар выше, toy-regime больнее бьёт
-   - E&D = natural fit (failure-mode analysis), reviewer pool мягче к toy-regime
-   - Моя рекомендация: **E&D**
+Measured, verified against raw JSON, documented in `docs/mass_control.md`:
 
-2. **Title:** оставить "Error Structure Determines Correctness Preference..." или вернуть "Compression Favors Consistency, Not Truth"?
-   - Моя рекомендация: **оставить текущий** (точнее описывает вклад, «compression» рецензенты частично отвергли)
+- **Survives.** At 86M the correct completion holds 59.0 ± 0.8% of the mass
+  against the generator's full false support (4 seeds, every per-seed bootstrap
+  interval above 0.5), replicated at 59.4 ± 0.6 on an independent corpus.
+- **Survives, and is the robust half.** A single coherent false rule is not
+  filtered at any size, architecture or corpus. One false mode, so splitting is
+  impossible by construction.
+- **Withdrawn.** The multi-rule N=1→2 jump is splitting: mass 47.9 → 47.8 while
+  pair accuracy goes 47 → 79.
+- **Withdrawn.** The description-length ladder shows no grading (86M family:
+  55.6 / 51.9 / 52.6 / 51.3 across L = 1, 4, 16, 64).
+- **Withdrawn.** "Coherent errors fall below chance" — that was completion
+  length (−0.58 tokens; length-matched 46.7–49.3).
+- **Narrowed.** Pair accuracy overstates the excess above chance roughly
+  threefold at 86M, and shows an effect below it where the controlled measure
+  shows none.
 
-3. **Qwen-1B seed 43:** запускать на Kaggle (~15ч, твой аккаунт) или оставить single seed + caveat?
-   - Caveat уже добавлен в Limitations (строка 330 main.tex) и в подпись Figure (строка 277). Текст честно говорит "single-seed scaling check"
-   - Если хочешь закрыть возражение наглухо — нужен ещё seed; иначе можно оставить как есть
+## Blocking for camera-ready
 
-4. **N-gram baseline:** делать (минуты, одна строка в таблице) или пропускаем?
-   - Моя рекомендация: **сделать, если не лень** — копеечный страховой полис
+- [ ] **Trim `main_v2.tex` to the page limit.** Body currently runs to ~11 pages
+      against a 9-page limit (10 for camera-ready). The control grids are already
+      in Appendix C; the next candidates are Related Work and Section 4.4.
+- [ ] **Decide the title.** `main_v2.tex` proposes "Correctness Preference Is
+      Smaller Than It Looks: Probability Mass in Contradictory Training Corpora".
+      The comment committed to narrowing the submitted one.
+- [ ] **Keep the release promise.** The comment promises the corpora, the
+      enumeration code and the per-run outputs behind both grids. Code and
+      per-run JSON are now in git; the corpora (~207 MB under `data/corpus/`)
+      are gitignored and need either a distribution channel or a regeneration
+      recipe with published SHA-256 checksums. `docs/mass_control.md` has the
+      commands.
+- [ ] **Rebuild the anonymous supplement.** `submission/anonymous_supplement.zip`
+      is from 2026-04-24 and contains none of the enumeration code, the new
+      corpora or the control outputs. Re-run
+      `scripts/prepare_anonymous_submission.sh`, then re-run the anonymity grep
+      (`krestnikov|rai220|github|@gmail|2603.11749`) over whatever goes in.
+- [ ] **Figures.** `figure_denoising_j1_j2.png` and `figure7_multirule.png` plot
+      pair accuracy only and are no longer referenced by `main_v2.tex`;
+      `figure_full_scaling.png` is still used and its caption now carries the
+      pair-accuracy caveat. New figures come from
+      `analysis/plot_mass_control.py` and `analysis/plot_multirule_control.py`.
+- [ ] **arXiv v2.** The preprint (2603.11749) states the withdrawn claims and
+      should be updated once `main_v2.tex` settles.
 
-5. **Related Work polish:** перечитать/усилить отделение от memorization/data-poisoning литературы или оставить?
-   - Моя рекомендация: **перечитать** (~1-2ч) — живые рецензенты реально по novelty бьют
+## Worth doing, not blocking
 
----
+- [ ] **Clean-corpus control at Qwen3 sizes.** The one experiment that would
+      settle whether the +5 points at 420M–1B in the held-out grid is a
+      preference or a calibration offset of the family measure. Cheap: 4–5 sizes
+      × 2 seeds, no new corpus family; `generate_scale.py` needs a clean mode.
+      See `results_cluster/SCALING_LAW.md` §6.
+- [ ] **Second seed for the 1B FineWeb-Edu run** (~15 h on Kaggle). Still the
+      only single-seed cell in the paper.
+- [ ] **Regenerate `scale_heldout_runs.csv` / `scale_heldout_summary.csv`** —
+      they stopped at 71 runs and predate the 34 family runs.
+- [ ] Name the statistical tests in Section 3.4, not only in the checklist.
+- [ ] Related Work: data poisoning / backdoors (Gu, Wallace, Carlini) and one
+      sentence on TruthfulQA-style evaluation. Both are standard reviewer asks
+      and neither is present.
+- [ ] Section 4.7 (1B): repeats, tokens, steps and warmup are still unstated.
+- [ ] Ethical Considerations: name the data licences (Wikipedia CC BY-SA,
+      FineWeb-Edu ODC-BY). They are in the checklist but not in the section.
+- [ ] Name the exposure-bias / teacher-forcing gap and cite Bachmann &
+      Nagarajan (2024).
 
-## ✅ Сделано в этой сессии (2026-04-18)
+## Security / hygiene
 
-- [x] **Grep sweep** по `main.tex`/`references.bib` — чисто, деанонимизирующих строк нет
-- [x] **Анонимный ZIP собран:** `/tmp/anon_submission.zip` (11MB, 120 файлов)
-  - Исключены: `.git`, `.env`, `.claude`, `.free-code-logs`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `paper_v{2,3}.md`, `paper_conf/`, `Статья К.К..md`, `TODO.md`, `*.npz/*.pt`, `results/`, `modal_*.py`, `kaggle_train_1b.py`, `notebooks/`, `scripts/upload_to_hf.py`, `LICENSE`, `data/corpus/train_*` (регенерируются скриптами), `main.py`
-  - Включены: `training/`, `training_torch/`, `data/generate_*.py`, `data/corpus/test_paired_*.jsonl`, `analysis/`, `scripts/`, `Dockerfile`, `run_*_experiment.sh`, `results_master.csv`, `docs/refs_audit.md`
-  - Добавлен анонимный `README.md` с reproduction instructions
-  - Финальная проверка grep: 0 совпадений по `krestnikov|rai220|github|@gmail|2603.11749`
-- [x] **Проверка main.tex** — NeurIPS checklist полностью заполнен (все 15 пунктов Yes/NA с justifications)
-- [x] **Проверка Limitations** — уже покрывает: model scale, domain specificity, discriminative/generative gap, seed counts, causal identification. Ничего добавлять не нужно
-- [x] **Проверка multi-rule / probability mass concern** — уже обсуждается: main.tex:194 ("selector...adding high-complexity bits that break compressibility") + main.tex:395 (MDL appendix, Prediction 3, `O(n log N)` bits for source selection). Logsumexp ablation не нужен
+- [ ] **HF token in `.env`** was visible in shell output in April. The file is
+      gitignored and not in history, but rotation status is unknown. Rotate at
+      https://huggingface.co/settings/tokens if it has not been done.
+- [x] Cluster scripts sanitised: `scripts/pull_cluster.sh` and
+      `scripts/run_keyed_ladder_cluster.sh` no longer carry a private-key path,
+      a hostname or another person's account name (2026-08-03).
+- [ ] `paper_conf/poster/` stays untracked: it prints the arXiv id and describes
+      a named-venue talk. Its `README.md` also promises `poster_datafest.*`
+      files that do not exist.
+- [ ] `data/generate_paired_test.py` at seed 999 no longer reproduces the
+      committed `test_paired_random.jsonl` (the file matches its manifest hash;
+      the generator drifted). Shipped artefacts are unaffected, but the
+      documented regeneration command is wrong.
 
----
+## Closed
 
-## 📋 Остаётся (после принятия решений выше)
-
-### Пересобрать PDF
-- [ ] `main.tex` обновлён 15 апреля 18:36, `main.pdf` собран 15:59 того же дня — **PDF устарел**
-- [ ] Перегенерировать PDF из `paper_conf/main.tex` перед подачей. На macOS нет локального pdflatex — использовать Overleaf (`paper_conf/overleaf_upload.zip` уже есть) или TeX Live.
-
-### Пересобрать ZIP после финальных правок
-- [ ] Если будут изменения в `main.tex` или коде — пересобрать `/tmp/anon_submission.zip`. Скрипт экскклюдов готов в этой сессии.
-
-### Submission (OpenReview, твой аккаунт)
-- [ ] 4 мая AoE: submit abstract (title + abstract + author list)
-- [ ] 6 мая AoE: submit full paper (PDF + anonymous ZIP)
-- [ ] OpenReview профили авторов обновлены
-
----
-
-## 📦 Опциональные улучшения (по желанию, не блокируют submit)
-
-- [ ] N-gram baseline (вопрос #4) — ~30 минут кода, добавит одну строку в таблицу Robustness Checks
-- [ ] Related Work polish (вопрос #5) — перечитать, усилить novelty-позиционирование vs Longpre/Marks/Wang (data poisoning), Carlini (memorization)
-
----
-
-## ✅ Готово ранее
-
-- [x] paper_v3.md — переписан по замечаниям рецензентов (абстракт, интро, структура, MDL framing)
-- [x] Generation eval на всех размерах (tiny→large, random+coherent) — Table 4
-- [x] Qwen3-0.6B experiment — 86.8% random, 50.6% coherent (Table 5, Figure 3)
-- [x] Qwen3-1B on FineWeb-Edu (seed 42) — 76.8% random, 46.7% coherent
-- [x] J-labels → human-readable names
-- [x] Caveats → Methodology + Limitations
-- [x] Contribution → один чёткий тезис
-- [x] Limitations / Ethical Considerations — ненумерованные секции после Conclusion
-- [x] ±std в multi-rule таблице
-- [x] Corpus generation examples в Appendix A
-- [x] Inverse scaling chained verification в Discussion
-- [x] Discriminative vs generative gap расширен в Limitations
-- [x] Modal volumes удалены (нет ongoing costs)
-- [x] P2.1 Soften claims — "establish that" → "support the hypothesis that"
-- [x] P2.2 Version skew — README title/count fixed, "abrupt crossover"
-- [x] P2.3 Per-task generation breakdown — added to Section 4.5
-- [x] P1.4 Matched-control ablation — 74.5%±0.4% (4 seeds), closes surface confound
-- [x] LaTeX conversion — paper_conf/main.tex (NeurIPS 2026 style, 9 pages)
-- [x] Anonymization checklist — paper_conf/ANONYMIZATION_CHECKLIST.md
-- [x] NeurIPS checklist — paper_conf/main.tex (все 15 пунктов заполнены)
-- [x] Docker reproduction — Dockerfile + scripts/reproduce_minimal.sh
-- [x] Bibliography — 31 refs verified
+- [x] Rebuttal to reviewers, and the Official Comment answering rFTw's
+      identification objection (posted 2026-08-03).
+- [x] Aggregate-mass measurement on three corpora (mixed, denoising, ladder)
+      plus the clean-corpus calibration control.
+- [x] Appendix numbering, bibliography artefacts, the 11M/12M inconsistency, the
+      multi-rule table caption and the NeurIPS checklist — all fixed in the
+      LaTeX version; they survive only in the dead `paper_v3.md`.
+- [x] Submission, review, rebuttal window.

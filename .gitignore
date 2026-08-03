@@ -1,4 +1,9 @@
 # ============================================
+# Local-only review notes (not for submission package)
+# ============================================
+TODO_ANALYZE.md
+
+# ============================================
 # Project-specific: heavy artifacts (reproducible from code)
 # ============================================
 
@@ -252,3 +257,11 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 .free-code-logs/
+
+# Locally generated submission PDFs; Overleaf is the source of truth.
+paper_conf/main.pdf
+paper_conf/main_v2.pdf
+
+# Poster: not part of the paper package, prints the arXiv id, and its README
+# promises files that do not exist. Kept local until it is rebuilt.
+paper_conf/poster/
