@@ -15,7 +15,7 @@ Current finding, after the August 2026 controls: **a coherent false rule is neve
 - `docs/official_comment_rFTw.md` — what was conceded to the area chair (posted 2026-08-03, frozen).
 - `TODO.md` — current state and what is blocking camera-ready.
 
-`paper_v3.md` and `paper_v2.md` are dead markdown drafts kept for history; they still contain the withdrawn claims and several bugs fixed only in LaTeX.
+The markdown drafts `paper_v2.md` and `paper_v3.md` were deleted on 2026-08-03: they carried the withdrawn claims and bugs fixed only in LaTeX. They remain in git history if ever needed.
 
 ## Environment Setup
 
@@ -70,9 +70,9 @@ bash scripts/run_wiki_experiment.sh
 
 **Data generation pipeline:** `data/generate_math.py` is the core generator. Specialized variants: `generate_math_denoising.py` (same problem with correct+wrong), `generate_math_multirule.py` (N competing wrong rules), `generate_math_conditions.py` (false theory conditions C/D/E), `generate_wiki_corpus.py` (Wikipedia NER entity substitution), `generate_synthetic_world.py` (natural language world).
 
-**Evaluation:** Paired eval (`eval_paired.py`) is the primary metric — compares NLL on correct vs incorrect completion for the same problem. Also: `eval_perplexity.py` (corpus-level), `eval_generation.py` (greedy decode + SymPy verification).
+**Evaluation:** `analysis/eval_aggregate_mass.py` (MLX) and `eval_aggregate_mass_torch.py` (PyTorch) compute the primary metric, the aggregate share against the enumerated false support; the supports come from `analysis/gen_*_support.py`. Secondary: `training/eval_paired.py` (one false completion, inflated by splitting), `eval_perplexity.py` (corpus-level), `eval_generation.py` (greedy decode + SymPy verification, immune to the splitting objection).
 
-**Analysis:** `analysis/` contains plotting scripts. Each generates figures in `results/`. Key: `plot_scaling_multirule.py`, `compression_measure.py`, `plot_learning_curves.py`.
+**Analysis:** `analysis/` holds the support enumerators, the mass evaluators, and plotting. Live figures: `plot_mass_control.py` and `plot_multirule_control.py` (the revision), `plot_full_scaling.py` and `plot_scaling_multirule.py` (figures the frozen `main.tex` still uses). Also `compression_measure.py` (gzip appendix) and `wiki_length_check.py`.
 
 **Model sizes:** tiny (3.5M), small (12M), medium (26M), large (86M). Defined in `training/model.py` `MODEL_CONFIGS` dict. Larger sizes used on the cluster: xlarge (200M), plus Qwen3 0.6B and 1B.
 

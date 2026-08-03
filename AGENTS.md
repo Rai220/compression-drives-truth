@@ -20,8 +20,9 @@
 - `docs/official_comment_rFTw.md` — что признано перед AC (отправлено, заморожено).
 - `TODO.md` — текущее состояние и что блокирует camera-ready.
 
-`paper_v3.md` и `paper_v2.md` — мёртвые markdown-черновики, оставлены для истории:
-в них живут снятые утверждения и баги, исправленные только в LaTeX.
+Markdown-черновики `paper_v2.md` и `paper_v3.md` удалены 2026-08-03: в них жили
+снятые утверждения и баги, исправленные только в LaTeX. Если понадобятся — они
+в истории git.
 
 ## Что где лежит
 
@@ -59,8 +60,12 @@ python training/eval_perplexity.py --model-size tiny --weights results/mixed_50_
 # Генерация текста
 python training/generate.py --model-size tiny --weights results/mixed_50_50_tiny_seed42/model_final.npz --tokenizer results/mixed_50_50_tiny_seed42/tokenizer.json --prompt "Problem: " --max-tokens 200 --temperature 0.3 --n 5
 
+# Замер aggregate share (основная метрика)
+python analysis/gen_random_support.py --n 1200 --seed 999 --output data/corpus/support_random.jsonl
+python analysis/eval_aggregate_mass.py --model-size tiny --weights results/mixed_50_50_tiny_seed42/model_final.npz --tokenizer results/mixed_50_50_tiny_seed42/tokenizer.json --support data/corpus/support_random.jsonl --output results/mixed_50_50_tiny_seed42/aggregate_mass_random.json
+
 # Построение графиков
-python analysis/plot_results.py
+python analysis/plot_mass_control.py
 ```
 
 ## Стиль написания статьи

@@ -1,9 +1,4 @@
 # ============================================
-# Local-only review notes (not for submission package)
-# ============================================
-TODO_ANALYZE.md
-
-# ============================================
 # Project-specific: heavy artifacts (reproducible from code)
 # ============================================
 
@@ -27,8 +22,7 @@ data/test_sample.meta.json
 Formatting_Instructions/
 paper_conf/Formatting_Instructions_For_NeurIPS/
 
-# NeurIPS template and build artifacts
-paper_conf/neurips_2026_template.tex
+# NeurIPS build artifacts
 paper_conf/overleaf_upload.zip
 paper_conf/*.aux
 paper_conf/*.log

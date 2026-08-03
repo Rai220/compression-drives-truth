@@ -127,7 +127,7 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       plus the clean-corpus calibration control.
 - [x] Appendix numbering, bibliography artefacts, the 11M/12M inconsistency, the
       multi-rule table caption and the NeurIPS checklist — all fixed in the
-      LaTeX version; they survive only in the dead `paper_v3.md`.
+      LaTeX version; the markdown drafts that still carried them are deleted.
 - [x] Submission, review, rebuttal window.
 
 ## Numbers that could not be verified from this repository (2026-08-03)
