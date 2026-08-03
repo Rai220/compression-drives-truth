@@ -28,9 +28,10 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
   55.6 / 51.9 / 52.6 / 51.3 across L = 1, 4, 16, 64).
 - **Withdrawn.** "Coherent errors fall below chance" — that was completion
   length (−0.58 tokens; length-matched 46.7–49.3).
-- **Narrowed.** Pair accuracy overstates the excess above chance roughly
-  threefold at 86M, and shows an effect below it where the controlled measure
-  shows none.
+- **Narrowed.** At 86M the pairwise measures overstate the excess above chance
+  by three to four times (realized share 27.6 pp, pair accuracy 37.4 pp, family
+  9.0 pp), and below 86M they show an effect where the controlled measure shows
+  none.
 
 ## Blocking for camera-ready
 
