@@ -35,9 +35,17 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
 
 ## Blocking for camera-ready
 
-- [ ] **Trim `main_v2.tex` to the page limit.** Body currently runs to ~11 pages
-      against a 9-page limit (10 for camera-ready). The control grids are already
-      in Appendix C; the next candidates are Related Work and Section 4.4.
+- [ ] **Trim `main_v2.tex` to the page limit.** Body is **12 pages** against a
+      9-page limit (10 for camera-ready), measured from the built PDF —
+      Limitations ends on p12, references start on p13. Note that trimming the
+      appendices does not help: they fall outside the limit. Merging the Qwen3
+      and 1B sections and compressing the MDL framing bought back roughly what
+      the new Wikipedia analysis added. What is left to demote, with estimates:
+      Related Work 5 paragraphs → 3 (~0.5 p), Section 4.4 Robustness Checks
+      (~0.4 p), the Wikipedia and generative tables → appendix keeping prose
+      (~0.6 p), Discussion "What pair accuracy is good for" folded into "What we
+      withdraw" (~0.25 p), Figure 1 to 0.85 textwidth (~0.15 p). That is an
+      author's call about what stops being load-bearing, not a mechanical edit.
 - [ ] **Decide the title.** `main_v2.tex` proposes "Correctness Preference Is
       Smaller Than It Looks: Probability Mass in Contradictory Training Corpora".
       The comment committed to narrowing the submitted one.
@@ -57,16 +65,30 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       `figure_full_scaling.png` is still used and its caption now carries the
       pair-accuracy caveat. New figures come from
       `analysis/plot_mass_control.py` and `analysis/plot_multirule_control.py`.
+- [ ] **Clean-corpus control at Qwen3 sizes.** Promoted to blocking: without it
+      the held-out grid cannot answer the reviewers' scale question. At 420M–1B
+      the correct completion holds ~5 points more than an exact 0.5 null on the
+      length-matched subset (4 runs, 5.9–7.7 sigma) while coherent sits at 50.0
+      and 50.2 — the only measurement above 86M taken with the right null. It
+      cannot go in the paper until a clean corpus at the same sizes bounds the
+      measure's calibration offset. Cheap: 4–5 sizes × 2 seeds, no new corpus
+      family; `generate_scale.py` needs a clean mode. See
+      `results_cluster/SCALING_LAW.md` §6.
 - [ ] **arXiv v2.** The preprint (2603.11749) states the withdrawn claims and
       should be updated once `main_v2.tex` settles.
 
 ## Worth doing, not blocking
 
-- [ ] **Clean-corpus control at Qwen3 sizes.** The one experiment that would
-      settle whether the +5 points at 420M–1B in the held-out grid is a
-      preference or a calibration offset of the family measure. Cheap: 4–5 sizes
-      × 2 seeds, no new corpus family; `generate_scale.py` needs a clean mode.
-      See `results_cluster/SCALING_LAW.md` §6.
+- [ ] **Aggregate share on Wikipedia, via single-entity paragraphs.** The
+      largest remaining gap: natural language currently has no usable
+      measurement at all for the random condition, only for coherent. The false
+      support is the product of entity pools over every entity site, and the
+      evaluation set has a median of 8 sites and no paragraph with fewer than 2
+      (`analysis/wiki_length_check.py`). Regenerating the eval set restricted to
+      single-entity paragraphs makes the support exactly that entity type's
+      pool — a few hundred to a few thousand strings — summable at one forward
+      pass per pool member, with the same exact 0.5 null as the math corpora.
+      Add a clean-Wikipedia calibration run alongside, as `ladder2_clean` does.
 - [ ] **Second seed for the 1B FineWeb-Edu run** (~15 h on Kaggle). Still the
       only single-seed cell in the paper.
 - [ ] **Regenerate `scale_heldout_runs.csv` / `scale_heldout_summary.csv`** —
