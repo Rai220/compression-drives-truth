@@ -1,0 +1,17 @@
+{
+  "weights": "results/scale_random_tiny_seed45/model_final.pt",
+  "support": "data/heldout_random_clean.jsonl",
+  "n_problems": 2523,
+  "skipped": 431,
+  "mean_false_modes": 17.52596115735236,
+  "aggregate_share_mean": 0.1251800750822339,
+  "aggregate_share_ci95": [
+    0.12041329233030813,
+    0.12989060932134697
+  ],
+  "frac_share_above_half": 0.020214030915576695,
+  "pair_accuracy_mean_nll": 0.7076975161844365,
+  "length_delta_mean": -0.028193215014459504,
+  "equal_length_share_mean": 0.14758416731579957,
+  "equal_length_n": 485
+}

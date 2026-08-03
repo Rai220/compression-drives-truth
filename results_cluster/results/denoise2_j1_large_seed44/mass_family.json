@@ -1,0 +1,17 @@
+{
+  "weights": "results/denoise2_j1_large_seed44/model_final.pt",
+  "support": "data/support_denoise_random_family_strict.jsonl",
+  "n_problems": 2569,
+  "skipped": 435,
+  "mean_false_modes": 12.03425457376411,
+  "aggregate_share_mean": 0.5808728515055166,
+  "aggregate_share_ci95": [
+    0.5719498818983381,
+    0.5897784540368739
+  ],
+  "frac_share_above_half": 0.682366679641884,
+  "pair_accuracy_mean_nll": 0.9702090278874937,
+  "length_delta_mean": -0.055274110425826396,
+  "equal_length_share_mean": 0.5807611680223164,
+  "equal_length_n": 531
+}

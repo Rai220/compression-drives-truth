@@ -1,0 +1,17 @@
+{
+  "weights": "results/denoise2_j1_tiny_seed43/model_final.pt",
+  "support": "data/support_denoise_random_realized_strict.jsonl",
+  "n_problems": 2620,
+  "skipped": 390,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.6579829282788636,
+  "aggregate_share_ci95": [
+    0.6479154637372775,
+    0.6679393387193024
+  ],
+  "frac_share_above_half": 0.7366412213740458,
+  "pair_accuracy_mean_nll": 0.7385496183206107,
+  "length_delta_mean": -0.06450381679389312,
+  "equal_length_share_mean": 0.6605851537698649,
+  "equal_length_n": 1792
+}

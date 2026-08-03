@@ -1,0 +1,17 @@
+{
+  "weights": "results/ladder2_L64_tiny_seed44/model_final.pt",
+  "support": "data/support_keyed_L64.jsonl",
+  "n_problems": 1341,
+  "skipped": 659,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.7168525142848508,
+  "aggregate_share_ci95": [
+    0.7018087844715506,
+    0.7319235359802297
+  ],
+  "frac_share_above_half": 0.7785234899328859,
+  "pair_accuracy_mean_nll": 0.7800149142431022,
+  "length_delta_mean": 0.026845637583892617,
+  "equal_length_share_mean": 0.7164445266419083,
+  "equal_length_n": 1278
+}

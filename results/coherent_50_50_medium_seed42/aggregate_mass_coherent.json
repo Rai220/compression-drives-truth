@@ -1,0 +1,44 @@
+{
+  "weights": "results/coherent_50_50_medium_seed42/model_final.npz",
+  "support": "data/corpus/support_coherent.jsonl",
+  "n_problems": 915,
+  "skipped": 85,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.5039336152707174,
+  "aggregate_share_median": 0.5105246254686604,
+  "aggregate_share_ci95": [
+    0.4936027624590978,
+    0.5144953531264708
+  ],
+  "frac_share_above_half": 0.5672131147540984,
+  "branch_share_mean": 0.5072250112873875,
+  "branch_share_n": 915,
+  "length_delta_mean": -0.7049180327868853,
+  "equal_length_share_mean": 0.5051044323568014,
+  "equal_length_n": 561,
+  "pair_accuracy_sum_nll": 0.5672131147540984,
+  "pair_accuracy_mean_nll": 0.5759562841530055,
+  "pair_n": 915,
+  "by_type": {
+    "algebra": {
+      "n": 232,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.5095945976438105
+    },
+    "arithmetic": {
+      "n": 160,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.4515150567372935
+    },
+    "derivative": {
+      "n": 249,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.5416490436129717
+    },
+    "equation": {
+      "n": 274,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.4954755123421371
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "weights": "results/flip2_keyed_tiny_seed42/model_final.pt",
+  "support": "data/heldout_flip2_keyed_clean.jsonl",
+  "n_problems": 3000,
+  "skipped": 0,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.685473352651576,
+  "aggregate_share_ci95": [
+    0.6786866452694211,
+    0.6923152767904975
+  ],
+  "frac_share_above_half": 0.8206666666666667,
+  "pair_accuracy_mean_nll": 0.8206666666666667,
+  "length_delta_mean": 0.0,
+  "equal_length_share_mean": 0.685473352651576,
+  "equal_length_n": 3000
+}

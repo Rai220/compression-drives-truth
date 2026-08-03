@@ -1,0 +1,17 @@
+{
+  "weights": "results/flip_keyed_medium_seed43/model_final.pt",
+  "support": "data/heldout_flip_keyed_clean.jsonl",
+  "n_problems": 3000,
+  "skipped": 0,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.9998334080935553,
+  "aggregate_share_ci95": [
+    0.9997800366954647,
+    0.9998770151020079
+  ],
+  "frac_share_above_half": 1.0,
+  "pair_accuracy_mean_nll": 1.0,
+  "length_delta_mean": 0.0,
+  "equal_length_share_mean": 0.9998334080935553,
+  "equal_length_n": 3000
+}

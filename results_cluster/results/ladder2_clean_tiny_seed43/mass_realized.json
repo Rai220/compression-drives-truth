@@ -1,0 +1,17 @@
+{
+  "weights": "results/ladder2_clean_tiny_seed43/model_final.pt",
+  "support": "data/support_keyed_L64.jsonl",
+  "n_problems": 1341,
+  "skipped": 659,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.9408919793915541,
+  "aggregate_share_ci95": [
+    0.9324002786316469,
+    0.9490382557447613
+  ],
+  "frac_share_above_half": 0.9627143922445935,
+  "pair_accuracy_mean_nll": 0.9627143922445935,
+  "length_delta_mean": 0.026845637583892617,
+  "equal_length_share_mean": 0.9395154295601037,
+  "equal_length_n": 1278
+}

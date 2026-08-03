@@ -1,0 +1,17 @@
+{
+  "weights": "results/ladder2_L4_large_seed43/model_final.pt",
+  "support": "data/support_keyed_L4_family.jsonl",
+  "n_problems": 1341,
+  "skipped": 659,
+  "mean_false_modes": 4.0,
+  "aggregate_share_mean": 0.5020407724476286,
+  "aggregate_share_ci95": [
+    0.49085593331808675,
+    0.5134524237551485
+  ],
+  "frac_share_above_half": 0.5123042505592841,
+  "pair_accuracy_mean_nll": 0.8963460104399702,
+  "length_delta_mean": 0.0011185682326621924,
+  "equal_length_share_mean": 0.4850984685707723,
+  "equal_length_n": 1169
+}

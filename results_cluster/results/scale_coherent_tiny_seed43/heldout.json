@@ -1,0 +1,17 @@
+{
+  "weights": "results/scale_coherent_tiny_seed43/model_final.pt",
+  "support": "data/heldout_coherent_clean.jsonl",
+  "n_problems": 2512,
+  "skipped": 430,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.3784405232344081,
+  "aggregate_share_ci95": [
+    0.3666411464308841,
+    0.3902924397874487
+  ],
+  "frac_share_above_half": 0.36863057324840764,
+  "pair_accuracy_mean_nll": 0.36942675159235666,
+  "length_delta_mean": -1.3945063694267517,
+  "equal_length_share_mean": 0.49768601681747554,
+  "equal_length_n": 1255
+}

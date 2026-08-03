@@ -1,0 +1,17 @@
+{
+  "weights": "results/ladder2_L16_medium_seed43/model_final.pt",
+  "support": "data/support_keyed_L16.jsonl",
+  "n_problems": 1340,
+  "skipped": 660,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.7554695070998357,
+  "aggregate_share_ci95": [
+    0.7433393286825886,
+    0.7679840517364968
+  ],
+  "frac_share_above_half": 0.858955223880597,
+  "pair_accuracy_mean_nll": 0.858955223880597,
+  "length_delta_mean": 0.034328358208955224,
+  "equal_length_share_mean": 0.7529425864206658,
+  "equal_length_n": 1280
+}

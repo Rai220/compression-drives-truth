@@ -1,0 +1,17 @@
+{
+  "weights": "results/flip_identity_tiny_seed43/model_final.pt",
+  "support": "data/heldout_flip_identity_clean.jsonl",
+  "n_problems": 3000,
+  "skipped": 0,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.000787876746302934,
+  "aggregate_share_ci95": [
+    0.00021375614334554388,
+    0.001557775939583612
+  ],
+  "frac_share_above_half": 0.0003333333333333333,
+  "pair_accuracy_mean_nll": 0.0003333333333333333,
+  "length_delta_mean": 0.0,
+  "equal_length_share_mean": 0.000787876746302934,
+  "equal_length_n": 3000
+}

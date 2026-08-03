@@ -1,0 +1,17 @@
+{
+  "weights": "results/scale_random_large_seed43/model_final.pt",
+  "support": "data/heldout_random_clean.jsonl",
+  "n_problems": 2523,
+  "skipped": 431,
+  "mean_false_modes": 17.52596115735236,
+  "aggregate_share_mean": 0.3904556456298335,
+  "aggregate_share_ci95": [
+    0.38014166406138805,
+    0.4006632742333322
+  ],
+  "frac_share_above_half": 0.3832738803012287,
+  "pair_accuracy_mean_nll": 0.9118128036875559,
+  "length_delta_mean": -0.028193215014459504,
+  "equal_length_share_mean": 0.4773771033335502,
+  "equal_length_n": 485
+}

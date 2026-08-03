@@ -1,0 +1,11 @@
+{
+  "corpus_path": "data/corpus/train_keyedpair_L4.txt",
+  "model_size": "tiny",
+  "n_params": 3508224,
+  "vocab_size": 41,
+  "seq_len": 256,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "max_steps": 5000,
+  "seed": 42
+}

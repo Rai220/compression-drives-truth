@@ -1,0 +1,41 @@
+{
+  "weights": "results/coherent_50_50_tiny_seed43/model_final.npz",
+  "support": "data/corpus/support_multirule_1.jsonl",
+  "n_problems": 916,
+  "skipped": 81,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.48567314005436174,
+  "aggregate_share_median": 0.4996688366486053,
+  "aggregate_share_ci95": [
+    0.4721673054223626,
+    0.49917675255896704
+  ],
+  "frac_share_above_half": 0.4978165938864629,
+  "branch_share_mean": 0.497793560347147,
+  "branch_share_n": 916,
+  "pair_accuracy_sum_nll": 0.4978165938864629,
+  "pair_accuracy_mean_nll": 0.5054585152838428,
+  "pair_n": 916,
+  "by_type": {
+    "algebra": {
+      "n": 251,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.5053371515814757
+    },
+    "arithmetic": {
+      "n": 194,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.4851373568856042
+    },
+    "derivative": {
+      "n": 240,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.45626935245567896
+    },
+    "equation": {
+      "n": 231,
+      "mean_false_modes": 1.0,
+      "aggregate_share_mean": 0.49530597150508576
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "weights": "results/scale2_keyed_small_seed44/model_final.pt",
+  "support": "data/heldout_keyed_family_clean.jsonl",
+  "n_problems": 2533,
+  "skipped": 431,
+  "mean_false_modes": 17.50256612712199,
+  "aggregate_share_mean": 0.2541385679482026,
+  "aggregate_share_ci95": [
+    0.2440112937285589,
+    0.2642687643507417
+  ],
+  "frac_share_above_half": 0.24397947098302408,
+  "pair_accuracy_mean_nll": 0.7899540875261365,
+  "length_delta_mean": -0.026535655276278977,
+  "equal_length_share_mean": 0.3570351321549687,
+  "equal_length_n": 486
+}

@@ -1,0 +1,17 @@
+{
+  "weights": "results/flip_constant_medium_seed43/model_final.pt",
+  "support": "data/heldout_flip_constant_clean.jsonl",
+  "n_problems": 3000,
+  "skipped": 0,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.001265374397838387,
+  "aggregate_share_ci95": [
+    0.0007109620180359737,
+    0.001924880488624814
+  ],
+  "frac_share_above_half": 0.0,
+  "pair_accuracy_mean_nll": 0.0,
+  "length_delta_mean": 0.0,
+  "equal_length_share_mean": 0.001265374397838387,
+  "equal_length_n": 3000
+}

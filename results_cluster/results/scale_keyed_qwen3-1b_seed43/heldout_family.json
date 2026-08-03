@@ -1,0 +1,17 @@
+{
+  "weights": "results/scale_keyed_qwen3-1b_seed43/model_final.pt",
+  "support": "data/heldout_keyed_family_clean.jsonl",
+  "n_problems": 2533,
+  "skipped": 431,
+  "mean_false_modes": 17.50256612712199,
+  "aggregate_share_mean": 0.48273188022250385,
+  "aggregate_share_ci95": [
+    0.4754152169399619,
+    0.4897730894952098
+  ],
+  "frac_share_above_half": 0.5155941571259376,
+  "pair_accuracy_mean_nll": 0.9919336974163266,
+  "length_delta_mean": -0.026535655276278977,
+  "equal_length_share_mean": 0.5638804133638221,
+  "equal_length_n": 486
+}
