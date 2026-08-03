@@ -50,7 +50,7 @@ taken over every string the error generator could have produced for that problem
 
 We train transformers (3.5M--1B parameters) from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, varying the structure of errors while holding frequency, format, and domain constant, and we measure both quantities on the same checkpoints.
 
-Our contributions are: (a)~a splitting-proof measurement of correctness preference on corpora where its null is exact, showing that the correct completion holds $59.0\%$ of the mass at 86M against random errors---about ten points---and no more than chance at 3.5M--26M; (b)~confirmation that a single coherent false rule produces no preference at any size, a result immune to splitting because its false support is one string, together with the finding that its apparent sub-chance readings are completion length; (c)~two negative controls, the multi-rule sweep and a description-length ladder, in which pair accuracy rises by 32 and 16 points while probability mass stays flat or falls; and (d)~a calibration of pair accuracy itself, which overstates the excess above chance roughly threefold in the one condition where both can be computed exactly. Results elsewhere in the paper that rest on pair accuracy alone are marked as such.
+Our contributions are: (a)~a splitting-proof measurement of correctness preference on corpora where its null is exact, showing that the correct completion holds $59.0\%$ of the mass at 86M against random errors---about ten points---and no more than chance at 3.5M--26M; (b)~confirmation that a single coherent false rule produces no preference at any size, a result immune to splitting because its false support is one string, together with the finding that its apparent sub-chance readings are completion length; (c)~two negative controls, the multi-rule sweep and a description-length ladder, in which pair accuracy rises by 32 and 16 points while probability mass stays flat or falls; and (d)~a calibration of the pairwise family of measures, which overstate the excess above chance by a factor of three to four in the one condition where all of them can be computed exactly. Results elsewhere in the paper that rest on pair accuracy alone are marked as such.
 
 %======================================================================
 \section{Related Work}
@@ -181,7 +181,7 @@ Under the splitting-proof measure the correct completion holds $59.0\% \pm 0.8\%
 
 Below 86M the same measure shows nothing: $18.6\%$, $31.6\%$ and $44.1\%$ at 3.5M, 12M and 26M, all below the $0.500$ null, while pair accuracy at those sizes already reads $72$--$89\%$. Part of that shortfall is a known downward bias of the measure at small scale rather than a preference for the false system. Trained on a corpus containing the same problems and no false rule at all, the same 18-mode family measure reads $99.7\%$ at 86M but only $64.1\%$ at 3.5M (Section~\ref{sec:ladder}): a third of the mass at the smallest size leaks onto strings that never occurred. The measure is close to unbiased where we report an effect and conservative where we report none.
 
-The gap between the two measures is the quantity the pairwise comparison adds on its own. At 86M, scoring the correct completion against the single realized error gives $27.6$~pp of excess above chance; summing the family gives $9.0$~pp. Pair accuracy overstates the effect roughly threefold, and below 86M it reverses the sign of the conclusion entirely.
+The gap between the two measures is the quantity the pairwise comparison adds on its own. At 86M, scoring the correct completion against the single realized error gives $27.6$~pp of excess above chance where summing the family gives $9.0$~pp---a threefold overstatement---and pair accuracy against that same error gives $37.4$~pp, a fourfold one. Below 86M the two measures do not merely differ in magnitude: they disagree about whether there is an effect.
 
 Against a coherent false rule no preference appears at any size: $43.5$, $45.8$, $46.4$ and $48.8\%$. This condition is immune to the objection by construction---one rule produces one string, so there is nothing to split---which makes it the more robust half of the contrast. The readings sit slightly below $0.5$, and that shortfall is completion length: the coherent false completions are on average $0.58$ tokens shorter than the correct ones, and on the length-matched subset the values are $46.7$, $48.3$, $48.1$ and $49.3\%$, approaching chance from below rather than sitting under it. The first version of this work attributed the sub-chance readings to the textual simplicity of the false rules. That reading was wrong, and we draw no conclusion from the shortfall.
 
@@ -268,11 +268,11 @@ In pair accuracy the contrast reproduces (Table~\ref{tab:wikipedia}): random sub
 
 \textbf{Tokenization.}\quad The primary experiments use a character-level tokenizer (vocab ${\sim}57$). Repeating the core conditions with a BPE tokenizer (SentencePiece, vocab=1000) raises pair accuracy from 65.3\% to 75.9\% in denoising (79.5\% to 85.6\% in standard) and leaves the coherent condition at chance (49.3\% and 45.9\%). We did not repeat the controlled measure under BPE, so this shows only that the pair-accuracy signal is not an artifact of the character tokenizer. It also bears on the coherent readings: under BPE the denoising coherent value is 49.3\% against 43.5\% at character level, consistent with the length account in Section~\ref{sec:central}, since a subword tokenizer changes the token-count difference between the two completions. Full results in Appendix~\ref{app:robustness}.
 
-\textbf{Frequency.}\quad For coherent errors, frequency dominates: at 40/60 coherent mixing the model prefers the false system in 72\% of pairs, rising to 91\% at 20/80. The coherent false support is a single string, so these values are unaffected by splitting. The corresponding sweep for random errors (67\% pair accuracy at 10/90) is pair accuracy only, and at 50/50 in the same setup and size the controlled measure is already at chance ($50.2 \pm 0.7$); we therefore do not claim that a preference persists into the minority regime. Details in Appendix~\ref{app:standard}.
+\textbf{Frequency.}\quad For coherent errors, frequency dominates: at 40/60 coherent mixing the model prefers the false system in 72\% of pairs, rising to 90\% at 20/80. The coherent false support is a single string, so these values are unaffected by splitting. The corresponding sweep for random errors (67\% pair accuracy at 10/90) is pair accuracy only, and at 50/50 in the same setup and size the controlled measure is already at chance ($50.2 \pm 0.7$); we therefore do not claim that a preference persists into the minority regime. Details in Appendix~\ref{app:standard}.
 
 \textbf{Matched-control ablation.}\quad Coherent errors affect more derivation steps per problem (${\sim}3$ on average) than standard random errors (exactly 1). ``Matched random'' errors corrupt the same number of steps at random positions with random values, and give $74.5\% \pm 0.4\%$ pair accuracy (4 seeds) against $47.2\%$ for coherent at identical step counts. This rules out corruption load as the explanation, but not mode count: matched-random errors have a large false support and coherent errors have exactly one, so the 27~pp gap is also what splitting alone would produce. The measurement in Section~\ref{sec:central} is the control that addresses the latter.
 
-\textbf{Noise tolerance.}\quad Pair accuracy declines from 85\% at 1:1 to 66--75\% at 1:4 (large). The number of false completions per problem also changes across these conditions, and pair accuracy is sensitive to that, so we report the trend descriptively. Details in Appendix~\ref{app:standard}.
+\textbf{Noise tolerance.}\quad At 86M, pair accuracy declines from 85\% at a 1:1 correct-to-incorrect ratio to 75\% at 1:2 and 66\% at 1:4. The number of false completions per problem also changes across these conditions, and pair accuracy is sensitive to that, so we report the trend descriptively. Details in Appendix~\ref{app:standard}.
 
 \subsection{Generative Evaluation}
 \label{sec:generative}
@@ -291,11 +291,11 @@ medium (26M)  & $50.5\% \pm 1.3\%$ & $36.1\% \pm 2.7\%$ & $+14.4$ pp \\
 large (86M)   & $52.8\% \pm 1.1\%$ & $35.6\% \pm 1.8\%$ & $+17.2$ pp \\
 \bottomrule
 \end{tabular}
-\caption{Generative accuracy (4 seeds, 500 problems each). The gap widens with model size.}
+\caption{Generative accuracy (4 seeds, 500 problems each). The gap widens with model size. Every cell recomputes from the released per-run evaluation logs except the tiny random-trained one, whose logs did not survive; it is reproduced from the first version of this work and is the only number in the paper we cannot re-derive.}
 \label{tab:generative}
 \end{table}
 
-Random-trained models solve more problems than coherent-trained ones at every size, and the gap widens with scale (10~pp at tiny $\to$ 17~pp at large, Table~\ref{tab:generative}). At 3.5M, where the controlled likelihood measure shows nothing (18.6\%), generation still separates the two conditions ($30.5\%$ vs $20.8\%$, 4 seeds). The two measurements are not in conflict---they ask different questions, one about allocation of mass between two given strings and one about what the model produces unprompted---but the generative result is the reason we do not claim the small-model conditions are entirely without effect. Absolute generation accuracy is far below pair accuracy (53\% vs 85\% at large), which is the familiar teacher-forcing gap: ranking two supplied strings is easier than producing one autoregressively without error compounding.
+Random-trained models solve more problems than coherent-trained ones at every size, and the gap widens with scale (10~pp at tiny $\to$ 17~pp at large, Table~\ref{tab:generative}). At 12M, where the controlled likelihood measure reads $31.6\%$ and reports no preference, generation already separates the two conditions cleanly: $46.7\% \pm 1.8\%$ against $31.7\% \pm 1.7\%$ over 4 seeds each, with no per-seed overlap. The two measurements are not in conflict---they ask different questions, one about allocation of mass between two given strings and one about what the model produces unprompted---but the generative result is the reason we do not claim the small-model conditions are entirely without effect. Absolute generation accuracy is far below pair accuracy (53\% vs 85\% at large), which is the familiar teacher-forcing gap: ranking two supplied strings is easier than producing one autoregressively without error compounding.
 
 Per-task breakdown reveals that generation difficulty varies sharply by type. For random-trained large models: derivative (79.5\%), algebra (70.4\%), equation (61.0\%), arithmetic (0\%). Multi-step arithmetic requires exact carry propagation across many digits---a well-known difficulty for autoregressive generation at this scale---even though paired evaluation shows strong discrimination. Coherent-trained models show lower generation accuracy across all types, with the gap largest for algebra (70.4\% vs 38.3\%) and smallest for derivative (79.5\% vs 56.5\%).
 
@@ -321,7 +321,7 @@ Coherent & 49.3\% & 52.8\% & 49.8\% & $\mathbf{50.6\%}$ \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.7\textwidth]{figure_full_scaling.png}
-\caption{Cross-setup pair-accuracy summary. GPT-2 family (3.5M--86M, math-only, 2--4 seeds), Qwen3-0.6B (420M, math-only, 3 seeds), and Qwen3-architecture ${\sim}$1B (FineWeb-Edu + 8\% math, single seed). Setups differ in architecture, corpus, and seed count, and every point is pair accuracy, which Section~\ref{sec:central} shows overstates the excess above chance roughly threefold where both measures are available. The figure summarizes directional robustness of the pairwise contrast, not a scaling law and not the size of the effect.}
+\caption{Cross-setup pair-accuracy summary. GPT-2 family (3.5M--86M, math-only, 2--4 seeds), Qwen3-0.6B (420M, math-only, 3 seeds), and Qwen3-architecture ${\sim}$1B (FineWeb-Edu + 8\% math, single seed). Setups differ in architecture, corpus, and seed count, and every point is pair accuracy, which Section~\ref{sec:central} shows overstates the excess above chance about fourfold where both measures are available. The figure summarizes directional robustness of the pairwise contrast, not a scaling law and not the size of the effect.}
 \label{fig:qwen}
 \end{figure}
 
@@ -357,7 +357,7 @@ At 1B on diluted natural text, pair accuracy is 76.8\% for random errors and 46.
 
 \textbf{What we withdraw.}\quad Preference is not graded in the description length of the false system. The two experiments built to show it---competing wrong rules, and a ladder over the number of constants a single wrong rule stores---move pair accuracy by 32 and 16 points while leaving probability mass flat or falling, and their apparent signal is the model's inability to predict which false string will appear, credited to the correct side by a pairwise comparison. Nor do coherent errors fall below chance: that reading was completion length. Nor is the effect present at every scale we tested. These three claims were central to the first version of this work and none of them survives its own control.
 
-\textbf{The role of frequency.}\quad Coherent falsehood needs no frequency advantage to neutralize any preference for the correct answer: at 50/50 the model is at chance, and shifting to 40/60 and 20/80 moves it to 72\% and 91\% preference for the false system. Because the coherent false support is a single string, these numbers are unaffected by splitting. We drop the parallel claim for random errors, which rests on pair accuracy alone.
+\textbf{The role of frequency.}\quad Coherent falsehood needs no frequency advantage to neutralize any preference for the correct answer: at 50/50 the model is at chance, and shifting to 40/60 and 20/80 moves it to 72\% and 90\% preference for the false system. Because the coherent false support is a single string, these numbers are unaffected by splitting. We drop the parallel claim for random errors, which rests on pair accuracy alone.
 
 \textbf{What pair accuracy is good for.}\quad The metric is not worthless---it is a legitimate measure of a ranking behavior, and it is what the surrounding literature reports---but it answers a narrower question than it appears to. When the false side can take more than one form, the correct string competes against a divided opponent, and a model with no preference at all wins. Any experimental design that varies the number of false forms (competing rules, noise ratios, entity substitution, corruption load) varies the metric along with the treatment. We would expect this to affect published results beyond our own wherever contradictory or corrupted data is evaluated pairwise.
 
@@ -380,7 +380,7 @@ Measured against everything an error generator can produce, rather than against 
 
 \textbf{Domain specificity.}\quad Mathematics provides an unusually crisp correct/incorrect distinction and, more importantly here, a false-answer generator whose output support we can enumerate exactly. We could not enumerate the false support for Wikipedia entity substitution, so the natural-language results rest on pair accuracy alone; we cannot say whether the effect is weaker there or merely measured differently. Domains with competing real-world knowledge systems (conflicting news sources, historical revisionism) remain open.
 
-\textbf{Discriminative vs generative gap.}\quad Pair accuracy (85\%) substantially exceeds generative accuracy (53\%) at large scale, the familiar teacher-forcing gap. Pair accuracy is not a controlled diagnostic of preference: whenever the false side has more than one form, a model reproducing training frequencies wins the comparison. On the denoising corpus at 86M it reports $27.6$~pp of excess above chance where the mass-summed measure reports $9.0$~pp. We report it only for comparability with prior work.
+\textbf{Discriminative vs generative gap.}\quad Pair accuracy (85\%) substantially exceeds generative accuracy (53\%) at large scale, the familiar teacher-forcing gap. Pair accuracy is not a controlled diagnostic of preference: whenever the false side has more than one form, a model reproducing training frequencies wins the comparison. On the denoising corpus at 86M it reports $37.4$~pp of excess above chance where the mass-summed measure reports $9.0$~pp. We report it only for comparability with prior work.
 
 \textbf{Causal identification.}\quad We do not identify the cause. The multi-rule experiment, previously offered as evidence for a selector cost, measures mass splitting: aggregate mass is $47.9\%$ at $N{=}1$ and $47.8\%$ at $N{=}2$ while pair accuracy jumps 32~pp. The description-length ladder, built specifically to vary description length with mode count held at one realized string, is flat at 86M ($55.6$, $51.9$, $52.6$, $51.3$). Random and coherent corruptions still differ along axes beyond predictability---affected steps, lexical diversity---and the matched-control ablation addresses corruption load but not mode count. A design that separates predictability from description length while keeping both the realized and the potential false support at one string would be the next thing to try; we do not currently know how to build it.
 
@@ -513,7 +513,7 @@ Coherent (1 mode) & $47.3 \pm 0.7$ & $49.2 \pm 0.4$ & $50.0 \pm 0.4$ & $50.1 \pm
 \quad equal length & $49.3 \pm 0.7$ & $49.5 \pm 0.4$ & $49.9 \pm 0.4$ & $49.7 \pm 0.2$ \\
 \bottomrule
 \end{tabular}
-\caption{Aggregate share on the standard (non-denoising) corpus, 4 seeds (\%); $n{=}1101$ problems for random, $915$ for coherent, $359$ in the length-matched subset. The $59.4$ at 86M is the independent replication of the $59.0$ obtained on the denoising corpus. Per-seed bootstrap intervals for the random condition lie entirely above $0.5$ at 12M, 26M and 86M; every coherent interval contains or sits at $0.5$.}
+\caption{Aggregate share on the standard (non-denoising) corpus, 4 seeds (\%); $n{=}1101$ problems for random and $915$ for coherent, of which $359$ and $561$ are length-matched. The $59.4$ at 86M is the independent replication of the $59.0$ obtained on the denoising corpus. Per-seed bootstrap intervals for the random condition lie entirely above $0.5$ at 12M, 26M and 86M. The coherent intervals contain $0.5$ from 26M upward; at 3.5M all four lie entirely below it, and at 12M one of four does, consistent with the length account of Section~\ref{sec:central}.}
 \label{tab:standard_share}
 \end{table}
 
@@ -540,11 +540,13 @@ world random     & 0.0370 & 0.0516 & $+0.0146$ & 57.7\% \\
 world coherent   & 0.0374 & 0.0384 & $+0.0010$ & 46.6\% \\
 \bottomrule
 \end{tabular}
-\caption{Compression ratio (gzip) and paired accuracy across all 9 conditions. Spearman $\rho = 0.68$, $p = 0.042$.}
+\caption{Compression ratio (gzip) and paired accuracy across all 9 conditions. Spearman $\rho = 0.67$; two-sided $p = 0.05$ under the $t$ approximation and $0.06$ by exact permutation, i.e.\ not significant at the conventional level.}
 \label{tab:compression}
 \end{table}
 
-Conditions with larger compression gaps show higher pair accuracy. This correlation should now be read with care: four of the nine points are the multi-rule conditions, whose pair accuracy is known to be inflated by mass splitting (Section~\ref{sec:multirule}), and they carry the largest compression deltas ($+0.0038$ to $+0.0076$) because adding rules adds text diversity. The same variable therefore moves both axes, and the correlation cannot be read as evidence that compressibility drives preference. Recomputed against aggregate share for the multi-rule points ($47.9$, $47.8$, $41.8$, $41.9$, $38.7$), the relationship disappears. We retain the appendix as a record of the measurement, not as support for the hypothesis.
+The multi-rule accuracies here ($77.6$, $82.8$, $84.8$, $88.3$) come from the paired evaluation on the held-out paired test set; Table~\ref{tab:multirule} reports the same conditions scored on the enumerated support ($79.1$, $83.1$, $86.1$, $90.1$). Both are pair accuracies on the same checkpoints, differing only in which problems and which false completions they are computed over.
+
+Conditions with larger compression gaps show higher pair accuracy. This correlation should now be read with care: four of the nine points are the multi-rule conditions, whose pair accuracy is known to be inflated by mass splitting (Section~\ref{sec:multirule}), and their compression deltas ($+0.0038$ to $+0.0076$) grow monotonically with the number of rules, because adding rules adds text diversity. The same variable therefore moves both axes, and the correlation cannot be read as evidence that compressibility drives preference. Recomputed against aggregate share for the multi-rule points ($47.9$, $47.8$, $41.8$, $41.9$, $38.7$), the relationship disappears. We retain the appendix as a record of the measurement, not as support for the hypothesis.
 
 \section{Standard (Non-Denoising) Experiments}
 \label{app:standard}
@@ -583,7 +585,7 @@ The denoising setup is harder (within-problem contradiction vs across-corpus mix
 \toprule
 Proportion & Random & Coherent & False pref. \\
 \midrule
-50/50 & 80\% & 47.2\% & 52.8\% \\
+50/50 & 79.5\% & 47.2\% & 52.8\% \\
 40/60 & 79\% & 27.8\% & 72.2\% \\
 30/70 & 75\% & 14.7\% & 85.3\% \\
 20/80 & 69\% & 9.6\%  & 90.4\% \\
@@ -684,12 +686,12 @@ Embedding cross-domain verification dependencies in coherent-error tasks restore
 \toprule
 Size & Paired Accuracy & Seeds & Standard coherent baseline \\
 \midrule
-tiny (3.5M)  & $70.9\% \pm 1.2\%$ & 4 & $43.5\%$ \\
-small (12M)  & $64.2\% \pm 1.5\%$ & 4 & $44.5\%$ \\
-large (86M)  & $60.6\% \pm 1.2\%$ & 2 & $51.0\%$ \\
+tiny (3.5M)  & $70.9\% \pm 1.2\%$ & 4 & $47.2\%$ \\
+small (12M)  & $64.2\% \pm 1.5\%$ & 4 & $49.6\%$ \\
+large (86M)  & $60.6\% \pm 1.2\%$ & 2 & $51.4\%$ \\
 \bottomrule
 \end{tabular}
-\caption{Chained-verification pair accuracy vs the corresponding standard coherent baseline. Pair accuracy only; the mass-summed control was not run for this condition.}
+\caption{Chained-verification pair accuracy against the standard-setup coherent baseline measured on the same corpus family (4 seeds; the earlier version of this table printed the \emph{denoising} coherent values here by mistake). Pair accuracy only; the mass-summed control was not run for this condition.}
 \label{tab:chained}
 \end{table}
 
@@ -697,7 +699,7 @@ The decline with scale should not be read as an inverse-scaling result. The gap 
 
 \subsection{Learning Curves}
 
-All sizes reach behavioral plateau by step 3000--4000. The large model achieves 88.8\% at step 3000, stable through 5000. This check rules out an early-stopping artifact; the underlying logs and plotting script are included in the supplementary material.
+All sizes reach behavioral plateau by step 3000--4000. The large model reaches 90.4\% at step 3000 and holds 86.4\% and 87.8\% at steps 4000 and 5000. This check rules out an early-stopping artifact; the underlying logs and plotting script are included in the supplementary material.
 
 \section{Per-Seed Details}
 \label{app:seeds}
@@ -750,7 +752,7 @@ large  & 51.6\% & 50.4\% & --     & --     & 51.0\% \\
 \item {\bf Claims}
     \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The primary metric is aggregate share against the enumerated false support, whose null is exactly 0.500 on our corpora. The abstract and introduction state that the effect is established at 86M on two corpora and not below, that pair-accuracy results elsewhere in the paper are uncontrolled and overstate the excess above chance roughly threefold, and that the multi-rule and description-length experiments are reported as negative controls rather than as evidence for a mechanism. Claims that appeared in the first version of this work and did not survive their own controls are named and withdrawn in Sections~\ref{sec:multirule}, \ref{sec:ladder} and \ref{sec:discussion}.
+    \item[] Justification: The primary metric is aggregate share against the enumerated false support, whose null is exactly 0.500 on our corpora. The abstract and introduction state that the effect is established at 86M on two corpora and not below, that pair-accuracy results elsewhere in the paper are uncontrolled and overstate the excess above chance by a factor of three to four, and that the multi-rule and description-length experiments are reported as negative controls rather than as evidence for a mechanism. Claims that appeared in the first version of this work and did not survive their own controls are named and withdrawn in Sections~\ref{sec:multirule}, \ref{sec:ladder} and \ref{sec:discussion}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the abstract and introduction do not include the claims made in the paper.
