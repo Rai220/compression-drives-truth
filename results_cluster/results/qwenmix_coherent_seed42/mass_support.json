@@ -1,0 +1,17 @@
+{
+  "weights": "results/qwenmix_coherent_seed42/model_final.pt",
+  "support": "data/corpus/support_coherent.jsonl",
+  "n_problems": 915,
+  "skipped": 85,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.4959304725710953,
+  "aggregate_share_ci95": [
+    0.4921038454205352,
+    0.49973716029394094
+  ],
+  "frac_share_above_half": 0.5005464480874317,
+  "pair_accuracy_mean_nll": 0.5366120218579234,
+  "length_delta_mean": -0.7049180327868853,
+  "equal_length_share_mean": 0.49264859938883576,
+  "equal_length_n": 561
+}

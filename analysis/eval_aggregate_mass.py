@@ -44,43 +44,53 @@ def logsumexp(values: list[float]) -> float:
     return m + math.log(sum(math.exp(v - m) for v in values))
 
 
-def batch_completion_logprobs(model, prompt_ids, completions_ids, max_seq_len):
+def batch_completion_logprobs(model, prompt_ids, completions_ids, max_seq_len,
+                              max_batch=None):
     """Sum log P over completion tokens for several completions of one prompt.
 
-    All completions share the prompt, so they are padded into one batch.
+    All completions share the prompt, so they are padded into one batch —
+    or, for large supports (the Wikipedia entity pools reach thousands of
+    candidates), into chunks of max_batch sequences. Chunking changes memory
+    use only, not the numbers.
     Returns (logprobs, logits_at_branch_positions) where the second element is
     the full-vocabulary log-softmax at every position of the first sequence.
     """
     n_prompt = len(prompt_ids)
     seqs = [prompt_ids + c for c in completions_ids]
-    max_len = max(len(s) for s in seqs)
-    if max_len > max_seq_len + 1:
+    if max(len(s) for s in seqs) > max_seq_len + 1:
         return None, None
 
-    padded = np.zeros((len(seqs), max_len), dtype=np.int32)
-    for i, s in enumerate(seqs):
-        padded[i, :len(s)] = s
-
-    x = mx.array(padded[:, :-1])
-    y = mx.array(padded[:, 1:])
-    logits = model(x)
-    logprobs_all = logits - mx.logsumexp(logits, axis=-1, keepdims=True)
-
-    B, T, V = logits.shape
-    token_lp = mx.take_along_axis(
-        logprobs_all.reshape(B * T, V),
-        y.reshape(B * T, 1),
-        axis=-1,
-    ).reshape(B, T)
-    token_lp = np.array(token_lp.tolist(), dtype=np.float64)
-
-    start = max(0, n_prompt - 1)
     out = []
-    for i, c in enumerate(completions_ids):
-        end = min(start + len(c), T)
-        out.append(float(token_lp[i, start:end].sum()))
+    lp_grid = None
+    step = max_batch or len(seqs)
+    start = max(0, n_prompt - 1)
+    for off in range(0, len(seqs), step):
+        chunk = seqs[off:off + step]
+        max_len = max(len(s) for s in chunk)
+        padded = np.zeros((len(chunk), max_len), dtype=np.int32)
+        for i, s in enumerate(chunk):
+            padded[i, :len(s)] = s
 
-    return out, logprobs_all[0]
+        x = mx.array(padded[:, :-1])
+        y = mx.array(padded[:, 1:])
+        logits = model(x)
+        logprobs_all = logits - mx.logsumexp(logits, axis=-1, keepdims=True)
+
+        B, T, V = logits.shape
+        token_lp = mx.take_along_axis(
+            logprobs_all.reshape(B * T, V),
+            y.reshape(B * T, 1),
+            axis=-1,
+        ).reshape(B, T)
+        token_lp = np.array(token_lp.tolist(), dtype=np.float64)
+
+        for i, c in enumerate(completions_ids[off:off + step]):
+            end = min(start + len(c), T)
+            out.append(float(token_lp[i, start:end].sum()))
+        if off == 0:
+            lp_grid = logprobs_all[0]
+
+    return out, lp_grid
 
 
 def branch_share(model_logprobs, prompt_ids, completions_ids):
@@ -127,6 +137,8 @@ def main():
     parser.add_argument("--seq-len", type=int, default=256)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--output", type=str, default=None)
+    parser.add_argument("--max-batch", type=int, default=None,
+                        help="chunk size for large supports (memory only)")
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()
 
@@ -159,7 +171,8 @@ def main():
         wrong_ids = [tokenizer.encode(w) for w in p["wrong_completions"]]
 
         logps, lp_grid = batch_completion_logprobs(
-            model, prompt_ids, [correct_ids] + wrong_ids, args.seq_len
+            model, prompt_ids, [correct_ids] + wrong_ids, args.seq_len,
+            max_batch=args.max_batch,
         )
         if logps is None:
             skipped += 1

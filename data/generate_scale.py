@@ -21,7 +21,11 @@ and are emitted alongside each held-out problem.
 
 Conditions mirror the paper: 'random' (an error drawn from a large family) and
 'coherent' (one fixed wrong rule). Both corrupt a single step, so corruption
-load is matched.
+load is matched. 'clean' writes every problem correctly: no false rule anywhere,
+same problem stream and held-out split. Scored against the random/coherent
+supports it calibrates the family measure — the shortfall from 1.0 is mass the
+model leaks onto strings that never occurred (cf. generate_math_keyed.py
+--condition clean and docs/mass_control.md).
 """
 
 import argparse
@@ -245,6 +249,83 @@ def keyed_index(p, n_variants):
     return int.from_bytes(h, "big") % n_variants
 
 
+# Fixed global table: ones-digit (0-9) -> raw family index, taken mod n_variants.
+# Spread primes so distinct digits map to distinct indices for the usual n=16-18.
+LEARN_TABLE = [0, 7, 3, 11, 5, 15, 2, 13, 9, 17]
+
+
+def learnable_index(p, n_variants):
+    """One false variant per problem, selected by a LEARNABLE function of a
+    visible operand: the ones digit of a prominent number in the problem maps
+    through a fixed global table to a family index.
+
+    Unlike keyed_index (a blake2b hash the model cannot compute), a trained
+    model can read that digit and reproduce the selection, so its predictive
+    distribution concentrates on the one false string it will actually see.
+    This is the control the paper's Discussion flags as unbuilt: it holds the
+    realized false support at one string and makes the *selector* predictable,
+    separating predictability from the size of the potential false family. It
+    is 'multi-rule with a learnable selector' -- 10 fixed offset rules keyed to
+    a visible digit -- so if the multi-rule/random effect was mass splitting
+    over an unpredictable selection, the learnable condition should read like
+    coherent (at the 0.5 null); if output incoherence per se is penalised, it
+    should read like random (above the null).
+    """
+    t = p["type"]
+    if t == "arithmetic":
+        v = p["start"]
+    elif t in ("algebra", "equation"):
+        v = p["a"]
+    else:  # derivative
+        v = p["coeffs"][-1]
+    return LEARN_TABLE[abs(int(v)) % 10] % n_variants
+
+
+def _param_ints(p):
+    t = p["type"]
+    if t == "arithmetic":
+        return [p["start"], *p["operands"]]
+    if t == "algebra":
+        return [p["a"], p["b"], p["c"], p["d"]]
+    if t == "equation":
+        return [p["a"], p["b"], p["c"]]
+    return list(p["coeffs"])  # derivative
+
+
+def learnable_mod_index(p, n_variants):
+    """Harder-to-learn selector: the family index is the SUM of the visible
+    integer parameters, mod n. Combining several tokens and a modulo is
+    learnable in principle but harder than the single-digit lookup of
+    learnable_index -- an intermediate point on the predictability axis between
+    `learnable` (one visible digit, easy) and `keyed` (a blake2b hash,
+    impossible). Same one-realized-string-per-problem construction, so the
+    family-sum null stays exactly 0.5 and the family support is the same random
+    family. Lets the mechanism be traced as a monotone curve rather than a point.
+    """
+    return sum(abs(int(x)) for x in _param_ints(p)) % n_variants
+
+
+def _ones_digits(p):
+    return [abs(int(x)) % 10 for x in _param_ints(p)]
+
+
+def learnable_k2_index(p, n_variants):
+    """Intermediate selector: table lookup on the sum of the first TWO visible
+    ones digits, mod 10. Reads two tokens and one small addition -- harder than
+    the single digit of `learnable`, far easier than the many-term modular sum
+    of `learnable_mod`. Fills the predictability axis so the mechanism becomes a
+    graded curve (k1 learned -> below null ... sum-all unlearned -> random)."""
+    d = _ones_digits(p)
+    s = d[0] + (d[1] if len(d) > 1 else 0)
+    return LEARN_TABLE[s % 10] % n_variants
+
+
+def learnable_k3_index(p, n_variants):
+    """As learnable_k2 but the sum of the first THREE visible ones digits."""
+    d = _ones_digits(p)
+    return LEARN_TABLE[sum(d[:3]) % 10] % n_variants
+
+
 def is_heldout(p):
     """Deterministic train/held-out split on the problem itself.
 
@@ -299,6 +380,9 @@ def gen_train(n, mode, seed, out, shard=None, n_shards=None):
             render, n_rand = RENDER[p["type"]]
             correct = render(p, "correct")
             written += 1
+            if mode == "clean":
+                fh.write(correct + "\n\n")
+                continue
             if rng.random() < 0.5:
                 fh.write(correct + "\n\n")
                 continue
@@ -306,6 +390,14 @@ def gen_train(n, mode, seed, out, shard=None, n_shards=None):
                 txt = render(p, "coherent")
             elif mode == "keyed":
                 txt = render(p, "random", keyed_index(p, n_rand(p)))
+            elif mode == "learnable":
+                txt = render(p, "random", learnable_index(p, n_rand(p)))
+            elif mode == "learnable_mod":
+                txt = render(p, "random", learnable_mod_index(p, n_rand(p)))
+            elif mode == "learnable_k2":
+                txt = render(p, "random", learnable_k2_index(p, n_rand(p)))
+            elif mode == "learnable_k3":
+                txt = render(p, "random", learnable_k3_index(p, n_rand(p)))
             else:
                 txt = render(p, "random", rng.randrange(n_rand(p)))
             fh.write((correct if txt == correct else txt) + "\n\n")
@@ -337,6 +429,14 @@ def gen_heldout(n, mode, seed, out, limit, family=False):
             wrongs = [render(p, "coherent")]
         elif mode == "keyed" and not family:
             wrongs = [render(p, "random", keyed_index(p, n_rand(p)))]
+        elif mode == "learnable" and not family:
+            wrongs = [render(p, "random", learnable_index(p, n_rand(p)))]
+        elif mode == "learnable_mod" and not family:
+            wrongs = [render(p, "random", learnable_mod_index(p, n_rand(p)))]
+        elif mode == "learnable_k2" and not family:
+            wrongs = [render(p, "random", learnable_k2_index(p, n_rand(p)))]
+        elif mode == "learnable_k3" and not family:
+            wrongs = [render(p, "random", learnable_k3_index(p, n_rand(p)))]
         else:
             wrongs = [render(p, "random", k) for k in range(n_rand(p))]
 
@@ -366,7 +466,11 @@ def gen_heldout(n, mode, seed, out, limit, family=False):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["train", "heldout"], required=True)
-    ap.add_argument("--errors", choices=["random", "coherent", "keyed"], required=True)
+    ap.add_argument("--errors",
+                    choices=["random", "coherent", "keyed", "clean",
+                             "learnable", "learnable_mod",
+                             "learnable_k2", "learnable_k3"],
+                    required=True)
     ap.add_argument("--n", type=int, default=500000)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--limit", type=int, default=3000)
@@ -376,6 +480,10 @@ if __name__ == "__main__":
     ap.add_argument("--support-mode", choices=["realized", "family"],
                     default="realized")
     a = ap.parse_args()
+
+    if a.mode == "heldout" and a.errors == "clean":
+        ap.error("clean is a training-corpus calibration condition; "
+                 "evaluate clean-trained models against the random/coherent supports")
 
     if a.mode == "train":
         gen_train(a.n, a.errors, a.seed, a.output, a.shard, a.n_shards)

@@ -246,6 +246,10 @@ MODEL_CONFIGS = {
     "medium": {"arch": "gpt", "d_model": 512,  "n_heads": 8,  "n_layers": 8},
     "large":  {"arch": "gpt", "d_model": 768,  "n_heads": 12, "n_layers": 12},
     "xlarge": {"arch": "gpt", "d_model": 1024, "n_heads": 16, "n_layers": 16},
+    # GPT-2 at Qwen3-0.6B scale (~413M with vocab 53). Same-architecture
+    # control for the 420M-1B cells: SCALING_LAW.md §6 notes the architecture
+    # changes exactly where the above-null readings appear.
+    "xxlarge": {"arch": "gpt", "d_model": 1280, "n_heads": 20, "n_layers": 21},
     # Qwen3-0.6B (exact architecture from HuggingFace config)
     "qwen3-0.6b": {
         "arch": "qwen3",
@@ -264,6 +268,46 @@ MODEL_CONFIGS = {
         "n_kv_heads": 4,
         "n_layers": 24,
         "intermediate_size": 5568,
+        "rope_theta": 1000000.0,
+    },
+    # Genuine ~1B (Aug 2026): extends the held-out scaling curve past the
+    # mislabelled 474M "qwen3-1b" to a real billion, same Qwen3 stack.
+    "qwen3-1b-real": {
+        "arch": "qwen3",
+        "d_model": 1536,
+        "n_heads": 24,
+        "n_kv_heads": 4,
+        "n_layers": 26,
+        "intermediate_size": 8192,
+        "rope_theta": 1000000.0,
+    },
+    # ~2B, same stack (trained with gradient checkpointing on one H100).
+    "qwen3-2b": {
+        "arch": "qwen3",
+        "d_model": 2048,
+        "n_heads": 32,
+        "n_kv_heads": 4,
+        "n_layers": 28,
+        "intermediate_size": 11008,
+        "rope_theta": 1000000.0,
+    },
+    # ~3B and ~4B (Aug 2026): push the scaling curve as far as one H100 allows.
+    "qwen3-3b": {
+        "arch": "qwen3",
+        "d_model": 2048,
+        "n_heads": 32,
+        "n_kv_heads": 4,
+        "n_layers": 40,
+        "intermediate_size": 11008,
+        "rope_theta": 1000000.0,
+    },
+    "qwen3-4b": {
+        "arch": "qwen3",
+        "d_model": 2560,
+        "n_heads": 40,
+        "n_kv_heads": 8,
+        "n_layers": 36,
+        "intermediate_size": 13824,
         "rope_theta": 1000000.0,
     },
 }

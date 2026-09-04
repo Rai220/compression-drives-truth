@@ -1,0 +1,17 @@
+{
+  "weights": "results/scale_clean_xlarge_seed42/model_final.pt",
+  "support": "data/heldout_coherent_for_clean.jsonl",
+  "n_problems": 2483,
+  "skipped": 430,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.9985876577405544,
+  "aggregate_share_ci95": [
+    0.997536381766512,
+    0.9994033106109227
+  ],
+  "frac_share_above_half": 0.9991945227547322,
+  "pair_accuracy_mean_nll": 0.9991945227547322,
+  "length_delta_mean": -1.392267418445429,
+  "equal_length_share_mean": 0.9976821136222436,
+  "equal_length_n": 1243
+}

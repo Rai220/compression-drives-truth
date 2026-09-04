@@ -1,0 +1,102 @@
+[2026-08-11 20:17:41] train wikiclean tiny 42
+[2026-08-11 20:20:49] done wikiclean tiny 42
+[2026-08-11 20:20:49] train wikiclean small 42
+[2026-08-11 20:27:14] done wikiclean small 42
+[2026-08-11 20:27:14] train wikiclean medium 42
+[2026-08-11 20:39:14] done wikiclean medium 42
+[2026-08-11 20:39:14] train wikiclean large 42
+[2026-08-11 21:12:42] done wikiclean large 42
+[2026-08-11 21:12:42] train wikiclean tiny 43
+[2026-08-11 21:15:48] done wikiclean tiny 43
+[2026-08-11 21:15:48] train wikiclean small 43
+[2026-08-11 21:22:12] done wikiclean small 43
+[2026-08-11 21:22:12] train wikiclean medium 43
+[2026-08-11 21:34:07] done wikiclean medium 43
+[2026-08-11 21:34:07] train wikiclean large 43
+[2026-08-11 22:07:32] done wikiclean large 43
+[2026-08-11 22:07:32] wikiclean torch pass complete
+[2026-08-11 22:07:32] train random xxlarge 42
+[2026-08-11 22:52:48] done random xxlarge 42
+[2026-08-11 22:52:48] train coherent xxlarge 42
+[2026-08-11 23:35:45] done coherent xxlarge 42
+[2026-08-11 23:35:45] train clean xxlarge 42
+[2026-08-12 00:21:43] done clean xxlarge 42
+[2026-08-12 00:21:43] train random xxlarge 43
+[2026-08-12 01:06:44] done random xxlarge 43
+[2026-08-12 01:06:44] train coherent xxlarge 43
+[2026-08-12 01:49:40] done coherent xxlarge 43
+[2026-08-12 01:49:40] train clean xxlarge 43
+[2026-08-12 02:35:32] done clean xxlarge 43
+[2026-08-12 02:35:32] grid complete: jobs_xxlarge.txt
+[2026-08-12 02:35:32] train qwenmix random 42
+[2026-08-12 03:05:11] done wiki_single wiki_coherent_50_50_large_seed42
+[2026-08-12 03:29:07] done wiki_single wiki_coherent_50_50_large_seed43
+[2026-08-12 03:37:53] done wiki_single wiki_coherent_50_50_medium_seed42
+[2026-08-12 03:38:07] VALIDATION FAIL wiki_coherent_50_50_medium_seed43
+[2026-08-12 03:42:55] done wiki_single wiki_coherent_50_50_small_seed42
+[2026-08-12 03:47:42] done wiki_single wiki_coherent_50_50_small_seed43
+[2026-08-12 03:50:12] done wiki_single wiki_coherent_50_50_tiny_seed42
+[2026-08-12 03:50:21] VALIDATION FAIL wiki_coherent_50_50_tiny_seed43
+[2026-08-12 04:14:14] done wiki_single wiki_random_50_50_large_seed42
+[2026-08-12 04:38:08] done wiki_single wiki_random_50_50_large_seed43
+[2026-08-12 04:46:53] done wiki_single wiki_random_50_50_medium_seed42
+[2026-08-12 04:55:38] done wiki_single wiki_random_50_50_medium_seed43
+[2026-08-12 05:00:26] done wiki_single wiki_random_50_50_small_seed42
+[2026-08-12 05:05:13] done wiki_single wiki_random_50_50_small_seed43
+[2026-08-12 05:07:43] done wiki_single wiki_random_50_50_tiny_seed42
+[2026-08-12 05:10:12] done wiki_single wiki_random_50_50_tiny_seed43
+[2026-08-12 05:10:12] wiki single torch pass complete
+[2026-08-12 05:10:12] train qwenmix random 42
+[2026-08-12 05:15:03] done wiki_single wiki_coherent_50_50_large_seed42
+[2026-08-12 05:15:03] done wiki_single wiki_coherent_50_50_large_seed43
+[2026-08-12 05:15:03] done wiki_single wiki_coherent_50_50_medium_seed42
+[2026-08-12 05:23:46] done wiki_single wiki_coherent_50_50_medium_seed43
+[2026-08-12 05:23:46] done wiki_single wiki_coherent_50_50_small_seed42
+[2026-08-12 05:23:46] done wiki_single wiki_coherent_50_50_small_seed43
+[2026-08-12 05:23:46] done wiki_single wiki_coherent_50_50_tiny_seed42
+[2026-08-12 05:26:15] done wiki_single wiki_coherent_50_50_tiny_seed43
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_large_seed42
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_large_seed43
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_medium_seed42
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_medium_seed43
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_small_seed42
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_small_seed43
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_tiny_seed42
+[2026-08-12 05:26:15] done wiki_single wiki_random_50_50_tiny_seed43
+[2026-08-12 05:26:15] wiki single torch pass complete
+[2026-08-12 05:26:15] train random qwen3-1b 44
+[2026-08-12 06:17:40] done random qwen3-1b 44
+[2026-08-12 06:17:40] train random qwen3-0.6b 44
+[2026-08-12 07:07:44] done random qwen3-0.6b 44
+[2026-08-12 07:07:44] train random qwen3-1b 45
+[2026-08-12 07:58:55] done random qwen3-1b 45
+[2026-08-12 07:58:55] train random qwen3-0.6b 45
+[2026-08-12 08:48:51] done random qwen3-0.6b 45
+[2026-08-12 08:48:51] train coherent qwen3-1b 44
+[2026-08-12 09:37:11] done coherent qwen3-1b 44
+[2026-08-12 09:37:11] train coherent qwen3-0.6b 44
+[2026-08-12 10:24:37] done coherent qwen3-0.6b 44
+[2026-08-12 10:24:37] train coherent qwen3-1b 45
+[2026-08-12 11:12:57] done coherent qwen3-1b 45
+[2026-08-12 11:12:57] train coherent qwen3-0.6b 45
+[2026-08-12 12:00:25] done coherent qwen3-0.6b 45
+[2026-08-12 12:00:25] grid complete: jobs_qwen_seeds.txt
+[2026-08-12 12:00:25] train fineweb random 43
+[2026-08-12 12:30:45] done fineweb random 43
+[2026-08-12 12:30:45] train fineweb coherent 43
+[2026-08-12 13:01:12] done fineweb coherent 43
+[2026-08-12 13:01:12] fineweb seed43 complete
+[2026-08-12 13:01:12] train qwenmix random 42
+[2026-08-12 13:52:49] done qwenmix random 42
+[2026-08-12 13:52:49] train qwenmix random 43
+[2026-08-12 14:44:51] done qwenmix random 43
+[2026-08-12 14:44:51] train qwenmix random 44
+[2026-08-12 15:36:35] done qwenmix random 44
+[2026-08-12 15:36:35] train qwenmix coherent 42
+[2026-08-12 16:29:03] done qwenmix coherent 42
+[2026-08-12 16:29:03] train qwenmix coherent 43
+[2026-08-12 17:20:50] done qwenmix coherent 43
+[2026-08-12 17:20:50] train qwenmix coherent 44
+[2026-08-12 18:12:30] done qwenmix coherent 44
+[2026-08-12 18:12:30] grid complete: jobs_qwenmix.txt
+[2026-08-12 18:12:30] all remaining phases complete

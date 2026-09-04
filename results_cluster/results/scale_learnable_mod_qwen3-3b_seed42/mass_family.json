@@ -1,0 +1,17 @@
+{
+  "weights": "/workspace-SR008.nfs3/cdt_data/results/scale_learnable_mod_qwen3-3b_seed42/model_final.pt",
+  "support": "data/heldout_family_for_learnablemod.jsonl",
+  "n_problems": 2496,
+  "skipped": 431,
+  "mean_false_modes": 17.62580128205128,
+  "aggregate_share_mean": 0.49849057701769256,
+  "aggregate_share_ci95": [
+    0.4923147459127604,
+    0.5045989554872619
+  ],
+  "frac_share_above_half": 0.546875,
+  "pair_accuracy_mean_nll": 0.9952933953584995,
+  "length_delta_mean": -0.03180347815764476,
+  "equal_length_share_mean": 0.5462504094473636,
+  "equal_length_n": 475
+}

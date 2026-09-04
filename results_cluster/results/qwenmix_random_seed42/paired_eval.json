@@ -1,0 +1,41 @@
+{
+  "model_size": "qwen3-0.6b",
+  "weights": "results/qwenmix_random_seed42/model_final.pt",
+  "n_pairs": 4951,
+  "avg_correct_nll": 0.042947933554746964,
+  "avg_incorrect_nll": 0.0878689120546342,
+  "delta": 0.04492097849988723,
+  "pair_accuracy": 0.8733589173904261,
+  "correct_wins": 4324,
+  "bootstrap_ci_95": [
+    0.043269642282727734,
+    0.046617124598809026
+  ],
+  "wilcoxon_p": 0.0,
+  "by_type": {
+    "algebra": {
+      "n": 1273,
+      "delta": 0.01877384319559147,
+      "accuracy": 1.0,
+      "correct_wins": 1273
+    },
+    "arithmetic": {
+      "n": 1244,
+      "delta": 0.054819468795568704,
+      "accuracy": 0.9991961414790996,
+      "correct_wins": 1243
+    },
+    "derivative": {
+      "n": 1252,
+      "delta": 0.020315167321486954,
+      "accuracy": 0.7340255591054313,
+      "correct_wins": 919
+    },
+    "equation": {
+      "n": 1182,
+      "delta": 0.0887264411986155,
+      "accuracy": 0.7521150592216582,
+      "correct_wins": 889
+    }
+  }
+}

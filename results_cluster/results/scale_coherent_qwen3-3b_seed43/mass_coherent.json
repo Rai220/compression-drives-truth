@@ -1,0 +1,17 @@
+{
+  "weights": "/workspace-SR008.nfs3/cdt_data/results/scale_coherent_qwen3-3b_seed43/model_final.pt",
+  "support": "data/heldout_coherent_clean.jsonl",
+  "n_problems": 2512,
+  "skipped": 430,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.5011568495117051,
+  "aggregate_share_ci95": [
+    0.4952322325970404,
+    0.5068327370794703
+  ],
+  "frac_share_above_half": 0.5191082802547771,
+  "pair_accuracy_mean_nll": 0.5505573248407644,
+  "length_delta_mean": -1.3945063694267517,
+  "equal_length_share_mean": 0.48976112883960243,
+  "equal_length_n": 1255
+}

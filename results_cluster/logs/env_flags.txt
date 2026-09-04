@@ -1,0 +1,1 @@
+tf32_matmul: False tf32_cudnn: True

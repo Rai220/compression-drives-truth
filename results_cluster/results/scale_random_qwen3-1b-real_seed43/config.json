@@ -1,0 +1,14 @@
+{
+  "corpus_path": "data/train_scale_random.txt",
+  "model_size": "qwen3-1b-real",
+  "n_params": 1124845312,
+  "vocab_size": 53,
+  "seq_len": 256,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "max_steps": 5000,
+  "seed": 43,
+  "device": "cuda",
+  "dtype": "bfloat16",
+  "backend": "pytorch"
+}

@@ -65,15 +65,23 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       `figure_full_scaling.png` is still used and its caption now carries the
       pair-accuracy caveat. New figures come from
       `analysis/plot_mass_control.py` and `analysis/plot_multirule_control.py`.
-- [ ] **Clean-corpus control at Qwen3 sizes.** Promoted to blocking: without it
-      the held-out grid cannot answer the reviewers' scale question. At 420M–1B
-      the correct completion holds ~5 points more than an exact 0.5 null on the
-      length-matched subset (4 runs, 5.9–7.7 sigma) while coherent sits at 50.0
-      and 50.2 — the only measurement above 86M taken with the right null. It
-      cannot go in the paper until a clean corpus at the same sizes bounds the
-      measure's calibration offset. Cheap: 4–5 sizes × 2 seeds, no new corpus
-      family; `generate_scale.py` needs a clean mode. See
-      `results_cluster/SCALING_LAW.md` §6.
+- [ ] **Fix the "1B" label everywhere.** The committed `qwen3-1b` config
+      instantiates to **473,593,856** parameters (vocab 53), not ~1B; the
+      FineWeb-Edu run (BPE-8000) is 489,869,312. `main_v2.tex` is corrected
+      (2026-08-11: abstract, §4.7, checklist, reproducibility — which also
+      wrongly said Modal A100 where the run records say Kaggle T4);
+      `SCALING_LAW.md` carries a correction note. arXiv v2 must inherit this.
+- [x] **Clean-corpus control at Qwen3 sizes.** DONE 2026-08-11 on the
+      single-H100 box. `generate_scale.py --errors clean`, grid
+      `scale_clean_{large,xlarge,qwen3-0.6b,qwen3-1b} × seeds 42–43`. Clean
+      model reads (random family support): 80.9 / 91.7 / 99.4 / 99.2 full,
+      91.0 / 92.2 / 97.9 / 97.2 eqlen — leak monotone in scale and **downward**,
+      so the §4 above-null cells (~+5) are a real preference, not a calibration
+      offset, and if anything understated. Written into `SCALING_LAW.md` §6 and
+      §5; per-run JSON in `results_cluster/results/scale_clean_*`. The held-out
+      grid can now go into the paper. Remaining polish: a GPT-2 `xxlarge`
+      (413.7M) clean grid is running to separate architecture from scale in the
+      leak (202M GPT-2 leaks ~8 pp vs <1 pp at Qwen sizes).
 - [ ] **arXiv v2.** The preprint (2603.11749) states the withdrawn claims and
       should be updated once `main_v2.tex` settles.
 
@@ -89,10 +97,15 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       pool — a few hundred to a few thousand strings — summable at one forward
       pass per pool member, with the same exact 0.5 null as the math corpora.
       Add a clean-Wikipedia calibration run alongside, as `ladder2_clean` does.
-- [ ] **Second seed for the 1B FineWeb-Edu run** (~15 h on Kaggle). Still the
-      only single-seed cell in the paper.
-- [ ] **Regenerate `scale_heldout_runs.csv` / `scale_heldout_summary.csv`** —
-      they stopped at 71 runs and predate the 34 family runs.
+- [x] **Second seed for the 490M FineWeb-Edu run** — DONE 2026-08-12 on the
+      H100 box. random 0.768/0.783 → 0.776 ± 0.008, coherent 0.467/0.482 →
+      0.474 ± 0.007; reproduces the first (Kaggle T4) across seed and backend.
+      `main_v2.tex` §4.7, fig:qwen caption, checklist all updated to 2 seeds.
+      Per-run JSON in `results_cluster/results/fineweb_*_seed43/`.
+- [x] **Regenerate `scale_heldout_runs.csv` / `scale_heldout_summary.csv`** —
+      done 2026-08-11 via the new `scripts/collect_scale_heldout.py` (106 rows,
+      every measurement labelled with its support; values re-checked against
+      `SCALING_LAW.md`).
 - [ ] Name the statistical tests in Section 3.4, not only in the checklist.
 - [ ] Related Work: data poisoning / backdoors (Gu, Wallace, Carlini) and one
       sentence on TruthfulQA-style evaluation. Both are standard reviewer asks
@@ -135,11 +148,18 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
 Found while rechecking `main_v2.tex` against the raw JSON. Neither blocks the
 camera-ready, but both should be resolved before the release package ships.
 
-- **`tab:generative`, tiny random-trained (30.5% ± 1.7%).** No
-  `eval_generation_500.json` under `results/mixed_50_50_tiny_seed4*/`; every
-  other cell of that table has one. The value survives only in the first
-  version of the paper. Either rerun the four seeds or drop the row.
-- **`tab:qwen` (Qwen3-0.6B, 3 seeds: 85.3/85.7/89.3 and 49.3/52.8/49.8).**
-  Nothing in the repository reproduces these. The Modal runs behind them were
-  never pulled, and the Qwen3-0.6B directories under `results_cluster/` belong
-  to the held-out scaling grid and evaluate a different support.
+- **`tab:generative`, tiny random-trained (30.5% ± 1.7%).** RESOLVED
+  2026-08-11: rerun on the four surviving checkpoints gives **31.1% ± 1.4%**
+  (33.4/31.2/30.2/29.6; arithmetic 0.0% in all seeds), consistent with the
+  printed value; `eval_generation_500.json` now exists for all four seeds and
+  `main_v2.tex` cites the re-derived number.
+- **`tab:qwen` (Qwen3-0.6B).** RESOLVED 2026-08-12: reran the original protocol
+  on the H100 box (`scripts/run_qwen_mixed.sh`, 3 seeds × 2 conditions). Pair
+  accuracy reproduces the lost-artefact numbers — random 87.3 ± 0.4 (orig mean
+  86.8), coherent 49.4 ± 1.3 (orig 50.6) — now with per-run JSON in
+  `results_cluster/results/qwenmix_*`. Added the aggregate-mass evaluation the
+  original never had: random 56.3 ± 0.3 (above the 50 null), coherent
+  49.7 ± 0.0 (at null), so the controlled measure shows the contrast at 420M on
+  the mixed corpus too. `main_v2.tex` §4.7 updated with both the reproduced
+  pair accuracy and the new aggregate share; the "same denoising corpora"
+  wording was already corrected to standard construction.

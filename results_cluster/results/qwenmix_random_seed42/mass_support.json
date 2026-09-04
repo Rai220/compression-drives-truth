@@ -1,0 +1,17 @@
+{
+  "weights": "results/qwenmix_random_seed42/model_final.pt",
+  "support": "data/corpus/support_random.jsonl",
+  "n_problems": 1101,
+  "skipped": 91,
+  "mean_false_modes": 5.506811989100817,
+  "aggregate_share_mean": 0.5663238825396125,
+  "aggregate_share_ci95": [
+    0.5602527597456086,
+    0.5724683157534222
+  ],
+  "frac_share_above_half": 0.7075386012715713,
+  "pair_accuracy_mean_nll": 0.8540720557069331,
+  "length_delta_mean": -0.3560579733741009,
+  "equal_length_share_mean": 0.5387693165842649,
+  "equal_length_n": 359
+}

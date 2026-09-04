@@ -1,0 +1,17 @@
+{
+  "weights": "/workspace-SR008.nfs3/cdt_data/results/scale_random_qwen3-3b_seed43/model_final.pt",
+  "support": "data/heldout_random_clean.jsonl",
+  "n_problems": 2523,
+  "skipped": 431,
+  "mean_false_modes": 17.52596115735236,
+  "aggregate_share_mean": 0.501172880084445,
+  "aggregate_share_ci95": [
+    0.49443231046702835,
+    0.5077702772943936
+  ],
+  "frac_share_above_half": 0.5703527546571542,
+  "pair_accuracy_mean_nll": 0.9940244197824458,
+  "length_delta_mean": -0.028193215014459504,
+  "equal_length_share_mean": 0.5610221117912476,
+  "equal_length_n": 485
+}

@@ -1,5 +1,15 @@
 # Held-out scaling, 3.5M–1B: what the measures actually license
 
+> **Correction 2026-08-11.** The size labels are wrong at the top:
+> instantiating the committed configs (`training_torch/model.py`, vocab 53)
+> gives **473,593,856** parameters for `qwen3-1b` and 417,613,952 for
+> `qwen3-0.6b`. Every "1B" row below is a 474M model; the grid spans
+> 3.5M–474M (2.13 decades, not 2.46), and the two Qwen sizes differ by a
+> factor of 1.13 — the above-null cells of §4 sit at effectively one scale,
+> measured with two architectures' sizes. The FineWeb-Edu "1B" run
+> (BPE-8000 vocabulary) is 489,869,312 parameters. See
+> `H100_AUG2026.md`, Finding 0.
+
 Rewritten 2026-08-03. The version written 2026-07-29 built its conclusions on
 chance levels that are wrong for this corpus; the sections it got wrong are
 listed at the bottom so the error is not repeated. Raw per-run JSON in
@@ -92,15 +102,27 @@ condition into a single-mode rule from the model's side.
 | 26M | 40.4 ± 0.6 | 40.1 ± 0.7 | 51.2 ± 0.6 |
 | 86M | 45.5 ± 1.4 | 48.2 ± 0.8 | 52.4 ± 0.4 |
 | 200M | 48.5 ± 1.0 | — | 51.9 ± 0.5 |
-| 420M | **55.8 ± 0.3** | — | 50.0 ± 0.5 |
-| 1B | **54.8 ± 0.1** | **57.1 ± 0.7** | 50.2 ± 0.2 |
+| 420M | **56.8 ± 1.1** (4 seeds) | — | **50.2 ± 0.4** (4 seeds) |
+| 1B | **54.9 ± 0.2** (4 seeds) | **57.1 ± 0.7** | **49.9 ± 0.5** (4 seeds) |
 
-Four cells sit 4.8–7.1 points above an exact 50.0 null, in four independent runs
-(random 420M seeds 42/43 = 56.11/55.41; random 1B = 54.67/54.94; keyed-family 1B
-= 57.85/56.39). Propagating each run's own bootstrap interval to n = 485 puts
-them 5.9–7.7 sd above 50; even a worst-case Bernoulli bound leaves 2.1–3.5 sd.
-Over the same range coherent reads 50.0 and 50.2 — on the null, with no trend
-across 2.5 decades (range 49.4–52.4 over the whole table).
+> **Seeds 44–45 completed 2026-08-12 — both Qwen sizes now 4 seeds on both
+> conditions.** Random: 420M 56.11/55.41/57.25/58.29 → **56.77 ± 1.11** (+6.8);
+> 1B 54.67/54.94/54.62/55.21 → **54.86 ± 0.24** (+4.9, ≈20σ on the cross-seed
+> std). Coherent: 420M 50.4/49.5/50.2/50.6 → **50.18 ± 0.43**; 1B
+> 50.1/50.4/50.0/49.0 → **49.87 ± 0.52** — dead on the null across 4 seeds. The
+> contrast (random +5 to +7, coherent 0) is seed-robust at Qwen scale, in
+> contrast to the same-size GPT-2 (xxlarge 413M random 52.3/50.1, §6), which
+> straddles the null. With the clean control (§6) showing a downward leak at
+> these sizes, the random cells are lower bounds.
+
+The above-null cells sit 4.9–6.3 points over an exact 50.0 null and are tight
+across seeds at Qwen scale (1B std 0.24 over 4 seeds; original note: 420M seeds
+42/43 = 56.11/55.41, 1B = 54.67/54.94, keyed-family 1B = 57.85/56.39).
+Propagating each run's own bootstrap interval to n = 485 puts them 5.9–7.7 sd
+above 50; even a worst-case Bernoulli bound leaves 2.1–3.5 sd. Over the same
+range coherent reads 50.0 and 50.2 — on the null, with no trend across 2.13
+decades (range 49.4–52.4 over the whole table). The clean control (§6) shows the
+family measure leaks *downward* at these sizes, so these are lower bounds.
 
 ## 5. What can be claimed
 
@@ -111,7 +133,9 @@ coherent false rule attracts exactly its corpus share at every scale tested.**
 Below 420M nothing can be claimed in either direction: those cells are below a
 null that a merely-incompetent model also fails, and the family measure has a
 measured downward bias that grows as the model shrinks (`ladder2_clean`: 99.7 at
-86M against 64.1 at 3.5M on an 18-mode support, where the true value is 100).
+86M against 64.1 at 3.5M on an 18-mode support, where the true value is 100;
+confirmed on this grid's own corpus by the clean control in §6 — 99.2–99.4 at
+418–474M against 80.9 at 86M).
 
 Three things must **not** be claimed from this grid:
 
@@ -132,14 +156,50 @@ splitting is impossible.
   modes); for coherent it is 1255 of 2512 (61% algebra). They share only 278
   problems. The two columns are therefore not the same population and their
   numerical difference should not be quoted as an effect size.
-* **The missing control.** There is no clean-corpus run at the Qwen3 sizes, so we
-  cannot rule out that the +5 at 420M–1B is a calibration offset of the family
-  measure rather than a preference. `generate_scale.py` has no clean mode. This
-  is the single measurement that would settle section 4, and it is cheap
-  (4–5 sizes × 2 seeds, no new corpus family).
-* Architecture changes at 420M (GPT-2 → Qwen3), which is exactly where the
-  above-null cells appear. A same-architecture run above 200M would separate the
-  two explanations.
+* **The missing control — now measured (2026-08-11).** `generate_scale.py`
+  gained `--errors clean` and the run exists: `scale_clean_{large,xlarge,
+  qwen3-0.6b,qwen3-1b} × seeds 42–43`, same corpus family, scored on the same
+  random-family and coherent supports (filtered against the clean corpus,
+  which collides with 35/29 held-out records the 50/50 corpora did not). A
+  model trained with **no false rule anywhere** reads, on the random family
+  support:
+
+  | size | full-set family | eqlen subset |
+  |---|---|---|
+  | 86M large | 80.9 | 91.0 |
+  | 202M xlarge | 91.7 | 92.2 |
+  | 418M qwen3-0.6b | 99.4 | 97.9 |
+  | 474M qwen3-1b | 99.2 | 97.2 |
+
+  The leak is monotone in scale and, decisively, **downward** — the clean
+  model reads *below* the ideal 100, never above it. A downward-biased measure
+  cannot manufacture an excess above the 50.0 null, so the §4 above-null cells
+  (random eqlen 55.8 at 420M, 54.8 at 1B; keyed-family 57.1 at 1B) are a real
+  preference and are, if anything, slightly understated by the leak. This
+  settles the caveat that stood here: the +5 at 420M–1B is not a calibration
+  offset. (At 86M the leak reaches ~20 pp on the full set, which is exactly why
+  §4 claims nothing below 420M.) Per-run JSON in
+  `results_cluster/results/scale_clean_*`; running log in
+  `results_cluster/H100_AUG2026.md`.
+* **Architecture vs scale — measured (2026-08-11), confound closed.** A GPT-2
+  `xxlarge` (413.7M) grid separates the two. Two findings (seed 42; seed 43
+  confirms):
+  - **Whether the above-null effect survives the architecture is inconclusive.**
+    GPT-2 random-trained eqlen is 48.5 (200M) and **52.3 / 50.1 at 413M**
+    (seeds 42/43, mean 51.2, one seed on the null) — marginal and seed-dependent,
+    where Qwen3 420M is tight and clearly above (56.11 / 55.41). Coherent GPT-2
+    stays at 51.0. A same-architecture GPT-2 at 413M therefore does not robustly
+    reproduce the above-null cell, so an architecture component in the effect
+    cannot be excluded; the leak difference below confounds a naive comparison
+    and partly explains GPT-2's lower reading.
+  - **The measure's leak is architecture-driven, not scale-driven.** Clean eqlen
+    is 92.2 (200M GPT-2) → 93.5 (413M GPT-2) vs 97.9 (418M Qwen3): a 413M GPT-2
+    leaks like a 202M GPT-2, not like an equal-size Qwen3. The family measure's
+    calibration therefore depends on architecture at fixed size, not only on
+    size (§ this list, ladder2_clean gives the size axis). GPT-2's lower raw
+    readings are partly its diffuser next-token distribution, which is why the
+    clean control per architecture is load-bearing. Details in
+    `H100_AUG2026.md`.
 * Qwen3 sizes have 2 seeds against 4 for GPT-2 sizes.
 * Single corpus family (formal math); 0.44 epochs, so these are single-pass
   numbers.

@@ -29,7 +29,7 @@
 \maketitle
 
 \begin{abstract}
-When transformers train on contradictory data---the same problem with both correct and incorrect solutions---which answer do they prefer? The usual way to ask is pairwise: compare the likelihood of the correct completion against one incorrect completion. That comparison is won outright by a model that merely reproduces training frequencies whenever the error can appear in more than one form, because the correct string keeps its full share while the false side is divided among its variants. We therefore measure instead the share of probability mass the correct completion holds against \emph{everything the error generator can produce} for that problem, a quantity a frequency-matching model must score at exactly $0.500$. On corpora where each problem occurs twice, once correct and once corrupted, the two measures diverge sharply. At 86M parameters the correct completion holds $59.0\% \pm 0.8\%$ of the mass against random errors (4 seeds, every per-seed bootstrap interval above $0.5$; the same value, $59.4\%$, on an independent corpus), while scoring it against the single realized error instead reports $77.6\%$---a threefold overstatement of the excess above chance. Below 86M the aggregate share shows no preference at all. Against a single coherent false rule, where the false support is one string and no such inflation is possible, the correct completion holds $43.5$--$48.8\%$ at every size we tested; the shortfall below $0.5$ is completion length, not a preference for the false system. Two experiments we had designed to identify a compression mechanism---competing wrong rules, and a ladder over the description length of a single wrong rule---raise pair accuracy while leaving probability mass flat or falling, and we report them as negative controls. The contrast between predictable and unpredictable errors is real but small, and we do not claim to have identified the mechanism behind it.
+When transformers train on contradictory data---the same problem with both correct and incorrect solutions---which answer do they prefer? The usual way to ask is pairwise: compare the likelihood of the correct completion against one incorrect completion. That comparison is won outright by a model that merely reproduces training frequencies whenever the error can appear in more than one form, because the correct string keeps its full share while the false side is divided among its variants. We therefore measure instead the share of probability mass the correct completion holds against \emph{everything the error generator can produce} for that problem, a quantity a frequency-matching model must score at exactly $0.500$. On corpora where each problem occurs twice, once correct and once corrupted, the two measures diverge sharply. At 86M parameters the correct completion holds $59.0\% \pm 0.8\%$ of the mass against random errors (4 seeds, every per-seed bootstrap interval above $0.5$; the same value, $59.4\%$, on an independent corpus), while scoring it against the single realized error instead reports $77.6\%$---a threefold overstatement of the excess above chance. Below 86M the aggregate share shows no preference at all. Against a single coherent false rule, where the false support is one string and no such inflation is possible, the correct completion holds $43.5$--$48.8\%$ at every size we tested; the shortfall below $0.5$ is completion length, not a preference for the false system. Two experiments we had designed to identify a compression mechanism---competing wrong rules, and a ladder over the description length of a single wrong rule---raise pair accuracy while leaving probability mass flat or falling, and we report them as negative controls. A third does isolate a cause: holding the false support at a fixed size and varying only whether the model can learn which error a problem gets swings the preference from the correct system ($+5$ points) through indifference to the false one ($-7$), so the axis is the predictability of the error, not the description length of the false rule. What the objective rewards is a learnable, internally consistent system, not a true one---a contrast that holds from 420M to a genuine 3.08B parameters.
 \end{abstract}
 
 %======================================================================
@@ -48,9 +48,9 @@ Testing it requires care in what is measured. The natural measure, and the one u
 \]
 taken over every string the error generator could have produced for that problem. On our corpora each problem occurs exactly twice, once correct and once corrupted, and every other string in the enumeration occurs zero times, so a frequency-matching model scores exactly $0.500$ regardless of $N$.
 
-We train transformers (3.5M--1B parameters) from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, varying the structure of errors while holding frequency, format, and domain constant, and we measure both quantities on the same checkpoints.
+We train transformers (3.5M--3.08B parameters) from scratch on corpora where each mathematical problem appears with both correct and incorrect solutions, varying the structure of errors while holding frequency, format, and domain constant, and we measure both quantities on the same checkpoints.
 
-Our contributions are: (a)~a measurement of correctness preference that mass splitting cannot inflate, on corpora where its null is exact, showing that the correct completion holds $59.0\%$ of the mass at 86M against random errors---about ten points---and no more than chance at 3.5M--26M; (b)~confirmation that a single coherent false rule produces no preference at any size, a result immune to splitting because its false support is one string, together with the finding that its apparent sub-chance readings are completion length; (c)~two negative controls, the multi-rule sweep and a description-length ladder, in which pair accuracy rises by 32 and 16 points while probability mass stays flat or falls; and (d)~a calibration of the pairwise family of measures, which overstate the excess above chance by a factor of three to four in the one condition where all of them can be computed exactly. Results elsewhere in the paper that rest on pair accuracy alone are marked as such.
+Our contributions are: (a)~a measurement of correctness preference that mass splitting cannot inflate, on corpora where its null is exact, showing that the correct completion holds $59.0\%$ of the mass at 86M against random errors---about ten points---and no more than chance at 3.5M--26M; (b)~confirmation that a single coherent false rule produces no preference at any size, a result immune to splitting because its false support is one string, together with the finding that its apparent sub-chance readings are completion length; (c)~two negative controls, the multi-rule sweep and a description-length ladder, in which pair accuracy rises by 32 and 16 points while probability mass stays flat or falls; (d)~a calibration of the pairwise family of measures, which overstate the excess above chance by a factor of three to four in the one condition where all of them can be computed exactly; and (e)~a learnable-selector control that holds the false support at a fixed ten strings and varies only the predictability of its selector, moving the preference from $+5$ points for the correct system to $-7$ as the selector becomes learnable, which identifies predictability as the causal axis and reproduces at 1.1B--3.08B. Results elsewhere in the paper that rest on pair accuracy alone are marked as such.
 
 %======================================================================
 \section{Related Work}
@@ -242,6 +242,41 @@ Over the realized support the share rises with $L$ at every size, reproducing th
 
 No grading in description length is present at any size we tested. Taken with Section~\ref{sec:multirule}, both of the experiments we built to identify a compression mechanism measure something else, and we do not claim compression as a measured quantity.
 
+\subsection{The Learnable-Selector Control: Predictability, Isolated}
+\label{sec:learnable}
+
+Sections~\ref{sec:multirule} and \ref{sec:ladder} withdraw two designs because each moves the metric by changing how many false strings a problem has, not by changing the false system's predictability. That leaves the gap the first version's Limitations named: no experiment separates \emph{whether the model can predict the false answer} from \emph{how many forms it takes}. This control does. We hold the false family fixed---the false answer is $a{\cdot}b + T[\,s(p)\bmod 10\,]$ for a fixed 10-entry offset table $T$, exactly ten false strings per problem---and vary only the selector $s(p)$:
+
+\begin{itemize}\itemsep2pt
+\item \texttt{learnable}: $s$ is one visible operand's ones digit, a lookup the model can fit;
+\item \texttt{k2}, \texttt{k3}: $s$ is the sum of two or three ones digits mod $10$---learnable in principle, progressively harder to fit;
+\item \texttt{learnable\_mod}: $s$ is the sum of all operands mod $n$---deterministic, but not learned at any size.
+\end{itemize}
+
+These sit alongside \texttt{random} (an unpredictable draw over a support of the same order) and \texttt{coherent} (one rule). Mode count is constant across the three table conditions, so any preference difference among them is a difference in learnability alone. All are scored with the family measure on the held-out scale grid (single pass, no problem seen twice, exact $0.5$ null; Appendix~\ref{app:scale}), on the length-matched subset.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lccc}
+\toprule
+False selector $s(p)$ & 418M & 474M & realized (474M) \\
+\midrule
+\texttt{random} (unpredictable)        & $56.8 \pm 1.1$ & $54.9 \pm 0.2$ & ${\approx}92$ \\
+\texttt{coherent} (one rule)           & $50.2 \pm 0.4$ & $49.9 \pm 0.5$ & --- \\
+\texttt{learnable} (1 digit)           & $44.7 \pm 1.0$ & $\mathbf{43.4 \pm 0.7}$ & $66$ \\
+\texttt{k2} (2 digits)                 & $48.6 \pm 0.0$ & $49.2 \pm 0.1$ & $88.6$ \\
+\texttt{k3} (3 digits)                 & $47.6 \pm 1.4$ & $48.8 \pm 0.1$ & $91.6$ \\
+\texttt{learnable\_mod} (all operands) & ---            & $55.4$         & $93$ \\
+\bottomrule
+\end{tabular}
+\caption{The learnable-selector control (Qwen3, family measure, length-matched subset, \% mass on the correct completion, null $50$). \texttt{random}/\texttt{coherent}/\texttt{learnable} are 4 seeds, the rest 2. The three table conditions (\texttt{learnable}, \texttt{k2}, \texttt{k3}) share one 10-entry offset table, so they hold the false support at ten strings and differ only in how learnable the index is. \emph{Realized} is the correct completion scored against the single false string the corpus actually used; it reads how much of the false mass the model has committed to the string it can predict. Full grid and the billion-scale replication in Appendix~\ref{app:scale}.}
+\label{tab:learnable}
+\end{table}
+
+The sign of the preference tracks learnability with mode count held fixed (Table~\ref{tab:learnable}). Against a selector it cannot learn (\texttt{random}, \texttt{learnable\_mod}) the correct completion carries the ${\approx}55\%$ excess of Section~\ref{sec:qwen}. Against one it can (\texttt{learnable}) the model prefers the \emph{false} system: the correct share falls to $43.4\% \pm 0.7\%$ at 474M (4 seeds), below the null. The intermediate selectors interpolate monotonically---as $s$ depends on more digits the model fits it less, the realized false string carries less mass ($66 \to 89 \to 92$), and the family share climbs off the below-null value back to the null ($43 \to 49 \to 49$) and then above it. The realized column names the mediator: a selector the model fits concentrates false mass on the string the corpus used, and that commitment is what pulls the family share under chance.
+
+A below-null cell can otherwise be a competence artifact rather than a preference---a model that cannot yet do the arithmetic also scores under the null (Appendix~\ref{app:scale}). That reading is excluded here by construction: \texttt{random} and \texttt{learnable} are trained on identical correct derivations and differ only in the false selector, so they compute the correct answer equally well, and \texttt{random} above the null against \texttt{learnable} below it---at matched correct-side competence---isolates the selector as the cause. Two readings then follow, with one caution. The measured one: predictability, not description length, is the axis that moves the preference---the ladder held the rule learnable and varied its stored constants and nothing moved (Section~\ref{sec:ladder}); here the stored table is fixed and the learnability of its index varies, and the preference swings across the null. The interpretive one, which we do not measure: a learnable digit-table error is a more compressible system than multi-step arithmetic, and the model prefers the more compressible system whether or not it is true. The caution: \texttt{learnable\_mod} also changes the realized mode count, so it anchors the unlearnable end as a direction, not a matched-diversity point; the clean matched-diversity gradient is \texttt{learnable}$\to$\texttt{k2}$\to$\texttt{k3}, monotone on its own. The contrast holds to a genuine 3.08B parameters (Appendix~\ref{app:scale}).
+
 \subsection{Transfer to Wikipedia Text with Entity Substitution}
 \label{sec:wikipedia}
 
@@ -297,13 +332,13 @@ Both metrics above compare completions the evaluator supplies. Greedy decoding d
 Size & Random-trained & Coherent-trained & Gap \\
  & \multicolumn{2}{c}{greedy decode, SymPy-verified} & \\
 \midrule
-tiny (3.5M)   & $30.5\% \pm 1.7\%$ & $20.8\% \pm 3.6\%$ & $+9.7$ pp \\
+tiny (3.5M)   & $31.1\% \pm 1.4\%$ & $20.8\% \pm 3.6\%$ & $+10.3$ pp \\
 small (12M)   & $46.7\% \pm 1.9\%$ & $31.7\% \pm 1.8\%$ & $+15.0$ pp \\
 medium (26M)  & $50.5\% \pm 1.3\%$ & $36.1\% \pm 2.7\%$ & $+14.4$ pp \\
 large (86M)   & $52.8\% \pm 1.1\%$ & $35.6\% \pm 1.8\%$ & $+17.2$ pp \\
 \bottomrule
 \end{tabular}
-\caption{Generative accuracy (4 seeds, 500 problems each). The gap widens with model size. Every cell recomputes from the released per-run evaluation logs except the tiny random-trained one, whose logs did not survive; it is reproduced from the first version of this work and is the only number in the paper we cannot re-derive.}
+\caption{Generative accuracy (4 seeds, 500 problems each). The gap widens with model size. Every cell recomputes from the released per-run evaluation logs. The tiny random-trained cell was re-run in August 2026 on the surviving checkpoints after the original evaluation logs were lost; the first version printed $30.5 \pm 1.7$ for it, within one standard deviation of the re-run.}
 \label{tab:generative}
 \end{table}
 
@@ -311,38 +346,58 @@ Random-trained models solve more problems than coherent-trained ones at every si
 
 Per-task breakdown reveals that generation difficulty varies sharply by type. For random-trained large models: derivative (79.5\%), algebra (70.4\%), equation (61.0\%), arithmetic (0\%). Multi-step arithmetic requires exact carry propagation across many digits---a well-known difficulty for autoregressive generation at this scale---even though paired evaluation shows strong discrimination. Coherent-trained models show lower generation accuracy across all types, with the gap largest for algebra (70.4\% vs 38.3\%) and smallest for derivative (79.5\% vs 56.5\%).
 
-\subsection{Architecture and Scale: Qwen3 at 420M and 1B}
+\subsection{Architecture and Scale: Qwen3 at 420M and 490M}
 \label{sec:qwen}
 \label{sec:qwen1b}
 
-Two checks that the pairwise contrast is not tied to the GPT-2-like design or to
-toy scale. Both are pair accuracy: neither set of checkpoints was scored under
-the aggregate share, so both inherit the overstatement of
-Section~\ref{sec:central}, and the informative column in each is the coherent
-one, whose single false string leaves nothing to split.
+Two checks that the contrast is not tied to the GPT-2-like design or to toy
+scale. The 420M Qwen3-0.6B is scored under both metrics; the 490M FineWeb-Edu
+run is pair accuracy only and inherits the overstatement of
+Section~\ref{sec:central}, so there the informative column is the coherent one,
+whose single false string leaves nothing to split.
 
 \emph{Architecture.} A Qwen3-0.6B model \citep{yang2025qwen3} (420M
 non-embedding parameters, RoPE + GQA + SwiGLU + RMSNorm) trained from scratch on
-the same denoising corpora gives $86.8\%$ pair accuracy under random errors and
-$50.6\%$ under coherent ones (3 seeds: $85.3/85.7/89.3$ and $49.3/52.8/49.8$).
-Changing positional encoding, attention, activation and normalization does not
-change the picture, and a coherent false rule is not filtered at 420M either.
+50/50 corpora of the standard construction (Appendix~\ref{app:standard})
+scaled to 1.4M problems gives $87.3\% \pm 0.4\%$ pair accuracy under random
+errors and $49.4\% \pm 1.3\%$ under coherent ones (3 seeds). On the same
+checkpoints the aggregate share puts the correct completion at
+$56.3\% \pm 0.3\%$ of the mass against the enumerated false support for random
+errors and $49.7\% \pm 0.0\%$ for coherent ones (null $50\%$): the
+random/coherent contrast holds on the controlled measure at 420M as it does at
+86M, not only on pair accuracy. Changing positional encoding, attention,
+activation and normalization does not change the picture, and a coherent false
+rule is not filtered at 420M on either metric.
 
-\emph{Scale and naturalistic data.} A Qwen3-architecture model of ${\sim}1$B
-parameters trained from scratch on 1~GB of FineWeb-Edu \citep{penedo2024fineweb}
+\emph{Scale and naturalistic data.} A Qwen3-architecture model of 490M
+parameters (the first version of this work labelled this configuration
+${\sim}1$B; instantiating it gives 489.9M parameters at the run's 8k-token
+vocabulary) trained from scratch on 1~GB of FineWeb-Edu \citep{penedo2024fineweb}
 with mathematical content filtered out and replaced by 8\% contradictory math
-gives $76.8\%$ and $46.7\%$ (single seed per condition; $\Delta$Loss $+0.098$
-and $-0.003$, descriptive only, no across-seed uncertainty). The random value is
-below the math-only runs, plausibly because the contradictory signal is 8\% of
-the corpus rather than all of it, but we make no quantitative claim from a
-single seed on an uncontrolled metric. What the run establishes is that a
-coherent false rule is not filtered at 1B either---on real text, with the
-contradictory material in the minority.
+gives $77.6\% \pm 0.8\%$ pair accuracy under random errors and
+$47.4\% \pm 0.7\%$ under coherent ones (2 seeds; the second seed was added on
+8${\times}$H100 and reproduces the first, which was on Kaggle T4). The random
+value is below the math-only runs, plausibly because the contradictory signal
+is 8\% of the corpus rather than all of it, but this is pair accuracy on an
+enumeration-free support and we make no quantitative claim from it. What the run
+establishes is that a coherent false rule is not filtered at 490M either---on
+real text, with the contradictory material in the minority.
+
+\emph{To billions, on the controlled measure.} The held-out scale grid, whose
+enumerable error family lets the family measure keep its exact null, carries the
+random/coherent/learnable contrast of Sections~\ref{sec:qwen} and
+\ref{sec:learnable} past the Qwen sizes to genuine 1.12B, 2.16B and 3.08B
+Qwen3-architecture models (2 seeds each). Every finding holds: the correct system
+keeps a ${\approx}5$-point excess against an unpredictable false family, a
+coherent rule sits at the null, and a learnable false selector is preferred
+(correct share ${\approx}43$). The clean-corpus calibration stays above $96\%$ at
+every billion size, so the measure is not manufacturing these gaps
+(Appendix~\ref{app:scale}).
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.62\textwidth]{figure_full_scaling.png}
-\caption{Cross-setup pair-accuracy summary: GPT-2 family (3.5M--86M, math-only, 2--4 seeds), Qwen3-0.6B (420M, math-only, 3 seeds), Qwen3-architecture ${\sim}$1B (FineWeb-Edu + 8\% math, single seed). Setups differ in architecture, corpus and seed count, and every point is pair accuracy, which Section~\ref{sec:central} shows overstates the excess above chance about fourfold where both measures exist. Read as directional robustness of the pairwise contrast---not a scaling law, and not the size of the effect.}
+\caption{Cross-setup pair-accuracy summary: GPT-2 family (3.5M--86M, math-only, 2--4 seeds), Qwen3-0.6B (420M, math-only, 3 seeds), Qwen3-architecture 490M (FineWeb-Edu + 8\% math, 2 seeds). Setups differ in architecture, corpus and seed count, and every point is pair accuracy, which Section~\ref{sec:central} shows overstates the excess above chance about fourfold where both measures exist. Read as directional robustness of the pairwise contrast---not a scaling law, and not the size of the effect.}
 \label{fig:qwen}
 \end{figure}
 
@@ -351,7 +406,7 @@ contradictory material in the minority.
 \label{sec:discussion}
 %======================================================================
 
-\textbf{Summary of findings.}\quad Two math corpora agree at 86M: a false system whose output the model cannot predict from the problem loses about ten points of probability mass to the correct one ($59.0\%$ denoising, $59.4\%$ standard), and a coherent false rule loses none at any size we tested. Below 86M the two corpora disagree---the standard corpus shows the effect from 12M, the denoising corpus not at all---so the effect is established at one size on two corpora and nowhere below. The generative evaluation, which no splitting argument touches, does separate the conditions at every size. We describe this as a contrast between predictable and unpredictable false systems, and we do not claim to have identified what produces it.
+\textbf{Summary of findings.}\quad Two math corpora agree at 86M: a false system whose output the model cannot predict from the problem loses about ten points of probability mass to the correct one ($59.0\%$ denoising, $59.4\%$ standard), and a coherent false rule loses none at any size we tested. Below 86M the two corpora disagree---the standard corpus shows the effect from 12M, the denoising corpus not at all---so the effect is established at one size on two corpora and nowhere below. The generative evaluation, which no splitting argument touches, does separate the conditions at every size. We describe this as a contrast between predictable and unpredictable false systems, and Section~\ref{sec:learnable} identifies that axis directly: holding the false support at a fixed ten strings and varying only whether the model can learn which one applies flips the sign of the preference, from ${+}5$ points for the correct system when the selector is unpredictable to ${-}7$ when it is a learnable digit lookup, with a monotone interpolation between. Predictability---not the description length of the false rule, which the ladder shows does nothing---is what moves it.
 
 \textbf{What we withdraw.}\quad Preference is not graded in the description length of the false system. The two experiments built to show it---competing wrong rules, and a ladder over the number of constants a single wrong rule stores---move pair accuracy by 32 and 16 points while leaving probability mass flat or falling, and their apparent signal is the model's inability to predict which false string will appear, credited to the correct side by a pairwise comparison. Nor do coherent errors fall below chance: that reading was completion length. Nor is the effect present at every scale we tested. These three claims were central to the first version of this work and none of them survives its own control.
 
@@ -359,13 +414,13 @@ contradictory material in the minority.
 
 \textbf{What pair accuracy is good for.}\quad The metric is not worthless---it is a legitimate measure of a ranking behavior, and it is what the surrounding literature reports---but it answers a narrower question than it appears to. When the false side can take more than one form, the correct string competes against a divided opponent, and a model with no preference at all wins. Any experimental design that varies the number of false forms (competing rules, noise ratios, entity substitution, corruption load) varies the metric along with the treatment. We would expect this to affect published results beyond our own wherever contradictory or corrupted data is evaluated pairwise.
 
-\textbf{Implications and scope.}\quad Within these settings, the training objective offers no inherent ``truth compass'': internally coherent falsehood stays competitive at every size we tested, on both synthetic math and diluted natural text, and the preference against incoherent falsehood is real but modest where we can measure it cleanly. That bears on data curation, where coordinated errors would evade diversity-based filtering, and on the reading of hallucination as a corpus-statistics phenomenon \citep{kalai2024calibrated}. All our models remain far below production scale, we report a behavioral contrast rather than an identified mechanism, and we make no claims about production models.
+\textbf{Implications and scope.}\quad Within these settings, the training objective offers no inherent ``truth compass''. Internally coherent falsehood stays competitive at every size we tested, on both synthetic math and diluted natural text; the preference against incoherent falsehood is real but modest where we can measure it cleanly; and its stronger form (Section~\ref{sec:learnable}) is that a false system the model \emph{can} predict is preferred over the correct one, so what the objective rewards is a learnable, compressible system rather than a true one. That bears on data curation, where coordinated errors would evade diversity-based filtering and a systematic---hence learnable---corruption is exactly the kind this preference favours, and on the reading of hallucination as a corpus-statistics phenomenon \citep{kalai2024calibrated}. All our models remain far below production scale, the identification isolates predictability while leaving the interpretation in terms of compression as an interpretation, and we make no claims about production models.
 
 %======================================================================
 \section{Conclusion}
 %======================================================================
 
-Measured against everything an error generator can produce, rather than against one sampled error, correctness preference in contradictory training data is smaller than the pairwise metric reports and appears later. At 86M parameters the correct completion holds $59.0\%$ of the probability mass where the pairwise comparison reports $77.6\%$; below 86M the aggregate share shows no preference at all, while pair accuracy already reads 72--89\%. A single coherent false rule is not filtered at any size, architecture or corpus we tested, and this half of the contrast is immune to the objection by construction. Preference is not graded in the description length of the false system: both experiments we built to show that turned out to measure how the false mass is divided. The behavioral contrast between predictable and unpredictable errors is real; we report it as such, and leave its mechanism open.
+Measured against everything an error generator can produce, rather than against one sampled error, correctness preference in contradictory training data is smaller than the pairwise metric reports and appears later. At 86M parameters the correct completion holds $59.0\%$ of the probability mass where the pairwise comparison reports $77.6\%$; below 86M the aggregate share shows no preference at all, while pair accuracy already reads 72--89\%. A single coherent false rule is not filtered at any size, architecture or corpus we tested, and this half of the contrast is immune to the objection by construction. Preference is not graded in the description length of the false system: both experiments we built to show that turned out to measure how the false mass is divided. What does move it is predictability---holding the false support at a fixed size and making its selector learnable turns the correct system's small advantage into a preference for the false one, and the effect interpolates with how learnable the selector is. That contrast holds from 420M to a genuine 3.08B parameters. The behavioral finding is a preference for a learnable, internally consistent system over a true one; we report it as such.
 
 %======================================================================
 \section*{Limitations}
@@ -374,13 +429,13 @@ Measured against everything an error generator can produce, rather than against 
 
 \textbf{Measurement.}\quad The aggregate share sums probability over the false support the training generator can produce for each problem. It is exact only where that support can be enumerated, which rules out the Wikipedia and natural-text settings, and it is a lower bound rather than a point estimate, since adding strings to the sum can only lower it. It also carries a downward bias that grows as the model gets smaller: on a corpus containing the same problems and no false rule at all, the same 18-mode share reads $99.7\%$ at 86M but $64.1\%$ at 3.5M (Section~\ref{sec:ladder}). Where we report an effect the measure is close to unbiased; where we report none, it is conservative and a small preference could be hidden by the leak. Results elsewhere in the paper that rest on pair accuracy alone are marked in place.
 
-\textbf{Model scale, and the lower end.}\quad Primary experiments use 3.5M--86M parameter models; Section~\ref{sec:qwen1b} extends to ${\sim}$1B on natural text with a single seed. The scale limitation now runs in both directions. Under the aggregate share the effect is present only at our largest primary size on the denoising corpus ($18.6$, $31.6$, $44.1$, $59.0$ at 3.5M--86M) and from 12M on the standard corpus, so there is exactly one size at which it is established on both, and no evidence that it holds below. Multi-billion-scale replication with compute-matched training, multiple seeds, and an enumerable error family remains the natural next step.
+\textbf{Model scale, and the lower end.}\quad Primary experiments use 3.5M--86M parameter models; Section~\ref{sec:qwen1b} extends to 490M on natural text (2 seeds). The scale limitation now runs in both directions. Under the aggregate share the effect is present only at our largest primary size on the denoising corpus ($18.6$, $31.6$, $44.1$, $59.0$ at 3.5M--86M) and from 12M on the standard corpus, so there is exactly one size at which it is established on both, and no evidence that it holds below. At the top end the multi-billion replication we previously named as the next step is now done: on the held-out scale grid, with an enumerable error family and 2 seeds, the random/coherent/learnable contrast holds at a genuine 1.12B, 2.16B and 3.08B parameters (Appendix~\ref{app:scale}). What remains open is the low end---no controlled evidence below 420M except generation---and compute-matched rather than single-pass training at the billion scale.
 
-\textbf{Domain specificity.}\quad Mathematics provides an unusually crisp correct/incorrect distinction and, more importantly here, a false-answer generator whose output support we can enumerate exactly. Wikipedia entity substitution has no enumerable support, and its random condition therefore has no usable measurement at all---not a weaker one. What transfers to natural text in this work is the coherent result alone. A tractable version exists and we have not run it: restricting the evaluation set to paragraphs with exactly one entity makes the false support equal to that entity type's pool, a few hundred to a few thousand strings, which can be summed exactly at the cost of one forward pass per pool member. Domains with competing real-world knowledge systems (conflicting news sources, historical revisionism) remain open.
+\textbf{Domain specificity.}\quad Mathematics provides an unusually crisp correct/incorrect distinction and, more importantly here, a false-answer generator whose output support we can enumerate exactly. Wikipedia entity substitution has no such support in general, so its random condition cannot be scored the way the math conditions are. We ran the tractable special case---restricting evaluation to single-entity paragraphs, whose false support is exactly the substituted entity type's pool---and it does not rescue the random condition at trainable scale: that pool runs to ${\sim}2800$ strings, two orders past the math grid's ${\sim}18$, so the family measure's downward leak, calibrated on a clean model trained with no false rule, reaches ${\sim}95$ points below 1B---a clean 86M model reads $5\%$ of the mass on the correct string where it should read ${\sim}100\%$, and the random-trained model sits in the same band ($4\%$), both far under the $0.5$ null. The single-entity coherent support (one false mode, no leak) is length-mismatched instead: only ${\sim}25$ of $384$ problems are token-length-matched, and pooled across all four sizes and both seeds that subset reads $52 \pm 4$ at the $0.5$ null---coherent not filtered on the mass measure either, matching the paired result, but underpowered per cell. So the enumerable-support route quantifies \emph{why} natural text resists this measurement rather than removing the obstacle, and what transfers cleanly remains the coherent result. Domains with competing real-world knowledge systems (conflicting news sources, historical revisionism) remain open.
 
 \textbf{Discriminative vs generative gap.}\quad Pair accuracy (85\%) substantially exceeds generative accuracy (53\%) at large scale, the familiar teacher-forcing gap. Pair accuracy is not a controlled diagnostic of preference: whenever the false side has more than one form, a model reproducing training frequencies wins the comparison. On the denoising corpus at 86M it reports $37.4$~pp of excess above chance where the aggregate share reports $9.0$~pp. We report it only for comparability with prior work.
 
-\textbf{Causal identification.}\quad We do not identify the cause. The multi-rule experiment, previously offered as evidence for a selector cost, measures mass splitting: aggregate mass is $47.9\%$ at $N{=}1$ and $47.8\%$ at $N{=}2$ while pair accuracy jumps 32~pp. The description-length ladder, built specifically to vary description length with mode count held at one realized string, is flat at 86M ($55.6$, $51.9$, $52.6$, $51.3$). Random and coherent corruptions still differ along axes beyond predictability---affected steps, lexical diversity---and the matched-control ablation addresses corruption load but not mode count. A design that separates predictability from description length while keeping both the realized and the potential false support at one string would be the next thing to try; we do not currently know how to build it.
+\textbf{Causal identification.}\quad The two designs the first version offered---the multi-rule experiment (mass $47.9 \to 47.8\%$ at $N{=}1 \to 2$ while pair accuracy jumps 32~pp) and the description-length ladder (flat at 86M: $55.6$, $51.9$, $52.6$, $51.3$)---both confound their treatment with mode count and identify nothing. The learnable-selector control (Section~\ref{sec:learnable}) removes that confound: it fixes the false support at ten strings and varies only whether the selector is learnable, and the preference swings from ${+}5$ points (unpredictable) through the null (partly learnable, \texttt{k2}/\texttt{k3}) to ${-}7$ (a learnable digit lookup), monotone in the realized share. That isolates predictability as the causal axis, which is the identification we said we could not build. Three limits remain and we do not overclaim past them. First, it isolates predictability, not description length: the interpretation that the model prefers the \emph{more compressible} of two systems is consistent with the swing but not measured by it, since a learnable selector is both more predictable and cheaper to store. Second, the realized false support is ten strings, not one, so the design isolates predictability from mode \emph{count} but not from the existence of a small multiplicity; a version holding the realized support at one string while varying its predictability is still open. Third, the below-null readings rest on a matched-competence argument (\texttt{random} and \texttt{learnable} share correct-side training) rather than on a null that is clean below $0.5$; and all of it is one formal-math corpus family.
 
 \textbf{Future directions.}\quad Linear probing for ``truth'' vs ``coherence'' directions in models trained under our conditions could link behavior to internal representations; interactions with RLHF and in-context learning are natural extensions.
 
@@ -399,7 +454,7 @@ Measured against everything an error generator can produce, rather than against 
 \section{Reproducibility}
 \label{app:reproducibility}
 
-All code, data generation scripts, and evaluation scripts are available at [anonymous repository, included as supplementary material]. Denoising experiments were run on Modal.com T4 GPUs using PyTorch; the control grids of Sections~\ref{sec:central} and \ref{sec:ladder} were rerun on 8${\times}$H100 nodes. Standard math and Wikipedia experiments were run on Apple Mac M4 (36GB) using MLX (v0.31.0). Qwen3-0.6B experiments were run on Modal.com A10G GPUs; the ${\sim}$1B Qwen3-architecture experiments were run on Modal.com A100 GPUs. Over 300 models were trained across all conditions.
+All code, data generation scripts, and evaluation scripts are available at [anonymous repository, included as supplementary material]. Denoising experiments were run on Modal.com T4 GPUs using PyTorch; the control grids of Sections~\ref{sec:central} and \ref{sec:ladder} were rerun on 8${\times}$H100 nodes. Standard math and Wikipedia experiments were run on Apple Mac M4 (36GB) using MLX (v0.31.0). Qwen3-0.6B experiments were run on Modal.com A10G GPUs; the 490M Qwen3-architecture FineWeb-Edu experiments were run on Kaggle T4 GPUs (per the run records; an earlier draft said Modal A100). Over 300 models were trained across all conditions.
 
 \textbf{Released with this paper.}\quad The corpora, the support-enumeration code and the per-run outputs behind both control grids: 64 description-length ladder runs (4 rungs $\times$ 4 sizes $\times$ 4 seeds) plus 8 clean-corpus controls, and 32 denoising runs (2 conditions $\times$ 4 sizes $\times$ 4 seeds). The corpora regenerate byte-identically from their seeds and we publish their SHA-256 checksums; the enumeration script verifies, for every problem, that the error the corpus contains is a member of the enumerated support, and aborts otherwise. Training weights were deleted after evaluation, so only the metric JSON is retained for the cluster grids.
 
@@ -457,8 +512,17 @@ learner, it does not move these models' allocation between the clusters.
 
 The graded reading of this framework is therefore refuted by our own
 measurement, and only its binary consequence (Prediction 2, and Prediction 1 at
-our largest size) survives. We report compression as an interpretation of that
-contrast, not as a mechanism these experiments identify.
+our largest size) survives. One prediction the graded reading did not make, but
+the learnability account does, is borne out: the extra cost the mixture pays for
+the false cluster is the source-assignment term $L(\{z_i\})$, and that term is
+paid only when the assignment $z_i$ cannot be recovered from the problem. Making
+it recoverable---the learnable selector of Section~\ref{sec:learnable}---should
+remove the cost and let the model commit to the false cluster, and it does: the
+correct share drops below the null there while the ladder, which left the
+assignment unpredictable at every rung, never moved. So the assignment term, not
+the theory-description terms $L(T_1)+L(T_2)$, is what these models are sensitive
+to. We report compression as an interpretation of the surviving contrast, not as
+a quantity these experiments measure.
 
 \section{Control Grids in Full}
 \label{app:controls}
@@ -530,6 +594,89 @@ Coherent (1 mode) & $47.3 \pm 0.7$ & $49.2 \pm 0.4$ & $50.0 \pm 0.4$ & $50.1 \pm
 \end{tabular}
 \caption{Aggregate share on the standard (non-denoising) corpus, 4 seeds (\%); $n{=}1101$ problems for random and $915$ for coherent, of which $359$ and $561$ are length-matched. The $59.4$ at 86M is the independent replication of the $59.0$ obtained on the denoising corpus. Per-seed bootstrap intervals for the random condition lie entirely above $0.5$ at 12M, 26M and 86M. The coherent intervals contain $0.5$ from 26M upward; at 3.5M all four lie entirely below it, and at 12M one of four does, consistent with the length account of Section~\ref{sec:central}.}
 \label{tab:standard_share}
+\end{table}
+
+\section{The Held-Out Scale Grid and the Learnable-Selector Control}
+\label{app:scale}
+
+This grid trains one model per condition on 500k problems for 5000 steps at batch
+32 ($0.44$ epochs, so no problem is seen twice) and evaluates on ${\approx}2.5$k
+held-out problems disjoint from training by a hash of the problem parameters. It
+is the measurement behind Sections~\ref{sec:qwen} and \ref{sec:learnable} and the
+billion-scale replication. Because each problem is written once---correct with
+probability $0.5$, otherwise one false string---the frequency-matching null for
+the family share is exactly $0.500$ (a marginal correction from arithmetic
+problems that render identically in every mode raises it to at most $0.513$; we
+read the band $[50.0, 51.3]$). We report the length-matched subset, on which the
+completion-length confound of Section~\ref{sec:central} is removed.
+
+\textbf{A null of indifference is also a null of competence.} Every null here
+describes a model that both lacks a preference \emph{and} can compute the correct
+answer; a model that prefers truth but has not learned the arithmetic reads below
+it too. So a below-null cell is not on its own evidence of a preference for the
+false side. Only excursions above the band are unambiguous---except where a
+matched-competence contrast is available, as in the learnable control below,
+where \texttt{random} and \texttt{learnable} share their correct-side training and
+so cannot differ in competence.
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{lccccccc}
+\toprule
+ & 3.5M & 12M & 26M & 86M & 202M & 418M & 474M \\
+\midrule
+random (eqlen)   & $15.1$ & $32.8$ & $40.4$ & $45.5$ & $48.5$ & $\mathbf{56.8}$ & $\mathbf{54.9}$ \\
+coherent (eqlen) & $49.4$ & $51.6$ & $51.2$ & $52.4$ & $51.9$ & $50.2$ & $49.9$ \\
+clean (full)     & ---    & ---    & ---    & $80.9$ & $91.7$ & $99.4$ & $99.2$ \\
+clean (eqlen)    & ---    & ---    & ---    & $91.0$ & $92.2$ & $97.9$ & $97.2$ \\
+\bottomrule
+\end{tabular}
+\caption{Held-out scale grid, family measure, \% mass on the correct completion (null $50$). GPT-2 sizes 3.5M--202M (4 seeds), Qwen3 sizes 418M/474M (4 seeds on random and coherent). The above-null random cells appear only at 418M--474M; coherent sits at the null throughout. \emph{clean} trains on the same problems with no false rule anywhere: its shortfall below the ideal $100$ is the measure's downward leak, which is monotone in scale and never lifts a value \emph{above} the ideal, so it cannot manufacture the above-null random cells. The leak is also architecture-dependent---a same-size 413M GPT-2 leaks like a 202M GPT-2 (clean eqlen $93.5$) and its random cell straddles the null ($52.3/50.1$), where Qwen3 is tight and clearly above.}
+\label{tab:scale_grid}
+\end{table}
+
+\textbf{The learnable-selector control (Section~\ref{sec:learnable}), full grid.}
+The false answer is $a{\cdot}b + T[\,s(p)\bmod 10\,]$ with $T$ a fixed 10-entry
+table, so the false support is ten strings per problem in every row; only the
+selector $s(p)$ changes. Family share is the length-matched subset; \emph{realized}
+scores the correct completion against the single false string the corpus used.
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{418M} & \multicolumn{2}{c}{474M} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Selector $s(p)$ & family & realized & family & realized \\
+\midrule
+\texttt{learnable} (1 digit)   & $44.7 \pm 1.0$ & ${\approx}65$ & $43.4 \pm 0.7$ & $66$ \\
+\texttt{k2} (2 digits)         & $48.6 \pm 0.0$ & $85.9 \pm 0.6$ & $49.2 \pm 0.1$ & $88.6 \pm 0.1$ \\
+\texttt{k3} (3 digits)         & $47.6 \pm 1.4$ & $89.7 \pm 1.1$ & $48.8 \pm 0.1$ & $91.6 \pm 0.2$ \\
+\texttt{learnable\_mod} (all)  & ---            & ---           & $55.4$         & $93$ \\
+\bottomrule
+\end{tabular}
+\caption{Learnable-selector gradient (Qwen3, family measure on the length-matched subset, null $50$). \texttt{learnable} is 4 seeds, \texttt{k2}/\texttt{k3} are 2 seeds, \texttt{learnable\_mod} 2 seeds at 474M. As the selector is made to depend on more digits it is fitted less (realized share climbs $65 \to 89 \to 92$), and the family share climbs off the below-null value to the null. \texttt{learnable\_mod} (sum of all operands mod $n$) is deterministic but never learned, so it reads like \texttt{random}; it changes the realized mode count, so it anchors the unlearnable end as a direction rather than a matched-diversity point.}
+\label{tab:learnable_full}
+\end{table}
+
+\textbf{Billion-scale replication.} Genuine Qwen3-architecture models at 1.12B,
+2.16B and 3.08B parameters (bf16, gradient checkpointing; 2 seeds each) reproduce
+the full contrast on the controlled measure (Table~\ref{tab:billions}). A 4.39B
+configuration exceeds one H100's memory with fp32 optimizer states and is not run.
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{lccccc}
+\toprule
+Params & random & coherent & learnable & \texttt{learnable\_mod} & clean \\
+\midrule
+1.12B & $55.5$ & $49.5$ & $43.8$ & --- & $98.1$ \\
+2.16B & $54.5$ & $50.7$ & $43.1$ & $54.2$ & $96.4$ \\
+3.08B & $56.6$ & $49.3$ & $43.7$ & $54.6$ & $99.0$ \\
+\bottomrule
+\end{tabular}
+\caption{Billion-scale replication (family measure, length-matched subset, null $50$, 2 seeds). Correct system above the null against an unpredictable false family, coherent at the null, learnable false selector below the null (preferred), \texttt{learnable\_mod} unlearned and so at the random level, clean calibration above $96\%$ at every size. \texttt{learnable\_mod} was not run at 1.12B.}
+\label{tab:billions}
 \end{table}
 
 \section{Compression Measure (gzip)}
@@ -857,7 +1004,7 @@ large  & 51.6\% & 50.4\% & --     & --     & 51.0\% \\
 \item {\bf Experiment statistical significance}
     \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
     \item[] Answer: \answerYes{}
-    \item[] Justification: All $\pm$ values are standard deviations across random seeds (not standard errors). $p$-values are computed via Wilcoxon signed-rank test (one-sided) on per-pair NLL differences; bootstrap 95\% CIs (10{,}000 resamples) are used for confidence intervals. The number of seeds is reported for every condition. Per-seed breakdowns for the core denoising conditions are provided in Appendix~\ref{app:seeds}. For the 1B experiment (single seed), the $p$-value reflects per-example significance and is marked as descriptive.
+    \item[] Justification: All $\pm$ values are standard deviations across random seeds (not standard errors). $p$-values are computed via Wilcoxon signed-rank test (one-sided) on per-pair NLL differences; bootstrap 95\% CIs (10{,}000 resamples) are used for confidence intervals. The number of seeds is reported for every condition. Per-seed breakdowns for the core denoising conditions are provided in Appendix~\ref{app:seeds}. For the 490M FineWeb-Edu experiment (2 seeds), the reported values are pair accuracy on an enumeration-free support and are marked as descriptive.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -912,7 +1059,7 @@ large  & 51.6\% & 50.4\% & --     & --     & 51.0\% \\
 \item {\bf Safeguards}
     \item[] Question: Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse (e.g., pre-trained language models, image generators, or scraped datasets)?
     \item[] Answer: \answerNA{}
-    \item[] Justification: All models are small ($\leq$1B parameters) and trained on synthetic or filtered web data. They have no capabilities beyond the narrow experimental domain and pose no misuse risk.
+    \item[] Justification: All models are small ($\leq$0.5B parameters) and trained on synthetic or filtered web data. They have no capabilities beyond the narrow experimental domain and pose no misuse risk.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper poses no such risks.

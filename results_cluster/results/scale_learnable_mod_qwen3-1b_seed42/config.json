@@ -1,0 +1,14 @@
+{
+  "corpus_path": "data/train_scale_learnable_mod.txt",
+  "model_size": "qwen3-1b",
+  "n_params": 473593856,
+  "vocab_size": 53,
+  "seq_len": 256,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "max_steps": 5000,
+  "seed": 42,
+  "device": "cuda",
+  "dtype": "float32",
+  "backend": "pytorch"
+}

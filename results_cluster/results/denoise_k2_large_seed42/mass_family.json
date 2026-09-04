@@ -1,0 +1,17 @@
+{
+  "weights": "results/denoise_k2_large_seed42/model_final.pt",
+  "support": "data/support_denoise_k2_family.jsonl",
+  "n_problems": 4565,
+  "skipped": 435,
+  "mean_false_modes": 8.220810514786418,
+  "aggregate_share_mean": 0.4513619404615041,
+  "aggregate_share_ci95": [
+    0.44600322413558763,
+    0.4564718601274443
+  ],
+  "frac_share_above_half": 0.3596933187294633,
+  "pair_accuracy_mean_nll": 0.7968075267352086,
+  "length_delta_mean": -0.5161500176800853,
+  "equal_length_share_mean": 0.421905571649235,
+  "equal_length_n": 1179
+}

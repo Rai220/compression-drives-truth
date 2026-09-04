@@ -1,0 +1,19 @@
+[2026-08-11 15:44:56] train clean qwen3-1b 42
+[2026-08-11 16:32:33] EVAL FAIL clean qwen3-1b 42 random
+[2026-08-11 16:32:34] EVAL FAIL clean qwen3-1b 42 coherent
+[2026-08-11 16:32:34] train clean qwen3-0.6b 42
+[2026-08-11 16:47:30] done clean qwen3-1b 42 (eval redo)
+[2026-08-11 17:28:06] done clean qwen3-0.6b 42
+[2026-08-11 17:28:06] train clean qwen3-1b 43
+[2026-08-11 18:20:06] done clean qwen3-1b 43
+[2026-08-11 18:20:06] train clean qwen3-0.6b 43
+[2026-08-11 19:10:34] done clean qwen3-0.6b 43
+[2026-08-11 19:10:34] train clean xlarge 42
+[2026-08-11 19:33:00] done clean xlarge 42
+[2026-08-11 19:33:00] train clean xlarge 43
+[2026-08-11 19:55:27] done clean xlarge 43
+[2026-08-11 19:55:27] train clean large 42
+[2026-08-11 20:06:26] done clean large 42
+[2026-08-11 20:06:26] train clean large 43
+[2026-08-11 20:17:24] done clean large 43
+[2026-08-11 20:17:24] grid complete: jobs_clean.txt

@@ -1,0 +1,65 @@
+{
+  "model_size": "small",
+  "weights": "results/wiki_coherent_50_50_small_seed43_torch/model_final.pt",
+  "n_pairs": 2000,
+  "avg_correct_nll": 1.3078309463097366,
+  "avg_incorrect_nll": 1.3089952382216794,
+  "delta": 0.001164291911942783,
+  "pair_accuracy": 0.4745,
+  "correct_wins": 949,
+  "bootstrap_ci_95": [
+    -0.003685286923799593,
+    0.0060661285512054386
+  ],
+  "wilcoxon_p": 0.3779064828104163,
+  "by_type": {
+    "CARDINAL": {
+      "n": 204,
+      "delta": -0.02792434797459875,
+      "accuracy": 0.3480392156862745,
+      "correct_wins": 71
+    },
+    "DATE": {
+      "n": 326,
+      "delta": 0.0050543693801050615,
+      "accuracy": 0.4754601226993865,
+      "correct_wins": 155
+    },
+    "EVENT": {
+      "n": 9,
+      "delta": -0.03563030959158353,
+      "accuracy": 0.1111111111111111,
+      "correct_wins": 1
+    },
+    "GPE": {
+      "n": 282,
+      "delta": 0.013356501880214866,
+      "accuracy": 0.5,
+      "correct_wins": 141
+    },
+    "LOC": {
+      "n": 33,
+      "delta": 0.009651340037639011,
+      "accuracy": 0.48484848484848486,
+      "correct_wins": 16
+    },
+    "NORP": {
+      "n": 169,
+      "delta": 0.009159421062225004,
+      "accuracy": 0.4970414201183432,
+      "correct_wins": 84
+    },
+    "ORG": {
+      "n": 517,
+      "delta": 0.00034552609409499446,
+      "accuracy": 0.4661508704061896,
+      "correct_wins": 241
+    },
+    "PERSON": {
+      "n": 460,
+      "delta": 0.0019271571249763753,
+      "accuracy": 0.5217391304347826,
+      "correct_wins": 240
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "weights": "results/wiki_coherent_50_50_medium_seed43_torch/model_final.pt",
+  "support": "data/corpus/wiki_single_random.jsonl",
+  "n_problems": 468,
+  "skipped": 0,
+  "mean_false_modes": 2764.2393162393164,
+  "aggregate_share_mean": 0.030301254190247033,
+  "aggregate_share_ci95": [
+    0.022063039425968024,
+    0.04004982981503721
+  ],
+  "frac_share_above_half": 0.008547008547008548,
+  "pair_accuracy_mean_nll": 0.6485505503637031,
+  "length_delta_mean": 3.0557388685350593,
+  "equal_length_share_mean": null,
+  "equal_length_n": 0
+}

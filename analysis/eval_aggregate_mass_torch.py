@@ -19,37 +19,49 @@ import torch
 import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "training_torch"))
+# training_torch must resolve `model` (the torch one); training/ supplies only
+# `tokenizer`. insert(0, ...) reverses the listed order, so training/ goes in
+# first — with it in front, `from model import ...` finds the MLX model and
+# dies on boxes without mlx.
 sys.path.insert(0, str(ROOT / "training"))
+sys.path.insert(0, str(ROOT / "training_torch"))
 
 from model import create_model
 from tokenizer import load_tokenizer
 
 
 @torch.no_grad()
-def completion_logprobs(model, prompt_ids, completions, max_seq_len, device):
-    """Sum of token log-probs for each completion of a shared prompt."""
+def completion_logprobs(model, prompt_ids, completions, max_seq_len, device,
+                        max_batch=None):
+    """Sum of token log-probs for each completion of a shared prompt.
+
+    max_batch chunks large supports (the Wikipedia entity pools reach
+    thousands of candidates); it changes memory use only, not the numbers.
+    """
     n_prompt = len(prompt_ids)
     seqs = [prompt_ids + c for c in completions]
-    max_len = max(len(s) for s in seqs)
-    if max_len > max_seq_len + 1:
+    if max(len(s) for s in seqs) > max_seq_len + 1:
         return None
 
-    padded = torch.zeros((len(seqs), max_len), dtype=torch.long)
-    for i, s in enumerate(seqs):
-        padded[i, :len(s)] = torch.tensor(s, dtype=torch.long)
-    padded = padded.to(device)
-
-    x, y = padded[:, :-1], padded[:, 1:]
-    logits = model(x)
-    logprobs = F.log_softmax(logits.float(), dim=-1)
-    token_lp = logprobs.gather(-1, y.unsqueeze(-1)).squeeze(-1)
-
-    start = max(0, n_prompt - 1)
     out = []
-    for i, c in enumerate(completions):
-        end = min(start + len(c), token_lp.shape[1])
-        out.append(float(token_lp[i, start:end].sum().item()))
+    step = max_batch or len(seqs)
+    start = max(0, n_prompt - 1)
+    for off in range(0, len(seqs), step):
+        chunk = seqs[off:off + step]
+        max_len = max(len(s) for s in chunk)
+        padded = torch.zeros((len(chunk), max_len), dtype=torch.long)
+        for i, s in enumerate(chunk):
+            padded[i, :len(s)] = torch.tensor(s, dtype=torch.long)
+        padded = padded.to(device)
+
+        x, y = padded[:, :-1], padded[:, 1:]
+        logits = model(x)
+        logprobs = F.log_softmax(logits.float(), dim=-1)
+        token_lp = logprobs.gather(-1, y.unsqueeze(-1)).squeeze(-1)
+
+        for i, c in enumerate(completions[off:off + step]):
+            end = min(start + len(c), token_lp.shape[1])
+            out.append(float(token_lp[i, start:end].sum().item()))
     return out
 
 
@@ -61,6 +73,8 @@ def main():
     p.add_argument("--support", required=True)
     p.add_argument("--seq-len", type=int, default=256)
     p.add_argument("--device", default="cuda")
+    p.add_argument("--max-batch", type=int, default=None,
+                   help="chunk size for large supports (memory only)")
     p.add_argument("--output", default=None)
     a = p.parse_args()
 
@@ -84,7 +98,8 @@ def main():
         wrong_ids = [tokenizer.encode(w) for w in prob["wrong_completions"]]
 
         lps = completion_logprobs(
-            model, prompt_ids, [correct_ids] + wrong_ids, a.seq_len, a.device
+            model, prompt_ids, [correct_ids] + wrong_ids, a.seq_len, a.device,
+            max_batch=a.max_batch,
         )
         if lps is None:
             skipped += 1

@@ -1,0 +1,17 @@
+{
+  "weights": "results/wiki_random_50_50_large_seed43_torch/model_final.pt",
+  "support": "data/corpus/wiki_single_random.jsonl",
+  "n_problems": 468,
+  "skipped": 0,
+  "mean_false_modes": 2764.2393162393164,
+  "aggregate_share_mean": 0.042175397876699855,
+  "aggregate_share_ci95": [
+    0.031680116898000946,
+    0.05399356258148748
+  ],
+  "frac_share_above_half": 0.019230769230769232,
+  "pair_accuracy_mean_nll": 0.5951275764162691,
+  "length_delta_mean": 3.0557388685350593,
+  "equal_length_share_mean": null,
+  "equal_length_n": 0
+}

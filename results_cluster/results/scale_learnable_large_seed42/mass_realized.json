@@ -1,0 +1,17 @@
+{
+  "weights": "results/scale_learnable_large_seed42/model_final.pt",
+  "support": "data/heldout_learnable_realized_for.jsonl",
+  "n_problems": 2537,
+  "skipped": 431,
+  "mean_false_modes": 1.0,
+  "aggregate_share_mean": 0.7740008554406099,
+  "aggregate_share_ci95": [
+    0.7650655641021743,
+    0.7828979823369006
+  ],
+  "frac_share_above_half": 0.8561292865589278,
+  "pair_accuracy_mean_nll": 0.8545526212061489,
+  "length_delta_mean": -0.061095782420181315,
+  "equal_length_share_mean": 0.7887037442419617,
+  "equal_length_n": 1915
+}

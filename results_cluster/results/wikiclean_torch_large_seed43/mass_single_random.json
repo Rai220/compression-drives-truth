@@ -1,0 +1,17 @@
+{
+  "weights": "results/wikiclean_torch_large_seed43/model_final.pt",
+  "support": "data/corpus/wiki_single_random.jsonl",
+  "n_problems": 468,
+  "skipped": 0,
+  "mean_false_modes": 2764.2393162393164,
+  "aggregate_share_mean": 0.0594066677599996,
+  "aggregate_share_ci95": [
+    0.045840537904110495,
+    0.07454709099609509
+  ],
+  "frac_share_above_half": 0.03418803418803419,
+  "pair_accuracy_mean_nll": 0.7211459708424415,
+  "length_delta_mean": 3.0557388685350593,
+  "equal_length_share_mean": null,
+  "equal_length_n": 0
+}
