@@ -1,0 +1,98 @@
+{
+  "Qwen/Qwen2.5-0.5B": {
+    "Астрология": {
+      "share": 0.4795332113995472,
+      "n_templates": 3,
+      "mean_len_delta": 1.0
+    },
+    "Гомеопатия": {
+      "share": 0.42756689048074237,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Китайская медицина": {
+      "share": 0.685864450316624,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Иглоукалывание": {
+      "share": 0.4550998267920347,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Плоская Земля": {
+      "share": 0.48886986784077646,
+      "n_templates": 2,
+      "mean_len_delta": 0.5
+    },
+    "Эволюция [контроль]": {
+      "share": 0.9558151391608902,
+      "n_templates": 2,
+      "mean_len_delta": -0.5
+    }
+  },
+  "Qwen/Qwen2.5-1.5B": {
+    "Астрология": {
+      "share": 0.1417073970910179,
+      "n_templates": 3,
+      "mean_len_delta": 1.0
+    },
+    "Гомеопатия": {
+      "share": 0.37062311229245526,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Китайская медицина": {
+      "share": 0.2750799428024212,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Иглоукалывание": {
+      "share": 0.43864603210585296,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Плоская Земля": {
+      "share": 0.4490972855263546,
+      "n_templates": 2,
+      "mean_len_delta": 0.5
+    },
+    "Эволюция [контроль]": {
+      "share": 0.7404547849555644,
+      "n_templates": 2,
+      "mean_len_delta": -0.5
+    }
+  },
+  "Qwen/Qwen2.5-3B": {
+    "Астрология": {
+      "share": 0.3791949762237908,
+      "n_templates": 3,
+      "mean_len_delta": 1.0
+    },
+    "Гомеопатия": {
+      "share": 0.4514755559967931,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Китайская медицина": {
+      "share": 0.16099946429547735,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Иглоукалывание": {
+      "share": 0.2605257535029899,
+      "n_templates": 2,
+      "mean_len_delta": 1.0
+    },
+    "Плоская Земля": {
+      "share": 0.4269905176739132,
+      "n_templates": 2,
+      "mean_len_delta": 0.5
+    },
+    "Эволюция [контроль]": {
+      "share": 0.6259033625053169,
+      "n_templates": 2,
+      "mean_len_delta": -0.5
+    }
+  }
+}
