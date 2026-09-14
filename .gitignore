@@ -256,6 +256,10 @@ __marimo__/
 paper_conf/main.pdf
 paper_conf/main_v2.pdf
 
-# Poster: not part of the paper package, prints the arXiv id, and its README
-# promises files that do not exist. Kept local until it is rebuilt.
-paper_conf/poster/
+# Poster build artifacts (poster.tex is the source)
+paper_conf/poster/*.aux
+paper_conf/poster/*.nav
+paper_conf/poster/*.out
+paper_conf/poster/*.snm
+paper_conf/poster/*.toc
+paper_conf/poster/*.vrb
