@@ -6,6 +6,7 @@ We train transformers (3.5M–1B params) from scratch on corpora where every mat
 problem appears with both a correct and an incorrect solution, and measure which
 one the model puts its probability on.
 
+[![NeurIPS 2026](https://img.shields.io/badge/NeurIPS%202026-Accepted%20%C2%B7%20Poster-6f42c1.svg)](https://neurips.cc/Conferences/2026)
 [![arXiv](https://img.shields.io/badge/arXiv-2603.11749-b31b1b.svg)](https://arxiv.org/abs/2603.11749)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
