@@ -46,9 +46,11 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       (~0.6 p), Discussion "What pair accuracy is good for" folded into "What we
       withdraw" (~0.25 p), Figure 1 to 0.85 textwidth (~0.15 p). That is an
       author's call about what stops being load-bearing, not a mechanical edit.
-- [ ] **Decide the title.** `main_v2.tex` proposes "Correctness Preference Is
-      Smaller Than It Looks: Probability Mass in Contradictory Training Corpora".
-      The comment committed to narrowing the submitted one.
+- [x] **Decide the title.** Decided 2026-09-25: keep the accepted NeurIPS title,
+      "Truth as a Compression Artifact in Language Model Training", in the paper,
+      README and GitHub. The alternative "Correctness Preference Is Smaller Than It
+      Looks" is dropped. The official comment promised to narrow the title, so the
+      narrowing now has to be carried by the abstract and claims.
 - [ ] **Keep the release promise.** The comment promises the corpora, the
       enumeration code and the per-run outputs behind both grids. Code and
       per-run JSON are now in git; the corpora (~207 MB under `data/corpus/`)

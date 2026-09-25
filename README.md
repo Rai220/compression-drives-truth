@@ -1,4 +1,4 @@
-# Correctness Preference in Contradictory Training Data
+# Truth as a Compression Artifact in Language Model Training
 
 ### When a model sees the same question answered right and wrong, which answer does it keep?
 
