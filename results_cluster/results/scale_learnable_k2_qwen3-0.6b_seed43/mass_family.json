@@ -1,0 +1,17 @@
+{
+  "weights": "/workspace-SR008.nfs3/cdt_data/results/scale_learnable_k2_qwen3-0.6b_seed43/model_final.pt",
+  "support": "/workspace-SR008.nfs3/cdt_data/data/heldout_family_for_learnablek2.jsonl",
+  "n_problems": 2494,
+  "skipped": 431,
+  "mean_false_modes": 17.6271050521251,
+  "aggregate_share_mean": 0.46870015257351744,
+  "aggregate_share_ci95": [
+    0.4607432986941272,
+    0.476355157240992
+  ],
+  "frac_share_above_half": 0.47955092221331197,
+  "pair_accuracy_mean_nll": 0.9860643321749978,
+  "length_delta_mean": -0.0344352371617808,
+  "equal_length_share_mean": 0.4864124611644595,
+  "equal_length_n": 475
+}
