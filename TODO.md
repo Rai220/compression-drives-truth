@@ -1,5 +1,7 @@
 # TODO — after the NeurIPS 2026 rebuttal
 
+**State on 2026-10-21.** Camera-ready prepared in `paper_conf/main_v2.tex` (body ends on page 10 of the `[main, final]` build; 29 pages total; see `CHANGELOG` in the crew_lora experiment folder `expirements/2026-10-21-neurips-camera-ready/`). Deadline 23 October AoE. Remaining before upload: author confirms the acknowledgments/funding wording (`% AUTHOR:` comment in the source) and the hardware label (run record says Apple M4 Pro 48 GB, the first version said 36 GB), then uploads PDF + checklist. Earlier state follows.
+
 **State on 2026-08-03.** Submission 473 reviewed (4, 4, 3, 2). The meta-review
 named one condition for changing the decision: show that the effect is not
 probability-mass splitting. It was measured; part of the paper survived and part
@@ -35,17 +37,7 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
 
 ## Blocking for camera-ready
 
-- [ ] **Trim `main_v2.tex` to the page limit.** Body is **12 pages** against a
-      9-page limit (10 for camera-ready), measured from the built PDF —
-      Limitations ends on p12, references start on p13. Note that trimming the
-      appendices does not help: they fall outside the limit. Merging the Qwen3
-      and 1B sections and compressing the MDL framing bought back roughly what
-      the new Wikipedia analysis added. What is left to demote, with estimates:
-      Related Work 5 paragraphs → 3 (~0.5 p), Section 4.4 Robustness Checks
-      (~0.4 p), the Wikipedia and generative tables → appendix keeping prose
-      (~0.6 p), Discussion "What pair accuracy is good for" folded into "What we
-      withdraw" (~0.25 p), Figure 1 to 0.85 textwidth (~0.15 p). That is an
-      author's call about what stops being load-bearing, not a mechanical edit.
+- [x] **Trim `main_v2.tex` to the page limit.** DONE 2026-10-21: body ends on page 10 in the `[main, final]` build (acknowledgments and references start on page 10, 29 pages in all). Tables 1, 2, 7 and the pair-accuracy scaling figure moved to the appendices; Tables 6 and 14 merged; the K-ratio result on the controlled measure replaced the pair-accuracy noise paragraph; related work, discussion and limitations compressed. Numbers re-verified from per-run JSON (corrections listed in the experiment CHANGELOG: learnable realized 66.3/65.1, learnable_mod 2.16B one seed, per-entity-type means over 16 runs, frequency-sweep random cells without evaluation files dropped).
 - [x] **Decide the title.** Decided 2026-09-25: keep the accepted NeurIPS title,
       "Truth as a Compression Artifact in Language Model Training", in the paper,
       README and GitHub. The alternative "Correctness Preference Is Smaller Than It
@@ -62,12 +54,10 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       corpora or the control outputs. Re-run
       `scripts/prepare_anonymous_submission.sh`, then re-run the anonymity grep
       (`krestnikov|rai220|github|@gmail|2603.11749`) over whatever goes in.
-- [ ] **Figures.** `figure_denoising_j1_j2.png` and `figure7_multirule.png` plot
-      pair accuracy only and are no longer referenced by `main_v2.tex`;
-      `figure_full_scaling.png` is still used and its caption now carries the
-      pair-accuracy caveat. New figures come from
+- [ ] **Figures.** `figure_denoising_j1_j2.png`, `figure7_multirule.png` and (since the camera-ready, 2026-10-21) `figure_full_scaling.png` plot
+      pair accuracy only and are no longer referenced by `main_v2.tex`; only `figure_mass_control.png` and `figure_multirule_control.png` are used. New figures come from
       `analysis/plot_mass_control.py` and `analysis/plot_multirule_control.py`.
-- [ ] **Fix the "1B" label everywhere.** The committed `qwen3-1b` config
+- [x] **Fix the "1B" label everywhere** (paper: done; camera-ready says 490M; arXiv v2 still pending). The committed `qwen3-1b` config
       instantiates to **473,593,856** parameters (vocab 53), not ~1B; the
       FineWeb-Edu run (BPE-8000) is 489,869,312. `main_v2.tex` is corrected
       (2026-08-11: abstract, §4.7, checklist, reproducibility — which also
@@ -108,15 +98,12 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       done 2026-08-11 via the new `scripts/collect_scale_heldout.py` (106 rows,
       every measurement labelled with its support; values re-checked against
       `SCALING_LAW.md`).
-- [ ] Name the statistical tests in Section 3.4, not only in the checklist.
-- [ ] Related Work: data poisoning / backdoors (Gu, Wallace, Carlini) and one
-      sentence on TruthfulQA-style evaluation. Both are standard reviewer asks
-      and neither is present.
-- [ ] Section 4.7 (1B): repeats, tokens, steps and warmup are still unstated.
-- [ ] Ethical Considerations: name the data licences (Wikipedia CC BY-SA,
-      FineWeb-Edu ODC-BY). They are in the checklist but not in the section.
-- [ ] Name the exposure-bias / teacher-forcing gap and cite Bachmann &
-      Nagarajan (2024).
+- [x] Name the statistical tests in Section 3.4, not only in the checklist. (camera-ready, 2026-10-21)
+- [x] Related Work: data poisoning / backdoors (Gu 2017, Wallace 2021, Carlini 2024, Souly 2025) and TruthfulQA (Lin 2022) added in the camera-ready (2026-10-21).
+- [x] Section 4.7 (1B): repeats, tokens, steps and warmup stated in the camera-ready (15,000 steps, batch 4, seq 512, 200 warmup steps, ≈31M tokens, 2 seeds).
+- [x] Ethical Considerations: licences named in the section (camera-ready, 2026-10-21).
+- [x] Name the exposure-bias / teacher-forcing gap and cite Bachmann &
+      Nagarajan (2024). (camera-ready, 2026-10-21)
 
 ## Security / hygiene
 
