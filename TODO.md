@@ -43,17 +43,17 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       README and GitHub. The alternative "Correctness Preference Is Smaller Than It
       Looks" is dropped. The official comment promised to narrow the title, so the
       narrowing now has to be carried by the abstract and claims.
-- [ ] **Keep the release promise.** The comment promises the corpora, the
-      enumeration code and the per-run outputs behind both grids. Code and
-      per-run JSON are now in git; the corpora (~207 MB under `data/corpus/`)
-      are gitignored and need either a distribution channel or a regeneration
-      recipe with published SHA-256 checksums. `docs/mass_control.md` has the
-      commands.
-- [ ] **Rebuild the anonymous supplement.** `submission/anonymous_supplement.zip`
-      is from 2026-04-24 and contains none of the enumeration code, the new
-      corpora or the control outputs. Re-run
-      `scripts/prepare_anonymous_submission.sh`, then re-run the anonymity grep
-      (`krestnikov|rai220|github|@gmail|2603.11749`) over whatever goes in.
+- [x] **Keep the release promise.** DONE 2026-10-21: `data/training_corpus_manifest.md`
+      lists SHA-256, size, paper use and the regeneration command for all 59
+      training corpora (checksums from the archived copies and, for the four
+      large corpora, from the training host; the two agree where both exist).
+      The held-out-grid corpora keep their checksums in `results_cluster/data/`.
+      Still open: nobody has regenerated the corpora end to end on a fresh
+      machine and compared against the manifest; the `generate_paired_test.py`
+      drift (below) is the known failure.
+- [x] **Anonymous supplement** — no longer needed: the camera-ready points at
+      the public repository. `submission/`, `scripts/prepare_anonymous_submission.sh`
+      and `paper_conf/ANONYMIZATION_CHECKLIST.md` removed 2026-10-21.
 - [ ] **Figures.** `figure_denoising_j1_j2.png`, `figure7_multirule.png` and (since the camera-ready, 2026-10-21) `figure_full_scaling.png` plot
       pair accuracy only and are no longer referenced by `main_v2.tex`; only `figure_mass_control.png` and `figure_multirule_control.png` are used. New figures come from
       `analysis/plot_mass_control.py` and `analysis/plot_multirule_control.py`.
@@ -74,8 +74,11 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       grid can now go into the paper. Remaining polish: a GPT-2 `xxlarge`
       (413.7M) clean grid is running to separate architecture from scale in the
       leak (202M GPT-2 leaks ~8 pp vs <1 pp at Qwen sizes).
-- [ ] **arXiv v2.** The preprint (2603.11749) states the withdrawn claims and
-      should be updated once `main_v2.tex` settles.
+- [ ] **arXiv v4.** The preprint (2603.11749, v3 of 2026-04-03) states the
+      withdrawn claims. Upload the camera-ready source as v4: package in
+      `crew_lora/expirements/2026-10-21-neurips-camera-ready/arxiv_v4/`
+      (tex, bbl, sty, two figures; abstract and comments text alongside).
+      Needs the author's arXiv login.
 
 ## Worth doing, not blocking
 
@@ -113,9 +116,12 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
 - [x] Cluster scripts sanitised: `scripts/pull_cluster.sh` and
       `scripts/run_keyed_ladder_cluster.sh` no longer carry a private-key path,
       a hostname or another person's account name (2026-08-03).
-- [ ] `paper_conf/poster/` stays untracked: it prints the arXiv id and describes
-      a named-venue talk. Its `README.md` also promises `poster_datafest.*`
-      files that do not exist.
+- [x] `paper_conf/poster/` rewritten 2026-10-21 to the camera-ready claims
+      (author named, no affiliation, aggregate share, learnable-selector control,
+      withdrawn results marked as withdrawn); `README.md` and
+      `talking_points.md` updated; the DataFest poster that never existed is
+      no longer promised. Still to do by the author: proofread, print via ARC
+      (order at least five days before the session).
 - [ ] `data/generate_paired_test.py` at seed 999 no longer reproduces the
       committed `test_paired_random.jsonl` (the file matches its manifest hash;
       the generator drifted). Shipped artefacts are unaffected, but the

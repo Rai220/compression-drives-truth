@@ -6,14 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Research project on correctness preference in contradictory training data. Trains GPT-2-style transformers on contradictory math data (same problem, correct + incorrect answers) to study when models prefer the correct answer.
 
-Current finding, after the August 2026 controls: **a coherent false rule is never filtered, at any size, architecture or corpus; an unpredictable error loses about ten points of probability mass to the correct answer at 86M and nothing below.** Compression is the framing that motivated the design, not a quantity this work measures — two experiments built to identify it (multi-rule, description-length ladder) turned out to measure probability-mass splitting and are reported as negative controls. Read `docs/mass_control.md` before making any claim about this project's results.
+Current finding, after the August 2026 controls: **a coherent false rule is never filtered, at any size, architecture or corpus; an unpredictable error loses about nine points of probability mass to the correct answer at 86M and nothing below; a false rule whose selector the model can learn is preferred over the correct one, from 418M to 3.08B.** Compression is the framing that motivated the design, not a quantity this work measures — two experiments built to identify it (multi-rule, description-length ladder) turned out to measure probability-mass splitting and are reported as negative controls. Read `docs/mass_control.md` before making any claim about this project's results.
 
 **Sources of truth, in order:**
 - `paper_conf/main.tex` — the version submitted to NeurIPS 2026. **Frozen; do not edit.**
-- `paper_conf/main_v2.tex` — the revision. Edit this one.
+- `paper_conf/main_v2.tex` — the NeurIPS 2026 camera-ready (since 2026-10-21). Edit this one.
 - `docs/mass_control.md` — the measurement, its null, and the two control grids.
 - `docs/official_comment_rFTw.md` — what was conceded to the area chair (posted 2026-08-03, frozen).
-- `TODO.md` — current state and what is blocking camera-ready.
+- `TODO.md` — current state and what remains after the camera-ready (arXiv v4, release checks).
 
 The markdown drafts `paper_v2.md` and `paper_v3.md` were deleted on 2026-08-03: they carried the withdrawn claims and bugs fixed only in LaTeX. They remain in git history if ever needed.
 
