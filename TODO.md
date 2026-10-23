@@ -80,6 +80,26 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       (tex, bbl, sty, two figures; abstract and comments text alongside).
       Needs the author's arXiv login.
 
+## After the external review of f1b0768 (2026-10-23)
+
+Text corrections applied before upload (no recomputation): selector control no
+longer claims matched competence or a preference for the false system; the scored
+family is described as the full random family (~17.5 strings); "lower bound"
+replaced by "conditional share, conservative relative to the pairwise measure";
+greedy decoding no longer called splitting-immune; coherent claims limited to the
+main corpora with the L=1 rung named; "no problem seen twice" removed;
+`scripts/reproduce_minimal.sh` now checks the 86M aggregate share (step 1 verified:
+corpora match the manifest; training and evaluation not run).
+
+- [ ] **Rerun the selector control properly** (not for the camera-ready): problems
+      fixed in advance and shared across conditions, an independent RNG stream for
+      the false draws, absolute log-probabilities of the correct and each false
+      string saved, so a shift toward the false system can be told apart from lower
+      confidence in the correct answer. Estimate ~7-8 H100 hours at 474M, 2 seeds,
+      4 conditions. Needs the author's go-ahead for GPU time.
+- [ ] Greedy-decoding result: add sampled semantic accuracy at temperature 1 if the
+      generative claim is to be kept as more than a behavioral difference.
+
 ## Worth doing, not blocking
 
 - [ ] **Aggregate share on Wikipedia, via single-entity paragraphs.** The

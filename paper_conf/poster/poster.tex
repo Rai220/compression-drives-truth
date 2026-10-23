@@ -151,7 +151,7 @@
     \fontsize{32}{40}\selectfont\bfseries\color{NavyDeep}
     Measured against \emph{everything} the error generator can produce, the preference for the correct answer is small, late, and not about truth.\\[0.25em]
     \fontsize{19}{23}\selectfont\mdseries\color{TextMute}
-    The pairwise metric overstates it three- to fourfold; a coherent false rule is never filtered; a false rule the model can \emph{learn} is preferred over the correct one.
+    The pairwise metric overstates it three- to fourfold; the coherent false rules of our main corpora are not filtered; a false selector the model can \emph{learn} pushes the correct share below the null.
   \end{minipage}};
 \end{tikzpicture}
 
@@ -159,8 +159,8 @@
 
 \noindent
 \statcard{TruthBlue}{Random errors, 86M}{$59.0 \pm 0.8\%$}{mass on the correct completion; null $50$; nothing below 86M}\hfill
-\statcard{ErrorCoral}{One coherent rule}{$\approx 50\%$}{at every size, architecture and corpus: not filtered}\hfill
-\statcard{TruthDark}{Learnable false rule}{$43\%$}{below the null: the \emph{false} system is preferred, 418M--3.08B}
+\statcard{ErrorCoral}{One coherent rule}{$\approx 50\%$}{main corpora, every size and architecture: not filtered}\hfill
+\statcard{TruthDark}{Learnable false selector}{$43\%$}{correct share below the null against the family, 418M--3.08B}
 
 \vspace{0.35cm}
 
@@ -197,7 +197,7 @@ We sum over every string the generator can produce instead:
 Each problem occurs exactly twice in the primary corpus (once correct, once
 corrupted) and every other member of the family occurs zero times, so a
 frequency-matching model scores \textbf{exactly $0.500$} for any $N$.
-Adding strings can only lower the share: a value above $0.5$ is a lower bound.
+The share is conditional on the enumerated support; adding strings can only lower it, so it is conservative relative to the pairwise comparison.
 Full-string log-probability, not a per-token mean; a length-matched subset
 removes the remaining channel. Pair accuracy is reported only for comparability.
 \end{block}
@@ -250,8 +250,8 @@ checkpoints the aggregate share reads $47.9 \to 47.8 \to 38.7$: the jump is
 much pairwise signal splitting alone can manufacture.\\[0.3ex]
 \textbf{Description-length ladder.} Built to show a graded effect; the family
 measure is flat. A clean corpus with no false rule reads $99.7\%$ at 86M and
-$64.1\%$ at 3.5M on the same support, so the measure is near-unbiased where
-we report an effect and conservative where we report none.\\[0.3ex]
+$64.1\%$ at 3.5M on the same support, so the leak on a clean model is small
+where we report an effect and large where we report none.\\[0.3ex]
 Compression remains an \emph{interpretation} of the surviving contrast, not a
 quantity these experiments measure.
 \end{block}
@@ -263,20 +263,21 @@ quantity these experiments measure.
 % ---------------------------------------------------------------------
 \begin{column}{0.32\linewidth}
 
-\begin{block}{6.~What Moves the Preference: Learnability}
+\begin{block}{6.~What Moves the Share: Learnability}
 \centering
 \includegraphics[width=0.98\linewidth]{figure_poster_learnable.png}\\[0.3ex]
 \justifying\normalsize
-Held-out grid, no problem seen twice, family share on the length-matched
-subset, null $50$. The false answer is $a{\cdot}b + T[s(p) \bmod 10]$ for one
-10-entry table; only the selector $s(p)$ changes. Unpredictable selector:
-the correct system holds $+5$ points. Selector the model can learn (a visible
-digit): the correct share falls to $43.4 \pm 0.6\%$ at 474M (4 seeds), and the
-model prefers the \emph{false} system. Partly learnable selectors (sums of two
-or three digits) sit at the null. Random and learnable share identical correct
-derivations, so competence is matched and the selector is the only variable.
-The contrast holds at 1.12B, 2.16B and 3.08B; a clean corpus reads
-$96$--$99\%$ at every size.
+Held-out grid, evaluation problems disjoint from training, family share on
+the length-matched subset, null $50$. Every selector is scored against the
+same random family (${\approx}17.5$ strings); the conditions differ in how the
+corpus picks its false string. Unpredictable selector: the correct system holds $+5$
+points. Selector the model can learn (a visible digit): the share falls to
+$43.4 \pm 0.6\%$ at 474M (4 seeds), yet against the selected false string
+alone the correct completion still holds $65\%$; the deficit sits on the other
+family members. Partly learnable selectors sit at the null. The corpora share
+a generator but not their problems, so competence is not matched, and whether
+the below-null share is a shift toward the false system or lower confidence in
+the correct one is open. A clean corpus reads $96$--$99\%$ at every size.
 \end{block}
 
 \begin{block}{7.~Transfer and Noise}
@@ -314,9 +315,9 @@ above the null does not shrink with noise.
 
     \fontsize{22}{28}\selectfont\color{white}
     \begin{minipage}[t]{0.495\linewidth}\raggedright
-      \textbf{$\blacktriangleright$\;\,The objective favors a learnable, internally consistent system, not a true one.}
-      A coherent false rule keeps its corpus share at every size we tested;
-      a false rule the model can learn is preferred over the correct one.\\[0.4ex]
+      \textbf{$\blacktriangleright$\;\,What goes unfiltered is consistent or learnable structure, not falsehood as such.}
+      The coherent rules of our main corpora keep their corpus share at every size (one ladder rung is the exception);
+      a learnable false selector pushes the correct share below the null.\\[0.4ex]
       \textbf{$\blacktriangleright$\;\,Pair accuracy is not a controlled diagnostic of preference.}
       Any design that varies the number of false forms (competing rules, noise
       ratios, entity substitution, corruption load) varies the metric with the treatment.
@@ -327,7 +328,7 @@ above the null does not shrink with noise.
       about production models.\\[0.4ex]
       \textbf{$\blacktriangleright$\;\,For data curation:} diverse errors lose a
       little mass to the correct system; coordinated errors with a learnable rule
-      are exactly the kind this preference favors.
+      were not filtered in our main corpora.
     \end{minipage}
   \end{minipage}};
 \end{tikzpicture}

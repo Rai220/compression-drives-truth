@@ -70,7 +70,9 @@ rule anywhere** and running the same family measure (`ladder2_clean_*`, 2 seeds)
 | 26M | 97.3 |
 | 86M | 99.7 |
 
-At 86M the measure is close to unbiased. At 3.5M a third of the mass leaks onto
+At 86M a clean model reads 99.7, so the measure's own leak is small there
+(this bounds the leak on a clean model; it does not by itself exclude a bias in
+models trained on contradictions). At 3.5M a third of the mass leaks onto
 strings that never occurred, so small-model family numbers understate the share
 and cannot be read as evidence of anything.
 
@@ -122,8 +124,11 @@ carrying 12 false modes each, 11 of which never occur.
 At 86M the correct completion holds 59.0% of the mass against everything the
 error generator can produce, with every per-seed bootstrap interval above 0.5:
 [58.7, 60.4], [57.5, 59.3], [57.2, 59.0], [59.0, 60.7]. Splitting cannot raise
-that number, and adding strings to the sum can only lower it, so 59.0 is a lower
-bound.
+that number, and adding strings to the sum can only lower it, so 59.0 is
+conservative relative to any comparison against part of the support (the
+pairwise one included). It is a share conditional on the enumerated support,
+not a lower bound on the model's total probability of the correct answer
+(correction 2026-10-23, after an external review).
 
 Two columns are not in our favour:
 
@@ -141,8 +146,9 @@ different corpus and agrees at 86M: 59.4 against 59.0.
 ## What this licenses
 
 At 86M, a false system whose output the model cannot predict from the problem
-loses about ten points of probability mass to the correct one; a coherent false
-system loses none at any scale tested. Pair accuracy states the same contrast as
+loses about nine points of probability mass to the correct one; the coherent
+rule of the denoising corpus loses none at any scale tested (the ladder's L=1
+rung, a single rule of a different construction, does lose mass). Pair accuracy states the same contrast as
 roughly 39 points (87.4 against 48.2 at 86M) where mass states 10 points
 (59.0 against 48.8), so the primary metric of the paper overstates the
 separation by a factor of about four at 86M — and reverses its sign below it.

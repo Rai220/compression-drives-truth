@@ -34,8 +34,9 @@ share = P(correct) / (P(correct) + Σ P(false_i))
 over every string the error generator could produce for that problem. On the
 primary corpora each problem occurs exactly twice — once correct, once corrupted — and
 every other member of the family occurs zero times, so **a frequency-matching
-model scores exactly 0.500, whatever `N` is**. Adding strings to the sum can
-only lower the value, so anything above 0.5 is a lower bound.
+model scores exactly 0.500, whatever `N` is**. The share is conditional on the
+enumerated support; adding strings can only lower it, so it is conservative
+relative to the pairwise comparison.
 
 ## Key results
 
@@ -50,7 +51,7 @@ Denoising corpus, 4 seeds, measured on training problems where the null is
 exactly 0.500. Read as: at 86M the correct completion holds about nine points
 more mass than indifference; below 86M the controlled measure shows nothing,
 while pair accuracy already reads 72–89%. The 86M value replicates at 59.4 on an
-independent corpus. A coherent false rule is never filtered — and that half needs
+independent corpus. The coherent false rule of this corpus is not filtered at any size — and that half needs
 no control, because one rule produces one string and there is nothing to split.
 
 **Two of our own identification experiments are negative controls.**
@@ -63,15 +64,16 @@ no control, because one rule produces one string and there is nothing to split.
   description length.
 
 **Calibration.** Trained on a corpus with the same problems and no false rule at
-all, the same 18-mode family measure reads 99.7 at 86M and 64.1 at 3.5M. The
-measure is near-unbiased where we report an effect and conservative where we
+all, the same 18-mode family measure reads 99.7 at 86M and 64.1 at 3.5M: the
+leak on a clean model is small where we report an effect and large where we
 report none.
 
 **The selector control.** Random and coherent errors differ in two ways at once
-(predictability and the number of false forms). On the held-out grid we hold the
-false family fixed and vary only whether the model can learn *which* member a
-problem receives (family share on the length-matched subset, null 50; Qwen3
-architecture, 2–4 seeds):
+(predictability and the number of false forms). On the held-out grid every
+selector condition is scored against the same enumerated random family (~17.5
+strings; the coherent row against its one string), and the conditions differ in
+how the training corpus picks its false string (family share on
+the length-matched subset, null 50; Qwen3 architecture, 2–4 seeds):
 
 | selector | 418M | 474M | 1.12B | 2.16B | 3.08B |
 |---|---|---|---|---|---|
@@ -80,10 +82,13 @@ architecture, 2–4 seeds):
 | learnable (digit lookup) | **44.7** | **43.4** | **43.8** | **43.1** | **43.7** |
 | clean corpus (calibration) | 97.9 | 97.2 | 98.1 | 96.4 | 99.0 |
 
-A selector the model can learn flips the sign: the model puts *more* mass on the
-false system than on the correct one. Partly learnable selectors (`k2`, `k3`)
-sit at the null. What the objective favors is a learnable, internally consistent
-system, not a true one.
+A selector the model can learn pushes the share below the null. Against the
+selected false string alone the correct completion still wins (~65% at 474M):
+the deficit comes from mass on the other family members, and whether that is a
+shift toward the false system or lower confidence in the correct answer is not
+resolved by the saved outputs. The random and learnable corpora share a
+generator but not their problems, so competence is not matched by construction.
+Partly learnable selectors (`k2`, `k3`) sit at the null.
 
 **Noise ratio on the controlled measure** (86M, 2 seeds): with K random errors
 per problem the null is 1/(K+1); the family share reads 56.3 / 44.9 / 36.1 at
@@ -96,9 +101,11 @@ corpus checksums: [`data/training_corpus_manifest.md`](data/training_corpus_mani
 ## What this supports
 
 **For alignment and data curation.** The training objective is not a truth
-compass: a consistent false rule is not filtered at any size, architecture or
-corpus we tested, including 490M on real web text, and a false rule the model
-can learn is preferred over the correct one up to 3.08B. Coordinated error that
+compass: the coherent false rules of our main corpora are not filtered at any
+size, architecture or corpus we tested, including 490M on real web text, and a
+false selector the model can learn pushes the correct share below the null up to
+3.08B. One single-rule corruption of a different construction (the ladder's
+L=1 rung) does lose mass, so which properties of a rule decide the outcome is open. Coordinated error that
 keeps internal consistency would not wash out the way diverse organic error does.
 
 **For evaluation methodology.** Pair accuracy overstates the excess above chance
@@ -119,12 +126,12 @@ It was correct. Measuring it (August 2026) produced:
 | claim in the preprint | status |
 |---|---|
 | Random errors: preference 65% → 85% with scale | narrowed — 59.0% at 86M, nothing below, on the controlled measure |
-| Coherent errors eliminate the preference | **holds**, at every size, architecture and corpus |
+| Coherent errors eliminate the preference | **holds** for the coherent rules of the main corpora, at every size, architecture and corpus; the ladder's L=1 rung is an exception |
 | Two competing rules restore it (47% → 78%) | **withdrawn** — mass splitting |
 | Preference tracks description length | **withdrawn** — the ladder is flat |
 | Coherent errors fall *below* chance (~45%) | **withdrawn** — completion length (−0.58 tokens) |
 | "~1B" FineWeb-Edu model | relabeled — the config instantiates to 490M |
-| (new) learnable-selector control, 418M–3.08B | **added** — predictability, not description length, moves the preference |
+| (new) learnable-selector control, 418M–3.08B | **added** — predictability, not description length, moves the family share; competence not matched, source of the below-null share unresolved |
 
 The reply sent to the area chair is in
 [`docs/official_comment_rFTw.md`](docs/official_comment_rFTw.md). The camera-ready
