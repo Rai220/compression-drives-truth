@@ -254,7 +254,6 @@ __marimo__/
 
 # Locally generated submission PDFs; Overleaf is the source of truth.
 paper_conf/main.pdf
-paper_conf/main_v2.pdf
 
 # Poster build artifacts (poster.tex is the source)
 paper_conf/poster/*.aux

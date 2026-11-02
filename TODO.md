@@ -1,5 +1,31 @@
 # TODO — after the NeurIPS 2026 rebuttal
 
+**State on 2026-11-02.** Final version prepared in `paper_conf/main_v2.tex`. The
+camera-ready deadline is **7 November 2026, 14:59 Moscow time** (from the letter to
+authors; no upload confirmation was found in the mail, and the pre-filled
+"Edit Camera Ready Revision" form in OpenReview does not by itself show that the new
+PDF was uploaded). Every number in the paper was recomputed from the per-run JSON —
+277 checks, no mismatch — by `verify_paper_numbers.py` in the crew_lora experiment
+folder `expirements/2026-11-02-cdt-final-version/`; three text claims that the check
+contradicted were corrected (gzip appendix: the correlation against aggregate share
+reverses sign, Spearman rho = -0.90, exact p = 0.08, rather than vanishing;
+Table 4 caption: the realized column is the full set, not the length-matched subset;
+Appendix F: the coherent length delta on the standard paired test set is 0.71 tokens,
+not 0.8). The author confirmed the acknowledgments wording and the hardware label, so
+the `% AUTHOR:` comment is gone and the label now reads "Apple M4 Pro, 48 GB".
+Build on this machine (TinyTeX, TeX Live 2026): 30 pages, 0 errors, 0 overfull,
+0 undefined references, body and acknowledgments heading on page 10, references from
+page 11 — the 10-content-page limit holds. The arXiv v4 package is assembled and was
+test-built standalone. Later the same day the abstract was rewritten at the author's
+request (question and setting first, the compression framing named as motivation rather
+than a measured mechanism, one name for the measure; same numbers, still 19 lines, so the
+page layout is unchanged), a 144-word lay summary for the OpenReview form was written
+(`arxiv_v4/lay_summary.txt` in the crew_lora experiment folder), and the final PDF was
+rebuilt: `paper_conf/main_v2.pdf`, 30 pages, 614,939 bytes, SHA-256 starting 06d7c6a7864f8d14.
+The arXiv v4 package was refreshed from that source and test-built again. Remaining: the
+author uploads the PDF to OpenReview (deadline 7 November 14:59 Moscow time) and the
+package to arXiv. Earlier state follows.
+
 **State on 2026-10-21.** Camera-ready prepared in `paper_conf/main_v2.tex` (body ends on page 10 of the `[main, final]` build; 29 pages total; see `CHANGELOG` in the crew_lora experiment folder `expirements/2026-10-21-neurips-camera-ready/`). Deadline 23 October AoE. Remaining before upload: author confirms the acknowledgments/funding wording (`% AUTHOR:` comment in the source) and the hardware label (run record says Apple M4 Pro 48 GB, the first version said 36 GB), then uploads PDF + checklist. Earlier state follows.
 
 **State on 2026-08-03.** Submission 473 reviewed (4, 4, 3, 2). The meta-review
@@ -75,10 +101,13 @@ Measured, verified against raw JSON, documented in `docs/mass_control.md`:
       (413.7M) clean grid is running to separate architecture from scale in the
       leak (202M GPT-2 leaks ~8 pp vs <1 pp at Qwen sizes).
 - [ ] **arXiv v4.** The preprint (2603.11749, v3 of 2026-04-03) states the
-      withdrawn claims. Upload the camera-ready source as v4: package in
-      `crew_lora/expirements/2026-10-21-neurips-camera-ready/arxiv_v4/`
-      (tex, bbl, sty, two figures; abstract and comments text alongside).
-      Needs the author's arXiv login.
+      withdrawn claims. Upload the camera-ready source as v4. The current package is
+      `crew_lora/expirements/2026-11-02-cdt-final-version/arxiv_v4/` (tex, bbl, sty,
+      the two used figures, `abstract_plain.txt`, `comments.txt`), rebuilt from the
+      final `main_v2.tex` and verified by a standalone build in a clean directory.
+      The October package under `2026-10-21-neurips-camera-ready/arxiv_v4/` predates
+      the 2026-11-02 corrections and should not be uploaded. Needs the author's
+      arXiv login.
 
 ## After the external review of f1b0768 (2026-10-23)
 
